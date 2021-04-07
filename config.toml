@@ -5,9 +5,13 @@ theme = "anatole"
 [params]
 title = "I'm Lei Zhang"
 author = "Lei Zhang"
-description = ":)"
+description = "This is my knowledge base. I document things here :)"
 profilePicture = "images/profile.jpg"
 favicon = "favicons/"
+#displayMode = "dark"
+disableThemeSwitcher = true
+readMore = true
+fullPostContent = false
 
 ## Social links
 

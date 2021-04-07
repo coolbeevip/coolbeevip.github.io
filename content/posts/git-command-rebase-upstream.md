@@ -1,6 +1,7 @@
 ---
 title: "Git Fork 后同步上游分支"
 date: 2021-04-06T13:24:14+08:00
+categories: [git]
 draft: true
 ---
 
