@@ -1,0 +1,38 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+theme = "anatole"
+
+[params]
+title = "I'm Lei Zhang"
+author = "Lei Zhang"
+description = ":)"
+profilePicture = "images/profile.jpg"
+favicon = "favicons/"
+
+## Social links
+
+[[params.socialIcons]]
+icon = "fab fa-github"
+title = "GitHub"
+url = "https://github.com/coolbeevip/"
+
+[[params.socialIcons]]
+icon = "fas fa-envelope"
+title = "e-mail"
+url = "mailto:zhanglei@apache.org"
+
+## Menu items
+
+[menu]
+
+  [[menu.main]]
+  name = "Home"
+  identifier = "home"
+  weight = 100
+  url = "/"
+
+  [[menu.main]]
+  name = "About"
+  weight = 300
+  identifier = "about"
+  url = "/about/"
