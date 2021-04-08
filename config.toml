@@ -1,11 +1,12 @@
 baseURL = "https://coolbeevip.github.io/"
 languageCode = "en-us"
 theme = "anatole"
+enableEmoji = true
 
 [params]
 title = "I'm Lei Zhang"
 author = "Lei Zhang"
-description = "This is my knowledge base. I document things here :)"
+description = "This is my knowledge base. I document things here"
 profilePicture = "images/profile.jpg"
 favicon = "favicons/"
 #displayMode = "dark"
