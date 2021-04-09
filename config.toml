@@ -13,6 +13,7 @@ favicon = "favicons/"
 disableThemeSwitcher = true
 readMore = true
 fullPostContent = false
+customCss = ["css/custom.css"]
 
 ## Social links
 
