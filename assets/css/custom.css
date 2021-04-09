@@ -11,3 +11,18 @@
 .page-top {
   width: 70%;
 }
+
+@media screen and (max-width: 960px),
+print {
+  .sidebar {
+    width: 100%;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .page-top {
+    width: 100%;
+  }
+}
