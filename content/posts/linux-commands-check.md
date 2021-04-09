@@ -1,8 +1,8 @@
 ---
 title: "常用 Linux 检测命令"
-date: 2021-04-06T13:24:14+08:00
+date: 2019-05-06T13:24:14+08:00
 categories: [linux]
-draft: true
+draft: false
 ---
 
 ## IO

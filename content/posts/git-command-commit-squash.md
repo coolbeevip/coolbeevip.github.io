@@ -1,8 +1,8 @@
 ---
 title: "Git Squash Commits"
-date: 2021-04-06T13:24:14+08:00
+date: 2020-04-06T13:24:14+08:00
 categories: [git]
-draft: true
+draft: false
 ---
 
 压缩合并 Commits，将多个 commit 整理合并的方法，这样可以使提交记录更加清晰

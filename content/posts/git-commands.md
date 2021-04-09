@@ -1,8 +1,8 @@
 ---
 title: "常用 Git 命令"
-date: 2021-04-06T13:24:14+08:00
+date: 2019-04-06T13:24:14+08:00
 categories: [git]
-draft: true
+draft: false
 ---
 
 常用 Git 命令

@@ -1,8 +1,8 @@
 ---
 title: "Git Fork 后同步上游分支"
-date: 2021-04-06T13:24:14+08:00
+date: 2020-04-06T13:24:14+08:00
 categories: [git]
-draft: true
+draft: false
 ---
 
 当你 fork 一个仓库后，可以时用此方法使你 fork 后的仓库 master 分支保持和上游 master 分支的同步

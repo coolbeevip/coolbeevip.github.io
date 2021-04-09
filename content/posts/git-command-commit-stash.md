@@ -1,8 +1,8 @@
 ---
 title: "Git Stash"
-date: 2021-04-06T13:24:14+08:00
+date: 2020-04-06T13:24:14+08:00
 categories: [git]
-draft: true
+draft: false
 ---
 
 你在当前分支上开发代码，此时不想 commit，但是又想切换到其他分支完成其他的工作，此时可以用 stash
