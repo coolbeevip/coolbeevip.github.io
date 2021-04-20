@@ -15,6 +15,7 @@ draft: false
 * -o 离线执行命令,即不去远程仓库更新包；
 * -X 显示maven允许的debug信息；
 * -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。
+* --no-snapshot-updates 禁止更新 snapshot 
 
 ## Dependency
 
