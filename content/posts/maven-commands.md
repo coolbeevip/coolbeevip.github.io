@@ -63,3 +63,21 @@ mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
 ```shell
 ./mvnw.cmd clean install
 ```
+
+### 批量修改 POM 版本号
+
+```shell
+mvn versions:set -DnewVersion=4.1.9
+```
+
+确认修改
+
+```shell
+mvn versions:commit
+```
+
+取消修改
+
+```shell
+mvn versions:revert
+```
