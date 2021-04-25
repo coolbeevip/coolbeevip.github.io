@@ -1,0 +1,272 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Maven项目和模块的最佳实践</title><meta charset=utf-8><meta name=generator content="Hugo 0.82.1"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.cd7936c50d56f98d62c7547a00bf2e7e991fef59134e336e0810382876374277.css integrity="sha256-zXk2xQ1W+Y1ix1R6AL8ufpkf71kTTjNuCBA4KHY3Qnc=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/best-practices-for-structuring-maven-projects-and-modules/><script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Maven项目和模块的最佳实践"><meta name=twitter:description content="本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API 网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。
+目标  通过多模块方式组织项目 管理项目版本、依赖，属性 规划模块依赖关系  主项目 POM 每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签
+ properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级子模块; pluginRepositories: 插件仓库地址（非必须，主要解决国内访问慢的问题）; repositories: 定义 Maven 私服地址; distributionManagement: 定义发布用 Maven 私服地址 pluginManagement: 定义管理类插件版本  例如：
+<?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?> <build xmlns=&#34;http://maven.apache.org/POM/4.0.0&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; xsi:schemaLocation=&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;> <modelVersion>4.0.0</modelVersion> <groupId>com.coolbeevip.apigateway</groupId> <artifactId>apigateway-parent</artifactId> <version>1.0.0-SNAPSHOT</version> <packaging>pom</packaging> <properties> <!-- project --> <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> <maven.compiler.encoding>UTF-8</maven.compiler.encoding> <maven.compiler.source>8</maven.compiler.source> <maven.compiler.target>8</maven.compiler.target> <!-- plugins version --> <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version> <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version> <docker-maven-plugin."></head><body><div class="sidebar animated fadeInDown"><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2021</div></div></div><div class=main><div class="page-top animated fadeInDown"><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post animated fadeInDown"><div class=post-content><div class=post-title><h3>Maven项目和模块的最佳实践</h3></div><p>本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API
+网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。</p><h2 id=目标>目标</h2><ul><li>通过多模块方式组织项目</li><li>管理项目版本、依赖，属性</li><li>规划模块依赖关系</li></ul><h3 id=主项目-pom>主项目 POM</h3><p>每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签</p><ul><li>properties: 定义字符集编码、JDK 版本、插件版本;</li><li>modules: 下级子模块;</li><li>pluginRepositories: 插件仓库地址（非必须，主要解决国内访问慢的问题）;</li><li>repositories: 定义 Maven 私服地址;</li><li>distributionManagement: 定义发布用 Maven 私服地址</li><li>pluginManagement: 定义管理类插件版本</li></ul><p>例如：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;build</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
+       <span style=color:#a6e22e>xmlns:xsi=</span><span style=color:#e6db74>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+       <span style=color:#a6e22e>xsi:schemaLocation=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style=color:#f92672>&gt;</span>
+
+  <span style=color:#f92672>&lt;modelVersion&gt;</span>4.0.0<span style=color:#f92672>&lt;/modelVersion&gt;</span>
+
+  <span style=color:#f92672>&lt;groupId&gt;</span>com.coolbeevip.apigateway<span style=color:#f92672>&lt;/groupId&gt;</span>
+  <span style=color:#f92672>&lt;artifactId&gt;</span>apigateway-parent<span style=color:#f92672>&lt;/artifactId&gt;</span>
+  <span style=color:#f92672>&lt;version&gt;</span>1.0.0-SNAPSHOT<span style=color:#f92672>&lt;/version&gt;</span>
+  <span style=color:#f92672>&lt;packaging&gt;</span>pom<span style=color:#f92672>&lt;/packaging&gt;</span>
+
+  <span style=color:#f92672>&lt;properties&gt;</span>
+
+    <span style=color:#75715e>&lt;!-- project --&gt;</span>
+    <span style=color:#f92672>&lt;project.build.sourceEncoding&gt;</span>UTF-8<span style=color:#f92672>&lt;/project.build.sourceEncoding&gt;</span>
+    <span style=color:#f92672>&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span style=color:#f92672>&lt;/project.reporting.outputEncoding&gt;</span>
+    <span style=color:#f92672>&lt;maven.compiler.encoding&gt;</span>UTF-8<span style=color:#f92672>&lt;/maven.compiler.encoding&gt;</span>
+    <span style=color:#f92672>&lt;maven.compiler.source&gt;</span>8<span style=color:#f92672>&lt;/maven.compiler.source&gt;</span>
+    <span style=color:#f92672>&lt;maven.compiler.target&gt;</span>8<span style=color:#f92672>&lt;/maven.compiler.target&gt;</span>
+
+    <span style=color:#75715e>&lt;!-- plugins version --&gt;</span>
+    <span style=color:#f92672>&lt;maven-compiler-plugin.version&gt;</span>3.1<span style=color:#f92672>&lt;/maven-compiler-plugin.version&gt;</span>
+    <span style=color:#f92672>&lt;jacoco-maven-plugin.version&gt;</span>0.8.6<span style=color:#f92672>&lt;/jacoco-maven-plugin.version&gt;</span>
+    <span style=color:#f92672>&lt;docker-maven-plugin.version&gt;</span>0.34.1<span style=color:#f92672>&lt;/docker-maven-plugin.version&gt;</span>
+    <span style=color:#f92672>&lt;maven-deploy-plugin.version&gt;</span>2.7<span style=color:#f92672>&lt;/maven-deploy-plugin.version&gt;</span>
+    <span style=color:#f92672>&lt;maven-surefire-plugin.version&gt;</span>3.0.0-M5<span style=color:#f92672>&lt;/maven-surefire-plugin.version&gt;</span>
+    <span style=color:#f92672>&lt;sonar-maven-plugin.version&gt;</span>3.8.0.2131<span style=color:#f92672>&lt;/sonar-maven-plugin.version&gt;</span>
+
+    <span style=color:#75715e>&lt;!-- sonar plugin --&gt;</span>
+    <span style=color:#f92672>&lt;sonar.host.url&gt;</span>http://10.19.88.60:59000<span style=color:#f92672>&lt;/sonar.host.url&gt;</span>
+
+    <span style=color:#75715e>&lt;!-- maven deploy --&gt;</span>
+    <span style=color:#f92672>&lt;distribution.username/&gt;</span>
+    <span style=color:#f92672>&lt;distribution.password/&gt;</span>
+  <span style=color:#f92672>&lt;/properties&gt;</span>
+
+  <span style=color:#75715e>&lt;!-- 下级子模块（后续会将到子模块的划分原则）--&gt;</span>
+  <span style=color:#f92672>&lt;modules&gt;</span>
+    <span style=color:#f92672>&lt;module&gt;</span>apigateway-dependencies<span style=color:#f92672>&lt;/module&gt;</span>
+    <span style=color:#f92672>&lt;module&gt;</span>apigateway-common<span style=color:#f92672>&lt;/module&gt;</span>
+    <span style=color:#f92672>&lt;module&gt;</span>apigateway-server-common<span style=color:#f92672>&lt;/module&gt;</span>
+    <span style=color:#f92672>&lt;module&gt;</span>apigateway-server<span style=color:#f92672>&lt;/module&gt;</span>
+    <span style=color:#f92672>&lt;module&gt;</span>apigateway-server-plugins<span style=color:#f92672>&lt;/module&gt;</span>
+    <span style=color:#f92672>&lt;module&gt;</span>apigateway-client<span style=color:#f92672>&lt;/module&gt;</span>
+  <span style=color:#f92672>&lt;/modules&gt;</span>
+
+  <span style=color:#75715e>&lt;!-- 插件下载仓库 --&gt;</span>
+  <span style=color:#f92672>&lt;pluginRepositories&gt;</span>
+    <span style=color:#75715e>&lt;!-- 国内使用阿里云可能快点 --&gt;</span>
+    <span style=color:#f92672>&lt;pluginRepository&gt;</span>
+      <span style=color:#f92672>&lt;id&gt;</span>aliyun<span style=color:#f92672>&lt;/id&gt;</span>
+      <span style=color:#f92672>&lt;url&gt;</span>https://maven.aliyun.com/repository/public<span style=color:#f92672>&lt;/url&gt;</span>
+      <span style=color:#f92672>&lt;releases&gt;</span>
+        <span style=color:#f92672>&lt;enabled&gt;</span>true<span style=color:#f92672>&lt;/enabled&gt;</span>
+      <span style=color:#f92672>&lt;/releases&gt;</span>
+      <span style=color:#f92672>&lt;snapshots&gt;</span>
+        <span style=color:#f92672>&lt;enabled&gt;</span>false<span style=color:#f92672>&lt;/enabled&gt;</span>
+      <span style=color:#f92672>&lt;/snapshots&gt;</span>
+    <span style=color:#f92672>&lt;/pluginRepository&gt;</span>
+  <span style=color:#f92672>&lt;/pluginRepositories&gt;</span>
+
+  <span style=color:#75715e>&lt;!-- 下载依赖的私有仓库 --&gt;</span>
+  <span style=color:#f92672>&lt;repositories&gt;</span>
+    <span style=color:#75715e>&lt;!-- 国内使用阿里云可能快点 --&gt;</span>
+    <span style=color:#f92672>&lt;repository&gt;</span>
+      <span style=color:#f92672>&lt;id&gt;</span>aliyun<span style=color:#f92672>&lt;/id&gt;</span>
+      <span style=color:#f92672>&lt;name&gt;</span>aliyun<span style=color:#f92672>&lt;/name&gt;</span>
+      <span style=color:#f92672>&lt;url&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span style=color:#f92672>&lt;/url&gt;</span>
+    <span style=color:#f92672>&lt;/repository&gt;</span>
+    <span style=color:#f92672>&lt;repository&gt;</span>
+      <span style=color:#f92672>&lt;id&gt;</span>releases<span style=color:#f92672>&lt;/id&gt;</span>
+      <span style=color:#f92672>&lt;name&gt;</span>releases<span style=color:#f92672>&lt;/name&gt;</span>
+      <span style=color:#f92672>&lt;url&gt;</span>http://192.168.1.10:8082/nexus/repository/releases/<span style=color:#f92672>&lt;/url&gt;</span>
+      <span style=color:#f92672>&lt;releases&gt;</span>
+        <span style=color:#f92672>&lt;enabled&gt;</span>true<span style=color:#f92672>&lt;/enabled&gt;</span>
+      <span style=color:#f92672>&lt;/releases&gt;</span>
+      <span style=color:#f92672>&lt;snapshots&gt;</span>
+        <span style=color:#f92672>&lt;enabled&gt;</span>false<span style=color:#f92672>&lt;/enabled&gt;</span>
+      <span style=color:#f92672>&lt;/snapshots&gt;</span>
+    <span style=color:#f92672>&lt;/repository&gt;</span>
+    <span style=color:#f92672>&lt;repository&gt;</span>
+      <span style=color:#f92672>&lt;id&gt;</span>snapshots<span style=color:#f92672>&lt;/id&gt;</span>
+      <span style=color:#f92672>&lt;name&gt;</span>Snapshots<span style=color:#f92672>&lt;/name&gt;</span>
+      <span style=color:#f92672>&lt;url&gt;</span>http://192.168.1.10:8082/nexus/repository/snapshots/<span style=color:#f92672>&lt;/url&gt;</span>
+      <span style=color:#f92672>&lt;releases&gt;</span>
+        <span style=color:#f92672>&lt;enabled&gt;</span>true<span style=color:#f92672>&lt;/enabled&gt;</span>
+      <span style=color:#f92672>&lt;/releases&gt;</span>
+      <span style=color:#f92672>&lt;snapshots&gt;</span>
+        <span style=color:#f92672>&lt;enabled&gt;</span>true<span style=color:#f92672>&lt;/enabled&gt;</span>
+        <span style=color:#f92672>&lt;updatePolicy&gt;</span>always<span style=color:#f92672>&lt;/updatePolicy&gt;</span>
+      <span style=color:#f92672>&lt;/snapshots&gt;</span>
+    <span style=color:#f92672>&lt;/repository&gt;</span>
+  <span style=color:#f92672>&lt;/repositories&gt;</span>
+
+  <span style=color:#75715e>&lt;!-- 发布用私有仓库地址 --&gt;</span>
+  <span style=color:#f92672>&lt;distributionManagement&gt;</span>
+    <span style=color:#f92672>&lt;repository&gt;</span>
+      <span style=color:#f92672>&lt;id&gt;</span>releases<span style=color:#f92672>&lt;/id&gt;</span>
+      <span style=color:#f92672>&lt;name&gt;</span>Release Repository<span style=color:#f92672>&lt;/name&gt;</span>
+      <span style=color:#f92672>&lt;url&gt;</span>
+        http://${distribution.username}:${distribution.password}@192.168.1.10:8082/nexus/repository/releases/
+      <span style=color:#f92672>&lt;/url&gt;</span>
+    <span style=color:#f92672>&lt;/repository&gt;</span>
+    <span style=color:#f92672>&lt;snapshotRepository&gt;</span>
+      <span style=color:#f92672>&lt;id&gt;</span>snapshots<span style=color:#f92672>&lt;/id&gt;</span>
+      <span style=color:#f92672>&lt;name&gt;</span>Snapshot Repository<span style=color:#f92672>&lt;/name&gt;</span>
+      <span style=color:#f92672>&lt;url&gt;</span>
+        http://${distribution.username}:${distribution.password}@192.168.1.10:8082/nexus/repository/snapshots/
+      <span style=color:#f92672>&lt;/url&gt;</span>
+    <span style=color:#f92672>&lt;/snapshotRepository&gt;</span>
+  <span style=color:#f92672>&lt;/distributionManagement&gt;</span>
+
+  <span style=color:#75715e>&lt;!-- 项目管理类插件版本管理（根据自身情况自选） --&gt;</span>
+  <span style=color:#f92672>&lt;build&gt;</span>
+    <span style=color:#f92672>&lt;pluginManagement&gt;</span>
+      <span style=color:#f92672>&lt;plugins&gt;</span>
+        <span style=color:#75715e>&lt;!-- Java 编译插件 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>org.apache.maven.plugins<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>maven-compiler-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;version&gt;</span>${maven-compiler-plugin.version}<span style=color:#f92672>&lt;/version&gt;</span>
+          <span style=color:#f92672>&lt;configuration&gt;</span>
+            <span style=color:#f92672>&lt;compilerArgument&gt;</span>-Xlint:unchecked<span style=color:#f92672>&lt;/compilerArgument&gt;</span>
+          <span style=color:#f92672>&lt;/configuration&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+        <span style=color:#75715e>&lt;!-- Docker 发布插件 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>io.fabric8<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>docker-maven-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;version&gt;</span>${docker-maven-plugin.version}<span style=color:#f92672>&lt;/version&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+        <span style=color:#75715e>&lt;!-- Maven 发布插件 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>org.apache.maven.plugins<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>maven-deploy-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;version&gt;</span>${maven-deploy-plugin.version}<span style=color:#f92672>&lt;/version&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+        <span style=color:#75715e>&lt;!-- 执行测试用例插件 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>org.apache.maven.plugins<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>maven-surefire-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;version&gt;</span>${maven-surefire-plugin.version}<span style=color:#f92672>&lt;/version&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+        <span style=color:#75715e>&lt;!-- 代码覆盖率插件 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>org.jacoco<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>jacoco-maven-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;version&gt;</span>${jacoco-maven-plugin.version}<span style=color:#f92672>&lt;/version&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+        <span style=color:#75715e>&lt;!-- 代码质量管理插件 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>org.sonarsource.scanner.maven<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>sonar-maven-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;version&gt;</span>${sonar-maven-plugin.version}<span style=color:#f92672>&lt;/version&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+      <span style=color:#f92672>&lt;/plugins&gt;</span>
+    <span style=color:#f92672>&lt;/pluginManagement&gt;</span>
+  <span style=color:#f92672>&lt;/build&gt;</span>
+<span style=color:#f92672>&lt;/project&gt;</span>
+</code></pre></div><h3 id=使用-maven-wrapper-安装和管理-maven-版本>使用 Maven Wrapper 安装和管理 Maven 版本</h3><p>为了降低参与难度，建议在项目中使用 <a href=https://github.com/takari/takari-maven-plugin>Maven Wrapper</a> 方式管理 Maven，这样参与者使用 <code>mvnw</code> 命令代替 <code>mvn</code>
+命令执行时，会自动下载安装 Maven. 同样，您也可以看到我将镜像仓库地址也写到了主 pom 文件中，这也是为了避免参与者去手动修改本地 Maven 的 <code>settings.xml</code> 文件，从而降低参与的难度。</p><h3 id=子模块-pom>子模块 POM</h3><p>通常我们为了解耦一个项目，通常会采用多模块的方式按照子系统垂直拆分模块，或则按照基础设施水平拆分模块，总之拆分模块是必须的，拆分的合理性和粒度也决定了开发者的参与门槛。</p><p>根据我们这个想象的项目，我们可以按如下方式拆子模块.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml>
+<span style=color:#f92672>&lt;modules&gt;</span>
+  <span style=color:#75715e>&lt;!-- 依赖版本管理、公共参数管理 --&gt;</span>
+  <span style=color:#f92672>&lt;module&gt;</span>apigateway-dependencies<span style=color:#f92672>&lt;/module&gt;</span>
+  <span style=color:#75715e>&lt;!-- 网关的公共代码 --&gt;</span>
+  <span style=color:#f92672>&lt;module&gt;</span>apigateway-common<span style=color:#f92672>&lt;/module&gt;</span>
+  <span style=color:#75715e>&lt;!-- 网关服务的公共代码 --&gt;</span>
+  <span style=color:#f92672>&lt;module&gt;</span>apigateway-server-common<span style=color:#f92672>&lt;/module&gt;</span>
+  <span style=color:#75715e>&lt;!-- 网关服务本身 --&gt;</span>
+  <span style=color:#f92672>&lt;module&gt;</span>apigateway-server<span style=color:#f92672>&lt;/module&gt;</span>
+  <span style=color:#75715e>&lt;!-- 网关服务插件 --&gt;</span>
+  <span style=color:#f92672>&lt;module&gt;</span>apigateway-server-plugins<span style=color:#f92672>&lt;/module&gt;</span>
+  <span style=color:#75715e>&lt;!-- 网关客户端服 --&gt;</span>
+  <span style=color:#f92672>&lt;module&gt;</span>apigateway-client<span style=color:#f92672>&lt;/module&gt;</span>
+<span style=color:#f92672>&lt;/modules&gt;</span>
+</code></pre></div><ul><li>服务端模块 <code>pigateway-server</code>，包含 <code>apigateway-dependencies</code>，<code>apigateway-server-common</code>，<code>apigateway-server-plugins</code> 模块;</li><li>客户端模块 <code>apigateway-client</code> 包含 <code>apigateway-dependencies</code>，<code>apigateway-common</code> 模块;</li><li>插件模块 <code>apigateway-server-plugins</code> 包含 <code>apigateway-dependencies</code>，<code>apigateway-server-common</code> 模块;</li></ul><p>子模块的 POM 要继承上级 POM</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;project</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
+         <span style=color:#a6e22e>xmlns:xsi=</span><span style=color:#e6db74>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span style=color:#a6e22e>xsi:schemaLocation=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style=color:#f92672>&gt;</span>
+  <span style=color:#f92672>&lt;modelVersion&gt;</span>4.0.0<span style=color:#f92672>&lt;/modelVersion&gt;</span>
+  <span style=color:#f92672>&lt;parent&gt;</span>
+    <span style=color:#f92672>&lt;groupId&gt;</span>com.coolbeevip.apigateway<span style=color:#f92672>&lt;/groupId&gt;</span>
+    <span style=color:#f92672>&lt;artifactId&gt;</span>apigateway-parent<span style=color:#f92672>&lt;/artifactId&gt;</span>
+    <span style=color:#f92672>&lt;version&gt;</span>1.0.0-SNAPSHOT<span style=color:#f92672>&lt;/version&gt;</span>
+  <span style=color:#f92672>&lt;/parent&gt;</span>
+  <span style=color:#f92672>&lt;artifactId&gt;</span>apigateway-server<span style=color:#f92672>&lt;/artifactId&gt;</span>
+
+<span style=color:#f92672>&lt;/project&gt;</span>
+</code></pre></div><ul><li>子模块只能继承本系统的模块（只有这样参数才能继承，避免重复定义）</li><li>子模块中不要单独定义版本号</li></ul><h3 id=依赖定义子模块>依赖定义子模块</h3><p>通常在项目中必须有一个地方几种定义依赖的版本，承担这个功能的模块一般是主 pom 或者一个单独的子模块，例如 <code>apigateway-dependencies</code>. 在这个模块里通常会用到以下定义</p><ul><li>properties</li><li>dependencyManagement</li><li>pluginManagement</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;project</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
+         <span style=color:#a6e22e>xmlns:xsi=</span><span style=color:#e6db74>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+         <span style=color:#a6e22e>xsi:schemaLocation=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style=color:#f92672>&gt;</span>
+
+  <span style=color:#f92672>&lt;modelVersion&gt;</span>4.0.0<span style=color:#f92672>&lt;/modelVersion&gt;</span>
+  <span style=color:#f92672>&lt;parent&gt;</span>
+    <span style=color:#f92672>&lt;groupId&gt;</span>com.coolbeevip.apigateway<span style=color:#f92672>&lt;/groupId&gt;</span>
+    <span style=color:#f92672>&lt;artifactId&gt;</span>apigateway-parent<span style=color:#f92672>&lt;/artifactId&gt;</span>
+    <span style=color:#f92672>&lt;version&gt;</span>1.0.0-SNAPSHOT<span style=color:#f92672>&lt;/version&gt;</span>
+  <span style=color:#f92672>&lt;/parent&gt;</span>
+  <span style=color:#f92672>&lt;artifactId&gt;</span>apigateway-dependencies<span style=color:#f92672>&lt;/artifactId&gt;</span>
+
+  <span style=color:#f92672>&lt;properties&gt;</span>
+    <span style=color:#75715e>&lt;!-- 定义版本号 --&gt;</span>
+    <span style=color:#f92672>&lt;h2.version&gt;</span>1.4.200<span style=color:#f92672>&lt;/h2.version&gt;</span>
+    <span style=color:#f92672>&lt;dom4j.version&gt;</span>2.1.3<span style=color:#f92672>&lt;/dom4j.version&gt;</span>
+    <span style=color:#f92672>&lt;commons-httpclient.version&gt;</span>3.0<span style=color:#f92672>&lt;/commons-httpclient.version&gt;</span>
+  <span style=color:#f92672>&lt;/properties&gt;</span>
+  
+  <span style=color:#f92672>&lt;dependencyManagement&gt;</span>
+    <span style=color:#f92672>&lt;dependencies&gt;</span>
+      <span style=color:#75715e>&lt;!-- 管理依赖版本 --&gt;</span>
+      <span style=color:#f92672>&lt;dependency&gt;</span>
+        <span style=color:#f92672>&lt;groupId&gt;</span>com.h2database<span style=color:#f92672>&lt;/groupId&gt;</span>
+        <span style=color:#f92672>&lt;artifactId&gt;</span>h2<span style=color:#f92672>&lt;/artifactId&gt;</span>
+        <span style=color:#f92672>&lt;version&gt;</span>${h2.version}<span style=color:#f92672>&lt;/version&gt;</span>
+      <span style=color:#f92672>&lt;/dependency&gt;</span>
+      <span style=color:#f92672>&lt;dependency&gt;</span>
+        <span style=color:#f92672>&lt;groupId&gt;</span>org.dom4j<span style=color:#f92672>&lt;/groupId&gt;</span>
+        <span style=color:#f92672>&lt;artifactId&gt;</span>dom4j<span style=color:#f92672>&lt;/artifactId&gt;</span>
+        <span style=color:#f92672>&lt;version&gt;</span>${dom4j.version}<span style=color:#f92672>&lt;/version&gt;</span>
+      <span style=color:#f92672>&lt;/dependency&gt;</span>
+      <span style=color:#f92672>&lt;dependency&gt;</span>
+        <span style=color:#f92672>&lt;groupId&gt;</span>commons-httpclient<span style=color:#f92672>&lt;/groupId&gt;</span>
+        <span style=color:#f92672>&lt;artifactId&gt;</span>commons-httpclient<span style=color:#f92672>&lt;/artifactId&gt;</span>
+        <span style=color:#f92672>&lt;version&gt;</span>${commons-httpclient.version}<span style=color:#f92672>&lt;/version&gt;</span>
+      <span style=color:#f92672>&lt;/dependency&gt;</span>      
+    <span style=color:#f92672>&lt;/dependencies&gt;</span>
+  <span style=color:#f92672>&lt;/dependencyManagement&gt;</span>
+  
+  <span style=color:#f92672>&lt;build&gt;</span>
+    <span style=color:#f92672>&lt;pluginManagement&gt;</span>
+      <span style=color:#f92672>&lt;plugins&gt;</span>
+        <span style=color:#75715e>&lt;!-- Docker 发布的插件配置 --&gt;</span>
+        <span style=color:#f92672>&lt;plugin&gt;</span>
+          <span style=color:#f92672>&lt;groupId&gt;</span>io.fabric8<span style=color:#f92672>&lt;/groupId&gt;</span>
+          <span style=color:#f92672>&lt;artifactId&gt;</span>docker-maven-plugin<span style=color:#f92672>&lt;/artifactId&gt;</span>
+          <span style=color:#f92672>&lt;configuration&gt;</span>
+            <span style=color:#f92672>&lt;skip&gt;</span>true<span style=color:#f92672>&lt;/skip&gt;</span>
+            <span style=color:#f92672>&lt;dockerHost&gt;</span>${docker.host}<span style=color:#f92672>&lt;/dockerHost&gt;</span>
+            <span style=color:#f92672>&lt;registry&gt;</span>${docker.registry}<span style=color:#f92672>&lt;/registry&gt;</span>
+            <span style=color:#f92672>&lt;authConfig&gt;</span>
+              <span style=color:#f92672>&lt;push&gt;</span>
+                <span style=color:#f92672>&lt;username&gt;</span>${docker.username}<span style=color:#f92672>&lt;/username&gt;</span>
+                <span style=color:#f92672>&lt;password&gt;</span>${docker.password}<span style=color:#f92672>&lt;/password&gt;</span>
+              <span style=color:#f92672>&lt;/push&gt;</span>
+            <span style=color:#f92672>&lt;/authConfig&gt;</span>
+            <span style=color:#f92672>&lt;images&gt;</span>
+              <span style=color:#f92672>&lt;image&gt;</span>
+                <span style=color:#f92672>&lt;name&gt;</span>${docker.registry}/${docker.namespace}/${project.name}:%v<span style=color:#f92672>&lt;/name&gt;</span>
+                <span style=color:#f92672>&lt;build&gt;</span>
+                  <span style=color:#f92672>&lt;dockerFile&gt;</span>${project.basedir}/Dockerfile<span style=color:#f92672>&lt;/dockerFile&gt;</span>
+                <span style=color:#f92672>&lt;/build&gt;</span>
+              <span style=color:#f92672>&lt;/image&gt;</span>
+              <span style=color:#f92672>&lt;image&gt;</span>
+                <span style=color:#f92672>&lt;name&gt;</span>${docker.registry}/${docker.namespace}/${project.name}:latest<span style=color:#f92672>&lt;/name&gt;</span>
+                <span style=color:#f92672>&lt;build&gt;</span>
+                  <span style=color:#f92672>&lt;dockerFile&gt;</span>${project.basedir}/Dockerfile<span style=color:#f92672>&lt;/dockerFile&gt;</span>
+                <span style=color:#f92672>&lt;/build&gt;</span>
+              <span style=color:#f92672>&lt;/image&gt;</span>
+            <span style=color:#f92672>&lt;/images&gt;</span>
+          <span style=color:#f92672>&lt;/configuration&gt;</span>
+        <span style=color:#f92672>&lt;/plugin&gt;</span>
+      <span style=color:#f92672>&lt;/plugins&gt;</span>
+    <span style=color:#f92672>&lt;/pluginManagement&gt;</span>
+  <span style=color:#f92672>&lt;/build&gt;</span>
+<span style=color:#f92672>&lt;/project&gt;</span>
+</code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/maven/>maven</a><a class=category href=/categories/java/>java</a><a class=category href=/categories/project/>project</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script></body></html>
