@@ -21,6 +21,18 @@ docker rmi -f $(docker images | awk '{print $3}')
 docker rmi -f $(docker images -a | grep "<none>" | awk '{print $3}') 
 ```
 
+#### 导出镜像
+
+```shell
+docker save -o postgres_9.6.tar postgres:9.6
+```
+
+#### 导入镜像
+
+```shell
+docker load -i postgres_9.6.tar
+```
+
 ## 容器
 
 #### 删除所有 `Exited` 容器
