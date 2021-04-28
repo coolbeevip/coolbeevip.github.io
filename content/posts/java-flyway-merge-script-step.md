@@ -42,3 +42,7 @@ V1.0.0.2__modify_user_table.sql
 ```properties
 flyway.baseline-version=1.0.0.2
 ```
+
+## 4.结束
+
+程序后续的数据库脚本的版本号就从 `V1.0.0.3__xxx` 继续。
