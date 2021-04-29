@@ -26,3 +26,40 @@ print {
     width: 100%;
   }
 }
+
+table {
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
+}
+td, th {
+  border: solid rgb(200, 200, 200) 1px;
+  padding: .5rem;
+}
+th {
+  text-align: left;
+  background-color: #c8c8c8;
+  border-top: none;
+}
+td {
+  white-space: nowrap;
+  border-bottom: none;
+  color: rgb(20, 20, 20);
+}
+td:first-of-type, th:first-of-type {
+  border-left: none;
+}
+td:last-of-type, th:last-of-type {
+  border-right: none;
+}
+td:first-child{
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+td:last-child{
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
