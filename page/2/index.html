@@ -5,8 +5,10 @@ versions description script success 1.0.0.0 init.sql V1.0.0.0__init.sql 1 1.0.0.
 至此：你已经对齐了程序和数据库中脚本版本号，可以开始准备合并了
 2.合并程序中的SQL脚本 合并多个脚本的内容到最大版本号的文件中，例如：将 V1.0.0.0__init.sql, V1.0.0.1__add_user_table.sql, V1.0.0.2__modify_user_table.sql 合并为 V1.0.0.2__init.sql
 注意： 不是简单的文件合并，而是最终执行结果的合并
-3.重启应用程序，设置基线版本 在程序启动时设置基线版本参数为当前版本，设置这个参数的目的是告诉 Flyway 当前已经执行过 1.0.0.2 脚本了。这之前的脚本不要再执行了。
-flyway.baseline-version=1.0.0.2 4.结束 程序后续的数据库脚本的版本号就从 V1.0.0.3__xxx 继续。</p></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em><span class=date>Thu, Nov 29, 2018</span>
+3.重新打包程序 只包含合 V1.0.0.2__init.sql 脚本的程序
+4.停止所有老版本的程序 包含 V1.0.0.0__init.sql,V1.0.0.1__add_user_table.sql,V1.0.0.2__modify_user_table.sql 老脚本的程序
+5.删除数据库中的版本历史表 默认是 flyway_schema_history
+6.重启应用程序 在程序启动时设置基线版本参数为当前版本，设置这个参数的目的是告诉 Flyway 当前已经执行过 1.</p><a href=/posts/java-flyway-merge-script-step/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em><span class=date>Thu, Nov 29, 2018</span>
 <span class=separator><a class=category href=/categories/java/>java</a><a class=category href=/categories/flyway/>flyway</a></span></div></div></div></div><div class="post animated fadeInDown"><div class=post-title><h3><a href=/posts/maven-commands/>常用 Maven 命令</a></h3></div><div class=post-content><div class=p_part><p>常用 Maven 命令
 Parameters -D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试； -P 指定 Profile 配置，可以用于区分环境； -e 显示maven运行出错的信息； -o 离线执行命令,即不去远程仓库更新包； -X 显示maven允许的debug信息； -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。 &ndash;no-snapshot-updates 禁止更新 snapshot Dependency 显示maven依赖数
 mvn dependency:tree 显示maven依赖列表
