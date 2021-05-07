@@ -83,6 +83,14 @@ git push origin :refs/tags/<标签名>
 git push origin --tags
 ```
 
+重命名 Tag
+
+```shell
+git tag <新标签名> <老标签名>
+git tag -d <老标签名>
+git push origin <新标签名> :<老标签名>
+```
+
 ## Commit
 
 修改最后一次 commit
