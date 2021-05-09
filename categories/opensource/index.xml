@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>opensource on</title><link>https://coolbeevip.github.io/categories/opensource/</link><description>Recent content in opensource on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 09 May 2021 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/opensource/index.xml" rel="self" type="application/rss+xml"/><item><title>导出 Maven 项目的依赖报告并分析 LICENSE 信息</title><link>https://coolbeevip.github.io/posts/maven-export-dependencies-analyse-license/</link><pubDate>Sun, 09 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/maven-export-dependencies-analyse-license/</guid><description>有的时候我们那需要分析多模块 Maven 项目的依赖使用情况，并希望能够分析出这些依赖的 LICENSE 信息。使用 io.github.coolbeevip:license-maven-plugin 插件 可以生成 TXT 或者 CSV 格式的分析报告
+CSV 格式的报告 TXT 格式的报告 插件 LICENSE-MAVEN-PLUGIN -Dformat 导出格式，例如 -Dformat=csv (默认)；或者 -Dformat=txt； -Dlicense 是否分析 LICENSE 信息，例如 -Dlicense=false（默认）; -Dlicense=true； 导出报告 在 Maven 项目的根目录执行如下命令
+导出 CSV
+mvn io.github.coolbeevip:license-maven-plugin:1.4.0:dependency-license-export -Dformat=csv 导出 TXT
+mvn io.github.coolbeevip:license-maven-plugin:1.4.0:dependency-license-export -Dformat=txt 分析 LICENSE 此功能使用 selenium 从 Maven Central Repository 分析依赖的 License 信息
+在 MacOS 下安装 selenium 支持，更对支持参见ChromeDriver
+brew install --cask chromedriver 导出时增加参数 -Dlicense=true 即可
+mvn io.github.coolbeevip:license-maven-plugin:1.4.0:dependency-license-export -Dformat=csv -Dlicense=true</description></item></channel></rss>
