@@ -12,14 +12,22 @@ draft: false
 
 ![image-notice-csv](/images/posts/maven-export-dependencies-analyse-license/notice-csv.png)
 
+* [NOTICE.CSV](https://github.com/coolbeevip/license-maven-plugin/blob/master/samples/NOTICE.CSV)
+* [NOTICE-LICENSE.CSV](https://github.com/coolbeevip/license-maven-plugin/blob/master/samples/NOTICE-LICENSE.CSV)
+
 ## TXT 格式的报告
 
 ![image-notice-txt](/images/posts/maven-export-dependencies-analyse-license/notice-txt.png)
 
+* [NOTICE.TXT](https://github.com/coolbeevip/license-maven-plugin/blob/master/samples/NOTICE.TXT)
+* [NOTICE-LICENSE.TXT](https://github.com/coolbeevip/license-maven-plugin/blob/master/samples/NOTICE-LICENSE.TXT)
+
 ## 插件 LICENSE-MAVEN-PLUGIN
 
-* -Dformat 导出格式，例如 `-Dformat=csv` (默认)；或者 `-Dformat=txt`；
-* -Dlicense 是否分析 LICENSE 信息，例如 `-Dlicense=false`（默认）;  `-Dlicense=true`；
+* format 导出格式，支持 csv、txt；
+* license 是否分析 LICENSE 信息，默认 false；
+* ignoreGroupIds 忽略 groupId 列表, 多个用逗号分割;
+* timeout 分析 LICENSE 的超时时间，默认 5 秒;
 
 ## 导出报告
 
@@ -28,16 +36,24 @@ draft: false
 导出 CSV
 
 ```shell
-mvn io.github.coolbeevip:license-maven-plugin:1.4.0:dependency-license-export -Dformat=csv
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv
 ```
 
 导出 TXT
 
 ```shell
-mvn io.github.coolbeevip:license-maven-plugin:1.4.0:dependency-license-export -Dformat=txt
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=txt
 ````
 
-## 分析 LICENSE
+**提示：** 导出的报告位置在 `./target/distribute` 目录下
+
+## 导出报告(忽略部分依赖)
+
+```shell
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -Dlicense=true -DignoreGroupIds=org.apache.servicecomb,com.github.seanyinx
+```
+
+## 导出报告(分析LICENSE)
 
 此功能使用 [selenium](https://github.com/SeleniumHQ/selenium) 从 [Maven Central Repository](https://search.maven.org/) 分析依赖的 License 信息
 
@@ -50,5 +66,9 @@ brew install --cask chromedriver
 导出时增加参数 `-Dlicense=true` 即可
 
 ```shell
-mvn io.github.coolbeevip:license-maven-plugin:1.4.0:dependency-license-export -Dformat=csv -Dlicense=true
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -Dlicense=true
 ```
+
+分析过的 LICENSE 信息会存储在数据文件 `~/.m2/mvnrepository.mapdb` 中，再次分析时会优先从数据文件中提取 LICENSE 信息。
+你也可以下载作者的 [mvnrepository.mapdb](https://github.com/coolbeevip/license-maven-plugin/blob/master/db/mvnrepository.mapdb) 文件放到本机 `~/.m2/` 目录下
+这个数据文件中包含了作者常用的一些依赖信息
