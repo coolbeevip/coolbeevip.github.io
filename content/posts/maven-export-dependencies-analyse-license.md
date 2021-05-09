@@ -8,6 +8,12 @@ draft: false
 有的时候我们那需要分析多模块 Maven 项目的依赖使用情况，并希望能够分析出这些依赖的 LICENSE 信息。使用 [io.github.coolbeevip:license-maven-plugin](https://github.com/coolbeevip/license-maven-plugin) 插件
 可以生成 TXT 或者 CSV 格式的分析报告
 
+[youtube](https://www.youtube.com/watch?v=hhC0m-OZgfM)
+
+[bilibili](https://www.bilibili.com/video/BV1qU4y1t7M4/)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 ## CSV 格式的报告
 
 ![image-notice-csv](/images/posts/maven-export-dependencies-analyse-license/notice-csv.png)
@@ -50,7 +56,7 @@ mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -D
 ## 导出报告(忽略部分依赖)
 
 ```shell
-mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -Dlicense=true -DignoreGroupIds=org.apache.servicecomb,com.github.seanyinx
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.apache.servicecomb,com.github.seanyinx
 ```
 
 ## 导出报告(分析LICENSE)
