@@ -12,8 +12,6 @@ draft: false
 
 [bilibili](https://www.bilibili.com/video/BV1qU4y1t7M4/)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
 ## CSV 格式的报告
 
 ![image-notice-csv](/images/posts/maven-export-dependencies-analyse-license/notice-csv.png)
