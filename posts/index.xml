@@ -64,4 +64,9 @@ mvn dependency:tree 显示maven依赖列表
 mvn dependency:list 下载依赖包的源码
 mvn dependency:sources Maven Wrapper 自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件Maven Wrapper plugin将其自动化安装指定版本的 Maven
 mvn -N io.takari:maven:wrapper -Dmaven=3.6.3 这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理
-mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.cmd: 这是 Windows Script 可执行文件，用来代替 mvn mvn: 隐藏的文件夹，其中包含Maven Wrapper Java库及其属性文件 首次执行 mvnw 或者 mvnw.</description></item></channel></rss>
+mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.cmd: 这是 Windows Script 可执行文件，用来代替 mvn mvn: 隐藏的文件夹，其中包含Maven Wrapper Java库及其属性文件 首次执行 mvnw 或者 mvnw.</description></item><item><title>压力测试之服务器估算</title><link>https://coolbeevip.github.io/posts/stress-testing-host-estimate-with-qps/</link><pubDate>Wed, 07 Mar 2018 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/stress-testing-host-estimate-with-qps/</guid><description>通过单个服务器压测的 QPS 估算需要的服务器数量
+已知 QPS 和期望每笔耗时，估算服务器数量 服务器数量 =QPS/(1000/每笔毫秒)/每服务器CPU个数
+例如：
+QPS：每秒处理3200笔 每笔毫秒：50ms 每个服务器CPU个数：16 需要服务器数量=(3200/(1000/50)/16=10台服务器 已知 QPS 以及服务器数量，估算每笔耗时 每笔毫秒=1000/(QPS/(服务器数量*每服务器CPU个数))
+例如：
+QPS：每秒处理3200笔 服务器数量：10 每服务器CPU个数：16 每笔毫秒数=1000/(3200/(10*16))=50ms</description></item></channel></rss>
