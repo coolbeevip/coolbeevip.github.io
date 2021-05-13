@@ -14,6 +14,12 @@ disableThemeSwitcher = true
 readMore = true
 fullPostContent = false
 customCss = ["css/custom.css"]
+mainSections = []
+googleAnalytics = "G-0JGN8RJDND"
+
+[params.math]
+enable = true
+use = "katex"
 
 ## Social links
 
@@ -33,18 +39,24 @@ url = "mailto:zhanglei@apache.org"
 
   [[menu.main]]
   name = "Home"
-  identifier = "1.home"
+  identifier = "home"
   weight = 100
   url = "/"
 
   [[menu.main]]
-  name = "Bookmarks"
-  identifier = "2.bookmarks"
+  name = "Blog"
+  identifier = "blog"
   weight = 200
+  url = "/posts"
+
+  [[menu.main]]
+  name = "Bookmarks"
+  identifier = "bookmarks"
+  weight = 300
   url = "/bookmarks"
 
   [[menu.main]]
   name = "About"
-  weight = 300
+  weight = 400
   identifier = "3.about"
   url = "/about/"
