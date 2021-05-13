@@ -33,12 +33,18 @@ url = "mailto:zhanglei@apache.org"
 
   [[menu.main]]
   name = "Home"
-  identifier = "home"
+  identifier = "1.home"
   weight = 100
   url = "/"
 
   [[menu.main]]
+  name = "Bookmarks"
+  identifier = "2.bookmarks"
+  weight = 200
+  url = "/bookmarks"
+
+  [[menu.main]]
   name = "About"
   weight = 300
-  identifier = "about"
+  identifier = "3.about"
   url = "/about/"
