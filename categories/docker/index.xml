@@ -1,4 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>docker on</title><link>https://coolbeevip.github.io/categories/docker/</link><description>Recent content in docker on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 11 May 2021 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Firewalld 保护 Docker 端口</title><link>https://coolbeevip.github.io/posts/securing-docker-ports-with-firewalld/</link><pubDate>Tue, 11 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/securing-docker-ports-with-firewalld/</guid><description>概述 为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。 通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，更多详细
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>docker on</title><link>https://coolbeevip.github.io/categories/docker/</link><description>Recent content in docker on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 14 May 2021 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>JProfiler with Docker Sonatype Nexus3</title><link>https://coolbeevip.github.io/posts/jprofiler-with-docker/</link><pubDate>Fri, 14 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/jprofiler-with-docker/</guid><description>使用 JProfiler 监控 Docker Sonatype Nexus3
+下载 JProfiler 从 https://www.ej-technologies.com/下载 JProfiler 和 Agent（注意版本必须一致）
+JProfiler GUI
+https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg
+JProfiler Agent
+https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
+在服务器上安装 JProfiler Agent 将下载后的 jprofiler_linux_12_0_2.sh 传到服务器上，通过 sh jprofiler_linux_12_0_2.sh 命令按提示安装即可
+默认安装路径为 /opt/jprofiler12/，这个路径在启动 Docker 的时候要映射到容器内部
+启动 Docker Sonatype Nexus3 在官方 sonatype/nexus3 容器启动参数的基础上做如下修改
+使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
+增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
+增加 -p 9899:9899 容器端口映射
+docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS=&amp;#34;-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</description></item><item><title>使用 Firewalld 保护 Docker 端口</title><link>https://coolbeevip.github.io/posts/securing-docker-ports-with-firewalld/</link><pubDate>Tue, 11 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/securing-docker-ports-with-firewalld/</guid><description>概述 为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。 通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，更多详细
 本文基于环境
 Docker-CE 19.03.12 CentOS Linux release 7.8.2003 Firewall 0.6.3 本文例子:
 我们使用 Docker 安装一个 Nginx，并将 80(HTTP) 端口对外映射为 8080，443(HTTPS) 端口对外映射为 8443，并通过 Firewalld 仅允许特定的 IP 访问；提示：后续的防火墙规则中配置的端口是容器内部端口，例如 80，443
