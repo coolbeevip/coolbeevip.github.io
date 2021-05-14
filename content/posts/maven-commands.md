@@ -13,6 +13,12 @@ draft: false
 * -P 指定 Profile 配置，可以用于区分环境；
 * -e 显示maven运行出错的信息；
 * -o 离线执行命令,即不去远程仓库更新包；
+* -f 强制指定使用 POM 文件，或者包含 POM 文件的目录
+* -pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔)
+* -am 表示同时处理选定模块所依赖的模块
+* -amd 表示同时处理依赖选定模块的模块
+* -rf 表示从指定模块开始继续处理  
+* -N 表示不递归子模块  
 * -X 显示maven允许的debug信息；
 * -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。
 * --no-snapshot-updates 禁止更新 snapshot 
