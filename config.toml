@@ -21,6 +21,12 @@ googleAnalytics = "G-0JGN8RJDND"
 enable = true
 use = "katex"
 
+[params.utterances]
+repo = "coolbeevip/coolbeevip.github.io"
+issueTerm = "pathname"
+theme= "github-light"
+label="Blogs"
+
 ## Social links
 
 [[params.socialIcons]]
