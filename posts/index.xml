@@ -59,12 +59,12 @@ versions description script success 1.0.0.0 init.sql V1.0.0.0__init.sql 1 1.0.0.
 4.停止所有老版本的程序 包含 V1.0.0.0__init.sql,V1.0.0.1__add_user_table.sql,V1.0.0.2__modify_user_table.sql 老脚本的程序
 5.删除数据库中的版本历史表 默认是 flyway_schema_history
 6.重启应用程序 在程序启动时设置基线版本参数为当前版本，设置这个参数的目的是告诉 Flyway 当前已经执行过 1.</description></item><item><title>常用 Maven 命令</title><link>https://coolbeevip.github.io/posts/maven-commands/</link><pubDate>Fri, 23 Nov 2018 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/maven-commands/</guid><description>常用 Maven 命令
-Parameters -D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试； -P 指定 Profile 配置，可以用于区分环境； -e 显示maven运行出错的信息； -o 离线执行命令,即不去远程仓库更新包； -X 显示maven允许的debug信息； -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。 &amp;ndash;no-snapshot-updates 禁止更新 snapshot Dependency 显示maven依赖数
+Parameters -D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试； -P 指定 Profile 配置，可以用于区分环境； -e 显示maven运行出错的信息； -o 离线执行命令,即不去远程仓库更新包； -f 强制指定使用 POM 文件，或者包含 POM 文件的目录 -pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔) -am 表示同时处理选定模块所依赖的模块 -amd 表示同时处理依赖选定模块的模块 -rf 表示从指定模块开始继续处理 -N 表示不递归子模块 -X 显示maven允许的debug信息； -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。 &amp;ndash;no-snapshot-updates 禁止更新 snapshot Dependency 显示maven依赖数
 mvn dependency:tree 显示maven依赖列表
 mvn dependency:list 下载依赖包的源码
 mvn dependency:sources Maven Wrapper 自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件Maven Wrapper plugin将其自动化安装指定版本的 Maven
 mvn -N io.takari:maven:wrapper -Dmaven=3.6.3 这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理
-mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.cmd: 这是 Windows Script 可执行文件，用来代替 mvn mvn: 隐藏的文件夹，其中包含Maven Wrapper Java库及其属性文件 首次执行 mvnw 或者 mvnw.</description></item><item><title>压力测试之服务器估算</title><link>https://coolbeevip.github.io/posts/stress-testing-host-estimate-with-qps/</link><pubDate>Wed, 07 Mar 2018 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/stress-testing-host-estimate-with-qps/</guid><description>通过单个服务器压测的 QPS 估算需要的服务器数量
+mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.</description></item><item><title>压力测试之服务器估算</title><link>https://coolbeevip.github.io/posts/stress-testing-host-estimate-with-qps/</link><pubDate>Wed, 07 Mar 2018 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/stress-testing-host-estimate-with-qps/</guid><description>通过单个服务器压测的 QPS 估算需要的服务器数量
 已知 QPS 和期望每笔耗时，估算服务器数量 服务器数量 \( = QPS \div (1000 \div 每笔毫秒) \div 每服务器CPU个数 \)
 例如：
 QPS：每秒处理3200笔 每笔毫秒：50ms 每个服务器CPU个数：16 服务器数量 \( 3200_{qps} \div (1000_{ms} \div 50_{ms}) \div 16_{cpu} = 10_{台} \)
