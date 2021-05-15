@@ -1,7 +1,7 @@
 ---
-title: "常用 Maven 命令"
+title: "Maven Commands"
 date: 2018-11-23T13:24:14+08:00
-categories: [maven]
+categories: [maven,commands]
 draft: false
 ---
 

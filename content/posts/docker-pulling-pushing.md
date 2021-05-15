@@ -1,5 +1,5 @@
 ---
-title: "Docker Pulling Pushing Batch Shell Script"
+title: "Synchronize between image repositories with Bash"
 date: 2021-04-19T13:24:14+08:00
 categories: [docker,shell]
 draft: false

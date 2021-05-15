@@ -1,5 +1,5 @@
 ---
-title: "Git Fork 后同步上游分支"
+title: "Synchronizing Your Forked Git Project"
 date: 2020-04-06T13:24:14+08:00
 categories: [git]
 draft: false

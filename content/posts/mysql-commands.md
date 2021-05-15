@@ -1,7 +1,7 @@
 ---
-title: "常用 MySQL 命令"
+title: "MySQL Commands"
 date: 2020-05-11T13:24:14+08:00
-categories: [mysql]
+categories: [mysql,commands]
 draft: false
 ---
 

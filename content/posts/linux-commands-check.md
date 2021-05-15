@@ -1,7 +1,7 @@
 ---
-title: "常用 Linux 检测命令"
+title: "Linux Commands"
 date: 2019-05-06T13:24:14+08:00
-categories: [linux]
+categories: [linux,commands]
 draft: false
 ---
 

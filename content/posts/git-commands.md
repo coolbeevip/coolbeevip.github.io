@@ -1,7 +1,7 @@
 ---
-title: "常用 Git 命令"
+title: "Git Commands"
 date: 2019-04-06T13:24:14+08:00
-categories: [git]
+categories: [git,commands]
 draft: false
 ---
 

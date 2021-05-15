@@ -1,5 +1,5 @@
 ---
-title: "MacOS 切换 JDK"
+title: "MacOS Switch JDK"
 date: 2021-03-25T13:24:14+08:00
 categories: [macos,jdk,java]
 draft: false

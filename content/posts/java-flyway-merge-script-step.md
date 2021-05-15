@@ -1,5 +1,5 @@
 ---
-title: "Flyway 补丁脚本合并成全量脚本的步骤"
+title: "To roll up Flyway incremental changes into 1 file"
 date: 2018-11-29T13:24:14+08:00
 categories: [java, flyway]
 draft: false

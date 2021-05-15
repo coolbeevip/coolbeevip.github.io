@@ -1,5 +1,5 @@
 ---
-title: "压力测试之服务器估算"
+title: "Estimate host capacity based on QPS"
 date: 2018-03-07T13:24:14+08:00
 categories: [stress,test,host,qps]
 draft: false

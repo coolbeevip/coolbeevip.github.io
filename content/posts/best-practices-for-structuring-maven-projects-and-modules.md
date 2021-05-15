@@ -1,5 +1,5 @@
 ---
-title: "Maven项目和模块的最佳实践"
+title: "Maven Projects Best Practices"
 date: 2020-05-02T13:24:14+08:00 
 categories: [maven,java,project]
 draft: false

@@ -1,7 +1,7 @@
 ---
-title: "常用 Docker 命令"
+title: "Docker Commands"
 date: 2019-02-06T13:24:14+08:00
-categories: [docker]
+categories: [docker,commands]
 draft: false
 type: "post"
 ---

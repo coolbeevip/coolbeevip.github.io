@@ -1,5 +1,5 @@
 ---
-title: "导出 Maven 项目的依赖报告并分析 LICENSE 信息"
+title: "Use Maven plugin to export license info in source files and its optional dependencies"
 date: 2021-05-09T13:24:14+08:00
 categories: [maven,license,opensource]
 draft: false
