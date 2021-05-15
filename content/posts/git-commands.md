@@ -1,6 +1,7 @@
 ---
 title: "Git Commands"
 date: 2019-04-06T13:24:14+08:00
+tags: [git,commands]
 categories: [git,commands]
 draft: false
 ---

@@ -1,6 +1,7 @@
 ---
 title: "Flyway Support Oracle "
 date: 2018-11-29T13:24:14+08:00
+tags: [java, flyway, oracle]
 categories: [java, flyway, oracle]
 draft: false
 ---

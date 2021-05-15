@@ -1,6 +1,7 @@
 ---
 title: "Git Stash"
 date: 2020-04-06T13:24:14+08:00
+tags: [git]
 categories: [git]
 draft: false
 ---
