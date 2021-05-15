@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>license on</title><link>https://coolbeevip.github.io/tags/license/</link><description>Recent content in license on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 09 May 2021 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/license/index.xml" rel="self" type="application/rss+xml"/><item><title>Use Maven plugin to export license info in source files and its optional dependencies</title><link>https://coolbeevip.github.io/posts/maven-export-dependencies-analyse-license/</link><pubDate>Sun, 09 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/maven-export-dependencies-analyse-license/</guid><description>有的时候我们那需要分析多模块 Maven 项目的依赖使用情况，并希望能够分析出这些依赖的 LICENSE 信息。使用 io.github.coolbeevip:license-maven-plugin 插件 可以生成 TXT 或者 CSV 格式的分析报告
+youtube
+bilibili
+CSV 格式的报告 NOTICE.CSV NOTICE-LICENSE.CSV TXT 格式的报告 NOTICE.TXT NOTICE-LICENSE.TXT 插件 LICENSE-MAVEN-PLUGIN format 导出格式，支持 csv、txt； license 是否分析 LICENSE 信息，默认 false； ignoreGroupIds 忽略 groupId 列表, 多个用逗号分割; timeout 分析 LICENSE 的超时时间，默认 5 秒; 导出报告 在 Maven 项目的根目录执行如下命令
+导出 CSV
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv 导出 TXT
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=txt 提示： 导出的报告位置在 ./target/distribute 目录下
+导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.</description></item></channel></rss>
