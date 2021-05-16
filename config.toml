@@ -11,11 +11,13 @@ profilePicture = "images/profile.jpg"
 favicon = "favicons/"
 #displayMode = "dark"
 disableThemeSwitcher = true
+doNotLoadAnimations = true
 readMore = true
 fullPostContent = false
 customCss = ["css/custom.css"]
-mainSections = []
+#mainSections = []
 googleAnalytics = "G-0JGN8RJDND"
+
 
 [params.math]
 enable = true
@@ -38,6 +40,10 @@ url = "https://github.com/coolbeevip/"
 icon = "fas fa-envelope"
 title = "e-mail"
 url = "mailto:zhanglei@apache.org"
+
+[taxonomies]
+category = "categories"
+tag = "tags"
 
 ## Menu items
 

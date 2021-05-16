@@ -1,0 +1,58 @@
+{{ define "main" }}
+
+      <div class="list-with-title listing-title">
+        <div class="listing-title">Tags</div>
+        <div class="tags-cloud">
+          {{ if ne (len $.Site.Taxonomies.tags) 0 }}
+          {{ $largestFontSize := 1.4 }}
+          {{ $smallestFontSize := 1.0 }}
+          {{ $fontSpread := sub $largestFontSize $smallestFontSize }}
+          {{ $max := add (len (index $.Site.Taxonomies.tags.ByCount 0).Pages) 1 }}
+          {{ $min := len (index $.Site.Taxonomies.tags.ByCount.Reverse 0).Pages }}
+          {{ $spread := sub $max $min }}
+          {{ $fontStep := div $fontSpread $spread }}
+          {{ range $name, $taxonomy := $.Site.Taxonomies.tags }}
+          {{ $tagCount := len $taxonomy.Pages }}
+          {{ $currentFontSize := (add $smallestFontSize (mul (sub $tagCount $min) $fontStep) ) }}
+          {{ $weigth := div (sub (math.Log $tagCount) (math.Log $min)) (sub (math.Log $max) (math.Log $min)) }}
+          {{ $currentFontSize := (add $smallestFontSize (mul (sub $largestFontSize $smallestFontSize) $weigth)) }}
+          <a href="{{ "/tags/" | relURL }}{{ $name | urlize }}" class="tags-cloud-item" style="font-size: {{ $currentFontSize }}rem;">
+          {{ $name }}<sup>{{ $tagCount }}</sup>
+          </a>
+          {{ end }}
+          {{ end }}
+        </div>
+      </div>
+
+
+<!--  <div id="tags-cloud" style="margin: 30px;">-->
+<!--    {{ $tags := $.Site.Taxonomies.tags.ByCount }}-->
+<!--    {{ $v1 := where $tags "Count" ">=" 3 }}-->
+<!--    {{ $v2 := where $v1 "Term" "not in" (slice "hugo" "tags" "rss") }}-->
+<!--    {{ range $v2 }}-->
+<!--    {{ if .Term }}-->
+<!--    {{ $tagURL := printf "tags/%s" .Term | relURL }}-->
+<!--    <a href="{{ $tagURL }}" class="tags-cloud-item" role="button" style="text-transform: uppercase; font-size: 12px; padding-right: 5px; padding-left: 5px;" >{{ .Term }} <span class="badge">({{ .Count }})</span></a>-->
+<!--    {{ end }}-->
+<!--    {{ end }}-->
+<!--  </div>-->
+    <div class="archive {{ with .Site.Params.doNotLoadAnimations }} . {{ else }} animated fadeInDown {{ end }}">
+        <ul class="list-with-title">
+            {{ range .Data.Pages.GroupByDate "2006" }}
+                <div class="listing-title">{{ .Key }}</div>
+                {{ range .Pages }}
+                    <ul class="listing">
+                        <div class="listing-item">
+                            <div class="listing-post"><a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a>
+                                <div class="post-time"><span class="date">{{ if isset .Site.Params "listdateformat" }}
+                                                                            {{ .Date.Format .Site.Params.listDateFormat }}
+                                                                            {{ else }} {{.Date.Format "Jan 2"}}
+                                                                            {{ end }}</span></div>
+                            </div>
+                        </div>
+                    </ul>
+                {{ end }}
+            {{ end }}
+        </ul>
+    </div>
+{{ end }}

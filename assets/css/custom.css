@@ -12,6 +12,16 @@
   width: 70%;
 }
 
+.tags-cloud-item:nth-child(1n){color:#3a8286}
+.tags-cloud-item:nth-child(2n){color:#b56b00}
+.tags-cloud-item:nth-child(3n){color:#191c21}
+.tags-cloud-item:nth-child(4n){color:#00b57a}
+.tags-cloud-item:nth-child(5n){color:#49a3a7}
+.tags-cloud-item:nth-child(6n){color:#ff5064}
+.tags-cloud-item:nth-child(7n){color:#6c44d1}
+.tags-cloud-item:nth-child(8n){color:#b56b00}
+.tags-cloud-item:nth-child(9n){color:#191c21}
+
 @media screen and (max-width: 960px),
 print {
   .sidebar {
