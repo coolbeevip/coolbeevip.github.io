@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>java on</title><link>https://coolbeevip.github.io/categories/java/</link><description>Recent content in java on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 25 Mar 2021 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/java/index.xml" rel="self" type="application/rss+xml"/><item><title>MacOS Switch JDK</title><link>https://coolbeevip.github.io/posts/macos-switch-jdk/</link><pubDate>Thu, 25 Mar 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/macos-switch-jdk/</guid><description>查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>java on</title><link>https://coolbeevip.github.io/categories/java/</link><description>Recent content in java on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 14 May 2021 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/java/index.xml" rel="self" type="application/rss+xml"/><item><title>JProfiler with Docker Sonatype Nexus3</title><link>https://coolbeevip.github.io/posts/jprofiler-with-docker/</link><pubDate>Fri, 14 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/jprofiler-with-docker/</guid><description>使用 JProfiler 监控 Docker Sonatype Nexus3
+下载 JProfiler 从 https://www.ej-technologies.com/下载 JProfiler 和 Agent（注意版本必须一致）
+JProfiler GUI
+https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg
+JProfiler Agent
+https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
+在服务器上安装 JProfiler Agent 将下载后的 jprofiler_linux_12_0_2.sh 传到服务器上，通过 sh jprofiler_linux_12_0_2.sh 命令按提示安装即可
+默认安装路径为 /opt/jprofiler12/，这个路径在启动 Docker 的时候要映射到容器内部
+启动 Docker Sonatype Nexus3 在官方 sonatype/nexus3 容器启动参数的基础上做如下修改
+使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
+增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
+增加 -p 9899:9899 容器端口映射
+docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS=&amp;#34;-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</description></item><item><title>Use Maven plugin to export license info in source files and its optional dependencies</title><link>https://coolbeevip.github.io/posts/maven-export-dependencies-analyse-license/</link><pubDate>Sun, 09 May 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/maven-export-dependencies-analyse-license/</guid><description>有的时候我们那需要分析多模块 Maven 项目的依赖使用情况，并希望能够分析出这些依赖的 LICENSE 信息。使用 io.github.coolbeevip:license-maven-plugin 插件 可以生成 TXT 或者 CSV 格式的分析报告
+youtube
+bilibili
+CSV 格式的报告 NOTICE.CSV NOTICE-LICENSE.CSV TXT 格式的报告 NOTICE.TXT NOTICE-LICENSE.TXT 插件 LICENSE-MAVEN-PLUGIN format 导出格式，支持 csv、txt； license 是否分析 LICENSE 信息，默认 false； ignoreGroupIds 忽略 groupId 列表, 多个用逗号分割; timeout 分析 LICENSE 的超时时间，默认 5 秒; 导出报告 在 Maven 项目的根目录执行如下命令
+导出 CSV
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv 导出 TXT
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=txt 提示： 导出的报告位置在 ./target/distribute 目录下
+导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.</description></item><item><title>MacOS Switch JDK</title><link>https://coolbeevip.github.io/posts/macos-switch-jdk/</link><pubDate>Thu, 25 Mar 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/macos-switch-jdk/</guid><description>查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
 $ /usr/libexec/java_home -V Matching Java Virtual Machines (2): 11.0.10, x86_64: &amp;#34;OpenJDK 11.0.10&amp;#34; /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 1.8.0_201, x86_64: &amp;#34;Java SE 8&amp;#34; /Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 查看当前使用的 JDK 版本 $ java -version java version &amp;#34;1.8.0_201&amp;#34; Java(TM) SE Runtime Environment (build 1.8.0_201-b09) Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode) 切换 JDK 切换到 JDK 11.0.10 版本，并查看切换后的 JDK 版本
 $ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk version &amp;#34;11.</description></item><item><title>Maven Projects Best Practices</title><link>https://coolbeevip.github.io/posts/best-practices-for-structuring-maven-projects-and-modules/</link><pubDate>Sat, 02 May 2020 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/best-practices-for-structuring-maven-projects-and-modules/</guid><description>本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API 网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。
 目标 通过多模块方式组织项目 管理项目版本、依赖，属性 规划模块依赖关系 主项目 POM 每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签
@@ -20,4 +39,10 @@ versions description script success 1.0.0.0 init.sql V1.0.0.0__init.sql 1 1.0.0.
 3.重新打包程序 只包含合 V1.0.0.2__init.sql 脚本的程序
 4.停止所有老版本的程序 包含 V1.0.0.0__init.sql,V1.0.0.1__add_user_table.sql,V1.0.0.2__modify_user_table.sql 老脚本的程序
 5.删除数据库中的版本历史表 默认是 flyway_schema_history
-6.重启应用程序 在程序启动时设置基线版本参数为当前版本，设置这个参数的目的是告诉 Flyway 当前已经执行过 1.</description></item></channel></rss>
+6.重启应用程序 在程序启动时设置基线版本参数为当前版本，设置这个参数的目的是告诉 Flyway 当前已经执行过 1.</description></item><item><title>Maven Commands</title><link>https://coolbeevip.github.io/posts/maven-commands/</link><pubDate>Fri, 23 Nov 2018 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/maven-commands/</guid><description>常用 Maven 命令
+Parameters -D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试； -P 指定 Profile 配置，可以用于区分环境； -e 显示maven运行出错的信息； -o 离线执行命令,即不去远程仓库更新包； -f 强制指定使用 POM 文件，或者包含 POM 文件的目录 -pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔) -am 表示同时处理选定模块所依赖的模块 -amd 表示同时处理依赖选定模块的模块 -rf 表示从指定模块开始继续处理 -N 表示不递归子模块 -X 显示maven允许的debug信息； -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。 &amp;ndash;no-snapshot-updates 禁止更新 snapshot Dependency 显示maven依赖数
+mvn dependency:tree 显示maven依赖列表
+mvn dependency:list 下载依赖包的源码
+mvn dependency:sources Maven Wrapper 自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件Maven Wrapper plugin将其自动化安装指定版本的 Maven
+mvn -N io.takari:maven:wrapper -Dmaven=3.6.3 这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理
+mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.</description></item></channel></rss>
