@@ -1,8 +1,8 @@
 ---
 title: "Use Maven plugin to export license info in source files and its optional dependencies"
 date: 2021-05-09T13:24:14+08:00
-tags: [maven,license,opensource]
-categories: [maven,license,opensource]
+tags: [maven,license]
+categories: [java]
 draft: false
 ---
 

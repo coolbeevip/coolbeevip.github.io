@@ -2,7 +2,7 @@
 title: "To roll up Flyway incremental changes into 1 file"
 date: 2018-11-29T13:24:14+08:00
 tags: [java, flyway]
-categories: [java, flyway]
+categories: [java]
 draft: false
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: "MySQL Commands"
 date: 2020-05-11T13:24:14+08:00
-tags: [mysql,commands]
-categories: [mysql,commands]
+tags: [mysql]
+categories: [database]
 draft: false
 ---
 

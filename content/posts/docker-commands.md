@@ -1,8 +1,8 @@
 ---
 title: "Docker Commands"
 date: 2019-02-06T13:24:14+08:00
-tags: [docker,commands]
-categories: [docker,commands]
+tags: [docker]
+categories: [docker]
 draft: false
 type: "post"
 ---

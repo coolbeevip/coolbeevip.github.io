@@ -1,8 +1,8 @@
 ---
 title: "Synchronize between image repositories with Bash"
 date: 2021-04-19T13:24:14+08:00
-tags: [docker,shell]
-categories: [docker,shell]
+tags: [docker]
+categories: [docker]
 draft: false
 ---
 

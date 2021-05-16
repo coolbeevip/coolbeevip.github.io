@@ -2,7 +2,7 @@
 title: "Maven Projects Best Practices"
 date: 2020-05-02T13:24:14+08:00
 tags: [maven,java,project]
-categories: [maven,java,project]
+categories: [java]
 draft: false
 ---
 

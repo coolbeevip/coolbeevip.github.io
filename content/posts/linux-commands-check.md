@@ -1,8 +1,8 @@
 ---
 title: "Linux Commands"
 date: 2019-05-06T13:24:14+08:00
-tags: [linux,commands]
-categories: [linux,commands]
+tags: [linux]
+categories: [linux]
 draft: false
 ---
 

@@ -2,7 +2,7 @@
 title: "Flyway hung on the MySQL Router + MGR"
 date: 2018-11-29T13:24:14+08:00
 tags: [java, flyway, mysql]
-categories: [java, flyway, mysql]
+categories: [java]
 draft: false
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: "Maven Commands"
 date: 2018-11-23T13:24:14+08:00
-tags: [maven,commands]
-categories: [maven,commands]
+tags: [maven]
+categories: [java]
 draft: false
 ---
 

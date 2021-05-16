@@ -1,8 +1,8 @@
 ---
 title: "Estimate host capacity based on QPS"
 date: 2018-03-07T13:24:14+08:00
-tags: [stress,test,host,qps]
-categories: [stress,test,host,qps]
+tags: [stress,test,qps]
+categories: [stress]
 draft: false
 katex: true
 markup: "mmark"

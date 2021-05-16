@@ -2,7 +2,7 @@
 title: "Securing Docker ports with firewalld"
 date: 2021-05-11T13:24:14+08:00
 tags: [docker,firewalld,centos]
-categories: [docker,firewalld,centos]
+categories: [docker]
 draft: false
 ---
 

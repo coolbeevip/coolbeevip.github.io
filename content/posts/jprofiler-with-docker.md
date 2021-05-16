@@ -2,7 +2,7 @@
 title: "JProfiler with Docker Sonatype Nexus3"
 date: 2021-05-14T13:24:14+08:00
 tags: [jprofiler,docker,nexus]
-categories: [jprofiler,docker,nexus]
+categories: [java]
 draft: false
 type: "post"
 ---
