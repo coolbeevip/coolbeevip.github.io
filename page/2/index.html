@@ -19,18 +19,15 @@ $ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分
 $ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/disk1s5 466Gi 10Gi 128Gi 8% 488463 4881964417 0% / devfs 192Ki 192Ki 0Bi 100% 663 0 100% /dev /dev/disk1s1 466Gi 318Gi 128Gi 72% 4557528 4877895352 0% /System/Volumes/Data /dev/disk1s4 466Gi 8.</p><a href=/posts/linux-commands-disk/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em><span class=date>Mon, May 6, 2019</span>
 <span class=separator><a class=category href=/categories/linux/>linux</a></span>
 <span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/disk/>disk</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/git-commands/>Git Commands</a></h3></div><div class=post-content><div class=p_part><p>常用 Git 命令
-Branch 创建分支
+Init 在已有目录中初始化 GIT 仓库
+$ git init $ git remote add origin &lt;仓库地址> $ git add . $ git commit -m "Initial commit" $ git push -u origin master Branch 创建分支
 git checkout -b &lt;分支名> 推送分支
 git push origin &lt;分支名> 修改分支名
 git branch -m &lt;旧分支名> &lt;新分支名> 删除本地分支
 git branch -D &lt;分支名> 删除远程分支
 git push origin --delete &lt;分支名> 拉取远程分支
 git fetch origin &lt;分支名> 拉取远程分支并切换
-git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定版本
-git reset --hard &lt;版本号的sha1> Tag 创建本地 Tag
-git tag -a &lt;标签名> -m "my tag" 删除本地 Tag
-git tag -d &lt;标签名> 删除远程 Tag
-git push origin :refs/tags/&lt;标签名> 推送本地所有 Tag 到远程</p><a href=/posts/git-commands/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em><span class=date>Sat, Apr 6, 2019</span>
+git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定版本</p><a href=/posts/git-commands/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em><span class=date>Sat, Apr 6, 2019</span>
 <span class=separator><a class=category href=/categories/git/>git</a></span>
 <span class=separator><a class=tag href=/tags/git/>git</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/flyway-hung-on-mysql-router-mgr/>Flyway hung on the MySQL Router + MGR</a></h3></div><div class=post-content><div class=p_part><p>Flyway 连接 MySQL Router 后启动卡在 GET_LOCK 语句
 现象 MySQL MGR + Router 部署高可用集群 Flyway 客户端使用 jdbc:mysql:loadbalance 连接 初始化 Schema History 表、或者执行多个 SQL 脚本时 当满足以上条件时，Flyway 会卡在初始化阶段，经过分析发现停顿在执行 GET_LOCK 语句时

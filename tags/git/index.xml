@@ -30,15 +30,12 @@ HEAD〜2 与 HEAD ^^ 的作用相同。
 如何检查HEAD的状态 您可以使用以下命令查看当前 Git HEAD 指向的位置：
 $ cat .git/HEAD ref: refs/heads/master 并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：
 $ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</description></item><item><title>Git Commands</title><link>https://coolbeevip.github.io/posts/git-commands/</link><pubDate>Sat, 06 Apr 2019 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git-commands/</guid><description>常用 Git 命令
-Branch 创建分支
+Init 在已有目录中初始化 GIT 仓库
+$ git init $ git remote add origin &amp;lt;仓库地址&amp;gt; $ git add . $ git commit -m &amp;quot;Initial commit&amp;quot; $ git push -u origin master Branch 创建分支
 git checkout -b &amp;lt;分支名&amp;gt; 推送分支
 git push origin &amp;lt;分支名&amp;gt; 修改分支名
 git branch -m &amp;lt;旧分支名&amp;gt; &amp;lt;新分支名&amp;gt; 删除本地分支
 git branch -D &amp;lt;分支名&amp;gt; 删除远程分支
 git push origin --delete &amp;lt;分支名&amp;gt; 拉取远程分支
 git fetch origin &amp;lt;分支名&amp;gt; 拉取远程分支并切换
-git checkout -b &amp;lt;分支名&amp;gt; origin/&amp;lt;分支名&amp;gt; 当前分支会退到指定版本
-git reset --hard &amp;lt;版本号的sha1&amp;gt; Tag 创建本地 Tag
-git tag -a &amp;lt;标签名&amp;gt; -m &amp;#34;my tag&amp;#34; 删除本地 Tag
-git tag -d &amp;lt;标签名&amp;gt; 删除远程 Tag
-git push origin :refs/tags/&amp;lt;标签名&amp;gt; 推送本地所有 Tag 到远程</description></item></channel></rss>
+git checkout -b &amp;lt;分支名&amp;gt; origin/&amp;lt;分支名&amp;gt; 当前分支会退到指定版本</description></item></channel></rss>
