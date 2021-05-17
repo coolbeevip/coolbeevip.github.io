@@ -8,6 +8,18 @@ draft: false
 
 常用 Git 命令
 
+## Init
+
+在已有目录中初始化 GIT 仓库
+
+```
+$ git init
+$ git remote add origin <仓库地址>
+$ git add .
+$ git commit -m "Initial commit"
+$ git push -u origin master
+```
+
 ## Branch
 
 创建分支
