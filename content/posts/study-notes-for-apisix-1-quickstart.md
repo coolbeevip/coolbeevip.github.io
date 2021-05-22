@@ -1,7 +1,7 @@
 ---
 title: "APISIX Study Notes (1) Build & QuickStart"
 date: 2021-05-21T01:00:00+08:00
-tags: [apisix,gateway]
+tags: [apisix]
 categories: [gateway]
 draft: false
 ---
@@ -44,7 +44,7 @@ docker-compose -f docker-compose-apisix-etcd.yml up -d
 * 验证
 
 ```shell
-$ curl -L http://127.0.0.1:2379//health
+$ curl -L http://127.0.0.1:2379/health
 {"health":"true"}
 ```
 #### 安装编译环境

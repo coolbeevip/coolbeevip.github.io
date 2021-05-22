@@ -1,7 +1,7 @@
 ---
 title: "APISIX Study Notes (2) Plugins Traffic Split"
 date: 2021-05-21T01:00:00+08:00
-tags: [apisix,gateway]
+tags: [apisix]
 categories: [gateway]
 draft: false
 ---
