@@ -2,7 +2,7 @@
 定义卷目录 APISIX 目前好像还不支持通过环境变量配置参数，所以需要在宿主机上创建配置文件，并在启动 Docker 时通过 Volume 映射进容器
 规划外部卷目录
 mkdir apisix_home mkdir -p apisix_home/apisix_volume/apisix/apisix_conf mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf 定义 APISIX Dashboard 配置文件 apisix_home/apisix_volume/apisix/dashboard_conf/conf.yaml
-conf: listen: host: 0.0.0.0 # `manager api` listening ip or host name port: 9000 # `manager api` listening port etcd: endpoints: # supports defining multiple etcd host addresses for an etcd cluster - apisix-etcd:2379 # etcd basic auth info # username: &#34;root&#34; # ignore etcd username if not enable etcd auth # password: &#34;123456&#34; # ignore etcd password if not enable etcd auth log: error_log: level: warn # supports levels, lower to higher: debug, info, warn, error, panic, fatal file_path: logs/error."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+conf: listen: # 绑定 IP 地址 host: 0.0.0.0 # 监听端口 port: 9000 etcd: # etcd 用户名 # username: &#34;root&#34; # etcd 密码 # password: &#34;123456&#34;  # etcd 地址，支持集群多节点定义 endpoints: - apisix-etcd:2379 log: error_log: # 日志级别 debug, info, warn, error, panic, fatal level: warn  # 日志输出路径 file_path: logs/error."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2021</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>APISIX Study Notes (3) Install with Docker</h3></div><p>使用 Docker 启动</p><h2 id=定义卷目录>定义卷目录</h2><p>APISIX 目前好像还不支持通过环境变量配置参数，所以需要在宿主机上创建配置文件，并在启动 Docker 时通过 Volume 映射进容器</p><p>规划外部卷目录</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>mkdir apisix_home
@@ -10,29 +10,32 @@ mkdir -p apisix_home/apisix_volume/apisix/apisix_conf
 mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf
 </code></pre></div><p>定义 APISIX Dashboard 配置文件 apisix_home/apisix_volume/apisix/dashboard_conf/conf.yaml</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>conf</span>:
   <span style=color:#f92672>listen</span>:
-    <span style=color:#f92672>host</span>: <span style=color:#ae81ff>0.0.0.0</span>     <span style=color:#75715e># `manager api` listening ip or host name</span>
-    <span style=color:#f92672>port</span>: <span style=color:#ae81ff>9000</span>          <span style=color:#75715e># `manager api` listening port</span>
+    <span style=color:#75715e># 绑定 IP 地址</span>
+    <span style=color:#f92672>host</span>: <span style=color:#ae81ff>0.0.0.0</span>
+    <span style=color:#75715e># 监听端口</span>
+    <span style=color:#f92672>port</span>: <span style=color:#ae81ff>9000</span>
   <span style=color:#f92672>etcd</span>:
-    <span style=color:#f92672>endpoints</span>:          <span style=color:#75715e># supports defining multiple etcd host addresses for an etcd cluster</span>
+    <span style=color:#75715e># etcd 用户名</span>
+    <span style=color:#75715e># username: &#34;root&#34;</span>
+    <span style=color:#75715e># etcd 密码</span>
+    <span style=color:#75715e># password: &#34;123456&#34;    </span>
+    <span style=color:#75715e># etcd 地址，支持集群多节点定义</span>
+    <span style=color:#f92672>endpoints</span>:
       - <span style=color:#ae81ff>apisix-etcd:2379</span>
-
-                        <span style=color:#75715e># etcd basic auth info</span>
-    <span style=color:#75715e># username: &#34;root&#34;    # ignore etcd username if not enable etcd auth</span>
-    <span style=color:#75715e># password: &#34;123456&#34;  # ignore etcd password if not enable etcd auth</span>
   <span style=color:#f92672>log</span>:
     <span style=color:#f92672>error_log</span>:
-      <span style=color:#f92672>level: warn       # supports levels, lower to higher</span>: <span style=color:#ae81ff>debug, info, warn, error, panic, fatal</span>
-      <span style=color:#f92672>file_path</span>:
-        <span style=color:#ae81ff>logs/error.log </span> <span style=color:#75715e># supports relative path, absolute path, standard output</span>
-                        <span style=color:#75715e># such as: logs/error.log, /tmp/logs/error.log, /dev/stdout, /dev/stderr</span>
+      <span style=color:#75715e># 日志级别 debug, info, warn, error, panic, fatal</span>
+      <span style=color:#f92672>level</span>: <span style=color:#ae81ff>warn </span>
+      <span style=color:#75715e># 日志输出路径</span>
+      <span style=color:#f92672>file_path</span>: <span style=color:#ae81ff>logs/error.log</span>
+      
 <span style=color:#f92672>authentication</span>:
-  <span style=color:#f92672>secret</span>:
-    <span style=color:#ae81ff>secret             </span> <span style=color:#75715e># secret for jwt token generation.</span>
-                        <span style=color:#75715e># NOTE: Highly recommended to modify this value to protect `manager api`.</span>
-                        <span style=color:#75715e># if it&#39;s default value, when `manager api` start, it will generate a random string to replace it.</span>
-  <span style=color:#f92672>expire_time</span>: <span style=color:#ae81ff>3600</span>     <span style=color:#75715e># jwt token expire time, in second</span>
+  <span style=color:#f92672>secret</span>: <span style=color:#ae81ff>secret</span>
+  <span style=color:#75715e># jwt token 过期时间（秒)</span>
+  <span style=color:#f92672>expire_time</span>: <span style=color:#ae81ff>3600</span>     
+  <span style=color:#75715e># 登录用户名密码</span>
   <span style=color:#f92672>users</span>:
-    - <span style=color:#f92672>username</span>: <span style=color:#ae81ff>admin  </span> <span style=color:#75715e># username and password for login `manager api`</span>
+    - <span style=color:#f92672>username</span>: <span style=color:#ae81ff>admin </span>
       <span style=color:#f92672>password</span>: <span style=color:#ae81ff>admin</span>
     - <span style=color:#f92672>username</span>: <span style=color:#ae81ff>user</span>
       <span style=color:#f92672>password</span>: <span style=color:#ae81ff>user</span>
