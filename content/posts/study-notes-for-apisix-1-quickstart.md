@@ -8,7 +8,7 @@ draft: false
 
 ## 安装
 
-以下操作在 macOS 系统
+在 macOS 基于源代码自己编译发布版本
 
 #### 安装 Etcd
 
@@ -245,7 +245,7 @@ curl http://127.0.0.1:9080/apisix/admin/upstreams/355873825117701764 -H 'X-API-K
 
 * 关联 UPSTREAM(355873825117701764)
 
-![image-apisix-dashboard-backend-server](/images/posts/study-notes-for-apisix/apisix-dashboard-backend-server.png)
+![image-apisix-dashboard-backend-server](/images/posts/study-notes-for-apisix/apisix-dashboard-route-backend-server.png)
 
 配置后的数据在 APISIX 中看起来如下:
 
