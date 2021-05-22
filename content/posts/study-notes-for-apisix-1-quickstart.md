@@ -1,5 +1,5 @@
 ---
-title: "APISIX Study Notes (1) QuickStart"
+title: "APISIX Study Notes (1) Build & QuickStart"
 date: 2021-05-21T01:00:00+08:00
 tags: [apisix,gateway]
 categories: [gateway]
