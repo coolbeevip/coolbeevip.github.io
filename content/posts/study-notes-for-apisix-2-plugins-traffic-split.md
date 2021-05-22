@@ -132,4 +132,12 @@ Server: APISIX/2.5
 127.0.0.1 - - [22/May/2021:17:50:25 +0800] 127.0.0.1:9080 "GET /nc-tools/actuator/health HTTP/1.1" 200 2363 0.018 "-" "curl/7.65.2" 192.168.51.234:5005 200 0.018 "http://127.0.0.1:9080"
 ```
 
+**提示**：也可以通过URL参数的方式传递变量
+
+```shell
+$ curl -i -X GET http://127.0.0.1:9080/nc-tools/actuator/health?center=local
+$ curl -i -X GET http://127.0.0.1:9080/nc-tools/actuator/health?center=cloud
+```
+
+
 It's COOL！！
