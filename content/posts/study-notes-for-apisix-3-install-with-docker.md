@@ -25,29 +25,32 @@ mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf
 ```yaml
 conf:
   listen:
-    host: 0.0.0.0     # `manager api` listening ip or host name
-    port: 9000          # `manager api` listening port
+    # 绑定 IP 地址
+    host: 0.0.0.0
+    # 监听端口
+    port: 9000
   etcd:
-    endpoints:          # supports defining multiple etcd host addresses for an etcd cluster
+    # etcd 用户名
+    # username: "root"
+    # etcd 密码
+    # password: "123456"    
+    # etcd 地址，支持集群多节点定义
+    endpoints:
       - apisix-etcd:2379
-
-                        # etcd basic auth info
-    # username: "root"    # ignore etcd username if not enable etcd auth
-    # password: "123456"  # ignore etcd password if not enable etcd auth
   log:
     error_log:
-      level: warn       # supports levels, lower to higher: debug, info, warn, error, panic, fatal
-      file_path:
-        logs/error.log  # supports relative path, absolute path, standard output
-                        # such as: logs/error.log, /tmp/logs/error.log, /dev/stdout, /dev/stderr
+      # 日志级别 debug, info, warn, error, panic, fatal
+      level: warn 
+      # 日志输出路径
+      file_path: logs/error.log
+      
 authentication:
-  secret:
-    secret              # secret for jwt token generation.
-                        # NOTE: Highly recommended to modify this value to protect `manager api`.
-                        # if it's default value, when `manager api` start, it will generate a random string to replace it.
-  expire_time: 3600     # jwt token expire time, in second
+  secret: secret
+  # jwt token 过期时间（秒)
+  expire_time: 3600     
+  # 登录用户名密码
   users:
-    - username: admin   # username and password for login `manager api`
+    - username: admin 
       password: admin
     - username: user
       password: user
