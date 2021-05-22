@@ -205,7 +205,7 @@ Date: Fri, 21 May 2021 12:20:00 GMT
 {"status":"UP","components":{...}}
 ```
 
-配置后的数据开起来如下
+配置后的数据在 APISIX 中看起来如下:
 
 ```shell
 curl http://127.0.0.1:9080/apisix/admin/upstreams/355873825117701764 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1'
@@ -247,7 +247,7 @@ curl http://127.0.0.1:9080/apisix/admin/upstreams/355873825117701764 -H 'X-API-K
 
 ![image-apisix-dashboard-backend-server](/images/posts/study-notes-for-apisix/apisix-dashboard-backend-server.png)
 
-配置后的数据看起来如下
+配置后的数据在 APISIX 中看起来如下:
 
 ```shell
 $ curl http://127.0.0.1:9080/apisix/admin/routes/355873926217205380 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1'
@@ -274,7 +274,7 @@ $ curl http://127.0.0.1:9080/apisix/admin/routes/355873926217205380 -H 'X-API-KE
 }
 ```
 
-* 通过 APISIX 调用我的 UPSTREAM 服务
+* 通过 APISIX 调用 UPSTREAM 服务, 成功！
 
 ```shell
 $ curl -i -X GET http://127.0.0.1:9080/nc-tools/actuator/health
