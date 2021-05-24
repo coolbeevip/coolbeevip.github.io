@@ -19,6 +19,14 @@ Error response from daemon: driver <span style=color:#e6db74>&#34;overlay&#34;</
 </code></pre></div><h2 id=网络>网络</h2><h4 id=删除所有网络>删除所有网络</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker network rm <span style=color:#66d9ef>$(</span>docker network ls | awk <span style=color:#e6db74>&#39;{print $1}&#39;</span><span style=color:#66d9ef>)</span>
 </code></pre></div><h4 id=创建容器网络>创建容器网络</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker network create nc-network
 </code></pre></div><h4 id=显示所有容器-ip-地址>显示所有容器 IP 地址</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker inspect --format<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&#39;</span> <span style=color:#66d9ef>$(</span>docker ps -aq<span style=color:#66d9ef>)</span>
+</code></pre></div><h4 id=重建-docker0>重建 Docker0</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>pkill docker 
+iptables -t filter -F
+iptables -t filter -X
+iptables -t nat -F
+iptables -t nat -X
+ifconfig docker0 down 
+ip link del docker0
+systemctl restart docker
 </code></pre></div><h2 id=系统>系统</h2><h4 id=资源占用查看>资源占用查看</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker system df
 TYPE                TOTAL               ACTIVE              SIZE                RECLAIMABLE
 Images              <span style=color:#ae81ff>29</span>                  <span style=color:#ae81ff>0</span>                   9.786GB             9.786GB <span style=color:#f92672>(</span>100%<span style=color:#f92672>)</span>
