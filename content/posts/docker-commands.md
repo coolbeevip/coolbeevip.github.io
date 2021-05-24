@@ -107,6 +107,19 @@ docker network create nc-network
 docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 ```
 
+#### 重建 Docker0
+
+```shell
+pkill docker 
+iptables -t filter -F
+iptables -t filter -X
+iptables -t nat -F
+iptables -t nat -X
+ifconfig docker0 down 
+ip link del docker0
+systemctl restart docker
+```
+
 ## 系统
 
 #### 资源占用查看
