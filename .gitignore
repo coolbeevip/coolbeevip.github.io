@@ -1,5 +1,8 @@
-# jetbrains
+## JetBrains
 .idea/
 
-# hugo
+## hugo
 /public/
+
+## OS
+.DS_Store
