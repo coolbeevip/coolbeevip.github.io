@@ -34,7 +34,9 @@ HEAD〜2 与 HEAD ^^ 的作用相同。
 如果写数字，则使用的默认值为1，因此 HEAD〜 等价于 HEAD ^。
 如何检查HEAD的状态 您可以使用以下命令查看当前 Git HEAD 指向的位置：
 $ cat .git/HEAD ref: refs/heads/master 并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：
-$ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</description></item><item><title>Git Commands</title><link>https://coolbeevip.github.io/posts/git-commands/</link><pubDate>Sat, 06 Apr 2019 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git-commands/</guid><description>常用 Git 命令
+$ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</description></item><item><title>Git Revert</title><link>https://coolbeevip.github.io/posts/git-command-revert/</link><pubDate>Tue, 06 Aug 2019 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git-command-revert/</guid><description>撤销上一次提交
+$ git revert HEAD 撤销上两次提交
+ISSUE-4 解决网关服务日志中无法正确显示经过代理访问的请求端 IP 问题 $ git revert [倒数第一个提交] [倒数第二个提交]</description></item><item><title>Git Commands</title><link>https://coolbeevip.github.io/posts/git-commands/</link><pubDate>Sat, 06 Apr 2019 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git-commands/</guid><description>常用 Git 命令
 Init 在已有目录中初始化 GIT 仓库
 $ git init $ git remote add origin &amp;lt;仓库地址&amp;gt; $ git add . $ git commit -m &amp;quot;Initial commit&amp;quot; $ git push -u origin master Branch 创建分支
 git checkout -b &amp;lt;分支名&amp;gt; 推送分支

@@ -1,4 +1,20 @@
-<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Git Reset HEAD</title><meta charset=utf-8><meta name=generator content="Hugo 0.83.1"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/git-reset-head/><script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Git Reset HEAD"><meta name=twitter:description content="Git 分支非常有用，您可以根据需要创建一个新分支，合并一个分支或删除一个分支。 您可以使用许多 git 命令来管理 git 中的分支。
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | Git Reset HEAD </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.87.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/git-reset-head/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Git Reset HEAD">
+<meta name=twitter:description content="Git 分支非常有用，您可以根据需要创建一个新分支，合并一个分支或删除一个分支。 您可以使用许多 git 命令来管理 git 中的分支。
 当您使用 git checkout 分支时，HEAD会指出最后的提交。 简单来说，您可以说 Git HEAD 是当前分支。 每当您签出一个分支或创建一个新分支时，Git HEAD 都会转移它。
 HEAD 是对当前检出分支中最后一次提交的引用。
 在存储库中，HEAD 始终指向当前分支的起点。 换句话说，HEAD 是指向下一个提交的父对象或下一个提交将发生的地方的指针。
@@ -9,19 +25,120 @@ HEAD〜2 与 HEAD ^^ 的作用相同。
 如果写数字，则使用的默认值为1，因此 HEAD〜 等价于 HEAD ^。
 如何检查HEAD的状态 您可以使用以下命令查看当前 Git HEAD 指向的位置：
 $ cat .git/HEAD ref: refs/heads/master 并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：
-$ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。"></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+$ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
-<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2021</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Git Reset HEAD</h3></div><p>Git 分支非常有用，您可以根据需要创建一个新分支，合并一个分支或删除一个分支。 您可以使用许多 git 命令来管理 git 中的分支。</p><p>当您使用 git checkout 分支时，HEAD会指出最后的提交。 简单来说，您可以说 Git HEAD 是当前分支。 每当您签出一个分支或创建一个新分支时，Git HEAD 都会转移它。</p><p>HEAD 是对当前检出分支中最后一次提交的引用。</p><p>在存储库中，HEAD 始终指向当前分支的起点。 换句话说，HEAD 是指向下一个提交的父对象或下一个提交将发生的地方的指针。</p><p>更具体地说，HEAD 是一个移动指针，它可以引用或可以不引用当前分支，但是它始终引用当前提交。</p><h3 id=什么是-head>什么是 HEAD^</h3><p>插入符（^）是 Commit 的父级。</p><h3 id=什么是-head-1>什么是 HEAD~</h3><p>代字号（〜）是一行几个字符（^）的简写字符。</p><p>HEAD〜2 与 HEAD ^^ 的作用相同。</p><p>如果写数字，则使用的默认值为1，因此 HEAD〜 等价于 HEAD ^。</p><h3 id=如何检查head的状态>如何检查HEAD的状态</h3><p>您可以使用以下命令查看当前 Git HEAD 指向的位置：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ cat .git/HEAD
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Git Reset HEAD</h3>
+</div>
+<p>Git 分支非常有用，您可以根据需要创建一个新分支，合并一个分支或删除一个分支。 您可以使用许多 git 命令来管理 git 中的分支。</p>
+<p>当您使用 git checkout 分支时，HEAD会指出最后的提交。 简单来说，您可以说 Git HEAD 是当前分支。 每当您签出一个分支或创建一个新分支时，Git HEAD 都会转移它。</p>
+<p>HEAD 是对当前检出分支中最后一次提交的引用。</p>
+<p>在存储库中，HEAD 始终指向当前分支的起点。 换句话说，HEAD 是指向下一个提交的父对象或下一个提交将发生的地方的指针。</p>
+<p>更具体地说，HEAD 是一个移动指针，它可以引用或可以不引用当前分支，但是它始终引用当前提交。</p>
+<h3 id=什么是-head>什么是 HEAD^</h3>
+<p>插入符（^）是 Commit 的父级。</p>
+<h3 id=什么是-head-1>什么是 HEAD~</h3>
+<p>代字号（〜）是一行几个字符（^）的简写字符。</p>
+<p>HEAD〜2 与 HEAD ^^ 的作用相同。</p>
+<p>如果写数字，则使用的默认值为1，因此 HEAD〜 等价于 HEAD ^。</p>
+<h3 id=如何检查head的状态>如何检查HEAD的状态</h3>
+<p>您可以使用以下命令查看当前 Git HEAD 指向的位置：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ cat .git/HEAD
 ref: refs/heads/master
-</code></pre></div><p>并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git rev-parse --short HEAD
+</code></pre></div><p>并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git rev-parse --short HEAD
 6f975a5
-</code></pre></div><h3 id=detached-head>Detached HEAD</h3><p>HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</p><p>如果您使用 git checkout 签出特定的提交，则您已经处于 <strong>Detached HEAD</strong>。 这意味着之后的所有提交都不属于任何 Git 分支，您无法将代码合并到 main 分支或任何其他分支中。</p><p><strong>如果此时使用 git checkout 命令切换分支，您的修改将丢失</strong>。</p><h3 id=detached-head-解决方案>Detached HEAD 解决方案</h3><p>当你看到 <strong>You&rsquo;re in the &lsquo;detached HEAD&rsquo; state</strong> 提示时，不是一种错误，此状态只是意味着你没有处于任何分支中</p><p>您可以随时使用 <code>git checkout</code> 命令从 <strong>detached HEAD</strong> 返回到分支中</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git checkout &lt;your-branch&gt;
-</code></pre></div><p>如果您已经对 <strong>detached HEAD</strong> 进行了一些更改并且不想丢失它们，则应将这些更改保存到一个临时分支中：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git checkout -b &lt;temporary-branch-name&gt;
-</code></pre></div><p>之后，可以将临时分支合并到另一个分支中，例如到主分支：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git checkout main
+</code></pre></div><h3 id=detached-head>Detached HEAD</h3>
+<p>HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</p>
+<p>如果您使用 git checkout 签出特定的提交，则您已经处于 <strong>Detached HEAD</strong>。 这意味着之后的所有提交都不属于任何 Git 分支，您无法将代码合并到 main 分支或任何其他分支中。</p>
+<p><strong>如果此时使用 git checkout 命令切换分支，您的修改将丢失</strong>。</p>
+<h3 id=detached-head-解决方案>Detached HEAD 解决方案</h3>
+<p>当你看到 <strong>You&rsquo;re in the &lsquo;detached HEAD&rsquo; state</strong> 提示时，不是一种错误，此状态只是意味着你没有处于任何分支中</p>
+<p>您可以随时使用 <code>git checkout</code> 命令从 <strong>detached HEAD</strong> 返回到分支中</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git checkout &lt;your-branch&gt;
+</code></pre></div><p>如果您已经对 <strong>detached HEAD</strong> 进行了一些更改并且不想丢失它们，则应将这些更改保存到一个临时分支中：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git checkout -b &lt;temporary-branch-name&gt;
+</code></pre></div><p>之后，可以将临时分支合并到另一个分支中，例如到主分支：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git checkout main
 $ git merge &lt;temporary-branch-name&gt;
-</code></pre></div><h3 id=git-head-reset>Git Head Reset</h3><p>首先，<strong>git reset-hard 是一个危险的命令</strong>。它可以销毁所有未提交的修改。在开始使用之前，请确保仔细检查 git status 是否还有未提交的修改。将更改提交到存储库后，您的更改将是安全的。</p><p>git reset 命令以特定顺序覆盖（HEAD /索引 /工作目录），并有有三种不同的模式</p><p><strong>Soft:</strong></p><p>这种模式只会移动 HEAD。并且，您的索引（暂存区）和工作目录将不受影响。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git reset --soft
-</code></pre></div><p><strong>Mixed:</strong></p><p>这是默认模式。因此，如果您编写 git reset，该命令将在混合模型中运行。</p><p>此模式将移动 HEAD 并更新临时区域。因此，此命令将撤消由 git add 和 git commit 添加的内容。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git reset --mixed or $ git reset
-</code></pre></div><p><strong>Hard:</strong></p><p><strong>使用此命令可能很危险。仅当您确切知道自己在做什么时才使用。</strong></p><p>此命令将移动 HEAD 和暂存区域。同样，它将撤消您的最后一次提交。</p><p>如果您想在 HEAD 之前重置提交（您需要撤消上一次提交），可以将 git reset 命令与 hard 选项一起使用：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git reset --hard HEAD^
-</code></pre></div><h3 id=总结>总结</h3><p>git reset 的目的是将当前 HEAD 转移到指定的提交（在HEAD本身上，在HEAD之前的一个提交，依此类推）。</p><p>本文内容来自于<a href=https://acompiler.com/git-head/>Git HEAD: The Definitive Guide</a></p></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
+</code></pre></div><h3 id=git-head-reset>Git Head Reset</h3>
+<p>首先，<strong>git reset-hard 是一个危险的命令</strong>。它可以销毁所有未提交的修改。在开始使用之前，请确保仔细检查 git status 是否还有未提交的修改。将更改提交到存储库后，您的更改将是安全的。</p>
+<p>git reset 命令以特定顺序覆盖（HEAD /索引 /工作目录），并有有三种不同的模式</p>
+<p><strong>Soft:</strong></p>
+<p>这种模式只会移动 HEAD。并且，您的索引（暂存区）和工作目录将不受影响。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git reset --soft
+</code></pre></div><p><strong>Mixed:</strong></p>
+<p>这是默认模式。因此，如果您编写 git reset，该命令将在混合模型中运行。</p>
+<p>此模式将移动 HEAD 并更新临时区域。因此，此命令将撤消由 git add 和 git commit 添加的内容。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git reset --mixed or $ git reset
+</code></pre></div><p><strong>Hard:</strong></p>
+<p><strong>使用此命令可能很危险。仅当您确切知道自己在做什么时才使用。</strong></p>
+<p>此命令将移动 HEAD 和暂存区域。同样，它将撤消您的最后一次提交。</p>
+<p>如果您想在 HEAD 之前重置提交（您需要撤消上一次提交），可以将 git reset 命令与 hard 选项一起使用：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ git reset --hard HEAD^
+</code></pre></div><h3 id=总结>总结</h3>
+<p>git reset 的目的是将当前 HEAD 转移到指定的提交（在HEAD本身上，在HEAD之前的一个提交，依此类推）。</p>
+<p>本文内容来自于<a href=https://acompiler.com/git-head/>Git HEAD: The Definitive Guide</a></p>
+</div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/git/>git</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>
