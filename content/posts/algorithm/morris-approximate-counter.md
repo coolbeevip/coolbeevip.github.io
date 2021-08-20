@@ -1,5 +1,5 @@
 ---
-title: "Approximate counting algorithm(Morris) Java"
+title: "Approximate Counting Morris Algorithm Java"
 date: 2021-08-20T13:24:14+08:00
 tags: [counter,approximate]
 categories: [algorithm]
