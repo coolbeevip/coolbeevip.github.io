@@ -1,0 +1,149 @@
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | Approximate counting algorithm(Morris) Java </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.87.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/algorithm/morris-approximate-counter/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Approximate counting algorithm(Morris) Java">
+<meta name=twitter:description content="本文介绍如何使用莫里斯计数器（近似计数算法）的 Java 实现 ，莫里斯计数器采用概率计数原理，用很小的内存实现海量数据的近似计数。
+本例中，我们使用一个 byte (8bit) 的变量，实现千万级的计数
+public class MorrisApproximateCounter { private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass()); /** * 定义一个计数器变量 */ byte counter = 0; /** * 使用随机模拟概率 */ Random random = new Random(); /** * 计算计数器表示的近似值 */ public double get() { return Math.exp(counter); } /** * 计数器累加 */ public void increment() { double probability = 1.0 / this.get(); // 使用伪随机数增加概率  if (random.nextDouble() < probability) { this.counter++; } } public static void main(String[] args) { MorrisApproximateCounter mc = new MorrisApproximateCounter(); // 定义实际数量  int realCount = 20_000_000; for (int n = 0; n < realCount; n++) { // 累加计数  mc.">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Approximate counting algorithm(Morris) Java</h3>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Fri, Aug 20, 2021
+</span>
+<em class="fas fa-stopwatch"></em>
+<span class=reading-time>One-minute read</span>
+</div>
+</div>
+<p>本文介绍如何使用莫里斯计数器（近似计数算法）的 Java 实现 ，莫里斯计数器采用概率计数原理，用很小的内存实现海量数据的近似计数。</p>
+<p>本例中，我们使用一个 byte (8bit) 的变量，实现千万级的计数</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MorrisApproximateCounter</span> <span style=color:#f92672>{</span>
+
+  <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>final</span> Logger log <span style=color:#f92672>=</span> LoggerFactory<span style=color:#f92672>.</span><span style=color:#a6e22e>getLogger</span><span style=color:#f92672>(</span>MethodHandles<span style=color:#f92672>.</span><span style=color:#a6e22e>lookup</span><span style=color:#f92672>().</span><span style=color:#a6e22e>lookupClass</span><span style=color:#f92672>());</span>
+
+  <span style=color:#75715e>/**
+</span><span style=color:#75715e>   * 定义一个计数器变量
+</span><span style=color:#75715e>   */</span>
+  <span style=color:#66d9ef>byte</span> counter <span style=color:#f92672>=</span> 0<span style=color:#f92672>;</span>
+
+  <span style=color:#75715e>/**
+</span><span style=color:#75715e>   * 使用随机模拟概率
+</span><span style=color:#75715e>   */</span>
+  Random random <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Random<span style=color:#f92672>();</span>
+
+  <span style=color:#75715e>/**
+</span><span style=color:#75715e>   * 计算计数器表示的近似值
+</span><span style=color:#75715e>   */</span>
+  <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>double</span> <span style=color:#a6e22e>get</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>return</span> Math<span style=color:#f92672>.</span><span style=color:#a6e22e>exp</span><span style=color:#f92672>(</span>counter<span style=color:#f92672>);</span>
+  <span style=color:#f92672>}</span>
+
+  <span style=color:#75715e>/**
+</span><span style=color:#75715e>   * 计数器累加
+</span><span style=color:#75715e>   */</span>
+  <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>increment</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>double</span> probability <span style=color:#f92672>=</span> 1<span style=color:#f92672>.</span><span style=color:#a6e22e>0</span> <span style=color:#f92672>/</span> <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>get</span><span style=color:#f92672>();</span>
+    <span style=color:#75715e>// 使用伪随机数增加概率
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>random<span style=color:#f92672>.</span><span style=color:#a6e22e>nextDouble</span><span style=color:#f92672>()</span> <span style=color:#f92672>&lt;</span> probability<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+      <span style=color:#66d9ef>this</span><span style=color:#f92672>.</span><span style=color:#a6e22e>counter</span><span style=color:#f92672>++;</span>
+    <span style=color:#f92672>}</span>
+  <span style=color:#f92672>}</span>
+
+  <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>main</span><span style=color:#f92672>(</span>String<span style=color:#f92672>[]</span> args<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+    MorrisApproximateCounter mc <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> MorrisApproximateCounter<span style=color:#f92672>();</span>
+
+    <span style=color:#75715e>// 定义实际数量
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>int</span> realCount <span style=color:#f92672>=</span> 20_000_000<span style=color:#f92672>;</span>
+
+    <span style=color:#66d9ef>for</span> <span style=color:#f92672>(</span><span style=color:#66d9ef>int</span> n <span style=color:#f92672>=</span> 0<span style=color:#f92672>;</span> n <span style=color:#f92672>&lt;</span> realCount<span style=color:#f92672>;</span> n<span style=color:#f92672>++)</span> <span style=color:#f92672>{</span>
+      <span style=color:#75715e>// 累加计数
+</span><span style=color:#75715e></span>      mc<span style=color:#f92672>.</span><span style=color:#a6e22e>increment</span><span style=color:#f92672>();</span>
+    <span style=color:#f92672>}</span>
+
+    <span style=color:#75715e>// 输出实际计数 和 近似计数
+</span><span style=color:#75715e></span>    log<span style=color:#f92672>.</span><span style=color:#a6e22e>info</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;实际计数 {}, 近似计数 {}&#34;</span><span style=color:#f92672>,</span> realCount<span style=color:#f92672>,</span> <span style=color:#f92672>(</span><span style=color:#66d9ef>int</span><span style=color:#f92672>)</span> mc<span style=color:#f92672>.</span><span style=color:#a6e22e>get</span><span style=color:#f92672>());</span>
+  <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>执行结果</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>22:09:42.416 <span style=color:#f92672>[</span>main<span style=color:#f92672>]</span> INFO org.coolbeevip.algorithm.approximatecounter.MorrisApproximateCounter - 实际计数 20000000, 近似计数 <span style=color:#ae81ff>24154952</span>
+</code></pre></div><p><a href=https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java>MorrisApproximateCounter.java</a></p>
+</div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/algorithm/>algorithm</a></span>
+<span class=separator><a class=tag href=/tags/counter/>counter</a><a class=tag href=/tags/approximate/>approximate</a></span>
+</div>
+</div>
+<div id=fb_comments_container>
+<h2>comments</h2>
+<script src=https://utteranc.es/client.js repo=coolbeevip/coolbeevip.github.io issue-term=pathname theme=github-light label=Blogs crossorigin=anonymous async></script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>
