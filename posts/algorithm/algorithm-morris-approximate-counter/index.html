@@ -18,6 +18,7 @@
 我们通常会定义一个 Long 类型对象，通过累加的方式实现计数。每个 Long 类型占用 8 byte (64bit) 空间，如果你有 30 亿个要记录的对象，那么你就需要 22GB 的空间存储这些计数器，这还不不包括在哈希中的对象ID。
 例如我们记录网页的访问数量，并给出热点排名，如果我们面对的是每天有数十亿的访问场景，那么十亿和十亿零几千万差别并不大。这时我们往往不需要精确计数，如果我们只需要得到计数的近似值，并且使用一个小的数据结构( 例如 1 byte) 作为计数器，那么我们只需要大概 2GB 的空间就足够了。
 以下样例代码中，我们使用 1 byte (8bit) 的变量，实现千万级的计数
+MorrisApproximateCounter.java
 public class MorrisApproximateCounter { private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass()); /** * 定义一个计数器变量 */ byte counter = 0; /** * 使用随机模拟概率 */ Random random = new Random(); /** * 计算计数器表示的近似值 */ public double get() { return Math.exp(counter); } /** * 计数器累加 */ public void increment() { double probability = 1.">
 </head>
 <body><div class="sidebar .">
@@ -77,6 +78,7 @@ public class MorrisApproximateCounter { private static final Logger log = Logger
 <p>我们通常会定义一个 Long 类型对象，通过累加的方式实现计数。每个 Long 类型占用 8 byte (64bit) 空间，如果你有 30 亿个要记录的对象，那么你就需要 22GB 的空间存储这些计数器，这还不不包括在哈希中的对象ID。</p>
 <p>例如我们记录网页的访问数量，并给出热点排名，如果我们面对的是每天有数十亿的访问场景，那么十亿和十亿零几千万差别并不大。这时我们往往不需要精确计数，如果我们只需要得到计数的近似值，并且使用一个小的数据结构( 例如 1 byte) 作为计数器，那么我们只需要大概 2GB 的空间就足够了。</p>
 <p>以下样例代码中，我们使用 1 byte (8bit) 的变量，实现千万级的计数</p>
+<p><a href=https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java>MorrisApproximateCounter.java</a></p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MorrisApproximateCounter</span> <span style=color:#f92672>{</span>
 
   <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>final</span> Logger log <span style=color:#f92672>=</span> LoggerFactory<span style=color:#f92672>.</span><span style=color:#a6e22e>getLogger</span><span style=color:#f92672>(</span>MethodHandles<span style=color:#f92672>.</span><span style=color:#a6e22e>lookup</span><span style=color:#f92672>().</span><span style=color:#a6e22e>lookupClass</span><span style=color:#f92672>());</span>
@@ -126,7 +128,8 @@ public class MorrisApproximateCounter { private static final Logger log = Logger
 <span style=color:#f92672>}</span>
 </code></pre></div><p>执行结果</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>实际计数 20000000, 近似计数 <span style=color:#ae81ff>24154952</span>
-</code></pre></div><p><a href=https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java>MorrisApproximateCounter.java</a></p>
+</code></pre></div><p>参考</p>
+<p><a href=https://en.wikipedia.org/wiki/Approximate_counting_algorithm>Approximate_counting_algorithm</a></p>
 </div>
 <div class=post-footer>
 <div class=info>
