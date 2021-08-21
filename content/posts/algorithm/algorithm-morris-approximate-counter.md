@@ -14,6 +14,8 @@ draft: false
 
 以下样例代码中，我们使用 1 byte (8bit) 的变量，实现千万级的计数
 
+![algorithm-morris-approximate-counter](/images/posts/algorithm/algorithm-morris-approximate-counter/algorithm-morris-approximate-counter.png)
+
 [MorrisApproximateCounter.java](https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java)
 
 ```java
@@ -22,54 +24,74 @@ public class MorrisApproximateCounter {
   private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /**
+   * 底数使用欧拉常数或者2
+   */
+  double radix = 2.718;
+
+  /**
    * 定义一个计数器变量
    */
   byte counter = 0;
 
   /**
-   * 使用随机模拟概率
+   * 模拟抛硬币概率
    */
   Random random = new Random();
 
   /**
-   * 计算计数器表示的近似值
+   * 返回计数值
    */
   public double get() {
-    return Math.exp(counter);
+    return Math.pow(radix, counter);
   }
 
   /**
-   * 计数器累加
+   * 计数值累加
    */
-  public void increment() {
-    double probability = 1.0 / this.get();
-    // 使用伪随机数增加概率
-    if (random.nextDouble() < probability) {
+  public byte increment() {
+    if (this.counter < 255 && random.nextDouble() < Math.pow(this.radix, -this.counter)) {
       this.counter++;
     }
+    return this.counter;
   }
 
   public static void main(String[] args) {
     MorrisApproximateCounter mc = new MorrisApproximateCounter();
 
     // 定义实际数量
-    int realCount = 20_000_000;
+    int realCount = 2_000;
+
+    double[][] real_graph_data = new double[realCount][2];
+    double[][] approximate_graph_data = new double[realCount][2];
 
     for (int n = 0; n < realCount; n++) {
       // 累加计数
       mc.increment();
+
+      real_graph_data[n][0] = n;
+      real_graph_data[n][1] = n;
+
+      approximate_graph_data[n][0] = n;
+      approximate_graph_data[n][1] = mc.get();
     }
 
     // 输出实际计数 和 近似计数
     log.info("实际计数 {}, 近似计数 {}", realCount, (int) mc.get());
+
+    // 绘制图形
+    LineChartFrame chart = new LineChartFrame("Algorithm", "Morris Approximate Counting Algorithm", "n","counter");
+    chart.addXYSeries("real count",real_graph_data);
+    chart.addXYSeries("approximate count",approximate_graph_data);
+    chart.pack();
+    chart.setVisible(true);
   }
 }
 ```
 
-执行结果
+执行结果，因为采用随机概率，所以每次估算的近似值都不同，有的时候误差还较大，如何减少这种误差？
 
 ```shell
-实际计数 20000000, 近似计数 24154952
+实际计数 2000, 近似计数 1095
 ```
 
 参考
