@@ -1,7 +1,7 @@
 ---
 title: "Approximate Counting Morris Algorithm in Java"
 date: 2021-08-21T00:24:14+08:00
-tags: [counter]
+tags: [counter,algorithm]
 categories: [algorithm]
 draft: false
 ---
