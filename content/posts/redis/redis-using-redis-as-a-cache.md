@@ -1,10 +1,9 @@
 ---
 title: "Using Redis as a Cache"
 date: 2020-08-19T13:24:14+08:00
-tags: [redis]
+tags: [redis,cache]
 categories: [redis]
 draft: false
-type: "post"
 ---
 
 当 Redis 用作缓存时，通常可以方便地让它在您添加新数据时自动驱逐旧数据。Redis 支持 6 种驱逐策略，你可以使用 `maxmemory-policy` 修改驱逐策略。默认是不驱逐，也就是说如果使用的内存超过了 `maxmemory` 限制，将提示 OOM。

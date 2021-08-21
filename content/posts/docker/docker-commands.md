@@ -4,7 +4,6 @@ date: 2019-02-06T13:24:14+08:00
 tags: [docker]
 categories: [docker]
 draft: false
-type: "post"
 ---
 
 常用 Docker 命令记录

@@ -4,7 +4,6 @@ date: 2021-05-14T13:24:14+08:00
 tags: [jprofiler,docker,nexus]
 categories: [java]
 draft: false
-type: "post"
 ---
 
 使用 JProfiler 监控 Docker Sonatype Nexus3

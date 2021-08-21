@@ -4,7 +4,6 @@ date: 2020-08-19T13:24:14+08:00
 tags: [redis]
 categories: [redis]
 draft: false
-type: "post"
 ---
 
 ## 安装

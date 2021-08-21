@@ -1,10 +1,9 @@
 ---
 title: "Approximate Counting Morris Algorithm in Java"
-date: 2021-08-21T13:24:14+08:00
-tags: [counter,approximate]
+date: 2021-08-21T00:24:14+08:00
+tags: [counter]
 categories: [algorithm]
 draft: false
-type: "post"
 ---
 
 本文介绍如何使用莫里斯计数器（近似计数算法）的 Java 实现 ，莫里斯计数器采用概率计数原理，用很小的内存实现海量数据的近似计数。
