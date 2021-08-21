@@ -38,3 +38,7 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 ## Diagram
 
 [Isoflow](https://isoflow.io/)
+
+## Typesetting mathematics
+
+[Katex](https://katex.org/docs/supported.html)
