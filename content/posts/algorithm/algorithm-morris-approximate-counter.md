@@ -14,6 +14,8 @@ draft: false
 
 以下样例代码中，我们使用 1 byte (8bit) 的变量，实现千万级的计数
 
+[MorrisApproximateCounter.java](https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java)
+
 ```java
 public class MorrisApproximateCounter {
 
@@ -70,4 +72,6 @@ public class MorrisApproximateCounter {
 实际计数 20000000, 近似计数 24154952
 ```
 
-[MorrisApproximateCounter.java](https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java)
+参考
+
+[Approximate_counting_algorithm](https://en.wikipedia.org/wiki/Approximate_counting_algorithm)
