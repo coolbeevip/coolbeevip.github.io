@@ -1,0 +1,291 @@
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | Setting up Redis for Production </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.87.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/redis/redis-setting-up-redis-for-production/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Setting up Redis for Production">
+<meta name=twitter:description content="安装 官方建议的安装方法是从源代码编译安装，您可以从 redis.io 下载最新稳定版的 TAR 包
+wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xvzf redis-6.2.5.tar.gz cd redis-6.2.5 make 此时，您可以通过键入 make test 来测试您的构建是否正常工作。编译后 redis-6.2.5/src 目录填充了一部分可执行文件。 最好将编译后的 Redis 执行文件都复制到适当的位置，或者使用以下命令手动复制（假设我们的安装路径是 /usr/local/redis）：
+# 可执行文件 sudo mkdir -p /usr/local/redis/bin sudo cp src/redis-server /usr/local/redis/bin sudo cp src/redis-cli /usr/local/redis/bin sudo cp src/redis-sentinel /usr/local/redis/bin sudo cp src/redis-benchmark /usr/local/redis/bin sudo cp src/redis-check-aof /usr/local/redis/bin sudo cp src/redis-check-rdb /usr/local/redis/bin # 配置文件 sudo mkdir -p /usr/local/redis/conf sudo cp redis.conf /usr/local/redis/conf sudo cp sentinel.conf /usr/local/redis/conf # 数据目录 sudo mkdir -p /usr/local/redis/data sudo mkdir -p /usr/local/redis/log # 创建链接 sudo ln -s /usr/local/redis/bin/redis-server /usr/bin/redis-server sudo ln -s /usr/local/redis/bin/redis-cli /usr/bin/redis-cli 提示： 复制完毕后，您可以删除 redis-6.">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Setting up Redis for Production</h3>
+</div>
+<h2 id=安装>安装</h2>
+<p>官方建议的安装方法是从源代码编译安装，您可以从 <a href=https://redis.io/>redis.io</a> 下载最新稳定版的 TAR 包</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>wget https://download.redis.io/releases/redis-6.2.5.tar.gz
+tar xvzf redis-6.2.5.tar.gz
+cd redis-6.2.5
+make
+</code></pre></div><p>此时，您可以通过键入 <code>make test</code> 来测试您的构建是否正常工作。编译后 <code>redis-6.2.5/src</code> 目录填充了一部分可执行文件。
+最好将编译后的 Redis 执行文件都复制到适当的位置，或者使用以下命令手动复制（假设我们的安装路径是 /usr/local/redis）：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 可执行文件</span>
+sudo mkdir -p /usr/local/redis/bin
+sudo cp src/redis-server /usr/local/redis/bin
+sudo cp src/redis-cli /usr/local/redis/bin
+sudo cp src/redis-sentinel /usr/local/redis/bin
+sudo cp src/redis-benchmark /usr/local/redis/bin
+sudo cp src/redis-check-aof /usr/local/redis/bin
+sudo cp src/redis-check-rdb /usr/local/redis/bin
+<span style=color:#75715e># 配置文件</span>
+sudo mkdir -p /usr/local/redis/conf
+sudo cp redis.conf /usr/local/redis/conf
+sudo cp sentinel.conf /usr/local/redis/conf
+<span style=color:#75715e># 数据目录</span>
+sudo mkdir -p /usr/local/redis/data
+sudo mkdir -p /usr/local/redis/log
+<span style=color:#75715e># 创建链接</span>
+sudo ln -s /usr/local/redis/bin/redis-server /usr/bin/redis-server
+sudo ln -s /usr/local/redis/bin/redis-cli /usr/bin/redis-cli
+</code></pre></div><p><strong>提示：</strong> 复制完毕后，您可以删除 redis-6.2.5.tar.gz 和 解压后的 redis-6.2.5 目录</p>
+<h2 id=启动>启动</h2>
+<p>执行 redis-server 文件并指定 redis.conf 参数</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ redis-server /usr/local/redis/conf/redis.conf
+29212:C <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.882 <span style=color:#75715e># oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span>
+29212:C <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.882 <span style=color:#75715e># Redis version=6.2.5, bits=64, commit=00000000, modified=0, pid=29212, just started</span>
+29212:C <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.882 <span style=color:#75715e># Configuration loaded</span>
+29212:M <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.883 * monotonic clock: POSIX clock_gettime
+                _._
+           _.-<span style=color:#e6db74>``</span>__ <span style=color:#e6db74>&#39;&#39;</span>-._
+      _.-<span style=color:#e6db74>``</span>    <span style=color:#e6db74>`</span>.  <span style=color:#e6db74>`</span>_.  <span style=color:#e6db74>&#39;&#39;</span>-._           Redis 6.2.5 <span style=color:#f92672>(</span>00000000/0<span style=color:#f92672>)</span> <span style=color:#ae81ff>64</span> bit
+  .-<span style=color:#e6db74>``</span> .-<span style=color:#e6db74>```</span>.  <span style=color:#e6db74>```</span><span style=color:#ae81ff>\/</span>    _.,_ <span style=color:#e6db74>&#39;&#39;</span>-._
+ <span style=color:#f92672>(</span>    <span style=color:#e6db74>&#39;      ,       .-`  | `,    )     Running in standalone mode
+</span><span style=color:#e6db74> |`-._`-...-` __...-.``-._|&#39;</span><span style=color:#e6db74>`</span> _.-<span style=color:#e6db74>&#39;|     Port: 6379
+</span><span style=color:#e6db74> |    `-._   `._    /     _.-&#39;</span>    |     PID: <span style=color:#ae81ff>29212</span>
+  <span style=color:#e6db74>`</span>-._    <span style=color:#e6db74>`</span>-._  <span style=color:#e6db74>`</span>-./  _.-<span style=color:#e6db74>&#39;    _.-&#39;</span>
+ |<span style=color:#e6db74>`</span>-._<span style=color:#e6db74>`</span>-._    <span style=color:#e6db74>`</span>-.__.-<span style=color:#e6db74>&#39;    _.-&#39;</span>_.-<span style=color:#e6db74>&#39;|
+</span><span style=color:#e6db74> |    `-._`-._        _.-&#39;</span>_.-<span style=color:#e6db74>&#39;    |           https://redis.io
+</span><span style=color:#e6db74>  `-._    `-._`-.__.-&#39;</span>_.-<span style=color:#e6db74>&#39;    _.-&#39;</span>
+ |<span style=color:#e6db74>`</span>-._<span style=color:#e6db74>`</span>-._    <span style=color:#e6db74>`</span>-.__.-<span style=color:#e6db74>&#39;    _.-&#39;</span>_.-<span style=color:#e6db74>&#39;|
+</span><span style=color:#e6db74> |    `-._`-._        _.-&#39;</span>_.-<span style=color:#e6db74>&#39;    |
+</span><span style=color:#e6db74>  `-._    `-._`-.__.-&#39;</span>_.-<span style=color:#e6db74>&#39;    _.-&#39;</span>
+      <span style=color:#e6db74>`</span>-._    <span style=color:#e6db74>`</span>-.__.-<span style=color:#e6db74>&#39;    _.-&#39;</span>
+          <span style=color:#e6db74>`</span>-._        _.-<span style=color:#e6db74>&#39;
+</span><span style=color:#e6db74>              `-.__.-&#39;</span>
+
+29212:M <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.885 <span style=color:#75715e># WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.</span>
+29212:M <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.885 <span style=color:#75715e># Server initialized</span>
+29212:M <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.885 <span style=color:#75715e># WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add &#39;vm.overcommit_memory = 1&#39; to /etc/sysctl.conf and then reboot or run the command &#39;sysctl vm.overcommit_memory=1&#39; for this to take effect.</span>
+29212:M <span style=color:#ae81ff>19</span> Aug <span style=color:#ae81ff>2021</span> 15:01:44.886 * Ready to accept connections
+</code></pre></div><h2 id=检查-redis-是否工作正常>检查 Redis 是否工作正常</h2>
+<p>使用 <code>ping</code> 命令检查服务是否正常返回 &lsquo;PONG&rsquo;</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ redis-cli -h 127.0.0.1 -p <span style=color:#ae81ff>6379</span> ping
+PONG
+</code></pre></div><p>我们还可以通过运行 Redis Benchmark 进行快速检查。它不仅会对 Redis 本身进行压力测试，还会验证我们的安装是否有任何问题。下面将发出来自 50 个客户端的 100000 个请求，同时发送 12 个命令</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ /usr/local/redis/bin/redis-benchmark -h 127.0.0.1 -p <span style=color:#ae81ff>16379</span> -q -n <span style=color:#ae81ff>100000</span> -c <span style=color:#ae81ff>50</span> -P <span style=color:#ae81ff>12</span>
+PING_INLINE: 347250.00 requests per second, p50<span style=color:#f92672>=</span>0.743 msec
+PING_MBULK: 463000.00 requests per second, p50<span style=color:#f92672>=</span>0.591 msec
+SET: 510244.91 requests per second, p50<span style=color:#f92672>=</span>0.639 msec
+GET: 492650.25 requests per second, p50<span style=color:#f92672>=</span>0.583 msec
+INCR: 526357.88 requests per second, p50<span style=color:#f92672>=</span>0.575 msec
+LPUSH: 495089.09 requests per second, p50<span style=color:#f92672>=</span>0.935 msec
+RPUSH: 456657.53 requests per second, p50<span style=color:#f92672>=</span>0.735 msec
+LPOP: 350905.28 requests per second, p50<span style=color:#f92672>=</span>0.991 msec
+RPOP: 502552.75 requests per second, p50<span style=color:#f92672>=</span>0.711 msec
+SADD: 534802.12 requests per second, p50<span style=color:#f92672>=</span>0.591 msec
+HSET: 531957.44 requests per second, p50<span style=color:#f92672>=</span>0.759 msec
+SPOP: 529142.88 requests per second, p50<span style=color:#f92672>=</span>0.575 msec
+ZADD: 321569.16 requests per second, p50<span style=color:#f92672>=</span>1.359 msec
+ZPOPMIN: 404890.69 requests per second, p50<span style=color:#f92672>=</span>0.639 msec
+LPUSH <span style=color:#f92672>(</span>needed to benchmark LRANGE<span style=color:#f92672>)</span>: 303054.53 requests per second, p50<span style=color:#f92672>=</span>1.375 msec
+LRANGE_100 <span style=color:#f92672>(</span>first <span style=color:#ae81ff>100</span> elements<span style=color:#f92672>)</span>: 66761.02 requests per second, p50<span style=color:#f92672>=</span>4.303 msec
+LRANGE_300 <span style=color:#f92672>(</span>first <span style=color:#ae81ff>300</span> elements<span style=color:#f92672>)</span>: 19651.80 requests per second, p50<span style=color:#f92672>=</span>15.047 msec
+LRANGE_500 <span style=color:#f92672>(</span>first <span style=color:#ae81ff>500</span> elements<span style=color:#f92672>)</span>: 10563.85 requests per second, p50<span style=color:#f92672>=</span>28.623 msec
+LRANGE_600 <span style=color:#f92672>(</span>first <span style=color:#ae81ff>600</span> elements<span style=color:#f92672>)</span>: 9882.21 requests per second, p50<span style=color:#f92672>=</span>24.927 msec
+MSET <span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> keys<span style=color:#f92672>)</span>: 194947.36 requests per second, p50<span style=color:#f92672>=</span>2.775 msec
+</code></pre></div><h2 id=操作系统配置>操作系统配置</h2>
+<p>在刚才的启动中你可以看到两个警告</p>
+<ul>
+<li>WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.</li>
+</ul>
+<p>编辑 <code>/etc/sysctl.conf</code> 添加 <code>net.core.somaxconn=2048</code>，然后在终端执行 <code>sysctl -p</code></p>
+<ul>
+<li>WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add &lsquo;vm.overcommit_memory = 1&rsquo; to /etc/sysctl.conf and then reboot or run the command &lsquo;sysctl vm.overcommit_memory=1&rsquo; for this to take effect.</li>
+</ul>
+<p>编辑 <code>/etc/sysctl.conf</code> 添加 <code>vm.overcommit_memory=1</code>，然后在终端执行 <code>sysctl -p</code></p>
+<h2 id=redis-配置>Redis 配置</h2>
+<p>Redis 附带了一个非常合理且包含大量注释的配置文件。查看 /usr/local/redis/conf/redis.conf 文件并逐步完成一下配置。</p>
+<h4 id=绑定地址>绑定地址</h4>
+<p>您需要配置绑定地址，否则这个 Redis 无法在外部访问，如果服务器有多个网卡地址，都需要支持外部访问，那么可配置成 <code>0.0.0.0</code>。<strong>Redis通常作为内部服务使用，建议通过防火墙控制访问策略</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bind 0.0.0.0 -::/0
+</code></pre></div><p><strong>提示：</strong> <code>::/0</code> 是 IPv6 的写法</p>
+<h4 id=端口>端口</h4>
+<p>我建议你修改默认端口 <code>6379</code>，这可以避免基于默认端口的漏洞扫描</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>port <span style=color:#ae81ff>65379</span>
+</code></pre></div><h4 id=工作目录>工作目录</h4>
+<p>RDB 和 AOF 的数据文件都会存储到这个目录</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>dir /usr/local/redis/data
+</code></pre></div><h4 id=日志>日志</h4>
+<p>配置日志存储位置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>logfile <span style=color:#e6db74>&#34;/usr/local/redis/log/redis-server.log&#34;</span>
+</code></pre></div><h4 id=pid-位置>PID 位置</h4>
+<p>定义 PID 文件存储位置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>pidfile /usr/local/redis/redis.pid
+</code></pre></div><h4 id=开启守护进程模式>开启守护进程模式</h4>
+<p>Redis 会在后台运行，并将进程 PID 号写入至 redis.conf 选项 pidfile 设置的文件中，此时 redis 将一直运行，除非手动kill该进程</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>daemonize yes
+</code></pre></div><h4 id=内存>内存</h4>
+<p>请根据业务实际需要配置合理的内存，以下配置的是 2GB</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>maxmemory 2gb
+</code></pre></div><p><strong>提示：</strong> 当超过 maxmemory 内存时，Redis 有多种处理策略，默认策略是不驱逐(maxmemory-policy noeviction)，这时会提示 OOM。如果你将 Redis 当作缓存来使用，并且丢失一个部分数据也不会影响你的业务，那么建议使用其他策略。</p>
+<h4 id=危险指令>危险指令</h4>
+<p>重命名一些危险指令，重命名这些命令前请和业务侧确认</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>rename-command config <span style=color:#e6db74>&#34;config_do&#34;</span>
+rename-command flushall <span style=color:#e6db74>&#34;flushall_do&#34;</span>
+rename-command flushdb <span style=color:#e6db74>&#34;flushdb_do&#34;</span>
+rename-command shutdown <span style=color:#e6db74>&#34;shutdown_do&#34;</span>
+</code></pre></div><h4 id=持久化>持久化</h4>
+<blockquote>
+<p>如果你的 Redis 用作缓存存储，并且您根本不介意丢失其数据，那么请忽略此章节。</p>
+</blockquote>
+<p>配置 RDB 模式的快照数据存储位置，Redis 会定期将其数据集转储到文件中，使其成为备份的理想选择。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>dbfilename dump.rdb
+</code></pre></div><p>配置 RDB 快照频率，您可以使用多个这些语句来使您的快照更加精细。请注意，配置文件中已经有一些这样的语句。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 每 900 秒（15分钟）至少 1 个 KEY 变化，写入 RDB</span>
+save <span style=color:#ae81ff>900</span> <span style=color:#ae81ff>1</span>
+<span style=color:#75715e># 每 300 秒（5分钟）至少 10 个 KEY 变化，写入 RDB</span>
+save <span style=color:#ae81ff>300</span> <span style=color:#ae81ff>10</span>
+<span style=color:#75715e># 每 60 秒（1分钟）至少 10000 个 KEY 变化，写入 RDB</span>
+save <span style=color:#ae81ff>60</span> <span style=color:#ae81ff>10000</span>
+</code></pre></div><p>开启 AOF 并配置文件存储位置，用于记录写入操作日志，及时你的机器崩溃，您仍然可以恢复并拥有最新数据</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>appendonly yes
+appendfilename <span style=color:#e6db74>&#34;appendonly.aof&#34;</span>
+</code></pre></div><p>因为操作系统维护一个输出缓冲区，成功写入并不一定意味着数据会立即写入（刷新）到磁盘。为了告诉操作系统真正将数据写入磁盘，Redis 需要在写入调用后立即调用 fsync() 函数，这可能会很慢。所以 Redis 提供了 3 个选项：</p>
+<ul>
+<li><strong>no:</strong> 不调用 <code>fsync()</code>，依靠操作系统在需要的时候刷新，写入速度快</li>
+<li><strong>always:</strong> 每次写 AOF 后都调用 <code>fsync()</code>，慢但是安全</li>
+<li><strong>everysec:</strong> 美妙调用 <code>fsync()</code>，这是默认选型</li>
+</ul>
+<p>请根据您的业务情况自行评估使用哪种方式，如果你要严格的数据可靠性，则可以设置 <code>appendfsync always</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>appendfsync everysec
+</code></pre></div><h2 id=安全>安全</h2>
+<h2 id=可靠停止服务>可靠停止服务</h2>
+<p>您可以在持久化章节了解 Redis 持久化的工作原理，如果您使用默认配置启动 Redis，Redis 只会不时自发地保存数据集（例如如果您的数据至少有 100 次更改，则至少需要五分钟），因此如果您希望数据库在重启后持久保存并重新加载，请确保每次要强制执行数据集快照时手动调用 SAVE 命令。否则请确保使用 SHUTDOWN 命令关闭数据库</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ redis-cli -h 127.0.0.1 -p <span style=color:#ae81ff>65379</span> shutdown
+</code></pre></div><h2 id=增加到系统服务>增加到系统服务</h2>
+<p>将 Redis 发行版中 utils 目录下的找到的 redis_init_script 脚本复制到 /etc/init.d 中。我们建议使用 <code>redis_端口号</code> 重命名这个文件</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo cp utils/redis_init_script /etc/init.d/redis_65379
+</code></pre></div><p>编辑 <code>/etc/init.d/redis_65379</code> 文件</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 配置端口号</span>
+REDISPORT<span style=color:#f92672>=</span><span style=color:#ae81ff>65379</span>
+<span style=color:#75715e># 定义执行文件路径</span>
+EXEC<span style=color:#f92672>=</span>/usr/local/redis/bin/redis-server
+CLIEXEC<span style=color:#f92672>=</span>/usr/local/redis/bin/redis-cli
+<span style=color:#75715e># PID 存储路径</span>
+PIDFILE<span style=color:#f92672>=</span>/usr/local/redis/redis.pid
+<span style=color:#75715e># 配置文件路径</span>
+CONF<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/usr/local/redis/conf/redis.conf&#34;</span>
+</code></pre></div><p>最后使用以下命令将新的 Redis init 脚本添加到所有默认运行级别</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo update-rc.d redis_6379 defaults
+</code></pre></div><p>你完成了！现在您可以尝试使用以下命令运行您的实例</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>sudo /etc/init.d/redis_65379 start
+</code></pre></div><h2 id=监控>监控</h2>
+<p>除了传统的磁盘空间监控和、CPU 监控外，我们更加需要关注内存的使用，你可以使用 <code>redis-cli -h 127.0.0.1 -p 65379 info memory</code> 命令查看内存使用情况</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>used_memory:872024
+maxmemory:2147483648
+</code></pre></div><p>通常你需要关注已用内存的占比，当达到一定阀值时就表示可能内存不够用了</p>
+<pre><code>内存使用率(%) = used_memory / maxmemory * 100
+</code></pre><h2 id=备份>备份</h2>
+<p>如配置部分所述，Redis 提供了非常适合进行备份的 RDB 快照。
+RDB 文件包含您存储的每一条数据，因此您可以安全地只备份 RDB 文件，并在发生事故时能够恢复。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cp /usr/local/redis/data/dump.rdb /somewhere/backup/dump.<span style=color:#66d9ef>$(</span>date +%Y%m%d%H%M<span style=color:#66d9ef>)</span>.rdb
+</code></pre></div><p>这很简单。您可以在服务器仍在运行时执行此操作。作为安全预防措施，您应该考虑在将文件上传到外部存储之前对其进行加密。自动化该过程的合理方法是通过 cron 任务</p>
+<h2 id=恢复>恢复</h2>
+<p>现在让我们假设发生了意外（例如有人删除了一些数据），我们想从这些 RDB 快照备份中恢复数据集的先前版本。是否启用 AOF 会导致恢复的步骤稍有不同</p>
+<h4 id=只开启了-rdb>只开启了 RDB</h4>
+<p>这种方式恢复非常简单</p>
+<ol>
+<li>停止 Redis 服务</li>
+<li>删除 /usr/local/redis/data/dump.rdb 文件</li>
+<li>使用备份的 dump.rdb 文件覆盖到 /usr/local/redis/data 目录下</li>
+<li>启动 Redis 服务</li>
+</ol>
+<h4 id=rdb--aof>RDB + AOF</h4>
+<p>使用 AOF，这个过程会更复杂一些。当 Redis 启动时，它会将 AOF 日志视为主要信息来源，因为它始终具有可用的最新数据。
+问题是，如果我们只有 RDB 快照而没有 AOF 日志（或者我们有日志但被事故影响无法使用），Redis仍然会使用AOF日志作为唯一的数据源。并且由于日志丢失，它根本不会加载任何数据并创建一个新的空快照文件。</p>
+<ol>
+<li>停止 Redis 服务</li>
+<li>删除 /usr/local/redis/data/dump.rdb 、/usr/local/redis/aof/appendonly.aof 文件</li>
+<li>使用备份的 dump.rdb 文件覆盖到 /usr/local/redis/data 目录下</li>
+<li>修改 /usr/local/redis/conf/redis.conf 配置文件，禁用 AOF <code>appendonly no</code></li>
+<li>启动 Redis 服务</li>
+<li>执行 <code>redis-cli BGREWRITEAOF</code>，这可能需要一些时间，您可以通过 <code>redis-cli info | grep aof_rewrite_in_progress</code> 值来检查进度（0 - 完成，1 - 尚未）</li>
+<li><code>BGREWRITEAOF</code> 命令执行完毕后你可以看到一个全新的 <code>/usr/local/redis/aof/appendonly.aof</code> 文件</li>
+<li>停止 Redis 服务</li>
+<li>修改 /usr/local/redis/conf/redis.conf 配置文件，启用 AOF <code>appendonly yes</code></li>
+<li>启动 Redis 服务</li>
+</ol>
+<p><strong>在 RDB + AOF 情况下，我们也可以直接备份 AOF 文件，不过这个文件通常很大，除非你不需要为磁盘空间担心</strong></p>
+</div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/redis/>redis</a></span>
+<span class=separator><a class=tag href=/tags/redis/>redis</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>

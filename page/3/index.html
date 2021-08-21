@@ -69,7 +69,120 @@
 </div>
 <div class="post .">
 <div class=post-title>
-<h3><a href=/posts/git-commands/>Git Commands</a>
+<h3><a href=/posts/git/git-reset-head/>Git Reset HEAD</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>Git 分支非常有用，您可以根据需要创建一个新分支，合并一个分支或删除一个分支。 您可以使用许多 git 命令来管理 git 中的分支。
+当您使用 git checkout 分支时，HEAD会指出最后的提交。 简单来说，您可以说 Git HEAD 是当前分支。 每当您签出一个分支或创建一个新分支时，Git HEAD 都会转移它。
+HEAD 是对当前检出分支中最后一次提交的引用。
+在存储库中，HEAD 始终指向当前分支的起点。 换句话说，HEAD 是指向下一个提交的父对象或下一个提交将发生的地方的指针。
+更具体地说，HEAD 是一个移动指针，它可以引用或可以不引用当前分支，但是它始终引用当前提交。
+什么是 HEAD^ 插入符（^）是 Commit 的父级。
+什么是 HEAD~ 代字号（〜）是一行几个字符（^）的简写字符。
+HEAD〜2 与 HEAD ^^ 的作用相同。
+如果写数字，则使用的默认值为1，因此 HEAD〜 等价于 HEAD ^。
+如何检查HEAD的状态 您可以使用以下命令查看当前 Git HEAD 指向的位置：
+$ cat .git/HEAD ref: refs/heads/master 并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：
+$ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</p>
+<a href=/posts/git/git-reset-head/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Tue, Aug 6, 2019
+</span>
+<span class=separator><a class=category href=/categories/git/>git</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
+<h3><a href=/posts/git/git-command-revert/>Git Revert</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>撤销上一次提交
+$ git revert HEAD 撤销上两次提交
+ISSUE-4 解决网关服务日志中无法正确显示经过代理访问的请求端 IP 问题 $ git revert [倒数第一个提交] [倒数第二个提交] </p>
+</div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Tue, Aug 6, 2019
+</span>
+<span class=separator><a class=category href=/categories/git/>git</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
+<h3><a href=/posts/java/java-jvm-options/>Important JVM Options</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>Heap Memory -XX:MetaspaceSize Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 -XX:MetaspaceSize=128M
+-XX:MaxMetaspaceSize Metaspace 最大值，默认不限制大小，但是线上环境建议设置，例如 -XX:MaxMetaspaceSize=512M
+GC -Xnoclassgc 表示关闭JVM对类的垃圾回收，缺省情况下，当一个类没有任何活动实例时，JVM 就会从内存中卸装该类，但是这样会使性能下降。如果关闭类垃圾回收，就可以消除由于多次装入和卸装同一个类而造成的开销
+-XX:+UseParNewGC 设置年轻代为并行收集
+-XX:MaxTenuringThreshold 控制新生代需要经历多少次GC​晋升到老年代中的最大阈值，默认值 15
+-XX:+CMSParallelRemarkEnabled CMS收集算法步骤如下：初始标记 -> 并发标记 -> 重新标记 -> 标记清除。 其中 初始标记和重新标记都需要STW，即暂停用户线程。 CMSParallelRemarkEnabled参数可以让重新标记阶段进行并行重新标记，减少暂停时间
+-XX:SurvivorRatio 设置 Eden、S0、S1 分配比例，默认值是 8
+-XX:SurvivorRatio=5 表示 Eden 占 50%，S0、S1 平分剩余空间
+-XX:+UseCompressedOops In short, don&rsquo;t turn it on, use a version which has it on by default.
+https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it
+-XX:+DisableExplicitGC 禁止 System.gc() 触发 GC 操作，当没有开启 DisableExplicitGC 这个参数时,你会发现JVM每个小时会执行一次Full GC,这是因为JVM在做分布式GC,为RMI服务的, 可以通过 sun.</p>
+<a href=/posts/java/java-jvm-options/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Tue, Aug 6, 2019
+</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/jvm/>jvm</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
+<h3><a href=/posts/linux/linux-commands-disk/>Linux Command - Disk</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>Linux 磁盘相关命令
+磁盘IO dd [root@localhost ~]# dd if=/dev/zero of=./a.dat bs=8K count=1M conv=fdatasync 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.8606 秒，578 MB/秒 [root@localhost ~]# dd if=./a.dat of=/dev/null bs=1M count=8k iflag=direct 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.2462 秒，603 MB/秒 磁盘空间 df 查看磁盘各个分区的空间大小、占用、可用等信息
+$ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/disk1s5 466Gi 10Gi 128Gi 8% 488463 4881964417 0% / devfs 192Ki 192Ki 0Bi 100% 663 0 100% /dev /dev/disk1s1 466Gi 318Gi 128Gi 72% 4557528 4877895352 0% /System/Volumes/Data /dev/disk1s4 466Gi 8.</p>
+<a href=/posts/linux/linux-commands-disk/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Mon, May 6, 2019
+</span>
+<span class=separator><a class=category href=/categories/linux/>linux</a></span>
+<span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/disk/>disk</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
+<h3><a href=/posts/git/git-commands/>Git Commands</a>
 </h3>
 </div>
 <div class=post-content>
@@ -84,7 +197,7 @@ git branch -D &lt;分支名> 删除远程分支
 git push origin --delete &lt;分支名> 拉取远程分支
 git fetch origin &lt;分支名> 拉取远程分支并切换
 git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定版本</p>
-<a href=/posts/git-commands/ class=read_more>Read more</a></div>
+<a href=/posts/git/git-commands/ class=read_more>Read more</a></div>
 </div>
 <div class=post-footer>
 <div class=meta>
@@ -100,7 +213,30 @@ git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定
 </div>
 <div class="post .">
 <div class=post-title>
-<h3><a href=/posts/flyway-hung-on-mysql-router-mgr/>Flyway hung on the MySQL Router + MGR</a>
+<h3><a href=/posts/docker/docker-commands/>Docker Commands</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>常用 Docker 命令记录
+镜像 删除所有镜像 docker rmi -f $(docker images | awk '{print $3}') 删除所有 dangling 镜像 docker rmi -f $(docker images -a | grep "&lt;none>" | awk '{print $3}') 导出镜像 docker save -o postgres_9.6.tar postgres:9.6 导入镜像 docker load -i postgres_9.6.tar 容器 删除所有 Exited 容器 docker rm $(docker ps -a | grep Exited | awk '{print $1}') 停止并删除所有容器 docker stop $(docker ps | awk '{print $1}') docker rm -f $(docker ps -a | awk '{print $1}') 停止 dead 容器 删除实例时提示 device or resource busy</p>
+<a href=/posts/docker/docker-commands/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Wed, Feb 6, 2019
+</span>
+<span class=separator><a class=category href=/categories/docker/>docker</a></span>
+<span class=separator><a class=tag href=/tags/docker/>docker</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
+<h3><a href=/posts/flyway/flyway-hung-on-mysql-router-mgr/>Flyway hung on the MySQL Router + MGR</a>
 </h3>
 </div>
 <div class=post-content>
@@ -111,7 +247,7 @@ git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定
 解决办法 在启动时设置 group=true 参数，这样 Flyway 在初始化时就会启用事务，确保一个事务内的 DDL 都在一个数据源执行
 ISSUE-3154
 public class FlywayTestManual { String url="jdbc:mysql:loadbalance://192.168.51.206:3810,192.168.51.207:3810/nc_notifier?roundRobinLoadBalance=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true"; String user="user"; String password="pass"; @Test public void test(){ Flyway flyway = Flyway.</p>
-<a href=/posts/flyway-hung-on-mysql-router-mgr/ class=read_more>Read more</a></div>
+<a href=/posts/flyway/flyway-hung-on-mysql-router-mgr/ class=read_more>Read more</a></div>
 </div>
 <div class=post-footer>
 <div class=meta>
@@ -127,7 +263,7 @@ public class FlywayTestManual { String url="jdbc:mysql:loadbalance://192.168.51.
 </div>
 <div class="post .">
 <div class=post-title>
-<h3><a href=/posts/java-flyway-support-oracle/>Flyway Support Oracle </a>
+<h3><a href=/posts/flyway/java-flyway-support-oracle/>Flyway Support Oracle </a>
 </h3>
 </div>
 <div class=post-content>
@@ -135,7 +271,7 @@ public class FlywayTestManual { String url="jdbc:mysql:loadbalance://192.168.51.
 <p>记录在使用 Flyway 管理 Oracle 数据库脚本时遇到的一些问题，Flyway 5.2.1 - 7.7.3 都存在此问题。
 1. Flyway not support Oracle 11g 异常信息
 Caused by: org.flywaydb.core.internal.license.FlywayEditionUpgradeRequiredException: Flyway Enterprise Edition or Oracle upgrade required: Oracle 11.2 is no longer supported by Flyway Community Edition, but still supported by Flyway Enterprise Edition. at org.flywaydb.core.internal.database.base.Database.ensureDatabaseNotOlderThanOtherwiseRecommendUpgradeToFlywayEdition(Database.java:173) at org.flywaydb.core.internal.database.oracle.OracleDatabase.ensureSupported(OracleDatabase.java:91) at org.flywaydb.core.Flyway.execute(Flyway.java:514) at org.flywaydb.core.Flyway.migrate(Flyway.java:159) at org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer.afterPropertiesSet(FlywayMigrationInitializer.java:65) at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1855) at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1792) ... 19 common frames omitted 修改 Flyway 5.2.4 OracleDatabase.java 社区版本做了版本号限制 修改 Flyway 6.</p>
-<a href=/posts/java-flyway-support-oracle/ class=read_more>Read more</a></div>
+<a href=/posts/flyway/java-flyway-support-oracle/ class=read_more>Read more</a></div>
 </div>
 <div class=post-footer>
 <div class=meta>
@@ -151,7 +287,7 @@ Caused by: org.flywaydb.core.internal.license.FlywayEditionUpgradeRequiredExcept
 </div>
 <div class="post .">
 <div class=post-title>
-<h3><a href=/posts/java-flyway-merge-script-step/>To roll up Flyway incremental changes into 1 file</a>
+<h3><a href=/posts/flyway/java-flyway-merge-script-step/>To roll up Flyway incremental changes into 1 file</a>
 </h3>
 </div>
 <div class=post-content>
@@ -167,7 +303,7 @@ versions description script success 1.0.0.0 init.sql V1.0.0.0__init.sql 1 1.0.0.
 4.停止所有老版本的程序 包含 V1.0.0.0__init.sql,V1.0.0.1__add_user_table.sql,V1.0.0.2__modify_user_table.sql 老脚本的程序
 5.删除数据库中的版本历史表 默认是 flyway_schema_history
 6.重启应用程序 在程序启动时设置基线版本参数为当前版本，设置这个参数的目的是告诉 Flyway 当前已经执行过 1.</p>
-<a href=/posts/java-flyway-merge-script-step/ class=read_more>Read more</a></div>
+<a href=/posts/flyway/java-flyway-merge-script-step/ class=read_more>Read more</a></div>
 </div>
 <div class=post-footer>
 <div class=meta>
@@ -183,7 +319,7 @@ versions description script success 1.0.0.0 init.sql V1.0.0.0__init.sql 1 1.0.0.
 </div>
 <div class="post .">
 <div class=post-title>
-<h3><a href=/posts/maven-commands/>Maven Commands</a>
+<h3><a href=/posts/maven/maven-commands/>Maven Commands</a>
 </h3>
 </div>
 <div class=post-content>
@@ -195,7 +331,7 @@ mvn dependency:list 下载依赖包的源码
 mvn dependency:sources Maven Wrapper 自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件Maven Wrapper plugin将其自动化安装指定版本的 Maven
 mvn -N io.takari:maven:wrapper -Dmaven=3.6.3 这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理
 mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.</p>
-<a href=/posts/maven-commands/ class=read_more>Read more</a></div>
+<a href=/posts/maven/maven-commands/ class=read_more>Read more</a></div>
 </div>
 <div class=post-footer>
 <div class=meta>
@@ -226,11 +362,14 @@ mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.</p>
 <li class="page-item active">
 <a href=# aria-current=page aria-label="Page 3" class=page-link role=button>3</a>
 </li>
-<li class="page-item disabled">
-<a href=# aria-disabled=true aria-label=Next class=page-link role=button tabindex=-1><span aria-hidden=true>&#187;</span></a>
+<li class=page-item>
+<a href=/page/4/ aria-label="Page 4" class=page-link role=button>4</a>
 </li>
-<li class="page-item disabled">
-<a href=# aria-disabled=true aria-label=Last class=page-link role=button tabindex=-1><span aria-hidden=true>&#187;&#187;</span></a>
+<li class=page-item>
+<a href=/page/4/ aria-label=Next class=page-link role=button><span aria-hidden=true>&#187;</span></a>
+</li>
+<li class=page-item>
+<a href=/page/4/ aria-label=Last class=page-link role=button><span aria-hidden=true>&#187;&#187;</span></a>
 </li>
 </ul>
 </div>

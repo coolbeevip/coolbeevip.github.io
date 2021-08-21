@@ -1,0 +1,233 @@
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | Flyway Support Oracle </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.87.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/flyway/java-flyway-support-oracle/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Flyway Support Oracle ">
+<meta name=twitter:description content="记录在使用 Flyway 管理 Oracle 数据库脚本时遇到的一些问题，Flyway 5.2.1 - 7.7.3 都存在此问题。
+1. Flyway not support Oracle 11g 异常信息
+Caused by: org.flywaydb.core.internal.license.FlywayEditionUpgradeRequiredException: Flyway Enterprise Edition or Oracle upgrade required: Oracle 11.2 is no longer supported by Flyway Community Edition, but still supported by Flyway Enterprise Edition. at org.flywaydb.core.internal.database.base.Database.ensureDatabaseNotOlderThanOtherwiseRecommendUpgradeToFlywayEdition(Database.java:173) at org.flywaydb.core.internal.database.oracle.OracleDatabase.ensureSupported(OracleDatabase.java:91) at org.flywaydb.core.Flyway.execute(Flyway.java:514) at org.flywaydb.core.Flyway.migrate(Flyway.java:159) at org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer.afterPropertiesSet(FlywayMigrationInitializer.java:65) at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1855) at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1792) ... 19 common frames omitted  修改 Flyway 5.2.4 OracleDatabase.java 社区版本做了版本号限制 修改 Flyway 6.">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Flyway Support Oracle </h3>
+</div>
+<p>记录在使用 Flyway 管理 Oracle 数据库脚本时遇到的一些问题，Flyway 5.2.1 - 7.7.3 都存在此问题。</p>
+<h4 id=1-flyway-not-support-oracle-11g>1. Flyway not support Oracle 11g</h4>
+<p>异常信息</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>Caused by: org.flywaydb.core.internal.license.FlywayEditionUpgradeRequiredException: Flyway Enterprise Edition or Oracle upgrade required: Oracle 11.2 is no longer supported by Flyway Community Edition, but still supported by Flyway Enterprise Edition.
+	at org.flywaydb.core.internal.database.base.Database.ensureDatabaseNotOlderThanOtherwiseRecommendUpgradeToFlywayEdition<span style=color:#f92672>(</span>Database.java:173<span style=color:#f92672>)</span>
+	at org.flywaydb.core.internal.database.oracle.OracleDatabase.ensureSupported<span style=color:#f92672>(</span>OracleDatabase.java:91<span style=color:#f92672>)</span>
+	at org.flywaydb.core.Flyway.execute<span style=color:#f92672>(</span>Flyway.java:514<span style=color:#f92672>)</span>
+	at org.flywaydb.core.Flyway.migrate<span style=color:#f92672>(</span>Flyway.java:159<span style=color:#f92672>)</span>
+	at org.springframework.boot.autoconfigure.flyway.FlywayMigrationInitializer.afterPropertiesSet<span style=color:#f92672>(</span>FlywayMigrationInitializer.java:65<span style=color:#f92672>)</span>
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods<span style=color:#f92672>(</span>AbstractAutowireCapableBeanFactory.java:1855<span style=color:#f92672>)</span>
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean<span style=color:#f92672>(</span>AbstractAutowireCapableBeanFactory.java:1792<span style=color:#f92672>)</span>
+	... <span style=color:#ae81ff>19</span> common frames omitted
+</code></pre></div><ul>
+<li>修改 Flyway 5.2.4 <a href=https://github.com/flyway/flyway/blob/0e87e9d7bedc06398d40902149a04e82c38eb9a3/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleDatabase.java#L118>OracleDatabase.java</a> 社区版本做了版本号限制</li>
+<li>修改 Flyway 6.5.7 <a href=https://github.com/flyway/flyway/blob/d3295ba81c0c29aa5e5aeff577b2572f9c4d7910/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleDatabase.java#L91>OracleDatabase.java</a> 社区版本做了版本号限制</li>
+<li>修改 Flyway 7.7.3 <a href=https://github.com/flyway/flyway/blob/74aa05c5cd6e05a4667e841e42ac6af361cb7489/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleDatabase.java#L84>OracleDatabase.java</a> 社区版本做了版本号限制</li>
+</ul>
+<p><strong>解决办法：</strong> 删除 ensureDatabaseNotOlderThanOtherwiseRecommendUpgradeToFlywayEdition 行检查代码</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#a6e22e>@Override</span>
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>final</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>ensureSupported</span><span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+    ensureDatabaseIsRecentEnough<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;10&#34;</span><span style=color:#f92672>);</span>
+    ensureDatabaseNotOlderThanOtherwiseRecommendUpgradeToFlywayEdition<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;12.2&#34;</span><span style=color:#f92672>,</span> org<span style=color:#f92672>.</span><span style=color:#a6e22e>flywaydb</span><span style=color:#f92672>.</span><span style=color:#a6e22e>core</span><span style=color:#f92672>.</span><span style=color:#a6e22e>internal</span><span style=color:#f92672>.</span><span style=color:#a6e22e>license</span><span style=color:#f92672>.</span><span style=color:#a6e22e>Edition</span><span style=color:#f92672>.</span><span style=color:#a6e22e>ENTERPRISE</span><span style=color:#f92672>);</span>
+    recommendFlywayUpgradeIfNecessary<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;19.0&#34;</span><span style=color:#f92672>);</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h4 id=2-all_scheduler_credentials-not-exist>2. ALL_SCHEDULER_CREDENTIALS not exist</h4>
+<p>ALL_SCHEDULER_CREDENTIALS 在 Oracle10 中不存在，并且在 Oracle12c以后废弃</p>
+<ul>
+<li>修改 Flyway 5.2.4 <a href=https://github.com/flyway/flyway/blob/0e87e9d7bedc06398d40902149a04e82c38eb9a3/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleSchema.java#L783>OracleSchema.java</a> 的 <code>getObjectTypeNames</code> 方法</li>
+<li>修改 Flyway 6.4.4 <a href=https://github.com/flyway/flyway/blob/c13e6880bf9470850dfaa3cbd0070d7fb83b1d3e/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleSchema.java#L783>OracleSchema.java</a> 的 <code>getObjectTypeNames</code> 方法</li>
+<li>修改 Flyway 7.7.3 <a href=https://github.com/flyway/flyway/blob/74aa05c5cd6e05a4667e841e42ac6af361cb7489/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleSchema.java#L783>OracleSchema.java</a> 的 <code>getObjectTypeNames</code> 方法</li>
+</ul>
+<p><strong>解决办法：</strong> 判断 <code>database.getVersion().getMajor().intValue() > 10</code> 才增加 <code>ALL_SCHEDULER_CREDENTIALS</code> 表的关联查询</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>  <span style=color:#75715e>/**
+</span><span style=color:#75715e>   * Returns the schema&#39;s existing object types.
+</span><span style=color:#75715e>   *
+</span><span style=color:#75715e>   * @return a set of object type names.
+</span><span style=color:#75715e>   * @throws SQLException if retrieving of object types failed.
+</span><span style=color:#75715e>   */</span>
+  <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Set<span style=color:#f92672>&lt;</span>String<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>getObjectTypeNames</span><span style=color:#f92672>(</span>JdbcTemplate jdbcTemplate<span style=color:#f92672>,</span> OracleDatabase database<span style=color:#f92672>,</span>
+      OracleSchema schema<span style=color:#f92672>)</span> <span style=color:#66d9ef>throws</span> SQLException <span style=color:#f92672>{</span>
+    <span style=color:#66d9ef>boolean</span> xmlDbAvailable <span style=color:#f92672>=</span> database<span style=color:#f92672>.</span><span style=color:#a6e22e>isXmlDbAvailable</span><span style=color:#f92672>();</span>
+
+    String query <span style=color:#f92672>=</span>
+        <span style=color:#75715e>// Most object types can be correctly selected from DBA_/ALL_OBJECTS.
+</span><span style=color:#75715e></span>        <span style=color:#e6db74>&#34;SELECT DISTINCT OBJECT_TYPE FROM &#34;</span> <span style=color:#f92672>+</span> database<span style=color:#f92672>.</span><span style=color:#a6e22e>dbaOrAll</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;OBJECTS&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; WHERE OWNER = ? &#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#75715e>// Materialized view logs.
+</span><span style=color:#75715e></span>            <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> MATERIALIZED_VIEW_LOG<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#e6db74>&#34;SELECT * FROM ALL_MVIEW_LOGS WHERE LOG_OWNER = ?) &#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#75715e>// Dimensions.
+</span><span style=color:#75715e></span>            <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> DIMENSION<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#e6db74>&#34;SELECT * FROM ALL_DIMENSIONS WHERE OWNER = ?) &#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#75715e>// Queue tables.
+</span><span style=color:#75715e></span>            <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> QUEUE_TABLE<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#e6db74>&#34;SELECT * FROM ALL_QUEUE_TABLES WHERE OWNER = ?) &#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#75715e>// Database links.
+</span><span style=color:#75715e></span>            <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> DATABASE_LINK<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#e6db74>&#34;SELECT * FROM &#34;</span> <span style=color:#f92672>+</span> database<span style=color:#f92672>.</span><span style=color:#a6e22e>dbaOrAll</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;DB_LINKS&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; WHERE OWNER = ?) &#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#75715e>// Contexts.
+</span><span style=color:#75715e></span>            <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> CONTEXT<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#e6db74>&#34;SELECT * FROM &#34;</span> <span style=color:#f92672>+</span> database<span style=color:#f92672>.</span><span style=color:#a6e22e>dbaOrAll</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;CONTEXT&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; WHERE SCHEMA = ?) &#34;</span> <span style=color:#f92672>+</span>
+            <span style=color:#75715e>// XML schemas.
+</span><span style=color:#75715e></span>            <span style=color:#f92672>(</span>xmlDbAvailable
+                <span style=color:#f92672>?</span> <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> XML_SCHEMA<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+                <span style=color:#e6db74>&#34;SELECT * FROM &#34;</span> <span style=color:#f92672>+</span> database<span style=color:#f92672>.</span><span style=color:#a6e22e>dbaOrAll</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;XML_SCHEMAS&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; WHERE OWNER = ?) &#34;</span>
+                <span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;&#34;</span><span style=color:#f92672>);</span>
+
+    <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>database<span style=color:#f92672>.</span><span style=color:#a6e22e>getVersion</span><span style=color:#f92672>().</span><span style=color:#a6e22e>getMajor</span><span style=color:#f92672>().</span><span style=color:#a6e22e>intValue</span><span style=color:#f92672>()</span> <span style=color:#f92672>&gt;</span> 10 <span style=color:#f92672>||</span> <span style=color:#f92672>!</span>database<span style=color:#f92672>.</span><span style=color:#a6e22e>getVersion</span><span style=color:#f92672>().</span><span style=color:#a6e22e>isAtLeast</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;12.2&#34;</span><span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+      <span style=color:#75715e>// Credentials.
+</span><span style=color:#75715e></span>      query <span style=color:#f92672>=</span> query <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;UNION SELECT &#39;&#34;</span> <span style=color:#f92672>+</span> CREDENTIAL<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>()</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;&#39; FROM DUAL WHERE EXISTS(&#34;</span> <span style=color:#f92672>+</span>
+          <span style=color:#e6db74>&#34;SELECT * FROM ALL_SCHEDULER_CREDENTIALS WHERE OWNER = ?) &#34;</span><span style=color:#f92672>;</span>
+    <span style=color:#f92672>}</span>
+
+    <span style=color:#66d9ef>int</span> n <span style=color:#f92672>=</span> 6 <span style=color:#f92672>+</span> <span style=color:#f92672>(</span>xmlDbAvailable <span style=color:#f92672>?</span> 1 <span style=color:#f92672>:</span> 0<span style=color:#f92672>)</span> <span style=color:#f92672>+</span>
+
+        1<span style=color:#f92672>;</span>
+    String<span style=color:#f92672>[]</span> params <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> String<span style=color:#f92672>[</span>n<span style=color:#f92672>];</span>
+    Arrays<span style=color:#f92672>.</span><span style=color:#a6e22e>fill</span><span style=color:#f92672>(</span>params<span style=color:#f92672>,</span> schema<span style=color:#f92672>.</span><span style=color:#a6e22e>getName</span><span style=color:#f92672>());</span>
+
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> HashSet<span style=color:#f92672>&lt;&gt;(</span>jdbcTemplate<span style=color:#f92672>.</span><span style=color:#a6e22e>queryForStringList</span><span style=color:#f92672>(</span>query<span style=color:#f92672>,</span> params<span style=color:#f92672>));</span>
+  <span style=color:#f92672>}</span>
+</code></pre></div><h4 id=3-oracle_maintained-column-does-not-exist>3. oracle_maintained column does not exist</h4>
+<p>Oracle 12c 之前的版本，ALL_USERS 这表中不存在 ORACLE_MAINTAINED 字段</p>
+<ul>
+<li>修改 Flyway 5.2.4 <a href=https://github.com/flyway/flyway/blob/0e87e9d7bedc06398d40902149a04e82c38eb9a3/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleDatabase.java#L365>OracleDatabase.java</a> 的 getSystemSchemas 方法</li>
+<li>修改 Flyway 6.5.7 <a href=https://github.com/flyway/flyway/blob/d3295ba81c0c29aa5e5aeff577b2572f9c4d7910/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleDatabase.java#L321>OracleDatabase.java</a> 的 getSystemSchemas 方法</li>
+<li>修改 Flyway 7.7.3 <a href=https://github.com/flyway/flyway/blob/74aa05c5cd6e05a4667e841e42ac6af361cb7489/flyway-core/src/main/java/org/flywaydb/core/internal/database/oracle/OracleDatabase.java#L320>OracleDatabase.java</a> 的 getSystemSchemas 方法</li>
+</ul>
+<p><strong>解决办法：</strong> 增加 <code>getVersion().isAtLeast("12.2")</code> 版本判断，当小于 12.2 版本时不判断 <code>ORACLE_MAINTAINED</code> 字段</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#75715e>/**
+</span><span style=color:#75715e> * Returns the list of schemas that were created and are maintained by Oracle-supplied scripts and must not be
+</span><span style=color:#75715e> * changed in any other way. The list is composed of default schemas mentioned in the official documentation for
+</span><span style=color:#75715e> * Oracle Database versions from 10.1 to 12.2, and is dynamically extended with schemas from DBA_REGISTRY and
+</span><span style=color:#75715e> * ALL_USERS (marked with ORACLE_MAINTAINED = &#39;Y&#39; in Oracle 12c).
+</span><span style=color:#75715e> *
+</span><span style=color:#75715e> * @return the set of system schema names
+</span><span style=color:#75715e> */</span>
+Set<span style=color:#f92672>&lt;</span>String<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>getSystemSchemas</span><span style=color:#f92672>()</span> <span style=color:#66d9ef>throws</span> SQLException <span style=color:#f92672>{</span>
+
+  <span style=color:#75715e>// The list of known default system schemas
+</span><span style=color:#75715e></span>  Set<span style=color:#f92672>&lt;</span>String<span style=color:#f92672>&gt;</span> result <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> HashSet<span style=color:#f92672>&lt;&gt;(</span>Arrays<span style=color:#f92672>.</span><span style=color:#a6e22e>asList</span><span style=color:#f92672>(</span>
+      <span style=color:#e6db74>&#34;SYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SYSTEM&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Standard system accounts
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;SYSBACKUP&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SYSDG&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SYSKM&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SYSRAC&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SYS$UMF&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Auxiliary system accounts
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;DBSNMP&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;MGMT_VIEW&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SYSMAN&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Enterprise Manager accounts
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;OUTLN&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Stored outlines
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;AUDSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Unified auditing
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;ORACLE_OCM&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Configuration Manager
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;APPQOSSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Database QoS Management
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;OJVMSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle JavaVM
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;DVF&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;DVSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Database Vault
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;DBSFWUSER&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Database Service Firewall
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;REMOTE_SCHEDULER_AGENT&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Remote scheduler agent
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;DIP&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Directory Integration Platform
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;APEX_PUBLIC_USER&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;FLOWS_FILES&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>/*&#34;APEX_######&#34;, &#34;FLOWS_######&#34;,*/</span>
+      <span style=color:#75715e>// Oracle Application Express
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;ANONYMOUS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;XDB&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;XS$NULL&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle XML Database
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;CTXSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Text
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;LBACSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Label Security
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;EXFSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Rules Manager and Expression Filter
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;MDDATA&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;MDSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SPATIAL_CSW_ADMIN_USR&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SPATIAL_WFS_ADMIN_USR&#34;</span><span style=color:#f92672>,</span>
+      <span style=color:#75715e>// Oracle Locator and Spatial
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;ORDDATA&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;ORDPLUGINS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;ORDSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;SI_INFORMTN_SCHEMA&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Multimedia
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;WMSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Workspace Manager
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;OLAPSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle OLAP catalogs
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;OWBSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;OWBSYS_AUDIT&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Warehouse Builder
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;GSMADMIN_INTERNAL&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;GSMCATUSER&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;GSMUSER&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Global Data Services
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;GGSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle GoldenGate
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;WK_TEST&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;WKSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;WKPROXY&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Ultra Search
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;ODM&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;ODM_MTR&#34;</span><span style=color:#f92672>,</span> <span style=color:#e6db74>&#34;DMSYS&#34;</span><span style=color:#f92672>,</span> <span style=color:#75715e>// Oracle Data Mining
+</span><span style=color:#75715e></span>      <span style=color:#e6db74>&#34;TSMSYS&#34;</span> <span style=color:#75715e>// Transparent Session Migration
+</span><span style=color:#75715e></span>  <span style=color:#f92672>));</span>
+
+  <span style=color:#66d9ef>if</span> <span style=color:#f92672>(!</span>getVersion<span style=color:#f92672>().</span><span style=color:#a6e22e>isAtLeast</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;12.2&#34;</span><span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+    result<span style=color:#f92672>.</span><span style=color:#a6e22e>addAll</span><span style=color:#f92672>(</span>
+        getMainConnection<span style=color:#f92672>().</span><span style=color:#a6e22e>getJdbcTemplate</span><span style=color:#f92672>()</span>
+            <span style=color:#f92672>.</span><span style=color:#a6e22e>queryForStringList</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;SELECT USERNAME FROM ALL_USERS &#34;</span> <span style=color:#f92672>+</span>
+                <span style=color:#e6db74>&#34;WHERE REGEXP_LIKE(USERNAME, &#39;^(APEX|FLOWS)_\\d+$&#39;)&#34;</span>
+            <span style=color:#f92672>));</span>
+  <span style=color:#f92672>}</span> <span style=color:#66d9ef>else</span> <span style=color:#f92672>{</span>
+    result<span style=color:#f92672>.</span><span style=color:#a6e22e>addAll</span><span style=color:#f92672>(</span>
+        getMainConnection<span style=color:#f92672>().</span><span style=color:#a6e22e>getJdbcTemplate</span><span style=color:#f92672>()</span>
+            <span style=color:#f92672>.</span><span style=color:#a6e22e>queryForStringList</span><span style=color:#f92672>(</span><span style=color:#e6db74>&#34;SELECT USERNAME FROM ALL_USERS &#34;</span> <span style=color:#f92672>+</span>
+                <span style=color:#e6db74>&#34;WHERE REGEXP_LIKE(USERNAME, &#39;^(APEX|FLOWS)_\\d+$&#39;)&#34;</span> <span style=color:#f92672>+</span>
+                <span style=color:#e6db74>&#34; OR ORACLE_MAINTAINED = &#39;Y&#39;&#34;</span>
+            <span style=color:#f92672>));</span>
+  <span style=color:#f92672>}</span>
+  <span style=color:#66d9ef>return</span> result<span style=color:#f92672>;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div></div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/flyway/>flyway</a><a class=tag href=/tags/oracle/>oracle</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>

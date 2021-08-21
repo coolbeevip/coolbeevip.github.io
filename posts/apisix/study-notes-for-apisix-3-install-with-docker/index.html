@@ -1,0 +1,221 @@
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | APISIX Study Notes (3) Install with Docker </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.87.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/apisix/study-notes-for-apisix-3-install-with-docker/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="APISIX Study Notes (3) Install with Docker">
+<meta name=twitter:description content="使用 Docker 启动
+定义卷目录 APISIX 目前好像还不支持通过环境变量配置参数，所以需要在宿主机上创建配置文件，并在启动 Docker 时通过 Volume 映射进容器
+规划外部卷目录
+mkdir apisix_home mkdir -p apisix_home/apisix_volume/apisix/apisix_conf mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf 定义 APISIX Dashboard 配置文件 apisix_home/apisix_volume/apisix/dashboard_conf/conf.yaml
+conf: listen: # 绑定 IP 地址 host: 0.0.0.0 # 监听端口 port: 9000 etcd: # etcd 用户名 # username: &#34;root&#34; # etcd 密码 # password: &#34;123456&#34;  # etcd 地址，支持集群多节点定义 endpoints: - apisix-etcd:2379 log: error_log: # 日志级别 debug, info, warn, error, panic, fatal level: warn  # 日志输出路径 file_path: logs/error.">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>APISIX Study Notes (3) Install with Docker</h3>
+</div>
+<p>使用 Docker 启动</p>
+<h2 id=定义卷目录>定义卷目录</h2>
+<p>APISIX 目前好像还不支持通过环境变量配置参数，所以需要在宿主机上创建配置文件，并在启动 Docker 时通过 Volume 映射进容器</p>
+<p>规划外部卷目录</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>mkdir apisix_home
+mkdir -p apisix_home/apisix_volume/apisix/apisix_conf
+mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf
+</code></pre></div><p>定义 APISIX Dashboard 配置文件 apisix_home/apisix_volume/apisix/dashboard_conf/conf.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>conf</span>:
+  <span style=color:#f92672>listen</span>:
+    <span style=color:#75715e># 绑定 IP 地址</span>
+    <span style=color:#f92672>host</span>: <span style=color:#ae81ff>0.0.0.0</span>
+    <span style=color:#75715e># 监听端口</span>
+    <span style=color:#f92672>port</span>: <span style=color:#ae81ff>9000</span>
+  <span style=color:#f92672>etcd</span>:
+    <span style=color:#75715e># etcd 用户名</span>
+    <span style=color:#75715e># username: &#34;root&#34;</span>
+    <span style=color:#75715e># etcd 密码</span>
+    <span style=color:#75715e># password: &#34;123456&#34;    </span>
+    <span style=color:#75715e># etcd 地址，支持集群多节点定义</span>
+    <span style=color:#f92672>endpoints</span>:
+      - <span style=color:#ae81ff>apisix-etcd:2379</span>
+  <span style=color:#f92672>log</span>:
+    <span style=color:#f92672>error_log</span>:
+      <span style=color:#75715e># 日志级别 debug, info, warn, error, panic, fatal</span>
+      <span style=color:#f92672>level</span>: <span style=color:#ae81ff>warn </span>
+      <span style=color:#75715e># 日志输出路径</span>
+      <span style=color:#f92672>file_path</span>: <span style=color:#ae81ff>logs/error.log</span>
+      
+<span style=color:#f92672>authentication</span>:
+  <span style=color:#f92672>secret</span>: <span style=color:#ae81ff>secret</span>
+  <span style=color:#75715e># jwt token 过期时间（秒)</span>
+  <span style=color:#f92672>expire_time</span>: <span style=color:#ae81ff>3600</span>     
+  <span style=color:#75715e># 登录用户名密码</span>
+  <span style=color:#f92672>users</span>:
+    - <span style=color:#f92672>username</span>: <span style=color:#ae81ff>admin </span>
+      <span style=color:#f92672>password</span>: <span style=color:#ae81ff>admin</span>
+    - <span style=color:#f92672>username</span>: <span style=color:#ae81ff>user</span>
+      <span style=color:#f92672>password</span>: <span style=color:#ae81ff>user</span>
+</code></pre></div><p>定义 APISIX 配置文件 apisix_home/apisix_volume/apisix/apisix_conf/config.yaml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>apisix</span>:
+  <span style=color:#f92672>node_listen</span>: <span style=color:#ae81ff>9080</span>
+  <span style=color:#f92672>enable_ipv6</span>: <span style=color:#66d9ef>false</span>
+  <span style=color:#f92672>allow_admin</span>:
+    - <span style=color:#ae81ff>0.0.0.0</span><span style=color:#ae81ff>/0</span>
+  <span style=color:#f92672>admin_key</span>:
+    - <span style=color:#f92672>name</span>: <span style=color:#e6db74>&#34;admin&#34;</span>
+      <span style=color:#f92672>key</span>: <span style=color:#ae81ff>edd1c9f034335f136f87ad84b625c8f1</span>
+      <span style=color:#f92672>role</span>: <span style=color:#ae81ff>admin</span>
+<span style=color:#f92672>etcd</span>:
+  <span style=color:#f92672>host</span>:
+    - <span style=color:#ae81ff>http://apisix-etcd:2379</span>
+</code></pre></div><h2 id=定义-docker-compose-文件>定义 Docker Compose 文件</h2>
+<p>在这个文件里，将 APISIX，Dashboard，Etcd 都集成到一起，并且使用内部网络与 Etcd 通讯</p>
+<p>创建 Docker Compose 文件 apisix_home/apisix-all-in-one.yml</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3&#34;</span>
+<span style=color:#f92672>services</span>:
+  <span style=color:#f92672>apisix</span>:
+    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>apache/apisix:2.5-alpine</span>
+    <span style=color:#f92672>container_name</span>: <span style=color:#ae81ff>apisix-server</span>
+    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>always</span>
+    <span style=color:#f92672>volumes</span>:
+      - <span style=color:#ae81ff>./apisix_volume/apisix/apisix_log:/usr/local/apisix/logs</span>
+      - <span style=color:#ae81ff>./apisix_volume/apisix/apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro</span>
+    <span style=color:#f92672>depends_on</span>:
+      - <span style=color:#ae81ff>apisix-etcd</span>
+    <span style=color:#f92672>ports</span>:
+      - <span style=color:#ae81ff>9080</span>:<span style=color:#ae81ff>9080</span>
+      - <span style=color:#ae81ff>9443</span>:<span style=color:#ae81ff>9443</span>
+    <span style=color:#f92672>networks</span>:
+      - <span style=color:#ae81ff>apisix</span>
+
+  <span style=color:#f92672>apisix-dashboard</span>:
+    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>apache/apisix-dashboard:2.6</span>
+    <span style=color:#f92672>container_name</span>: <span style=color:#ae81ff>apisix-dashboard</span>
+    <span style=color:#f92672>restart</span>: <span style=color:#ae81ff>always</span>
+    <span style=color:#f92672>volumes</span>:
+      - <span style=color:#ae81ff>./apisix_volume/apisix/dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml:ro</span>
+    <span style=color:#f92672>depends_on</span>:
+      - <span style=color:#ae81ff>apisix-etcd</span>
+    <span style=color:#f92672>ports</span>:
+      - <span style=color:#ae81ff>9000</span>:<span style=color:#ae81ff>9000</span>
+    <span style=color:#f92672>networks</span>:
+      - <span style=color:#ae81ff>apisix</span>
+
+  <span style=color:#f92672>apisix-etcd</span>:
+    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>docker.io/bitnami/etcd:3.4.16</span>
+    <span style=color:#f92672>container_name</span>: <span style=color:#ae81ff>apisix-etcd</span>
+    <span style=color:#75715e>#ports:</span>
+    <span style=color:#75715e>#  - 2380:2380</span>
+    <span style=color:#75715e>#  - 2379:2379</span>
+    <span style=color:#f92672>environment</span>:
+      - <span style=color:#ae81ff>ALLOW_NONE_AUTHENTICATION=yes</span>
+      - <span style=color:#ae81ff>ETCD_NAME=etcd-1</span>
+      - <span style=color:#ae81ff>ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380</span>
+      - <span style=color:#ae81ff>ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379</span>
+      - <span style=color:#ae81ff>ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379</span>
+    <span style=color:#f92672>volumes</span>:
+      - <span style=color:#ae81ff>./apisix_volume/apisix/etcd/data:/bitnami/etcd/data</span>
+      - <span style=color:#ae81ff>./apisix_volume/apisix/etcd/conf:/opt/bitnami/etcd/conf</span>
+    <span style=color:#f92672>networks</span>:
+      - <span style=color:#ae81ff>apisix</span>
+
+<span style=color:#f92672>networks</span>:
+  <span style=color:#f92672>apisix</span>:
+    <span style=color:#f92672>driver</span>: <span style=color:#ae81ff>bridge</span>
+</code></pre></div><h2 id=启动--停止>启动 & 停止</h2>
+<p>启动</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ cd apisix_home
+$ docker-compose -f apisix-all-in-one.yml up -d
+</code></pre></div><p>停止</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ cd apisix_home
+$ docker-compose -f apisix-all-in-one.yml down
+</code></pre></div><h2 id=验证>验证</h2>
+<ul>
+<li>
+<p>在浏览器打开 APISIX Dashboard 页面 http://127.0.0.1:9000</p>
+</li>
+<li>
+<p>验证 APISIX 服务</p>
+</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ curl http://127.0.0.1:9080/apisix/admin/services/ -H <span style=color:#e6db74>&#39;X-API-KEY: edd1c9f034335f136f87ad84b625c8f1&#39;</span>
+
+<span style=color:#f92672>{</span>
+	<span style=color:#e6db74>&#34;node&#34;</span>: <span style=color:#f92672>{</span>
+		<span style=color:#e6db74>&#34;key&#34;</span>: <span style=color:#e6db74>&#34;\/apisix\/services&#34;</span>,
+		<span style=color:#e6db74>&#34;dir&#34;</span>: true,
+		<span style=color:#e6db74>&#34;nodes&#34;</span>: <span style=color:#f92672>{}</span>
+	<span style=color:#f92672>}</span>,
+	<span style=color:#e6db74>&#34;action&#34;</span>: <span style=color:#e6db74>&#34;get&#34;</span>,
+	<span style=color:#e6db74>&#34;count&#34;</span>: <span style=color:#e6db74>&#34;1&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div></div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/gateway/>gateway</a></span>
+<span class=separator><a class=tag href=/tags/apisix/>apisix</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>
