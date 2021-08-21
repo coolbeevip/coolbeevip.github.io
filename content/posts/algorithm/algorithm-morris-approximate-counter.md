@@ -6,9 +6,12 @@ categories: [algorithm]
 draft: false
 ---
 
-本文介绍如何使用莫里斯计数器（近似计数算法）的 Java 实现 ，莫里斯计数器采用概率计数原理，用很小的内存实现海量数据的近似计数。
+这是一个莫里斯计数器（近似计数算法）的 Java 实现，用很小的数据结构准确估计具有几十亿数据量的数据计数。
 
-本例中，我们使用一个 byte (8bit) 的变量，实现千万级的计数
+我们通常会定义一个 Long 类型对象，通过累加的方式实现计数。每个 Long 类型占用 8 byte 空间，如果你有 30 亿个要记录的对象，那么你就需要 22GB 的空间存储这些计数器，这还不不包括在哈希中的对象ID。
+如果我们只需要得到计数的近似值，并且使用一个小的数据结构( 例如 1 byte) 作为计数器，那么我们只需要大概 2GB 的空间就足够了。
+
+以下样例代码中，我们使用 1 byte (8bit) 的变量，实现千万级的计数
 
 ```java
 public class MorrisApproximateCounter {
@@ -63,7 +66,7 @@ public class MorrisApproximateCounter {
 执行结果
 
 ```shell
-22:09:42.416 [main] INFO org.coolbeevip.algorithm.approximatecounter.MorrisApproximateCounter - 实际计数 20000000, 近似计数 24154952
+实际计数 20000000, 近似计数 24154952
 ```
 
 [MorrisApproximateCounter.java](https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateCounter.java)
