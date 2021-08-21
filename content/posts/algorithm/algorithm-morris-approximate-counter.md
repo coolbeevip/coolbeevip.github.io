@@ -94,6 +94,8 @@ public class MorrisApproximateCounter {
 实际计数 2000, 近似计数 1095
 ```
 
+使用是一个小型数组结构，通过哈希定位索引存储多个计数器，可以参考 [MorrisApproximateHashCounter.java](https://github.com/coolbeevip/tutorials/blob/master/algorithm/morris-approximate-counter/src/main/java/org/coolbeevip/algorithm/approximatecounter/MorrisApproximateHashCounter.java)
+
 参考
 
 [Approximate_counting_algorithm](https://en.wikipedia.org/wiki/Approximate_counting_algorithm)
