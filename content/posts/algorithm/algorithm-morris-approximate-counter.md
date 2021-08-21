@@ -98,4 +98,4 @@ public class MorrisApproximateCounter {
 
 参考
 
-[Approximate_counting_algorithm](https://en.wikipedia.org/wiki/Approximate_counting_algorithm)
+* [Approximate_counting_algorithm](https://en.wikipedia.org/wiki/Approximate_counting_algorithm)
