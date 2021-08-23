@@ -117,3 +117,11 @@ git commit --amend
 ```shell
 git rebase -i <commit id>
 ```
+
+## Remote
+
+更新本地仓库地址
+
+```shell
+git remote set-url origin ssh://git@<xxxx.git>
+```
