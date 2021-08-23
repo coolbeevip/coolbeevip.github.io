@@ -5,7 +5,7 @@ date = "2021-04-07"
 
 Hi, I'm ZhangLei 👋
 
-Software Enginner at asiainfo.com Beijing, China
+Software Engineer at Beijing, China
 
 Apache committer、Apache ServiceComb PMC
 
