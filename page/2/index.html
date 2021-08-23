@@ -69,6 +69,35 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/maven/maven-export-dependencies-analyse-license/>Use Maven plugin to export license info in source files and its optional dependencies</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>有的时候我们那需要分析多模块 Maven 项目的依赖使用情况，并希望能够分析出这些依赖的 LICENSE 信息。使用 io.github.coolbeevip:license-maven-plugin 插件 可以生成 TXT 或者 CSV 格式的分析报告
+youtube
+bilibili
+CSV 格式的报告 NOTICE.CSV NOTICE-LICENSE.CSV TXT 格式的报告 NOTICE.TXT NOTICE-LICENSE.TXT 插件 LICENSE-MAVEN-PLUGIN format 导出格式，支持 csv、txt； license 是否分析 LICENSE 信息，默认 false； ignoreGroupIds 忽略 groupId 列表, 多个用逗号分割; timeout 分析 LICENSE 的超时时间，默认 5 秒; 导出报告 在 Maven 项目的根目录执行如下命令
+导出 CSV
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv 导出 TXT
+mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=txt 提示： 导出的报告位置在 ./target/distribute 目录下
+导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.</p>
+<a href=/posts/maven/maven-export-dependencies-analyse-license/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Sun, May 9, 2021
+</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/license/>license</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/docker/docker-pulling-pushing/>Synchronize between image repositories with Bash</a>
 </h3>
 </div>
@@ -273,32 +302,6 @@ properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级�
 在当前分支执行 stash 将当前分支未提交的代码隐藏起来 $ git stash Saved working directory and index state WIP on SCB-1577: 2554be3d SCB-1593 Add notice for Boringssl support ciphers (base) bogon:servicecomb-pack zhanglei$ 此时你可以看到已经存储到一个id为 2554be3d 里了，这时你可以用 git status 查看已经没有要提交的内容了
 git status On branch SCB-1577 nothing to commit, working tree clean (base) bogon:servicecomb-pack zhanglei$ 这时你就可以切换到其他分支开始新的工作 (base) bogon:servicecomb-pack zhanglei$ git checkout master Switched to branch 'master' Your branch is up to date with 'origin/master'.</p>
 <a href=/posts/git/git-command-commit-stash/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Mon, Apr 6, 2020
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-command-rebase-upstream/>Synchronizing Your Forked Git Project</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>当你 fork 一个仓库后，可以时用此方法使你 fork 后的仓库 master 分支保持和上游 master 分支的同步
-使用 rebase 命令同步上游 master 分支到你本地的 master 分支，并推送到你 fork 后的仓库
-git fetch upstream git checkout master git rebase upstream/master git push -f origin master 或者你确定放弃你本地所有的修改，则可以简单的重置为上游版本
-git fetch upstream git checkout master git reset --hard upstream/master git push -f origin master 如果你也想同步 master 分支的修改到你的功能分支
-git checkout &lt;分支名> git rebase master git push -f origin &lt;分支名> </p>
-</div>
 </div>
 <div class=post-footer>
 <div class=meta>
