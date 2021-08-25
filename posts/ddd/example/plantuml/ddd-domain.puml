@@ -1,0 +1,10 @@
+@startuml
+
+storage Domain {
+  storage "User Access \nManagement Subdomain"
+  storage "Freelancer \nManagement Subdomain"
+  storage "Custom \nManagement Subdomain"
+  storage "Project \nManagement Subdomain"
+}
+
+@enduml

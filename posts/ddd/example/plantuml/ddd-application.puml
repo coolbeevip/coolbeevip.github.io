@@ -1,0 +1,44 @@
+@startuml
+
+package "User Interface Layer (Adapter)" as interfaceLayer <<Rectangle>> {
+	class Client <<Presentation>> {
+	}
+}
+
+package "Application Layer" as applicationLayer <<Rectangle>> {
+  class FreelancerApplicationService <<Application Service>> {
+  }
+}
+
+package "Domain Layer" as domainLayer <<Rectangle>> {
+	package "Freelancer Management Bounded Context" <<Rectangle>> {
+		class Address <<Object Value>> {
+		}
+
+		class FreelancerID <<Value Object>> {
+	    }
+
+		class Freelancer <<Aggregation Root>> {
+		}
+
+		class FreelancerRepository <<Domain Repository>> {
+		}
+	}
+}
+
+package "Infrastructure Layer (Adapter)" as infrastructureLayer <<Rectangle>> {
+	class HibernateFreelancerRepository {
+	}
+}
+
+
+Client .d.> FreelancerApplicationService : <<use>>
+FreelancerApplicationService -d-> Freelancer : invokes usecase on
+Freelancer *-l- Address
+Freelancer *-d- FreelancerID
+FreelancerApplicationService o-d- FreelancerRepository
+
+infrastructureLayer ..|> domainLayer
+infrastructureLayer ..|> applicationLayer
+infrastructureLayer ..|> interfaceLayer
+@enduml

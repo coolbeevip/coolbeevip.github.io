@@ -1,0 +1,92 @@
+@startuml
+
+package "Access Management Bounded Context" <<Rectangle>> {
+	class User <<Aggregation Root>> {
+	  - username: String
+	  - encryptedPassword: String
+	}
+}
+
+package "Common Type Shared Kernel" <<Rectangle>> {
+	class UserID <<Value Object>> {
+      - uniqueID: String
+    }
+
+	class ProjectID <<Value Object>> {
+      - uniqueID: String
+    }
+
+	class CustomerID <<Value Object>> {
+      - uniqueID: String
+    }
+}
+
+package "Freelancer Management Bounded Context" <<Rectangle>> {
+	class Freelancer <<Aggregation Root>> {
+	  + Address getAddress()
+	  + void movedTo(Address address)
+	}
+
+	class FreelancerID <<Value Object>> {
+      - uniqueID: String
+    }
+
+	class Address <<Value Object>> {
+	  - name: String
+	  - zipCode: String
+	  - city: String
+	  + Address changeName(String name)
+	  + Address changeZipCode(String zipCode)
+	  + Address changeCity(String city)
+	  + String getName()
+	  + String getZipCode()
+	  + String getCity()
+    }
+
+	class Timesheet <<Aggregation Root>> {
+      - year: int
+      - mouth: int
+      - hoursWorked: int
+    }
+
+	class TimesheetID <<Value Object>> {
+      - uniqueID: String
+    }
+
+	enum ContactType <<enumeration>> {
+	  EMAIL
+	  MOBILE
+	}
+
+	class CommunicationChannel <<Value Object>> {
+	  - value: String
+	}
+}
+
+package "Project Management Bounded Context" <<Rectangle>> {
+	class Project <<Aggregation Root>> {
+	  name: String
+	}
+}
+
+package "Customer Management Bounded Context" <<Rectangle>> {
+	class Customer <<Aggregation Root>> {
+	  name: String
+	}
+}
+
+UserID -u-o User
+UserID -d-o Freelancer : createBy
+ProjectID -d-o Timesheet
+ProjectID -d-o Project
+CustomerID -d-o Project
+CustomerID -d-o Customer
+
+FreelancerID -l-o Freelancer
+Address -r-* Freelancer
+FreelancerID -r-o Timesheet
+CommunicationChannel "0..*" -u-* Freelancer
+ContactType -u-o CommunicationChannel
+TimesheetID -u-o Timesheet
+
+@enduml
