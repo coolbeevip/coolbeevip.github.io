@@ -125,3 +125,4 @@ https://www.mirkosertic.de/blog/2012/07/domain-driven-design-overview-and-buildi
 https://www.jianshu.com/p/570d29bdda48
 https://www.itread01.com/content/1589857384.html
 https://yasinshaw.com/articles/78
+https://project-awesome.org/heynickc/awesome-ddd
