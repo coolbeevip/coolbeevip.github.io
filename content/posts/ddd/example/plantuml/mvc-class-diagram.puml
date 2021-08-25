@@ -1,0 +1,54 @@
+@startuml
+class User {
+  username: String
+  encryptedPassword: String
+}
+
+class Freelancer {
+  id: String
+  name: String
+  zipCode: String
+  city: String
+  createBy: User
+  contacts: Collection<ContactInformation>
+  projects: Collection<Project>
+}
+
+class Timesheet {
+  id: String
+  year: int
+  mouth: int
+  hoursWorked: int
+  project: Project
+}
+
+class Project {
+  id: String
+  name: String
+  createBy: User
+  customer: Customer
+}
+
+class Customer {
+  id: String
+  name: String
+  createBy: User
+}
+
+class ContactInformation {
+  id: String
+  value: String
+  type: int
+}
+
+User -d-o Freelancer
+User -d-o Project
+User -d-o Customer
+
+Timesheet -u-o Freelancer
+Project "0..*" -u-o Freelancer
+Project -l-o Timesheet
+ContactInformation "0..*" -l-* Freelancer
+Customer -l-o Project
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+
+class Client <<Presentation>> {
+}
+
+package "Transaction Boundary" as TransactionBoundary <<Rectangle>> {
+
+	class FreelancerApplicationService <<Application Service>> {
+	  + void freelancerMoved(FreelancerMovedCommand cmd)
+	  + FreelancerPresentationModel getPresentationModelFor(FreelancerID freelancerId)
+	}
+
+	class Address <<Object Value>> {
+	  - name: String
+	  - zipCode: String
+	  - city: String
+	  + Address changeName(String name)
+	  + Address changeZipCode(String zipCode)
+	  + Address changeCity(String city)
+	  + String getName()
+	  + String getZipCode()
+	  + String getCity()
+	}
+
+	class FreelancerID <<Value Object>> {
+      - uniqueID: String
+    }
+
+	class Freelancer <<Aggregation Root>> {
+	  + Address getAddress()
+	  + void movedTo(Address address)
+	}
+
+	class FreelancerRepository <<Domain Repository>> {
+	  + findById(String freelancerId): Freelancer
+	  + void add(Freelancer freelancer)
+	  + void remove(Freelancer freelancer)
+	  + findByName(String name): Collection<Freelancer>
+	}
+
+}
+
+Client .d.> FreelancerApplicationService : <<use>>
+FreelancerApplicationService -d-> Freelancer : invokes usecase on
+Freelancer *-d- Address
+Freelancer *-l- FreelancerID
+FreelancerApplicationService o-d- FreelancerRepository
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+
+class Client <<Presentation>> {
+}
+
+class FreelancerController {
+  - FreelancerService: service
+  + getFreelancerById(String freelancerId): FreelancerDTO
+  + void moveToAddress(FreelancerDTO dto)
+}
+
+class FreelancerDTO {
+  - id: String
+  - name: String
+  - zipCode: String
+  - city: String
+  + String getAddress()
+}
+
+class FreelancerService {
+  - FreelancerDAO: dao
+  + getFreelancerById(String freelancerId): FreelancerDTO
+  + void moveToAddress(FreelancerDTO dto)
+}
+
+class FreelancerDAO {
+  + findById(): FreelancerDO
+  + void add(FreelancerDO do)
+  + void remove(FreelancerDO do)
+  + findByName(String name): List<FreelancerDO>
+}
+
+class FreelancerDO {
+  - id: String
+  - name: String
+  - zipCode: String
+  - city: String
+  .. Setter ..
+  + void setId(String id)
+  + void setName(String name)
+  + void setZipCode(String zipCode)
+  + void setCity(String city)
+  .. Getter ..
+  + String getId()
+  + String getName()
+  + String getZipCode()
+  + String getCity()
+}
+
+Client .d.> FreelancerController : <<use>>
+FreelancerController o-d- FreelancerService
+FreelancerService o-d- FreelancerDAO
+
+FreelancerDTO -l-o FreelancerController
+FreelancerDTO -l-o FreelancerService
+FreelancerDO -l-o FreelancerDAO
+
+@enduml
