@@ -122,3 +122,6 @@ Example: The Bill Aggregate and the Bill Repository should be put into the same 
 
 https://www.mirkosertic.de/blog/2013/04/domain-driven-design-example/
 https://www.mirkosertic.de/blog/2012/07/domain-driven-design-overview-and-building-blocks/
+https://www.jianshu.com/p/570d29bdda48
+https://www.itread01.com/content/1589857384.html
+https://yasinshaw.com/articles/78
