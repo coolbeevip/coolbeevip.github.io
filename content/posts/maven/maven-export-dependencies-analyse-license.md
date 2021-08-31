@@ -68,6 +68,15 @@ mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -D
 brew install --cask chromedriver
 ```
 
+我个人建议手动安装 `ChromeDriver` ，因为 `ChromeDriver` 版本要与你本地安装的 Chrome 浏览器版本保持大版本一致。你可以先查看你浏览器的版本，例如是 `版本 92.0.4515.159（正式版本） (x86_64)`
+，您可以在 [ChromeDriver](http://chromedriver.storage.googleapis.com/index.html) 下载版本号最接近的驱动文件。下载解压后将可执行文件 `chromedriver` 放到你本地的目录，并增加到 path 中。
+执行一下命令可以看到安装成功
+
+```shell
+$ chromedriver --version
+ChromeDriver 92.0.4515.107 (87a818b10553a07434ea9e2b6dccf3cbe7895134-refs/branch-heads/4515@{#1634})
+```
+
 导出时增加参数 `-Dlicense=true` 即可
 
 ```shell
