@@ -112,7 +112,12 @@ mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -D
 <p>此功能使用 <a href=https://github.com/SeleniumHQ/selenium>selenium</a> 从 <a href=https://search.maven.org/>Maven Central Repository</a> 分析依赖的 License 信息</p>
 <p>在 MacOS 下安装 selenium 支持，更对支持参见<a href=https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver>ChromeDriver</a></p>
 <pre><code>brew install --cask chromedriver
-</code></pre><p>导出时增加参数 <code>-Dlicense=true</code> 即可</p>
+</code></pre><p>我个人建议手动安装 <code>ChromeDriver</code> ，因为 <code>ChromeDriver</code> 版本要与你本地安装的 Chrome 浏览器版本保持大版本一致。你可以先查看你浏览器的版本，例如是 <code>版本 92.0.4515.159（正式版本） (x86_64)</code>
+，您可以在 <a href=http://chromedriver.storage.googleapis.com/index.html>ChromeDriver</a> 下载版本号最接近的驱动文件。下载解压后将可执行文件 <code>chromedriver</code> 放到你本地的目录，并增加到 path 中。
+执行一下命令可以看到安装成功</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ chromedriver --version
+ChromeDriver 92.0.4515.107 <span style=color:#f92672>(</span>87a818b10553a07434ea9e2b6dccf3cbe7895134-refs/branch-heads/4515@<span style=color:#f92672>{</span><span style=color:#75715e>#1634})</span>
+</code></pre></div><p>导出时增加参数 <code>-Dlicense=true</code> 即可</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat<span style=color:#f92672>=</span>csv -Dlicense<span style=color:#f92672>=</span>true
 </code></pre></div><p>分析过的 LICENSE 信息会存储在数据文件 <code>~/.m2/mvnrepository.mapdb</code> 中，再次分析时会优先从数据文件中提取 LICENSE 信息。
 你也可以下载作者的 <a href=https://github.com/coolbeevip/license-maven-plugin/blob/master/db/mvnrepository.mapdb>mvnrepository.mapdb</a> 文件放到本机 <code>~/.m2/</code> 目录下
