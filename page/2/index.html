@@ -175,6 +175,31 @@ $ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk v
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/>Oracle Proxy Using HAProxy Docker</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>下载 HAProxy Docker
+docker pull haproxy:2.3 创建工作目录
+mkdir -p /opt/haproxy-oracle/docker_volume 在 /opt/haproxy-oracle/docker_volume 目录下创建如下 haproxy.cfg 文件，请将文件尾部的 oracle 地址和端口改为你的地址和端口
+global daemon log 127.0.0.1 local0 log 127.0.0.1 local1 notice maxconn 4096 tune.ssl.default-dh-param 2048 defaults log global retries 3 maxconn 2000 timeout connect 5s timeout client 50s timeout server 50s listen stats bind *:9090 balance mode http stats enable stats auth admin:admin stats uri /stats listen oracle-proxy log global bind :1521 mode tcp balance roundrobin server oracle-1 10.</p>
+<a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Tue, Sep 1, 2020
+</span>
+<span class=separator><a class=category href=/categories/haproxy/>haproxy</a></span>
+<span class=separator><a class=tag href=/tags/haproxy/>haproxy</a><a class=tag href=/tags/oracle/>oracle</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/redis/redis-setting-up-redis-for-production/>Setting up Redis for Production</a>
 </h3>
 </div>
@@ -294,29 +319,6 @@ properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级�
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/project/>project</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-command-commit-squash/>Git Squash Commits</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>压缩合并 Commits，将多个 commit 整理合并的方法，这样可以使提交记录更加清晰
-查看提交记录，选择你要合并的范围 git log commit 6d757f70af289b5a90d00bd5e4b93d892d64a258 (HEAD -> SCB-1669) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Thu Dec 19 13:53:26 2019 +0800 SCB-1669 Fixed reverse compensation sort bug in FSM commit 37e0c5d99d0e6dae188cbd78f543ba69433b928f (origin/SCB-1669) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Thu Dec 19 02:00:20 2019 +0800 SCB-1669 Fixed Reverse compensation sort bug in FSM commit b4ea8717a86d1eba1956d21727d05c466ff6d8a2 (upstream/master, origin/master, origin/HEAD, master) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Tue Dec 10 16:25:48 2019 +0800 SCB-1658 Improve encapsulation on txEntityMap of SagaData 可以看到最后两次提交，都是为了修复 SCB-1669 这个问题，此时我想合并最后两次提交 6d757f70af289b5a90d00bd5e4b93d892d64a258 和 37e0c5d99d0e6dae188cbd78f543ba69433b928f</p>
-<a href=/posts/git/git-command-commit-squash/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Mon, Apr 6, 2020
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span>
 </div>
 </div>
 </div>
