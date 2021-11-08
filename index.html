@@ -74,7 +74,11 @@
 </div>
 <div class=post-content>
 <div class=p_part>
-<p>使用正则表达式搜索文件内容 cat nc-auth_3000.log | grep -s 'timeCost":\d\d\d\d' 使用正则表达式搜索压缩文件内容 gzip -dc nc-auth_3000.20211106.38.log.gz | grep -s 'timeCost":\d\d\d\d' </p>
+<p>使用正则表达式搜索文件内容 macOS
+cat nc-auth_3000.log | grep -s 'timeCost":\d\d\d\d' centOS
+cat nc-auth_3000.log | grep -P 'timeCost":\d\d\d\d' 使用正则表达式搜索压缩文件内容 macOS
+gzip -dc nc-auth_3000.20211106.38.log.gz | grep -s 'timeCost":\d\d\d\d' centOS
+gzip -dc nc-auth_3000.20211106.38.log.gz | grep -P 'timeCost":\d\d\d\d' </p>
 </div>
 </div>
 <div class=post-footer>
