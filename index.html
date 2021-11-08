@@ -69,6 +69,31 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/java/java-undertow-threads-and-jdbc-pools/>The Impact of Undertow Thread Options & Database Connection Pool on Performance</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>Hikari 线程参数和数据库连接池参数对业务吞吐率的影响分析
+场景 本例中我们使用 Undertow 作为 Web 容器，使用 Hikari 作为数据库连接池， 并通过 spring.datasource.hikari.maximum-pool-size 和 server.undertow.threads.worker 两个参数的调整，看看对于业务的性能影响有多大
+为此我准备了一个简单的 DEMO，并且执行 1000 次请求，并发 100，每次请求执行一个 SLEEP(5) 的 SQL模拟单笔耗时。并在一个 2C 的服务器上测试。应用默认参数如下
+spring.datasource.hikari.connection-timeout=30000 spring.datasource.hikari.minimum-idle=10 spring.datasource.hikari.maximum-pool-size=10 server.undertow.threads.worker(默认是 2C*8) 默认参数 $ ab -c 100 -n 1000 http://localhost:6060/test This is ApacheBench, Version 2.3 &lt;$Revision: 1879490 $> Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/ Licensed to The Apache Software Foundation, http://www.apache.org/ Benchmarking localhost (be patient) Completed 100 requests Completed 200 requests Completed 300 requests Completed 400 requests Completed 500 requests Completed 600 requests Completed 700 requests Completed 800 requests Completed 900 requests Completed 1000 requests Finished 1000 requests Server Software: Server Hostname: localhost Server Port: 6060 Document Path: /test Document Length: 14 bytes Concurrency Level: 100 Time taken for tests: 510.</p>
+<a href=/posts/java/java-undertow-threads-and-jdbc-pools/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Thu, Sep 23, 2021
+</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/undertow/>undertow</a><a class=tag href=/tags/hikari/>hikari</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/redis/redis-find-biggest-objects-in-redis/>Find The Biggest Objects In Redis</a>
 </h3>
 </div>
@@ -307,40 +332,6 @@ UPSTREAM 1 $ curl -i -X GET http://192.168.51.234:5005/nc-tools/actuator/health 
 </span>
 <span class=separator><a class=category href=/categories/git/>git</a></span>
 <span class=separator><a class=tag href=/tags/git/>git</a><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/release/>release</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/docker/jprofiler-with-docker/>JProfiler with Docker Sonatype Nexus3</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>使用 JProfiler 监控 Docker Sonatype Nexus3
-下载 JProfiler 从 https://www.ej-technologies.com/下载 JProfiler 和 Agent（注意版本必须一致）
-JProfiler GUI
-https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg
-JProfiler Agent
-https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
-在服务器上安装 JProfiler Agent 将下载后的 jprofiler_linux_12_0_2.sh 传到服务器上，通过 sh jprofiler_linux_12_0_2.sh 命令按提示安装即可
-默认安装路径为 /opt/jprofiler12/，这个路径在启动 Docker 的时候要映射到容器内部
-启动 Docker Sonatype Nexus3 在官方 sonatype/nexus3 容器启动参数的基础上做如下修改
-使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
-增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
-增加 -p 9899:9899 容器端口映射
-docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS="-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</p>
-<a href=/posts/docker/jprofiler-with-docker/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Fri, May 14, 2021
-</span>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/jprofiler/>jprofiler</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/nexus/>nexus</a></span>
 </div>
 </div>
 </div>
