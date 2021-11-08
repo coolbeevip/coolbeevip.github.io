@@ -1,5 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | undertow </title>
+<title> Lei Zhang | Linux Command - Grep </title>
 <meta charset=utf-8><meta name=generator content="Hugo 0.89.1"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
@@ -10,12 +10,11 @@
 <link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
-<link rel=canonical href=/tags/undertow/>
-<link rel=alternate type=application/rss+xml href=/tags/undertow/index.xml title>
+<link rel=canonical href=/posts/linux/linux-commands-search/>
 <script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="undertow">
-<meta name=twitter:description content="This is my knowledge base. I document things here">
+<meta name=twitter:title content="Linux Command - Grep">
+<meta name=twitter:description content="使用正则表达式搜索文件内容 cat nc-auth_3000.log | grep -s 'timeCost&#34;:\d\d\d\d' 使用正则表达式搜索压缩文件内容 gzip -dc nc-auth_3000.20211106.38.log.gz | grep -s 'timeCost&#34;:\d\d\d\d' ">
 </head>
 <body><div class="sidebar .">
 <div class=logo-title>
@@ -65,122 +64,22 @@
 </div>
 <div class=autopagerize_page_element>
 <div class=content>
-<div class="list-with-title listing-title">
-<div class=listing-title>Tags</div>
-<div class=tags-cloud>
-<a href=/tags/apisix class=tags-cloud-item style=font-size:1.240823996531185rem>
-apisix<sup>4</sup>
-</a>
-<a href=/tags/approximation class=tags-cloud-item style=font-size:1rem>
-approximation<sup>1</sup>
-</a>
-<a href=/tags/cache class=tags-cloud-item style=font-size:1rem>
-cache<sup>1</sup>
-</a>
-<a href=/tags/centos class=tags-cloud-item style=font-size:1rem>
-centos<sup>1</sup>
-</a>
-<a href=/tags/counter class=tags-cloud-item style=font-size:1rem>
-counter<sup>1</sup>
-</a>
-<a href=/tags/disk class=tags-cloud-item style=font-size:1rem>
-disk<sup>1</sup>
-</a>
-<a href=/tags/docker class=tags-cloud-item style=font-size:1.240823996531185rem>
-docker<sup>4</sup>
-</a>
-<a href=/tags/firewalld class=tags-cloud-item style=font-size:1rem>
-firewalld<sup>1</sup>
-</a>
-<a href=/tags/flyway class=tags-cloud-item style=font-size:1.190848501887865rem>
-flyway<sup>3</sup>
-</a>
-<a href=/tags/git class=tags-cloud-item style=font-size:1.38169700377573rem>
-git<sup>9</sup>
-</a>
-<a href=/tags/grep class=tags-cloud-item style=font-size:1rem>
-grep<sup>1</sup>
-</a>
-<a href=/tags/haproxy class=tags-cloud-item style=font-size:1rem>
-haproxy<sup>1</sup>
-</a>
-<a href=/tags/hikari class=tags-cloud-item style=font-size:1rem>
-hikari<sup>1</sup>
-</a>
-<a href=/tags/java class=tags-cloud-item style=font-size:1.3112605001534574rem>
-java<sup>6</sup>
-</a>
-<a href=/tags/jdk class=tags-cloud-item style=font-size:1rem>
-jdk<sup>1</sup>
-</a>
-<a href=/tags/jprofiler class=tags-cloud-item style=font-size:1rem>
-jprofiler<sup>1</sup>
-</a>
-<a href=/tags/jvm class=tags-cloud-item style=font-size:1rem>
-jvm<sup>1</sup>
-</a>
-<a href=/tags/kafka class=tags-cloud-item style=font-size:1rem>
-kafka<sup>1</sup>
-</a>
-<a href=/tags/license class=tags-cloud-item style=font-size:1rem>
-license<sup>1</sup>
-</a>
-<a href=/tags/linux class=tags-cloud-item style=font-size:1.1204119982655925rem>
-linux<sup>2</sup>
-</a>
-<a href=/tags/macos class=tags-cloud-item style=font-size:1rem>
-macos<sup>1</sup>
-</a>
-<a href=/tags/maven class=tags-cloud-item style=font-size:1.240823996531185rem>
-maven<sup>4</sup>
-</a>
-<a href=/tags/memory-efficient class=tags-cloud-item style=font-size:1rem>
-memory-efficient<sup>1</sup>
-</a>
-<a href=/tags/mysql class=tags-cloud-item style=font-size:1.1204119982655925rem>
-mysql<sup>2</sup>
-</a>
-<a href=/tags/nexus class=tags-cloud-item style=font-size:1rem>
-nexus<sup>1</sup>
-</a>
-<a href=/tags/oracle class=tags-cloud-item style=font-size:1.1204119982655925rem>
-oracle<sup>2</sup>
-</a>
-<a href=/tags/project class=tags-cloud-item style=font-size:1rem>
-project<sup>1</sup>
-</a>
-<a href=/tags/qps class=tags-cloud-item style=font-size:1rem>
-qps<sup>1</sup>
-</a>
-<a href=/tags/redis class=tags-cloud-item style=font-size:1.190848501887865rem>
-redis<sup>3</sup>
-</a>
-<a href=/tags/release class=tags-cloud-item style=font-size:1rem>
-release<sup>1</sup>
-</a>
-<a href=/tags/stress class=tags-cloud-item style=font-size:1rem>
-stress<sup>1</sup>
-</a>
-<a href=/tags/test class=tags-cloud-item style=font-size:1rem>
-test<sup>1</sup>
-</a>
-<a href=/tags/undertow class=tags-cloud-item style=font-size:1rem>
-undertow<sup>1</sup>
-</a>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Linux Command - Grep</h3>
+</div>
+<h2 id=使用正则表达式搜索文件内容>使用正则表达式搜索文件内容</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cat nc-auth_3000.log | grep -s <span style=color:#e6db74>&#39;timeCost&#34;:\d\d\d\d&#39;</span>
+</code></pre></div><h2 id=使用正则表达式搜索压缩文件内容>使用正则表达式搜索压缩文件内容</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>gzip -dc nc-auth_3000.20211106.38.log.gz | grep -s <span style=color:#e6db74>&#39;timeCost&#34;:\d\d\d\d&#39;</span>
+</code></pre></div></div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/linux/>linux</a></span>
+<span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/grep/>grep</a></span>
 </div>
 </div>
-<div class="archive .">
-<ul class=list-with-title>
-<div class=listing-title>2021</div>
-<ul class=listing>
-<div class=listing-item>
-<div class=listing-post><a href=/posts/java/java-undertow-threads-and-jdbc-pools/ title="The Impact of Undertow Thread Options & Database Connection Pool on Performance">The Impact of Undertow Thread Options & Database Connection Pool on Performance</a>
-<div class=post-time><span class=date> Sep 23
-</span></div>
-</div>
-</div>
-</ul>
-</ul>
 </div>
 </div>
 </div>

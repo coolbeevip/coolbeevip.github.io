@@ -69,6 +69,28 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/linux/linux-commands-search/>Linux Command - Grep</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>使用正则表达式搜索文件内容 cat nc-auth_3000.log | grep -s 'timeCost":\d\d\d\d' 使用正则表达式搜索压缩文件内容 gzip -dc nc-auth_3000.20211106.38.log.gz | grep -s 'timeCost":\d\d\d\d' </p>
+</div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Sun, Nov 7, 2021
+</span>
+<span class=separator><a class=category href=/categories/linux/>linux</a></span>
+<span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/grep/>grep</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/java/java-undertow-threads-and-jdbc-pools/>The Impact of Undertow Thread Options & Database Connection Pool on Performance</a>
 </h3>
 </div>
@@ -297,41 +319,6 @@ UPSTREAM 1 $ curl -i -X GET http://192.168.51.234:5005/nc-tools/actuator/health 
 </span>
 <span class=separator><a class=category href=/categories/gateway/>gateway</a></span>
 <span class=separator><a class=tag href=/tags/apisix/>apisix</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-automate-tag-release-process-with-bash/>Bash script automates the Maven project Git release process</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>开源项目中我们大多采用主干开发模式管理我们的项目，他基本遵循以下规则
-所有的 PR 都默认向主干合并 主干上项目的版本号是 -SNAPSHOT 当主干要发布时，我们会建立与之对应的 X 分支（此分支的目的是为了基于此分支发布补丁版本） 基于当前主干去除版本号中的 -SNAPSHOT 后建立与版本对应的 TAG 将主干上的版本号中的 minor 累加一，并在后边增加 -SNAPSHOT 后缀 此过程繁琐，切容易出错。我制作了一个脚本 maven-project-git-release.sh 用来实现这个过程的规范化和自动化
-当然，这并不意味着你不需要掌握正手动发布的过程。
-由于某种原因导致自动过程中断后，你依然需要手动去处理，所以在使用这个脚本前，请确保你了解这个脚本帮你做了什么工作，以及如何做的。
-如何使用 maven-project-git-release.sh 脚本会帮你自动化以下工作
-创建一个编译用的目录
-目录会创建在你系统的临时目录下，在我的 Mac 系统系统中看起来像 /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T
-在编译用的目录中 git clone 你的仓库代码
-你的仓库地址在使用脚本时通过参数指定，像这样 sh maven-project-git-release.sh git@github.com:coolbeevip/license-maven-plugin.git
-编译你的代码确保正确
-默认在当前仓库根目录下执行 mvn clean package，如果你需要特殊的方式，可以修改脚本中的 check_source_before_release 函数
-计算版本号分支名
-根据 pom 中的版本定义，自动计算下一版本号，默认采 maven 的3段式版号方式 major.minor.patch，并以此为基准滚动 minor 版本号，如果你需要特殊的方式，可以修改脚本中的 next_version 函数
-输出发布计划</p>
-<a href=/posts/git/git-automate-tag-release-process-with-bash/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Sun, May 16, 2021
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/release/>release</a></span>
 </div>
 </div>
 </div>
