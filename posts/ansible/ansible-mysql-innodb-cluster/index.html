@@ -228,7 +228,7 @@ wget -P ~/my-docker-volume/ansible-playbook/packages http://ftp.ntu.edu.tw/MySQL
 </blockquote>
 <h4 id=main-mysqlyml>main-mysql.yml</h4>
 <p>安装 MySQL Server 的服务器 IP 地址，以及系统用户名</p>
-<pre tabindex=0><code>- hosts: 10.1.207.180
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>- hosts: 10.1.207.180
   user: mysql
 
 - hosts: 10.1.207.181
@@ -236,13 +236,13 @@ wget -P ~/my-docker-volume/ansible-playbook/packages http://ftp.ntu.edu.tw/MySQL
 
 - hosts: 10.1.207.182
   user: mysql
-</code></pre><h4 id=main-clusteryml>main-cluster.yml</h4>
+</code></pre></div><h4 id=main-clusteryml>main-cluster.yml</h4>
 <p>配置 MySQL 集群主节点的服务器 IP 地址，以及系统用户名</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>- hosts: 10.1.207.180
   user: mysql
 </code></pre></div><h4 id=main-routeryml>main-router.yml</h4>
 <p>安装 MySQL Router 的服务器 IP 地址，以及系统用户名</p>
-<pre tabindex=0><code>- hosts: 10.1.207.180
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>- hosts: 10.1.207.180
   user: mysql
 
 - hosts: 10.1.207.181
@@ -250,7 +250,7 @@ wget -P ~/my-docker-volume/ansible-playbook/packages http://ftp.ntu.edu.tw/MySQL
 
 - hosts: 10.1.207.182
   user: mysql
-</code></pre><h4 id=vars_mysqlyml>vars_mysql.yml</h4>
+</code></pre></div><h4 id=vars_mysqlyml>vars_mysql.yml</h4>
 <p>主机 IP 地址以及主机名映射关系</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># Linux Mapping of IP addresses to hostname /etc/hosts</span>
 hosts:
@@ -268,18 +268,18 @@ limits_soft_nofile: <span style=color:#e6db74>&#39;65535&#39;</span>
 mysql_user: <span style=color:#e6db74>&#34;mysql&#34;</span>
 mysql_group: <span style=color:#e6db74>&#34;mysql&#34;</span>
 </code></pre></div><p>安装介质名称以及解压后的目录名</p>
-<pre tabindex=0><code># MySQL server package
-mysql_tar: &quot;mysql-8.0.27-linux-glibc2.12-x86_64.tar.xz&quot;
-mysql_tar_unzip_dir: &quot;mysql-8.0.27-linux-glibc2.12-x86_64&quot;
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL server package</span>
+mysql_tar: <span style=color:#e6db74>&#34;mysql-8.0.27-linux-glibc2.12-x86_64.tar.xz&#34;</span>
+mysql_tar_unzip_dir: <span style=color:#e6db74>&#34;mysql-8.0.27-linux-glibc2.12-x86_64&#34;</span>
 
-# MySQL shell package
-mysql_shell_tar: &quot;mysql-shell-8.0.27-linux-glibc2.12-x86-64bit.tar.gz&quot;
-mysql_shell_tar_unzip_dir: &quot;mysql-shell-8.0.27-linux-glibc2.12-x86-64bit&quot;
+<span style=color:#75715e># MySQL shell package</span>
+mysql_shell_tar: <span style=color:#e6db74>&#34;mysql-shell-8.0.27-linux-glibc2.12-x86-64bit.tar.gz&#34;</span>
+mysql_shell_tar_unzip_dir: <span style=color:#e6db74>&#34;mysql-shell-8.0.27-linux-glibc2.12-x86-64bit&#34;</span>
 
-# MySQL router package
-mysql_router_tar: &quot;mysql-router-8.0.27-linux-glibc2.12-x86_64.tar.xz&quot;
-mysql_router_tar_unzip_dir: &quot;mysql-router-8.0.27-linux-glibc2.12-x86_64&quot;
-</code></pre><p>安装路径</p>
+<span style=color:#75715e># MySQL router package</span>
+mysql_router_tar: <span style=color:#e6db74>&#34;mysql-router-8.0.27-linux-glibc2.12-x86_64.tar.xz&#34;</span>
+mysql_router_tar_unzip_dir: <span style=color:#e6db74>&#34;mysql-router-8.0.27-linux-glibc2.12-x86_64&#34;</span>
+</code></pre></div><p>安装路径</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL InnoDB Cluster install directory</span>
 mysql_home_dir: <span style=color:#e6db74>&#34;/opt/mysql&#34;</span>
 mysql_run_dir: <span style=color:#e6db74>&#34;/data01/mysql/run&#34;</span>
@@ -309,9 +309,9 @@ mysqld_collation_server: utf8mb4_general_ci
 mysqld_innodb_buffer_pool_size: 10G
 client_default_character_set: utf8mb4
 </code></pre></div><p>MySQL cluster 配置</p>
-<pre tabindex=0><code># MySQL Cluster
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL Cluster</span>
 cluster_name: mycluster
-</code></pre><p>MySQL router 配置</p>
+</code></pre></div><p>MySQL router 配置</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL Router configuration</span>
 mysql_router_base_port: <span style=color:#ae81ff>36446</span>
 mysql_router_max_connections: <span style=color:#ae81ff>3000</span>
@@ -517,25 +517,25 @@ group_replication_applier	5e11bf00-4cf5-11ec-8798-5254005e1dd1	oss-irms-181	3336
 group_replication_applier	93a9227d-4cf5-11ec-9851-5254001a7e4c	oss-irms-182	3336	ONLINE	SECONDARY	8.0.27	XCom
 group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: <span style=color:#f92672>[</span>Warning<span style=color:#f92672>]</span> Using a password on the command line interface can be insecure.
 </code></pre></div><p>测试通过 MySQL Router RO 端口 <strong>36447</strong> 连接数据库从节点执行查看 MGR 组信息</p>
-<pre tabindex=0><code>bash-5.0# ansible all -m shell -a 'source ~/.bash_profile &amp;&amp; mysql -h 10.1.207.180 -P 36447 -uroot -pCoolbeevipWowo mysql -e &quot;select * from performance_schema.replication_group_members;&quot;'
-10.1.207.181 | CHANGED | rc=0 &gt;&gt;
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;source ~/.bash_profile &amp;&amp; mysql -h 10.1.207.180 -P 36447 -uroot -pCoolbeevipWowo mysql -e &#34;select * from performance_schema.replication_group_members;&#34;&#39;</span>
+10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 CHANNEL_NAME	MEMBER_ID	MEMBER_HOST	MEMBER_PORT	MEMBER_STATE	MEMBER_ROLE	MEMBER_VERSION	MEMBER_COMMUNICATION_STACK
 group_replication_applier	5e11bf00-4cf5-11ec-8798-5254005e1dd1	oss-irms-181	3336	ONLINE	SECONDARY	8.0.27	XCom
 group_replication_applier	93a9227d-4cf5-11ec-9851-5254001a7e4c	oss-irms-182	3336	ONLINE	SECONDARY	8.0.27	XCom
-group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: [Warning] Using a password on the command line interface can be insecure.
+group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: <span style=color:#f92672>[</span>Warning<span style=color:#f92672>]</span> Using a password on the command line interface can be insecure.
 
-10.1.207.180 | CHANGED | rc=0 &gt;&gt;
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 CHANNEL_NAME	MEMBER_ID	MEMBER_HOST	MEMBER_PORT	MEMBER_STATE	MEMBER_ROLE	MEMBER_VERSION	MEMBER_COMMUNICATION_STACK
 group_replication_applier	5e11bf00-4cf5-11ec-8798-5254005e1dd1	oss-irms-181	3336	ONLINE	SECONDARY	8.0.27	XCom
 group_replication_applier	93a9227d-4cf5-11ec-9851-5254001a7e4c	oss-irms-182	3336	ONLINE	SECONDARY	8.0.27	XCom
-group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: [Warning] Using a password on the command line interface can be insecure.
+group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: <span style=color:#f92672>[</span>Warning<span style=color:#f92672>]</span> Using a password on the command line interface can be insecure.
 
-10.1.207.182 | CHANGED | rc=0 &gt;&gt;
+10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 CHANNEL_NAME	MEMBER_ID	MEMBER_HOST	MEMBER_PORT	MEMBER_STATE	MEMBER_ROLE	MEMBER_VERSION	MEMBER_COMMUNICATION_STACK
 group_replication_applier	5e11bf00-4cf5-11ec-8798-5254005e1dd1	oss-irms-181	3336	ONLINE	SECONDARY	8.0.27	XCom
 group_replication_applier	93a9227d-4cf5-11ec-9851-5254001a7e4c	oss-irms-182	3336	ONLINE	SECONDARY	8.0.27	XCom
-group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: [Warning] Using a password on the command line interface can be insecure.
-</code></pre><p><strong>至此，您已经完成 MySQLInnoDB 集群的安装</strong></p>
+group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: <span style=color:#f92672>[</span>Warning<span style=color:#f92672>]</span> Using a password on the command line interface can be insecure.
+</code></pre></div><p><strong>至此，您已经完成 MySQLInnoDB 集群的安装</strong></p>
 <h4 id=安装完成后删除安装文件>安装完成后删除安装文件</h4>
 <p>删除过程中产生的临时脚本文件（<strong>因为里面包含 root 密码等敏感信息</strong>）</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;rm -rf /data01/mysql/script/*&#39;</span>
