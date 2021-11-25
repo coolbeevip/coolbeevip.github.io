@@ -69,6 +69,33 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/kafka-commands/>Kafka Commands</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>常用 Kafka 命令
+Topics 查询 topic 列表
+./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --list 查看 topic 描述
+./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --describe --topic my-topic Consumer Groups 查询消费组列表
+./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --list 查询指定的组各 topic 消息消费情况
+./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group my-group </p>
+</div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Tue, Jul 28, 2020
+</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/kafka/>kafka</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/mysql/mysql-commands/>MySQL Commands</a>
 </h3>
 </div>
@@ -297,37 +324,6 @@ $ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/d
 </span>
 <span class=separator><a class=category href=/categories/linux/>linux</a></span>
 <span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/disk/>disk</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-commands/>Git Commands</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>常用 Git 命令
-Init 在已有目录中初始化 GIT 仓库
-$ git init $ git remote add origin &lt;仓库地址> $ git add . $ git commit -m "Initial commit" $ git push -u origin master Branch 创建分支
-git checkout -b &lt;分支名> 推送分支
-git push origin &lt;分支名> 修改分支名
-git branch -m &lt;旧分支名> &lt;新分支名> 删除本地分支
-git branch -D &lt;分支名> 删除远程分支
-git push origin --delete &lt;分支名> 拉取远程分支
-git fetch origin &lt;分支名> 拉取远程分支并切换
-git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定版本</p>
-<a href=/posts/git/git-commands/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Sat, Apr 6, 2019
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span>
 </div>
 </div>
 </div>

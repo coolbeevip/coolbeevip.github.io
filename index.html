@@ -69,6 +69,32 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/ansible/ansible-mysql-innodb-cluster/>Ansible Playbook Install MySQL InnoDB Cluster</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>集群概述 MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。
+我将Ansible 脚本中展示三个节点的 InnoDB 集群配置。
+MySQL InnoDB 集群有以下服务组成
+MySQL shell Group Replication ( GR ) MySQL Router 安装计划 服务器规划
+IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 10.1.207.180 22022 mysql 123456 root123 10.1.207.181 22022 mysql 123456 root123 10.1.207.182 22022 mysql 123456 root123 集群节点规划</p>
+<a href=/posts/ansible/ansible-mysql-innodb-cluster/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Sun, Nov 21, 2021
+</span>
+<span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
+<span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/mysql/>mysql</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/linux/linux-commands-search/>Linux Command - Grep</a>
 </h3>
 </div>
@@ -290,30 +316,6 @@ UPSTREAM 1 $ curl -i -X GET http://192.168.51.234:5005/nc-tools/actuator/health 
 mkdir apisix_home mkdir -p apisix_home/apisix_volume/apisix/apisix_conf mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf 定义 APISIX Dashboard 配置文件 apisix_home/apisix_volume/apisix/dashboard_conf/conf.yaml
 conf: listen: # 绑定 IP 地址 host: 0.0.0.0 # 监听端口 port: 9000 etcd: # etcd 用户名 # username: "root" # etcd 密码 # password: "123456" # etcd 地址，支持集群多节点定义 endpoints: - apisix-etcd:2379 log: error_log: # 日志级别 debug, info, warn, error, panic, fatal level: warn # 日志输出路径 file_path: logs/error.</p>
 <a href=/posts/apisix/study-notes-for-apisix-3-install-with-docker/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Fri, May 21, 2021
-</span>
-<span class=separator><a class=category href=/categories/gateway/>gateway</a></span>
-<span class=separator><a class=tag href=/tags/apisix/>apisix</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/apisix/study-notes-for-apisix-4-plugins-proxy-rewrite/>APISIX Study Notes (4) Plugins Proxy Rewrite</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>在 APISIX STUDY NOTES (2) PLUGINS TRAFFIC SPLIT 提到，我们可以通过这个插件实现上游服务的导流，但是这个插件只能通过自定义 URL参数 或者 REQUEST HEADER 的方式传递导流变量。如果我们想通过 URL PATH 的方式实现上游业务的到导流，可以使用 Proxy Rewrite 插件
-场景描述 我有两个 UPSTREAM 服务:
-UPSTREAM 1 $ curl -i -X GET http://192.168.51.234:5005/nc-tools/actuator/health HTTP/1.1 200 OK Connection: keep-alive Transfer-Encoding: chunked Content-Type: application/vnd.spring-boot.actuator.v3+json Date: Sat, 22 May 2021 09:09:29 GMT {"status":"UP","components":{...}} UPSTREAM 2 $ curl -i -X GET http://10.19.88.60:5005/nc-tools/actuator/health HTTP/1.1 200 OK Connection: keep-alive Transfer-Encoding: chunked Content-Type: application/vnd.spring-boot.actuator.v3+json Date: Sat, 22 May 2021 09:08:12 GMT {"status":"UP","components":{.</p>
-<a href=/posts/apisix/study-notes-for-apisix-4-plugins-proxy-rewrite/ class=read_more>Read more</a></div>
 </div>
 <div class=post-footer>
 <div class=meta>
