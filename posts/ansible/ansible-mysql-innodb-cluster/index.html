@@ -14,8 +14,7 @@
 <script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Install MySQL InnoDB Cluster with Ansible Playbook">
-<meta name=twitter:description content="集群概述 MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。
-我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
+<meta name=twitter:description content="集群概述 MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
 MySQL InnoDB 集群有以下服务组成
  MySQL shell Group Replication ( GR ) MySQL Router  安装计划 服务器规划
    IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码     10.1.207.180 22022 mysql 123456 root123   10.1.207.181 22022 mysql 123456 root123   10.1.207.182 22022 mysql 123456 root123    集群节点规划">
@@ -74,9 +73,8 @@ MySQL InnoDB 集群有以下服务组成
 <h3>Install MySQL InnoDB Cluster with Ansible Playbook</h3>
 </div>
 <h2 id=集群概述>集群概述</h2>
-<p>MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。</p>
+<p>MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。</p>
 <p><img src=/images/posts/ansible/ansible-mysql-innodb-cluster/mysql-innodb-cluster-architecture.png alt=image-apisix-dashboard></p>
-<p>我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。</p>
 <p>MySQL InnoDB 集群有以下服务组成</p>
 <ul>
 <li>MySQL shell</li>
@@ -143,9 +141,6 @@ MySQL InnoDB 集群有以下服务组成
 </tbody>
 </table>
 <p>节点安装路径</p>
-<blockquote>
-<p>以下路径是默认路径，在安装前可以编辑 <code>var_mysql.yml</code> 中的变量改变成你想要的路径，其中路径变量中包含 <strong>_fast_</strong> 字样的路径建议你定义在 SSD 磁盘上</p>
-</blockquote>
 <table>
 <thead>
 <tr>
@@ -288,7 +283,7 @@ mysql_shell_tar_unzip_dir: <span style=color:#e6db74>&#34;mysql-shell-8.0.27-lin
 <span style=color:#75715e># MySQL router package</span>
 mysql_router_tar: <span style=color:#e6db74>&#34;mysql-router-8.0.27-linux-glibc2.12-x86_64.tar.xz&#34;</span>
 mysql_router_tar_unzip_dir: <span style=color:#e6db74>&#34;mysql-router-8.0.27-linux-glibc2.12-x86_64&#34;</span>
-</code></pre></div><p>安装路径</p>
+</code></pre></div><p>安装路径，其中路径变量中包含 <strong>_fast_</strong> 字样的路径建议你定义在 SSD 磁盘上</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL InnoDB Cluster install directory</span>
 mysql_home_dir: <span style=color:#e6db74>&#34;/opt/mysql&#34;</span>
 mysql_run_dir: <span style=color:#e6db74>&#34;/data01/mysql/run&#34;</span>
