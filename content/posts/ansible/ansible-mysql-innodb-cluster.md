@@ -8,11 +8,9 @@ draft: false
 
 ## 集群概述
 
-MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。
+MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
 
 ![image-apisix-dashboard](/images/posts/ansible/ansible-mysql-innodb-cluster/mysql-innodb-cluster-architecture.png)
-
-我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
 
 MySQL InnoDB 集群有以下服务组成
 
