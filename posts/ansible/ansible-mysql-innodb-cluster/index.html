@@ -341,7 +341,7 @@ mysql_router_max_connect_errors: <span style=color:#ae81ff>300</span>
 <p>此命令会配置操作系统内核参数、自动上传安装介质到三个目标服务器，设置 MySQL 环境变量，初始化 MySQL 数据库，设置 MySQL root 密码，启动 MySQL 服务</p>
 </blockquote>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-mysql.yml
-</code></pre></div><p><strong>提示：</strong> 此脚本首次执行耗时较长（因为需要上传约 1.3GB 的安装介质到所有目标服务器）。排除上传介质的耗时，此脚本在我的环境下执行耗时大约 6 分钟</p>
+</code></pre></div><p><strong>提示：</strong> 此脚本首次执行耗时较长（因为需要上传约 1.3GB 的安装介质到所有目标服务器）。排除上传介质的耗时，此脚本在我的环境下执行耗时大约 7 分钟</p>
 <p>检查 MySQL 节点状态</p>
 <blockquote>
 <p>可以看到三台服务器上的 MySQL 服务都已经启动</p>
@@ -485,7 +485,8 @@ oss-irms-182
 <p>此脚本将自动生成 mysqlrouter.conf 配置文件，并启动 MySQL Router 服务</p>
 </blockquote>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-router.yml
-</code></pre></div><p>查看 MySQL Router 进程</p>
+</code></pre></div><p><strong>提示：</strong> 此脚本会根据集群 MGR 信息自动创建 MSQL router 存储文件，启动停止脚本等。在我的环境下执行耗时大约 2 分钟。</p>
+<p>查看 MySQL Router 进程</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep mysql-router&#39;</span>
 10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 mysql    <span style=color:#ae81ff>30445</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>1</span> 17:05 ?        00:00:02 /opt/mysql/mysql-router-8.0.27-linux-glibc2.12-x86_64/bin/mysqlrouter -c /data01/mysql/router/mycluster/mysqlrouter.conf
