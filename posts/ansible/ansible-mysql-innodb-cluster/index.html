@@ -1,5 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Install MySQL InnoDB Cluster with Ansible Playbook </title>
+<title> Lei Zhang | Automate Install MySQL InnoDB Cluster with Ansible Playbook </title>
 <meta charset=utf-8><meta name=generator content="Hugo 0.89.4"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
@@ -13,11 +13,11 @@
 <link rel=canonical href=/posts/ansible/ansible-mysql-innodb-cluster/>
 <script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Install MySQL InnoDB Cluster with Ansible Playbook">
+<meta name=twitter:title content="Automate Install MySQL InnoDB Cluster with Ansible Playbook">
 <meta name=twitter:description content="集群概述 MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
 MySQL InnoDB 集群有以下服务组成
  MySQL shell Group Replication ( GR ) MySQL Router  安装计划 服务器规划
-   IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码     10.1.207.180 22022 mysql 123456 root123   10.1.207.181 22022 mysql 123456 root123   10.1.207.182 22022 mysql 123456 root123    集群节点规划">
+   IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS     10.1.207.180 22022 mysql 123456 root123 CentOS Linux release 7.9.2009   10.1.207.181 22022 mysql 123456 root123 CentOS Linux release 7.9.2009   10.">
 </head>
 <body><div class="sidebar .">
 <div class=logo-title>
@@ -70,7 +70,7 @@ MySQL InnoDB 集群有以下服务组成
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Install MySQL InnoDB Cluster with Ansible Playbook</h3>
+<h3>Automate Install MySQL InnoDB Cluster with Ansible Playbook</h3>
 </div>
 <h2 id=集群概述>集群概述</h2>
 <p>MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。</p>
@@ -91,6 +91,7 @@ MySQL InnoDB 集群有以下服务组成
 <th>SSH 用户名</th>
 <th>SSH 密码</th>
 <th>ROOT 密码</th>
+<th>OS</th>
 </tr>
 </thead>
 <tbody>
@@ -100,6 +101,7 @@ MySQL InnoDB 集群有以下服务组成
 <td>mysql</td>
 <td>123456</td>
 <td>root123</td>
+<td>CentOS Linux release 7.9.2009</td>
 </tr>
 <tr>
 <td>10.1.207.181</td>
@@ -107,6 +109,7 @@ MySQL InnoDB 集群有以下服务组成
 <td>mysql</td>
 <td>123456</td>
 <td>root123</td>
+<td>CentOS Linux release 7.9.2009</td>
 </tr>
 <tr>
 <td>10.1.207.182</td>
@@ -114,29 +117,39 @@ MySQL InnoDB 集群有以下服务组成
 <td>mysql</td>
 <td>123456</td>
 <td>root123</td>
+<td>CentOS Linux release 7.9.2009</td>
 </tr>
 </tbody>
 </table>
+<p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p>
 <p>集群节点规划</p>
 <table>
 <thead>
 <tr>
 <th>IP地址</th>
-<th>模块</th>
+<th>MySQL Server</th>
+<th>MySQL Router</th>
+<th>MySQL Shell</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>10.1.207.180</td>
-<td>MySQL Primary Node, MySQL Router</td>
+<td>Primary</td>
+<td>Primary</td>
+<td>Primary</td>
 </tr>
 <tr>
 <td>10.1.207.181</td>
-<td>MySQL Secondary Node, MySQL Router</td>
+<td>Secondary</td>
+<td>Primary</td>
+<td>Primary</td>
 </tr>
 <tr>
 <td>10.1.207.182</td>
-<td>MySQL Secondary Node, MySQL Router</td>
+<td>Secondary</td>
+<td>Primary</td>
+<td>Primary</td>
 </tr>
 </tbody>
 </table>
@@ -298,7 +311,7 @@ mysql_fast_relaylog_dir: <span style=color:#e6db74>&#34;/data01/mysql/relaylog&#
 <span style=color:#75715e>## MySQL router work directory</span>
 mysql_router_dir: <span style=color:#e6db74>&#34;/data01/mysql/router&#34;</span>
 </code></pre></div><p>MySQL root 初始化密码</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># Root initialization password, special characters are not recommended, for examples !@#$% etc.</span>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL administrator user initialization password, recommended only contain letters, numbers, and underscores</span>
 mysql_user_root_password: <span style=color:#e6db74>&#34;CoolbeevipWowo&#34;</span>
 </code></pre></div><p>MySQL server 配置</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># MySQL server configuration my.conf</span>
@@ -335,17 +348,25 @@ mysql_router_max_connect_errors: <span style=color:#ae81ff>300</span>
 </span><span style=color:#ae81ff></span>  -v /Users/zhanglei/mydocker/volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>  /bin/bash  
-</code></pre></div><h4 id=安装三节点-mysql-server>安装三节点 MySQL server</h4>
-<p>执行安装脚本</p>
-<blockquote>
-<p>此命令会配置操作系统内核参数、自动上传安装介质到三个目标服务器，设置 MySQL 环境变量，初始化 MySQL 数据库，设置 MySQL root 密码，启动 MySQL 服务</p>
-</blockquote>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-mysql.yml
-</code></pre></div><p><strong>提示：</strong> 此脚本首次执行耗时较长（因为需要上传约 1.3GB 的安装介质到所有目标服务器）。排除上传介质的耗时，此脚本在我的环境下执行耗时大约 7 分钟</p>
-<p>检查 MySQL 节点状态</p>
-<blockquote>
-<p>可以看到三台服务器上的 MySQL 服务都已经启动</p>
-</blockquote>
+</code></pre></div><h4 id=安装-mysql-集群>安装 MySQL 集群</h4>
+<p>这个脚本将自动化完成如下操作：</p>
+<ul>
+<li>配置操作系统参数</li>
+<li>上传安装介质到每个服务器</li>
+<li>配置每个服务器上的 MySQL 环境变量</li>
+<li>初始化每个服务器的 MySQL 数据库，设置 root 密码并启动</li>
+<li>子主节点服务器上配置 MySQL 主从复制关系</li>
+<li>在每个服务器上安装 MySQL router 并启动</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-mysql.yml /ansible-playbook/mysql/main-cluster.yml /ansible-playbook/mysql/main-router.yml
+</code></pre></div><p><strong>提示:</strong> 因为第一次执行脚本时，会上传MySQL 安装包到所有服务器（约1.3GB），所以执行时间较长（取决于你的客户端和服务器之间的网络速度）。 你也可以在执行以上脚本前手动将安装包上传到服务器的安装路径 <code>/opt/mysql</code> 下。在我本地环境首次安装大概耗时 25 分钟（上传安装包大概 5 分钟，安装集群大概 20 分钟）</p>
+<p>如果你看到如下信息，说明安装完成</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
+ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h4 id=验证-mysql-集群>验证 MySQL 集群</h4>
+<p>检查 MySQL 状态</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/mysql.server status&#39;</span>
 10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
  SUCCESS! MySQL running <span style=color:#f92672>(</span>25729<span style=color:#f92672>)</span>
@@ -355,10 +376,54 @@ mysql_router_max_connect_errors: <span style=color:#ae81ff>300</span>
 
 10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
  SUCCESS! MySQL running <span style=color:#f92672>(</span>28934<span style=color:#f92672>)</span>
-</code></pre></div><p>校验 MySQL 三节点之间是否可以正常连接</p>
-<blockquote>
-<p>在创建集群前，我们需要确认MySQL实例间可以彼此连接。当你看到 <strong>The instance &lsquo;xxx&rsquo; is valid to be used in an InnoDB cluster.</strong> 提示时，说明连接正常</p>
-</blockquote>
+</code></pre></div><p>检查 MySQL 集群状态</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;source ~/.bash_profile &amp;&amp; mysqlsh --password=&#34;CoolbeevipWowo&#34; root@10.1.207.180:3336 -- cluster status&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+<span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;clusterName&#34;</span>: <span style=color:#e6db74>&#34;mycluster&#34;</span>,
+    <span style=color:#e6db74>&#34;defaultReplicaSet&#34;</span>: <span style=color:#f92672>{</span>
+        <span style=color:#e6db74>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;default&#34;</span>,
+        <span style=color:#e6db74>&#34;primary&#34;</span>: <span style=color:#e6db74>&#34;oss-irms-180:3336&#34;</span>,
+        <span style=color:#e6db74>&#34;ssl&#34;</span>: <span style=color:#e6db74>&#34;REQUIRED&#34;</span>,
+        <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;OK&#34;</span>,
+        <span style=color:#e6db74>&#34;statusText&#34;</span>: <span style=color:#e6db74>&#34;Cluster is ONLINE and can tolerate up to ONE failure.&#34;</span>,
+        <span style=color:#e6db74>&#34;topology&#34;</span>: <span style=color:#f92672>{</span>
+            <span style=color:#e6db74>&#34;oss-irms-180:3336&#34;</span>: <span style=color:#f92672>{</span>
+                <span style=color:#e6db74>&#34;address&#34;</span>: <span style=color:#e6db74>&#34;oss-irms-180:3336&#34;</span>,
+                <span style=color:#e6db74>&#34;memberRole&#34;</span>: <span style=color:#e6db74>&#34;PRIMARY&#34;</span>,
+                <span style=color:#e6db74>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;R/W&#34;</span>,
+                <span style=color:#e6db74>&#34;readReplicas&#34;</span>: <span style=color:#f92672>{}</span>,
+                <span style=color:#e6db74>&#34;replicationLag&#34;</span>: null,
+                <span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;HA&#34;</span>,
+                <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;ONLINE&#34;</span>,
+                <span style=color:#e6db74>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;8.0.27&#34;</span>
+            <span style=color:#f92672>}</span>,
+            <span style=color:#e6db74>&#34;oss-irms-181:3336&#34;</span>: <span style=color:#f92672>{</span>
+                <span style=color:#e6db74>&#34;address&#34;</span>: <span style=color:#e6db74>&#34;oss-irms-181:3336&#34;</span>,
+                <span style=color:#e6db74>&#34;memberRole&#34;</span>: <span style=color:#e6db74>&#34;SECONDARY&#34;</span>,
+                <span style=color:#e6db74>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;R/O&#34;</span>,
+                <span style=color:#e6db74>&#34;readReplicas&#34;</span>: <span style=color:#f92672>{}</span>,
+                <span style=color:#e6db74>&#34;replicationLag&#34;</span>: null,
+                <span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;HA&#34;</span>,
+                <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;ONLINE&#34;</span>,
+                <span style=color:#e6db74>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;8.0.27&#34;</span>
+            <span style=color:#f92672>}</span>,
+            <span style=color:#e6db74>&#34;oss-irms-182:3336&#34;</span>: <span style=color:#f92672>{</span>
+                <span style=color:#e6db74>&#34;address&#34;</span>: <span style=color:#e6db74>&#34;oss-irms-182:3336&#34;</span>,
+                <span style=color:#e6db74>&#34;memberRole&#34;</span>: <span style=color:#e6db74>&#34;SECONDARY&#34;</span>,
+                <span style=color:#e6db74>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;R/O&#34;</span>,
+                <span style=color:#e6db74>&#34;readReplicas&#34;</span>: <span style=color:#f92672>{}</span>,
+                <span style=color:#e6db74>&#34;replicationLag&#34;</span>: null,
+                <span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;HA&#34;</span>,
+                <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;ONLINE&#34;</span>,
+                <span style=color:#e6db74>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;8.0.27&#34;</span>
+            <span style=color:#f92672>}</span>
+        <span style=color:#f92672>}</span>,
+        <span style=color:#e6db74>&#34;topologyMode&#34;</span>: <span style=color:#e6db74>&#34;Single-Primary&#34;</span>
+    <span style=color:#f92672>}</span>,
+    <span style=color:#e6db74>&#34;groupInformationSourceMember&#34;</span>: <span style=color:#e6db74>&#34;oss-irms-180:3336&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>校验 MySQL 节点之间是否可以正常连接</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;source ~/.bash_profile &amp;&amp; mysqlsh --no-password &lt; /data01/mysql/script/mysql_members_validate.sql&#39;</span>
 10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 
@@ -386,108 +451,8 @@ Clients and other cluster members will communicate with it through this address 
 No incompatible tables detected
 Instance configuration is compatible with InnoDB cluster
 The instance <span style=color:#e6db74>&#39;oss-irms-182:3336&#39;</span> is valid to be used in an InnoDB cluster.
-</code></pre></div><h4 id=配置-mysql-集群>配置 MySQL 集群</h4>
-<blockquote>
-<p>这个脚本将在主节点上创建集群并将两个从节点加入到集群</p>
-</blockquote>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-cluster.yml
-</code></pre></div><p><strong>提示：</strong> 此脚本执行过程中 MySQL 实例会自动重启并等待同步主节点和从节点数据，在我的环境下执行耗时大约 4 分钟。</p>
-<p><strong>提示：</strong> 此脚本执行结束后你可以看到如下集群状态信息，一个读写模式的 PRIMARY 节点 <code>oss-irms-180</code>；两个具有只读模式的 SECONDARY 节点 <code>oss-irms-181</code> 和 <code>oss-irms-182</code>。并且三个节点都处于 ONLINE 状态</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>TASK <span style=color:#f92672>[</span>check mysql_cluster_status output<span style=color:#f92672>]</span> *******************************************************************************************************************************************************************
-ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
-    <span style=color:#e6db74>&#34;check_result.stdout_lines&#34;</span>: <span style=color:#f92672>[</span>
-        <span style=color:#e6db74>&#34;{&#34;</span>,
-        <span style=color:#e6db74>&#34;    \&#34;clusterName\&#34;: \&#34;mycluster\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;    \&#34;defaultReplicaSet\&#34;: {&#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;name\&#34;: \&#34;default\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;primary\&#34;: \&#34;oss-irms-180:3336\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;ssl\&#34;: \&#34;REQUIRED\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;status\&#34;: \&#34;OK\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;statusText\&#34;: \&#34;Cluster is ONLINE and can tolerate up to ONE failure.\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;topology\&#34;: {&#34;</span>,
-        <span style=color:#e6db74>&#34;            \&#34;oss-irms-180:3336\&#34;: {&#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;address\&#34;: \&#34;oss-irms-180:3336\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;memberRole\&#34;: \&#34;PRIMARY\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;mode\&#34;: \&#34;R/W\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;readReplicas\&#34;: {}, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;replicationLag\&#34;: null, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;role\&#34;: \&#34;HA\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;status\&#34;: \&#34;ONLINE\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;version\&#34;: \&#34;8.0.27\&#34;&#34;</span>,
-        <span style=color:#e6db74>&#34;            }, &#34;</span>,
-        <span style=color:#e6db74>&#34;            \&#34;oss-irms-181:3336\&#34;: {&#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;address\&#34;: \&#34;oss-irms-181:3336\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;memberRole\&#34;: \&#34;SECONDARY\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;mode\&#34;: \&#34;R/O\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;readReplicas\&#34;: {}, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;replicationLag\&#34;: null, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;role\&#34;: \&#34;HA\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;status\&#34;: \&#34;ONLINE\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;version\&#34;: \&#34;8.0.27\&#34;&#34;</span>,
-        <span style=color:#e6db74>&#34;            }, &#34;</span>,
-        <span style=color:#e6db74>&#34;            \&#34;oss-irms-182:3336\&#34;: {&#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;address\&#34;: \&#34;oss-irms-182:3336\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;memberRole\&#34;: \&#34;SECONDARY\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;mode\&#34;: \&#34;R/O\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;readReplicas\&#34;: {}, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;replicationLag\&#34;: null, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;role\&#34;: \&#34;HA\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;status\&#34;: \&#34;ONLINE\&#34;, &#34;</span>,
-        <span style=color:#e6db74>&#34;                \&#34;version\&#34;: \&#34;8.0.27\&#34;&#34;</span>,
-        <span style=color:#e6db74>&#34;            }&#34;</span>,
-        <span style=color:#e6db74>&#34;        }, &#34;</span>,
-        <span style=color:#e6db74>&#34;        \&#34;topologyMode\&#34;: \&#34;Single-Primary\&#34;&#34;</span>,
-        <span style=color:#e6db74>&#34;    }, &#34;</span>,
-        <span style=color:#e6db74>&#34;    \&#34;groupInformationSourceMember\&#34;: \&#34;oss-irms-180:3336\&#34;&#34;</span>,
-        <span style=color:#e6db74>&#34;}&#34;</span>
-    <span style=color:#f92672>]</span>
-<span style=color:#f92672>}</span>
-</code></pre></div><p><strong>提示：</strong> 更多集群说明请参见 <a href=https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-innodb-cluster.html>MySQL InnoDB Cluster</a></p>
-<h4 id=安装-mysql-router>安装 MySQL router</h4>
-<p>安装前检查</p>
-<blockquote>
-<p>需要允许基于主机名和 IP 的集群节点之间的完整通信。通常在安装之前的脚本的时候已经自动修改了 /etc/hosts 文件。</p>
-</blockquote>
-<p>查看每个机器的主机名</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;hostname&#39;</span>
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-oss-irms-181
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-oss-irms-180
-
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-oss-irms-182
-</code></pre></div><p>查看每个主机 /etc/hosts 文件中是否配置了每个服务器的主机名和IP地址</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;cat /etc/hosts&#39;</span>
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-10.1.207.180 oss-irms-180
-10.1.207.181 oss-irms-181
-10.1.207.182 oss-irms-182
-
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-10.1.207.180 oss-irms-180
-10.1.207.181 oss-irms-181
-10.1.207.182 oss-irms-182
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-10.1.207.180 oss-irms-180
-10.1.207.181 oss-irms-181
-10.1.207.182 oss-irms-182
-</code></pre></div><p>执行 MySQL router 安装脚本 <code>main-router.yml</code></p>
-<blockquote>
-<p>此脚本将自动生成 mysqlrouter.conf 配置文件，并启动 MySQL Router 服务</p>
-</blockquote>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-router.yml
-</code></pre></div><p><strong>提示：</strong> 此脚本会根据集群 MGR 信息自动创建 MSQL router 存储文件，启动停止脚本等。在我的环境下执行耗时大约 2 分钟。</p>
-<p>查看 MySQL Router 进程</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep mysql-router&#39;</span>
+</code></pre></div><p>查看 MySQL Router 进程</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep [m]ysql-router&#39;</span>
 10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 mysql    <span style=color:#ae81ff>30445</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>1</span> 17:05 ?        00:00:02 /opt/mysql/mysql-router-8.0.27-linux-glibc2.12-x86_64/bin/mysqlrouter -c /data01/mysql/router/mycluster/mysqlrouter.conf
 mysql    <span style=color:#ae81ff>30993</span> <span style=color:#ae81ff>30991</span>  <span style=color:#ae81ff>0</span> 17:07 pts/1    00:00:00 /bin/sh -c ps -ef | grep mysql-router
@@ -502,8 +467,8 @@ mysql    <span style=color:#ae81ff>26378</span> <span style=color:#ae81ff>26376<
 mysql    <span style=color:#ae81ff>16000</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>1</span> 17:01 ?        00:00:02 /opt/mysql/mysql-router-8.0.27-linux-glibc2.12-x86_64/bin/mysqlrouter -c /data01/mysql/router/mycluster/mysqlrouter.conf
 mysql    <span style=color:#ae81ff>16463</span> <span style=color:#ae81ff>16462</span>  <span style=color:#ae81ff>0</span> 17:03 pts/3    00:00:00 /bin/sh -c ps -ef | grep mysql-router
 mysql    <span style=color:#ae81ff>16465</span> <span style=color:#ae81ff>16463</span>  <span style=color:#ae81ff>0</span> 17:03 pts/3    00:00:00 grep mysql-router
-</code></pre></div><p>测试通过 MySQL Router RW 端口 <strong>36446</strong> 连接数据库主节点执行查看 MGR 组信息</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;source ~/.bash_profile &amp;&amp; mysql -h 10.1.207.180 -P 36446 -uroot -pCoolbeevipWowo mysql -e &#34;select * from performance_schema.replication_group_members;&#34;&#39;</span>
+</code></pre></div><p>测试通过 MySQL Router RW 端口 <strong>36447</strong> 连接数据库主节点执行查看 MGR 组信息</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;source ~/.bash_profile &amp;&amp; mysql -h 10.1.207.180 -P 36447 -uroot -pCoolbeevipWowo mysql -e &#34;select * from performance_schema.replication_group_members;&#34;&#39;</span>
 10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 CHANNEL_NAME	MEMBER_ID	MEMBER_HOST	MEMBER_PORT	MEMBER_STATE	MEMBER_ROLE	MEMBER_VERSION	MEMBER_COMMUNICATION_STACK
 group_replication_applier	5e11bf00-4cf5-11ec-8798-5254005e1dd1	oss-irms-181	3336	ONLINE	SECONDARY	8.0.27	XCom
@@ -540,14 +505,46 @@ CHANNEL_NAME	MEMBER_ID	MEMBER_HOST	MEMBER_PORT	MEMBER_STATE	MEMBER_ROLE	MEMBER_V
 group_replication_applier	5e11bf00-4cf5-11ec-8798-5254005e1dd1	oss-irms-181	3336	ONLINE	SECONDARY	8.0.27	XCom
 group_replication_applier	93a9227d-4cf5-11ec-9851-5254001a7e4c	oss-irms-182	3336	ONLINE	SECONDARY	8.0.27	XCom
 group_replication_applier	9aed150e-4cf5-11ec-8819-525400506ca8	oss-irms-180	3336	ONLINE	PRIMARY	8.0.27	XCommysql: <span style=color:#f92672>[</span>Warning<span style=color:#f92672>]</span> Using a password on the command line interface can be insecure.
-</code></pre></div><p><strong>至此，您已经完成 MySQLInnoDB 集群的安装</strong></p>
-<h4 id=安装完成后删除安装文件>安装完成后删除安装文件</h4>
+</code></pre></div><h4 id=安装完成后删除安装文件>安装完成后删除安装文件</h4>
 <p>删除过程中产生的临时脚本文件（<strong>因为里面包含 root 密码等敏感信息</strong>）</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;rm -rf /data01/mysql/script/*&#39;</span>
 </code></pre></div><p>(<strong>可选</strong>)删除安装包文件（删除后可以释放出约1.3GB的磁盘空间）</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;rm /opt/*.tar.*&#39;</span>
-</code></pre></div><h2 id=常用运维命令>常用运维命令</h2>
-<p>启动 MySQL</p>
+</code></pre></div><p><strong>恭喜！您已经完成 MySQL InnoDB 集群的安装</strong></p>
+<h2 id=常用运维命令>常用运维命令</h2>
+<p>查看每个机器的主机名</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;hostname&#39;</span>
+10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+oss-irms-181
+
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+oss-irms-180
+
+10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+oss-irms-182
+</code></pre></div><p>查看每个主机 /etc/hosts 文件中是否配置了每个服务器的主机名和IP地址</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;cat /etc/hosts&#39;</span>
+10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.1.207.180 oss-irms-180
+10.1.207.181 oss-irms-181
+10.1.207.182 oss-irms-182
+
+10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.1.207.180 oss-irms-180
+10.1.207.181 oss-irms-181
+10.1.207.182 oss-irms-182
+
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.1.207.180 oss-irms-180
+10.1.207.181 oss-irms-181
+10.1.207.182 oss-irms-182
+</code></pre></div><p>启动 MySQL</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/mysql.server start&#39;</span>
 10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 Starting MySQL........ SUCCESS!
@@ -647,7 +644,7 @@ logging facility initialized, switching logging to loggers specified in configur
 
 10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 </code></pre></div><p>检查 MySQL Router 进程</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep mysql-router&#39;</span>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep [m]ysql-router&#39;</span>
 10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
 mysql     <span style=color:#ae81ff>8813</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>1</span> 18:00 ?        00:00:01 /opt/mysql/mysql-router-8.0.27-linux-glibc2.12-x86_64/bin/mysqlrouter -c /data01/mysql/router/mycluster/mysqlrouter.conf
 mysql     <span style=color:#ae81ff>9154</span>  <span style=color:#ae81ff>9153</span>  <span style=color:#ae81ff>9</span> 18:02 pts/1    00:00:00 /bin/sh -c ps -ef | grep mysql-router
