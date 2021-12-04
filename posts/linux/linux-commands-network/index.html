@@ -1,0 +1,337 @@
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | Linux Command - Network </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.89.4"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/linux/linux-commands-network/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Linux Command - Network">
+<meta name=twitter:description content="Linux 网络相关命令
+可以使用 yum install iperf3 安装这个工具，或者从网站 https://iperf.fr/iperf-download.php 下载
+测试 TCP 吞吐量 假设我们要测试 10.1.207.180 和 10.1.207.181 两个服务器之间的带宽
+先在其中一台服务器 10.1.207.181 服上启动 iperf3 服务
+[root@oss-irms-181 ~]# iperf3 -s -p 5001 ----------------------------------------------------------- Server listening on 5001 ----------------------------------------------------------- 再在另一台机器 10.1.207.180 启动客户端连接服务端 10.1.207.181 测试
+[root@oss-irms-180 ~]# iperf3 -c 10.1.207.181 -P 4 -t 30 -i 2 -p 5001 Connecting to host 10.1.207.181, port 5001 [ 4] local 10.1.207.180 port 49244 connected to 10.1.207.181 port 5001 [ 6] local 10.">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Linux Command - Network</h3>
+</div>
+<p>Linux 网络相关命令</p>
+<p>可以使用 <code>yum install iperf3</code> 安装这个工具，或者从网站 <a href=https://iperf.fr/iperf-download.php>https://iperf.fr/iperf-download.php</a> 下载</p>
+<h2 id=测试-tcp-吞吐量>测试 TCP 吞吐量</h2>
+<p>假设我们要测试 10.1.207.180 和 10.1.207.181 两个服务器之间的带宽</p>
+<p>先在其中一台服务器 10.1.207.181 服上启动 iperf3 服务</p>
+<pre tabindex=0><code>[root@oss-irms-181 ~]# iperf3 -s -p 5001
+-----------------------------------------------------------
+Server listening on 5001
+-----------------------------------------------------------
+</code></pre><p>再在另一台机器 10.1.207.180 启动客户端连接服务端 10.1.207.181 测试</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>root@oss-irms-180 ~<span style=color:#f92672>]</span><span style=color:#75715e># iperf3 -c 10.1.207.181 -P 4 -t 30 -i 2 -p 5001</span>
+Connecting to host 10.1.207.181, port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>49244</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>49246</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>49248</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>49250</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Retr  Cwnd
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>883</span> MBytes  3.70 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>867</span> MBytes  3.63 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>908</span> MBytes  3.80 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>878</span> MBytes  3.67 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-2.00   sec  3.45 GBytes  14.8 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>952</span> MBytes  4.00 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>950</span> MBytes  3.99 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>949</span> MBytes  3.99 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>948</span> MBytes  3.98 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   2.00-4.00   sec  3.71 GBytes  16.0 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   4.00-6.00   sec  1.04 GBytes  4.45 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   4.00-6.00   sec  1.03 GBytes  4.44 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   4.00-6.00   sec  1.03 GBytes  4.44 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   4.00-6.00   sec  1.03 GBytes  4.41 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   4.00-6.00   sec  4.13 GBytes  17.7 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>998</span> MBytes  4.18 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>992</span> MBytes  4.16 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>989</span> MBytes  4.15 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>990</span> MBytes  4.15 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   6.00-8.00   sec  3.88 GBytes  16.6 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   8.00-10.00  sec  <span style=color:#ae81ff>1002</span> MBytes  4.21 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   8.00-10.00  sec  <span style=color:#ae81ff>1001</span> MBytes  4.20 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   8.00-10.00  sec  <span style=color:#ae81ff>1001</span> MBytes  4.20 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   8.00-10.00  sec   <span style=color:#ae81ff>996</span> MBytes  4.18 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   8.00-10.00  sec  3.91 GBytes  16.8 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>979</span> MBytes  4.10 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>979</span> MBytes  4.10 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>974</span> MBytes  4.08 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>971</span> MBytes  4.07 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  10.00-12.00  sec  3.81 GBytes  16.4 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  12.00-14.00  sec  <span style=color:#ae81ff>1008</span> MBytes  4.22 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  12.00-14.00  sec  <span style=color:#ae81ff>1006</span> MBytes  4.22 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  12.00-14.00  sec  <span style=color:#ae81ff>1002</span> MBytes  4.20 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  12.00-14.00  sec  <span style=color:#ae81ff>1004</span> MBytes  4.21 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  12.00-14.00  sec  3.93 GBytes  16.9 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  14.00-16.00  sec  1.09 GBytes  4.70 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  14.00-16.00  sec  1.09 GBytes  4.69 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  14.00-16.00  sec  1.09 GBytes  4.70 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  14.00-16.00  sec  1.09 GBytes  4.69 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  14.00-16.00  sec  4.37 GBytes  18.8 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>979</span> MBytes  4.11 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>976</span> MBytes  4.09 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>972</span> MBytes  4.08 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>970</span> MBytes  4.07 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  16.00-18.00  sec  3.81 GBytes  16.3 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  18.00-20.00  sec  1.08 GBytes  4.64 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  18.00-20.00  sec  1.08 GBytes  4.63 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  18.00-20.00  sec  1.07 GBytes  4.61 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  18.00-20.00  sec  1.08 GBytes  4.62 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  18.00-20.00  sec  4.31 GBytes  18.5 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>989</span> MBytes  4.15 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>986</span> MBytes  4.13 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>986</span> MBytes  4.13 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>982</span> MBytes  4.12 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  20.00-22.00  sec  3.85 GBytes  16.5 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>984</span> MBytes  4.13 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>982</span> MBytes  4.12 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>979</span> MBytes  4.11 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>978</span> MBytes  4.10 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  22.00-24.00  sec  3.83 GBytes  16.5 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  24.00-26.00  sec  1.09 GBytes  4.66 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  24.00-26.00  sec  1.08 GBytes  4.65 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  24.00-26.00  sec  1.08 GBytes  4.64 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  24.00-26.00  sec  1.08 GBytes  4.64 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  24.00-26.00  sec  4.33 GBytes  18.6 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  26.00-28.00  sec  1.12 GBytes  4.80 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  26.00-28.00  sec  1.12 GBytes  4.80 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  26.00-28.00  sec  1.12 GBytes  4.79 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  26.00-28.00  sec  1.11 GBytes  4.79 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  26.00-28.00  sec  4.47 GBytes  19.2 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  28.00-30.00  sec  1.07 GBytes  4.60 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  28.00-30.00  sec  1.07 GBytes  4.59 Gbits/sec    <span style=color:#ae81ff>0</span>   3.04 MBytes
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  28.00-30.00  sec  1.07 GBytes  4.58 Gbits/sec    <span style=color:#ae81ff>0</span>   3.03 MBytes
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  28.00-30.00  sec  1.07 GBytes  4.58 Gbits/sec    <span style=color:#ae81ff>0</span>   3.01 MBytes
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  28.00-30.00  sec  4.27 GBytes  18.4 Gbits/sec    <span style=color:#ae81ff>0</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Retr
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-30.00  sec  15.1 GBytes  4.31 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-30.00  sec  15.1 GBytes  4.31 Gbits/sec                  receiver
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec                  receiver
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec                  receiver
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.29 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.29 Gbits/sec                  receiver
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-30.00  sec  60.1 GBytes  17.2 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-30.00  sec  60.1 GBytes  17.2 Gbits/sec                  receiver
+
+iperf Done.
+</code></pre></div><p>从以上结果可以看出 4 个数据流接收到的数据大小和平均带宽 4.XX Gbits/sec</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Retr
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Retr
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-30.00  sec  15.1 GBytes  4.31 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-30.00  sec  15.1 GBytes  4.31 Gbits/sec                  receiver
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec                  receiver
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.30 Gbits/sec                  receiver
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.29 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 GBytes  4.29 Gbits/sec                  receiver
+</code></pre></div><p>还有接收到的总数据和总带宽 17.2 Gbits/sec</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Retr
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-30.00  sec  60.1 GBytes  17.2 Gbits/sec    <span style=color:#ae81ff>0</span>             sender
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-30.00  sec  60.1 GBytes  17.2 Gbits/sec                  receiver
+</code></pre></div><h2 id=测试-udp-丢包率>测试 UDP 丢包率</h2>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>root@oss-irms-180 ~<span style=color:#f92672>]</span><span style=color:#75715e># iperf3 -c 10.1.207.181 -u -P 4 -t 30 -i 2 -p 5001</span>
+Connecting to host 10.1.207.181, port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>52917</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>54137</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>36687</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span> local 10.1.207.180 port <span style=color:#ae81ff>47721</span> connected to 10.1.207.181 port <span style=color:#ae81ff>5001</span>
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Total Datagrams
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>245</span> KBytes  1.00 Mbits/sec  <span style=color:#ae81ff>173</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>245</span> KBytes  1.00 Mbits/sec  <span style=color:#ae81ff>173</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>245</span> KBytes  1.00 Mbits/sec  <span style=color:#ae81ff>173</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>245</span> KBytes  1.00 Mbits/sec  <span style=color:#ae81ff>173</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-2.00   sec   <span style=color:#ae81ff>979</span> KBytes  4.01 Mbits/sec  <span style=color:#ae81ff>692</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   2.00-4.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   2.00-4.00   sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   4.00-6.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   4.00-6.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   4.00-6.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   4.00-6.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   4.00-6.00   sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   6.00-8.00   sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   6.00-8.00   sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   8.00-10.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   8.00-10.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   8.00-10.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   8.00-10.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   8.00-10.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  10.00-12.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  10.00-12.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  12.00-14.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  12.00-14.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  12.00-14.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  12.00-14.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  12.00-14.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  14.00-16.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  14.00-16.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  14.00-16.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  14.00-16.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  14.00-16.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  16.00-18.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  16.00-18.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  18.00-20.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  18.00-20.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  18.00-20.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  18.00-20.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  18.00-20.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  20.00-22.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  20.00-22.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  22.00-24.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  22.00-24.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  24.00-26.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  24.00-26.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  24.00-26.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  24.00-26.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  24.00-26.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  26.00-28.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  26.00-28.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  26.00-28.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  26.00-28.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  26.00-28.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>  28.00-30.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>  28.00-30.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>  28.00-30.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>  28.00-30.00  sec   <span style=color:#ae81ff>256</span> KBytes  1.05 Mbits/sec  <span style=color:#ae81ff>181</span>
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>  28.00-30.00  sec  <span style=color:#ae81ff>1024</span> KBytes  4.19 Mbits/sec  <span style=color:#ae81ff>724</span>
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style=color:#f92672>[</span> ID<span style=color:#f92672>]</span> Interval           Transfer     Bandwidth       Jitter    Lost/Total Datagrams
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span>   0.00-30.00  sec  3.74 MBytes  1.05 Mbits/sec  0.040 ms  0/2707 <span style=color:#f92672>(</span>0%<span style=color:#f92672>)</span>
+<span style=color:#f92672>[</span>  4<span style=color:#f92672>]</span> Sent <span style=color:#ae81ff>2707</span> datagrams
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span>   0.00-30.00  sec  3.74 MBytes  1.05 Mbits/sec  0.036 ms  0/2707 <span style=color:#f92672>(</span>0%<span style=color:#f92672>)</span>
+<span style=color:#f92672>[</span>  6<span style=color:#f92672>]</span> Sent <span style=color:#ae81ff>2707</span> datagrams
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span>   0.00-30.00  sec  3.74 MBytes  1.05 Mbits/sec  0.036 ms  0/2707 <span style=color:#f92672>(</span>0%<span style=color:#f92672>)</span>
+<span style=color:#f92672>[</span>  8<span style=color:#f92672>]</span> Sent <span style=color:#ae81ff>2707</span> datagrams
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span>   0.00-30.00  sec  3.74 MBytes  1.05 Mbits/sec  0.039 ms  0/2707 <span style=color:#f92672>(</span>0%<span style=color:#f92672>)</span>
+<span style=color:#f92672>[</span> 10<span style=color:#f92672>]</span> Sent <span style=color:#ae81ff>2707</span> datagrams
+<span style=color:#f92672>[</span>SUM<span style=color:#f92672>]</span>   0.00-30.00  sec  15.0 MBytes  4.18 Mbits/sec  0.038 ms  0/10828 <span style=color:#f92672>(</span>0%<span style=color:#f92672>)</span>
+
+iperf Done.
+</code></pre></div><p><code>Jitter</code> 列表示抖动时间，或者称为传输延迟，<code>Lost/Total</code> 列表示丢失的数据报和总的数据报数量，后面的0%是平均丢包的比率，<code>Datagrams</code> 列显示的是总共传输数据报的数量。这个输出结果过于简单，要了解更详细的UDP丢包和延时信息，可以在iperf服务端查看，因为在客户端执行传输测试的同时，服务端也会同时显示传输状态.</p>
+</div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/linux/>linux</a></span>
+<span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/network/>network</a><a class=tag href=/tags/iperf3/>iperf3</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>

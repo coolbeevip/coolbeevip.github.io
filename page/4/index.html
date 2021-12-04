@@ -69,6 +69,30 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/linux/linux-commands-disk/>Linux Command - Disk</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>Linux 磁盘相关命令
+磁盘IO dd [root@localhost ~]# dd if=/dev/zero of=./a.dat bs=8K count=1M conv=fdatasync 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.8606 秒，578 MB/秒 [root@localhost ~]# dd if=./a.dat of=/dev/null bs=1M count=8k iflag=direct 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.2462 秒，603 MB/秒 磁盘空间 df 查看磁盘各个分区的空间大小、占用、可用等信息
+$ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/disk1s5 466Gi 10Gi 128Gi 8% 488463 4881964417 0% / devfs 192Ki 192Ki 0Bi 100% 663 0 100% /dev /dev/disk1s1 466Gi 318Gi 128Gi 72% 4557528 4877895352 0% /System/Volumes/Data /dev/disk1s4 466Gi 8.</p>
+<a href=/posts/linux/linux-commands-disk/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Mon, May 6, 2019
+</span>
+<span class=separator><a class=category href=/categories/linux/>linux</a></span>
+<span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/disk/>disk</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/git/git-commands/>Git Commands</a>
 </h3>
 </div>
