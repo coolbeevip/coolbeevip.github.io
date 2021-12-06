@@ -69,6 +69,32 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/apisix/study-notes-for-apisix-3-install-with-docker/>APISIX Study Notes (3) Install with Docker</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>使用 Docker 启动
+定义卷目录 APISIX 目前好像还不支持通过环境变量配置参数，所以需要在宿主机上创建配置文件，并在启动 Docker 时通过 Volume 映射进容器
+规划外部卷目录
+mkdir apisix_home mkdir -p apisix_home/apisix_volume/apisix/apisix_conf mkdir -p apisix_home/apisix_volume/apisix/dashboard_conf 定义 APISIX Dashboard 配置文件 apisix_home/apisix_volume/apisix/dashboard_conf/conf.yaml
+conf: listen: # 绑定 IP 地址 host: 0.0.0.0 # 监听端口 port: 9000 etcd: # etcd 用户名 # username: "root" # etcd 密码 # password: "123456" # etcd 地址，支持集群多节点定义 endpoints: - apisix-etcd:2379 log: error_log: # 日志级别 debug, info, warn, error, panic, fatal level: warn # 日志输出路径 file_path: logs/error.</p>
+<a href=/posts/apisix/study-notes-for-apisix-3-install-with-docker/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Fri, May 21, 2021
+</span>
+<span class=separator><a class=category href=/categories/gateway/>gateway</a></span>
+<span class=separator><a class=tag href=/tags/apisix/>apisix</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/apisix/study-notes-for-apisix-4-plugins-proxy-rewrite/>APISIX Study Notes (4) Plugins Proxy Rewrite</a>
 </h3>
 </div>
@@ -311,32 +337,6 @@ wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xvzf redis-6.2.5.
 </span>
 <span class=separator><a class=category href=/categories/redis/>redis</a></span>
 <span class=separator><a class=tag href=/tags/redis/>redis</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/redis/redis-using-redis-as-a-cache/>Using Redis as a Cache</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>当 Redis 用作缓存时，通常可以方便地让它在您添加新数据时自动驱逐旧数据。Redis 支持 6 种驱逐策略，你可以使用 maxmemory-policy 修改驱逐策略。默认是不驱逐，也就是说如果使用的内存超过了 maxmemory 限制，将提示 OOM。
-你可以在 redis.conf 通过 maxmemory 2gb 设置，也可以通过 config set maxmemory 2gb 方式动态设置，注意： 在64bit系统下，maxmemory设置为0表示不限制内存使用，在32bit系统下，maxmemory不能超过3GB
-驱逐策略 noenviction: 禁止驱逐数据(默认淘汰策略) 当 redis 内存数据达到 maxmemory，在该策略下，直接返回OOM错误； volatile-lru: 驱逐已设置过期时间的内存数据集中最近最少使用的数据； volatile-ttl: 驱逐已设置过期时间的内存数据集中即将过期的数据； volatile-random: 驱逐已设置过期时间的内存数据集中任意挑选数据； allkeys-lru: 驱逐内存数据集中最近最少使用的数据； allkeys-random: 驱逐数据集中任意挑选数据； volatile-lfu 驱逐已设置过期时间的内存数据集中使用频率最少的数据；（since 4.0） allkeys-lfu 驱逐内存数据集中使用频率最少的数据；（since 4.0） 如果 KEY 未设置过期时间，那么 volatile-random、volatile-ttl 和 volatile-lru 等同于 noenviction。
-驱逐程序如何运作 重要的是要了解驱逐过程的工作方式如下：
-客户端运行新命令，导致添加更多数据。 Redis 检查内存使用情况，如果大于 maxmemory limit ，则根据策略驱逐键。 执行新命令，等等。 所以我们不断地越过内存限制的边界，越过它，然后通过驱逐键返回到限制之下。 如果某个命令导致使用大量内存一段时间，则内存限制可能会明显超出。</p>
-</div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Wed, Aug 19, 2020
-</span>
-<span class=separator><a class=category href=/categories/redis/>redis</a></span>
-<span class=separator><a class=tag href=/tags/redis/>redis</a><a class=tag href=/tags/cache/>cache</a></span>
 </div>
 </div>
 </div>
