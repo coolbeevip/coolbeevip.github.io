@@ -1,6 +1,6 @@
 ---
 title: "Slow LOG In Redis"
-date: 2021-12-5T13:24:14+08:00
+date: 2021-12-05T13:24:14+08:00
 tags: [redis]
 categories: [redis]
 draft: false
