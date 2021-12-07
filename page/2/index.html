@@ -69,6 +69,30 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/apisix/study-notes-for-apisix-1-quickstart/>APISIX Study Notes (1) Build & QuickStart</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>安装 在 macOS 基于源代码自己编译发布版本
+安装 Etcd 启动 apisix-etcd.yml
+version: '3.2' services: etcd-1: image: docker.io/bitnami/etcd:3.4.16 hostname: etcd container_name: apisix-etcd ports: - '2380:2380' - '2379:2379' environment: - ALLOW_NONE_AUTHENTICATION=yes - ETCD_NAME=etcd-1 - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380 - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379 - ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 volumes: - ./volume/apisix/etcd/data:/bitnami/etcd/data - ./volume/apisix/etcd/conf:/opt/bitnami/etcd/conf docker-compose -f docker-compose-apisix-etcd.yml up -d 验证 $ curl -L http://127.0.0.1:2379/health {"health":"true"} 安装编译环境 安装 Node 10.23.0+ $ node -v v12.18.3 安装 Yarn $ npm install -g yarn $ yarn -v 1.</p>
+<a href=/posts/apisix/study-notes-for-apisix-1-quickstart/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Fri, May 21, 2021
+</span>
+<span class=separator><a class=category href=/categories/gateway/>gateway</a></span>
+<span class=separator><a class=tag href=/tags/apisix/>apisix</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/apisix/study-notes-for-apisix-2-plugins-traffic-split/>APISIX Study Notes (2) Plugins Traffic Split</a>
 </h3>
 </div>
@@ -316,31 +340,6 @@ $ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk v
 </div>
 </div>
 </div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/>Oracle Proxy Using HAProxy Docker</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>下载 HAProxy Docker
-docker pull haproxy:2.3 创建工作目录
-mkdir -p /opt/haproxy-oracle/docker_volume 在 /opt/haproxy-oracle/docker_volume 目录下创建如下 haproxy.cfg 文件，请将文件尾部的 oracle 地址和端口改为你的地址和端口
-global daemon log 127.0.0.1 local0 log 127.0.0.1 local1 notice maxconn 4096 tune.ssl.default-dh-param 2048 defaults log global retries 3 maxconn 2000 timeout connect 5s timeout client 50s timeout server 50s listen stats bind *:9090 balance mode http stats enable stats auth admin:admin stats uri /stats listen oracle-proxy log global bind :1521 mode tcp balance roundrobin server oracle-1 10.</p>
-<a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Tue, Sep 1, 2020
-</span>
-<span class=separator><a class=category href=/categories/haproxy/>haproxy</a></span>
-<span class=separator><a class=tag href=/tags/haproxy/>haproxy</a><a class=tag href=/tags/oracle/>oracle</a></span>
-</div>
-</div>
-</div>
-</div>
 <div class=pagination>
 <ul class="pagination pagination-default">
 <li class=page-item>
@@ -362,10 +361,13 @@ global daemon log 127.0.0.1 local0 log 127.0.0.1 local1 notice maxconn 4096 tune
 <a href=/page/4/ aria-label="Page 4" class=page-link role=button>4</a>
 </li>
 <li class=page-item>
+<a href=/page/5/ aria-label="Page 5" class=page-link role=button>5</a>
+</li>
+<li class=page-item>
 <a href=/page/3/ aria-label=Next class=page-link role=button><span aria-hidden=true>&#187;</span></a>
 </li>
 <li class=page-item>
-<a href=/page/4/ aria-label=Last class=page-link role=button><span aria-hidden=true>&#187;&#187;</span></a>
+<a href=/page/5/ aria-label=Last class=page-link role=button><span aria-hidden=true>&#187;&#187;</span></a>
 </li>
 </ul>
 </div>

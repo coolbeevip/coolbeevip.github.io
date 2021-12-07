@@ -69,6 +69,32 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/ansible/ansible-antdb-distributed-cluster/>Automate Install AntDB Distributed Cluster with Ansible Playbook</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>集群概述 包含组件
+MGR 集群的管理 GTM 全局事务管理 Coordinator 协调员管理用户会话 Data Node 数据节点 安装计划 服务器规划
+IP SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS 10.1.207.180 22022 antdb 123456 root123 CentOS Linux release 7.9.2009 10.1.207.181 22022 antdb 123456 root123 CentOS Linux release 7.9.2009 10.1.207.182 22022 antdb 123456 root123 CentOS Linux release 7.9.2009 提示： 可以参考批量自动化创建用户
+集群节点规划
+IP MGR GTM Coordinator DataNode 10.</p>
+<a href=/posts/ansible/ansible-antdb-distributed-cluster/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Sun, Dec 5, 2021
+</span>
+<span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
+<span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/antdb/>antdb</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/ansible/ansible-redis-master-slave-sentinel/>Automate Install Redis Master-Slave Sentinel with Ansible Playbook</a>
 </h3>
 </div>
@@ -307,30 +333,6 @@ Slow Method</p>
 </div>
 </div>
 </div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/apisix/study-notes-for-apisix-1-quickstart/>APISIX Study Notes (1) Build & QuickStart</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>安装 在 macOS 基于源代码自己编译发布版本
-安装 Etcd 启动 apisix-etcd.yml
-version: '3.2' services: etcd-1: image: docker.io/bitnami/etcd:3.4.16 hostname: etcd container_name: apisix-etcd ports: - '2380:2380' - '2379:2379' environment: - ALLOW_NONE_AUTHENTICATION=yes - ETCD_NAME=etcd-1 - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380 - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379 - ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 volumes: - ./volume/apisix/etcd/data:/bitnami/etcd/data - ./volume/apisix/etcd/conf:/opt/bitnami/etcd/conf docker-compose -f docker-compose-apisix-etcd.yml up -d 验证 $ curl -L http://127.0.0.1:2379/health {"health":"true"} 安装编译环境 安装 Node 10.23.0+ $ node -v v12.18.3 安装 Yarn $ npm install -g yarn $ yarn -v 1.</p>
-<a href=/posts/apisix/study-notes-for-apisix-1-quickstart/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Fri, May 21, 2021
-</span>
-<span class=separator><a class=category href=/categories/gateway/>gateway</a></span>
-<span class=separator><a class=tag href=/tags/apisix/>apisix</a></span>
-</div>
-</div>
-</div>
-</div>
 <div class=pagination>
 <ul class="pagination pagination-default">
 <li class="page-item disabled">
@@ -352,10 +354,13 @@ version: '3.2' services: etcd-1: image: docker.io/bitnami/etcd:3.4.16 hostname: 
 <a href=/page/4/ aria-label="Page 4" class=page-link role=button>4</a>
 </li>
 <li class=page-item>
+<a href=/page/5/ aria-label="Page 5" class=page-link role=button>5</a>
+</li>
+<li class=page-item>
 <a href=/page/2/ aria-label=Next class=page-link role=button><span aria-hidden=true>&#187;</span></a>
 </li>
 <li class=page-item>
-<a href=/page/4/ aria-label=Last class=page-link role=button><span aria-hidden=true>&#187;&#187;</span></a>
+<a href=/page/5/ aria-label=Last class=page-link role=button><span aria-hidden=true>&#187;&#187;</span></a>
 </li>
 </ul>
 </div>

@@ -1,0 +1,927 @@
+<!doctype html><html lang=en data-theme><head>
+<title> Lei Zhang | Automate Install AntDB Distributed Cluster with Ansible Playbook </title>
+<meta charset=utf-8><meta name=generator content="Hugo 0.89.4"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=description content="This is my knowledge base. I document things here">
+<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
+<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
+<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
+<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
+<link rel=canonical href=/posts/ansible/ansible-antdb-distributed-cluster/>
+<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Automate Install AntDB Distributed Cluster with Ansible Playbook">
+<meta name=twitter:description content="集群概述 包含组件
+ MGR 集群的管理 GTM 全局事务管理 Coordinator 协调员管理用户会话 Data Node 数据节点  安装计划 服务器规划
+   IP SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS     10.1.207.180 22022 antdb 123456 root123 CentOS Linux release 7.9.2009   10.1.207.181 22022 antdb 123456 root123 CentOS Linux release 7.9.2009   10.1.207.182 22022 antdb 123456 root123 CentOS Linux release 7.9.2009    提示： 可以参考批量自动化创建用户
+集群节点规划
+   IP MGR GTM Coordinator DataNode     10.">
+</head>
+<body><div class="sidebar .">
+<div class=logo-title>
+<div class=title>
+<img src=/images/profile.jpg alt="profile picture">
+<h3 title><a href=/>I'm Lei Zhang</a></h3>
+<div class=description>
+<p>This is my knowledge base. I document things here</p>
+</div>
+</div>
+<p>
+<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
+</p>
+</div>
+<ul class=social-links>
+<li>
+<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
+<i class="fab fa-github fa-2x" aria-hidden=true></i>
+</a>
+</li>
+<li>
+<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
+<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
+</a>
+</li>
+</ul>
+<div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2021 </div>
+</div>
+</div>
+<div class=main>
+<div class="page-top .">
+<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span>
+</a>
+<ul class=nav id=navMenu>
+<li><a href=/ title>Home</a></li>
+<li><a href=/posts title>Blog</a></li>
+<li><a href=/bookmarks title>Bookmarks</a></li>
+<li><a href=/about/ title>About</a></li>
+</ul>
+</div>
+<div class=autopagerize_page_element>
+<div class=content>
+<div class="post .">
+<div class=post-content>
+<div class=post-title>
+<h3>Automate Install AntDB Distributed Cluster with Ansible Playbook</h3>
+</div>
+<h2 id=集群概述>集群概述</h2>
+<p>包含组件</p>
+<ul>
+<li>MGR 集群的管理</li>
+<li>GTM 全局事务管理</li>
+<li>Coordinator 协调员管理用户会话</li>
+<li>Data Node 数据节点</li>
+</ul>
+<h2 id=安装计划>安装计划</h2>
+<p>服务器规划</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>SSH 端口</th>
+<th>SSH 用户名</th>
+<th>SSH 密码</th>
+<th>ROOT 密码</th>
+<th>OS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.207.180</td>
+<td>22022</td>
+<td>antdb</td>
+<td>123456</td>
+<td>root123</td>
+<td>CentOS Linux release 7.9.2009</td>
+</tr>
+<tr>
+<td>10.1.207.181</td>
+<td>22022</td>
+<td>antdb</td>
+<td>123456</td>
+<td>root123</td>
+<td>CentOS Linux release 7.9.2009</td>
+</tr>
+<tr>
+<td>10.1.207.182</td>
+<td>22022</td>
+<td>antdb</td>
+<td>123456</td>
+<td>root123</td>
+<td>CentOS Linux release 7.9.2009</td>
+</tr>
+</tbody>
+</table>
+<p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p>
+<p>集群节点规划</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>MGR</th>
+<th>GTM</th>
+<th>Coordinator</th>
+<th>DataNode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.207.180</td>
+<td>Master</td>
+<td>Master</td>
+<td></td>
+<td>DataNode_Master_1, DataNode_Slave_3</td>
+</tr>
+<tr>
+<td>10.1.207.181</td>
+<td></td>
+<td>Slave_1</td>
+<td>Coordinator_1</td>
+<td>DataNode_Master_2, DataNode_Slave_1</td>
+</tr>
+<tr>
+<td>10.1.207.182</td>
+<td>Slave_1</td>
+<td></td>
+<td>Coordinator_2</td>
+<td>DataNode_Master_3, DataNode_Slave_2</td>
+</tr>
+</tbody>
+</table>
+<p>节点安装路径</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/opt/antdb</td>
+<td>RPM 安装介质</td>
+</tr>
+<tr>
+<td>~/antdb_uninstall.sh</td>
+<td>集群卸载脚本</td>
+</tr>
+<tr>
+<td>~/antdb_config.sql</td>
+<td>数据库参数脚本</td>
+</tr>
+<tr>
+<td>/data01/antdb/app</td>
+<td>PG 程序文件</td>
+</tr>
+<tr>
+<td>/data01/antdb/mgr</td>
+<td>MGR 程序文件</td>
+</tr>
+<tr>
+<td>/data01/antdb/data</td>
+<td>节点数据和配置目录</td>
+</tr>
+<tr>
+<td>/data01/antdb/tools</td>
+<td>工具脚本</td>
+</tr>
+<tr>
+<td>/data01/antdb/core</td>
+<td>core dump 文件存放路径</td>
+</tr>
+</tbody>
+</table>
+<h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2>
+<p>在客户机上创建 playbook 脚本存放目录</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>mkdir -p ~/my-docker-volume/ansible-playbook
+</code></pre></div><p>下载 playbook 脚本</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cd ~/my-docker-volume/ansible-playbook
+git clone https://github.com/coolbeevip/ansible-playbook.git
+</code></pre></div><p>下载 AntDB 安装包 <code>antdb.cluster-5.0.009be78c-centos7.9.rpm</code> 到 <code>~/my-docker-volume/ansible-playbook/packages</code> 目录</p>
+<h2 id=配置安装脚本>配置安装脚本</h2>
+<blockquote>
+<p>您可以编辑以下配置文件，修改默认参数</p>
+</blockquote>
+<h4 id=main-os-inityml>main-os-init.yml</h4>
+<p>定义 AntDB 集群的所有服务器 IP 地址，以及安装用系统用户名，此脚本自动设置内核参数，创建目录、上传 RPM package</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
+  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>antdb</span>
+
+- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.181</span>
+  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>antdb</span>
+
+- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.182</span>
+  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>antdb</span>
+</code></pre></div><h4 id=main-cluster-installyml>main-cluster-install.yml</h4>
+<p>定义 AntDB MGR 主/备节点服务器 IP 地址，系统用户。备节点的名称 <code>mgr_slave_1</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># MGR Master Node Initialize</span>
+- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
+  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>antdb</span>
+
+<span style=color:#75715e># MGR Slave Node Initialize</span>
+- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.182</span>
+  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>antdb</span>
+  <span style=color:#f92672>vars</span>:
+    <span style=color:#f92672>mgr_slave_name</span>: <span style=color:#e6db74>&#34;mgr_slave_1&#34;</span>
+
+<span style=color:#75715e># Restart all node of AntDB cluster on MGR Master Node</span>
+- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
+  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>antdb</span>
+</code></pre></div><h4 id=var_antdbyml>var_antdb.yml</h4>
+<p>操作系统内核参数</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>limits_hard_nproc</span>: <span style=color:#e6db74>&#39;65535&#39;</span>
+<span style=color:#f92672>limits_soft_nproc</span>: <span style=color:#e6db74>&#39;65535&#39;</span>
+<span style=color:#f92672>limits_hard_nofile</span>: <span style=color:#e6db74>&#39;278528&#39;</span>
+<span style=color:#f92672>limits_soft_nofile</span>: <span style=color:#e6db74>&#39;278528&#39;</span>
+<span style=color:#f92672>limits_soft_stack</span>: <span style=color:#e6db74>&#39;unlimited&#39;</span>
+<span style=color:#f92672>limits_soft_core</span>: <span style=color:#e6db74>&#39;unlimited&#39;</span>
+<span style=color:#f92672>limits_hard_core</span>: <span style=color:#e6db74>&#39;unlimited&#39;</span>
+<span style=color:#f92672>limits_soft_memlock</span>: <span style=color:#e6db74>&#39;250000000&#39;</span>
+<span style=color:#f92672>limits_hard_memlock</span>: <span style=color:#e6db74>&#39;250000000&#39;</span>
+</code></pre></div><p>安装用系统用户名和密码</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>antdb_user</span>: <span style=color:#e6db74>&#39;antdb&#39;</span>
+<span style=color:#f92672>antdb_group</span>: <span style=color:#e6db74>&#39;antdb&#39;</span>
+<span style=color:#f92672>antdb_password</span>: <span style=color:#e6db74>&#39;123456&#39;</span>
+</code></pre></div><p>AntDB rpm 包名称</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>antdb_tar</span>: <span style=color:#e6db74>&#39;antdb.cluster-5.0.009be78c-centos7.9.rpm&#39;</span>
+</code></pre></div><p>AntDB 安装路径</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>antdb_home_dir</span>: <span style=color:#e6db74>&#39;/opt/antdb&#39;</span>
+<span style=color:#f92672>antdb_mgr_dir</span>: <span style=color:#e6db74>&#39;/data01/antdb/mgr&#39;</span>
+<span style=color:#f92672>antdb_data_dir</span>: <span style=color:#e6db74>&#39;/data01/antdb/data&#39;</span>
+<span style=color:#f92672>antdb_tools_dir</span>: <span style=color:#e6db74>&#39;/data01/antdb/tools&#39;</span>
+<span style=color:#f92672>antdb_app_dir</span>: <span style=color:#e6db74>&#39;/data01/antdb/app&#39;</span>
+<span style=color:#f92672>antdb_core_dir</span>: <span style=color:#e6db74>&#39;/data01/antdb/core&#39;</span>
+</code></pre></div><p>postgresql.conf 扩展参数</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>antdb_conf_listen_addresses</span>: <span style=color:#e6db74>&#39;*&#39;</span>
+<span style=color:#f92672>antdb_conf_port</span>: <span style=color:#ae81ff>16432</span>
+<span style=color:#f92672>antdb_conf_log_destination</span>: <span style=color:#e6db74>&#39;csvlog&#39;</span>
+<span style=color:#f92672>antdb_conf_logging_collector</span>: <span style=color:#66d9ef>on</span>
+<span style=color:#f92672>antdb_conf_log_directory</span>: <span style=color:#e6db74>&#39;pg_log&#39;</span>
+<span style=color:#f92672>antdb_conf_log_rotation_size</span>: <span style=color:#ae81ff>100MB</span>
+<span style=color:#f92672>antdb_conf_log_min_messages</span>: <span style=color:#ae81ff>error</span>
+<span style=color:#f92672>antdb_conf_log_statement</span>: <span style=color:#ae81ff>ddl</span>
+</code></pre></div><p>集群所有节点名称(此名称不是主机名，是集群管理用的节点名称，名称只能包含字母、数字和下划线)</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># 集群节点名称（注意这不是主机名)</span>
+<span style=color:#f92672>node_names</span>:
+  <span style=color:#f92672>10.1.207.180</span>:
+    <span style=color:#f92672>name</span>: <span style=color:#ae81ff>antdb180</span>
+  <span style=color:#f92672>10.1.207.181</span>:
+    <span style=color:#f92672>name</span>: <span style=color:#ae81ff>antdb181</span>
+  <span style=color:#f92672>10.1.207.182</span>:
+    <span style=color:#f92672>name</span>: <span style=color:#ae81ff>antdb182</span>
+</code></pre></div><p>集群各个组件端口</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># Agent</span>
+<span style=color:#f92672>andb_agent_port</span>: <span style=color:#ae81ff>18432</span>
+<span style=color:#75715e># GTM</span>
+<span style=color:#f92672>antdb_gtm_port</span>: <span style=color:#ae81ff>16655</span>
+<span style=color:#75715e># Coordinator</span>
+<span style=color:#f92672>antdb_coordinator_port</span>: <span style=color:#ae81ff>15432</span>
+<span style=color:#75715e># DataNode</span>
+<span style=color:#f92672>antdb_datanode_master_port</span>: <span style=color:#ae81ff>14332</span>
+<span style=color:#f92672>antdb_datanode_slave_port</span>: <span style=color:#ae81ff>14333</span>
+</code></pre></div><p>MGR 节点配置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>mgr_nodes</span>:
+  <span style=color:#f92672>master</span>:
+    <span style=color:#f92672>ip</span>: <span style=color:#ae81ff>10.1.207.180</span>
+  <span style=color:#f92672>slave</span>:
+    <span style=color:#f92672>ips</span>: [<span style=color:#ae81ff>10.1.207.182</span>]
+</code></pre></div><p>GTM 节点配置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>gtm_nodes</span>:
+  <span style=color:#f92672>master</span>:
+    <span style=color:#f92672>name</span>: <span style=color:#ae81ff>gtm_master</span>
+    <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb180</span>
+  <span style=color:#f92672>slaves</span>:
+    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>gtm_slave_1</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb181</span>
+</code></pre></div><p>Coordinator 节点配置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>coordinator_nodes</span>:
+  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>coordinator_1</span>
+    <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb181</span>
+  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>coordinator_2</span>
+    <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb182</span>
+</code></pre></div><p>DataNodes 节点配置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>data_nodes</span>:
+  - <span style=color:#f92672>master</span>:
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>dn_master_1</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb180</span>
+    <span style=color:#f92672>slave</span>:
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>dn_slave_1</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb181</span>
+  - <span style=color:#f92672>master</span>:
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>dn_master_2</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb181</span>
+    <span style=color:#f92672>slave</span>:
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>dn_slave_2</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb182</span>
+  - <span style=color:#f92672>master</span>:
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>dn_master_3</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb182</span>
+    <span style=color:#f92672>slave</span>:
+      <span style=color:#f92672>name</span>: <span style=color:#ae81ff>dn_slave_3</span>
+      <span style=color:#f92672>node</span>: <span style=color:#ae81ff>antdb180</span>
+</code></pre></div><p>数据库配置参数</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>antdb_set</span>:
+  <span style=color:#f92672>datanode</span>:
+    <span style=color:#f92672>max_connections</span>: <span style=color:#ae81ff>1000</span> <span style=color:#75715e># 自定义最大连接数</span>
+    <span style=color:#f92672>max_prepared_transactions</span>: <span style=color:#ae81ff>1000</span> <span style=color:#75715e># 等于最大连接数</span>
+    <span style=color:#f92672>max_worker_processes</span>: <span style=color:#ae81ff>108</span> <span style=color:#75715e># cpu*2，不能小于 108</span>
+    <span style=color:#f92672>shared_buffers</span>: <span style=color:#ae81ff>2GB</span> <span style=color:#75715e># 物理内存 * 25% GB</span>
+    <span style=color:#f92672>effective_cache_size</span>: <span style=color:#ae81ff>3GB</span> <span style=color:#75715e># 物理内存 * 75% GB</span>
+    <span style=color:#f92672>max_wal_size</span>: <span style=color:#ae81ff>1GB</span> <span style=color:#75715e># 2 * shared_buffers GB</span>
+    <span style=color:#f92672>random_page_cost</span>: <span style=color:#ae81ff>4</span> <span style=color:#75715e># 如果是SSD磁盘，设置为1；如果是SATA磁盘，保持默认值4</span>
+  <span style=color:#f92672>coordinator</span>:
+    <span style=color:#f92672>max_connections</span>: <span style=color:#ae81ff>1000</span> <span style=color:#75715e># 最大连接数</span>
+    <span style=color:#f92672>max_prepared_transactions</span>: <span style=color:#ae81ff>1000</span> <span style=color:#75715e># 等于最大连接数</span>
+    <span style=color:#f92672>max_worker_processes</span>: <span style=color:#ae81ff>108</span> <span style=color:#75715e># cpu*2，不能小于 108</span>
+  <span style=color:#f92672>gtmcoord</span>:
+    <span style=color:#f92672>max_connections</span>: <span style=color:#ae81ff>1000</span> <span style=color:#75715e># 最大连接数</span>
+    <span style=color:#f92672>max_prepared_transactions</span>: <span style=color:#ae81ff>1000</span> <span style=color:#75715e># 等于最大连接数</span>
+    <span style=color:#f92672>max_worker_processes</span>: <span style=color:#ae81ff>108</span> <span style=color:#75715e># cpu*2，不能小于 108</span>
+    <span style=color:#f92672>shared_buffers</span>: <span style=color:#ae81ff>5GB</span> <span style=color:#75715e># 物理内存 * 25% GB</span>
+</code></pre></div><p>更多默认配置参见 <code>antdb_config.sql.j2</code> 文件</p>
+<h2 id=开始安装>开始安装</h2>
+<p>启动 ansible 容器工具连接目标服务器，并将 <code>~/my-docker-volume/ansible-playbook</code> 目录挂载到容器中。</p>
+<p><strong>提示：</strong> ANSIBLE_SSH_USERS，ANSIBLE_SSH_PASSS 配置成您之前在目标服务器上创建的用户名 <code>antdb</code> 和密码 <code>123456</code></p>
+<p><strong>提示：</strong> ANSIBLE_SU_PASSS 为 root 用户的密码</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker run --name ansible --rm -it <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_HOSTS<span style=color:#f92672>=</span>10.1.207.180,10.1.207.181,10.1.207.182 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PORTS<span style=color:#f92672>=</span>22022,22022,22022 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_USERS<span style=color:#f92672>=</span>antdb,antdb,antdb <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PASSS<span style=color:#f92672>=</span>123456,123456,123456 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e ANSIBLE_SU_PASSS<span style=color:#f92672>=</span>root123,root123,root123 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v /Users/zhanglei/mydocker/volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  /bin/bash  
+</code></pre></div><h2 id=安装集群>安装集群</h2>
+<p>自动配置系统参数，关闭防火墙，创建安装目录，上传安装介质，启动并初始化集群</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/antdb/main-os-init.yml /ansible-playbook/antdb/main-cluster-install.yml
+</code></pre></div><p>如果你看到如下信息，说明安装完成</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
+ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p><strong>提示：</strong> 此脚本在我的环境下执行耗时大约 6 分钟</p>
+<h2 id=验证集群>验证集群</h2>
+<p>安装完毕，登录到 MGR 主节点 <strong>10.1.207.180</strong> 检查集群状态，可以看到所有节点都已经 <code>running</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;monitor all;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+   nodename    |      nodetype      | status | description |     host     | port  | recovery |           boot time           | nodezone
+---------------+--------------------+--------+-------------+--------------+-------+----------+-------------------------------+----------
+ gtm_master    | gtmcoord master    | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>16655</span> | false    | 2021-11-30 13:39:48.610397+08 | local
+ gtm_slave_1   | gtmcoord slave     | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>16655</span> | true     | 2021-11-30 13:36:06.056928+08 | local
+ coordinator_1 | coordinator master | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>15432</span> | false    | 2021-11-30 13:36:12.660815+08 | local
+ coordinator_2 | coordinator master | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>15432</span> | false    | 2021-11-30 13:35:19.633406+08 | local
+ dn_master_1   | datanode master    | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>14332</span> | false    | 2021-11-30 13:40:08.57693+08  | local
+ dn_master_2   | datanode master    | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>14332</span> | false    | 2021-11-30 13:36:22.518815+08 | local
+ dn_master_3   | datanode master    | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>14332</span> | false    | 2021-11-30 13:35:29.467795+08 | local
+ dn_slave_1    | datanode slave     | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>14333</span> | true     | 2021-11-30 13:40:12.453562+08 | local
+ dn_slave_2    | datanode slave     | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>14333</span> | true     | 2021-11-30 13:36:29.635405+08 | local
+ dn_slave_3    | datanode slave     | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>14333</span> | true     | 2021-11-30 13:35:39.245053+08 | local
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>登录到 MGR 主节点 <strong>10.1.207.180</strong>，通过 <code>Coordinator</code> 节点端口，测试连接集群是否正常</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -h 10.1.207.181 -p 15432 -c &#34;SELECT datname FROM pg_database;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+  datname
+-----------
+ postgres
+ antdb
+ template1
+ template0
+<span style=color:#f92672>(</span><span style=color:#ae81ff>4</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>登录到 MGR 备节点 <strong>10.1.207.182</strong> 检查集群状态，可以看到所有节点都已经 <code>running</code>，说明 MGR 备节点可以正常工作</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.182 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;monitor all;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+   nodename    |      nodetype      | status | description |     host     | port  | recovery |           boot time           | nodezone
+---------------+--------------------+--------+-------------+--------------+-------+----------+-------------------------------+----------
+ gtm_master    | gtmcoord master    | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>16655</span> | false    | 2021-11-30 13:39:48.610397+08 | local
+ gtm_slave_1   | gtmcoord slave     | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>16655</span> | true     | 2021-11-30 13:36:06.056928+08 | local
+ coordinator_1 | coordinator master | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>15432</span> | false    | 2021-11-30 13:36:12.660815+08 | local
+ coordinator_2 | coordinator master | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>15432</span> | false    | 2021-11-30 13:35:19.633406+08 | local
+ dn_master_1   | datanode master    | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>14332</span> | false    | 2021-11-30 13:40:08.57693+08  | local
+ dn_master_2   | datanode master    | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>14332</span> | false    | 2021-11-30 13:36:22.518815+08 | local
+ dn_master_3   | datanode master    | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>14332</span> | false    | 2021-11-30 13:35:29.467795+08 | local
+ dn_slave_1    | datanode slave     | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>14333</span> | true     | 2021-11-30 13:40:12.453562+08 | local
+ dn_slave_2    | datanode slave     | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>14333</span> | true     | 2021-11-30 13:36:29.635405+08 | local
+ dn_slave_3    | datanode slave     | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>14333</span> | true     | 2021-11-30 13:35:39.245053+08 | local
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><h2 id=添加客户端白名单>添加客户端白名单</h2>
+<p>登录到 MGR 主节点 <strong>10.1.207.180</strong>，增加客户端白名单，否则你连接的时候将会收到 <strong>[28000] FATAL: no pg_hba.conf entry for host &ldquo;x.x.x.x&rdquo;, user &ldquo;xxx&rdquo;, database &ldquo;xxx&rdquo;</strong> 类似的错误。命令格式：<code>add hba coordinator all ("host &lt;database> &lt;user> &lt;ip-address> &lt;ip-mark> &lt;auth-method>");</code></p>
+<p>例如：添加 C类地址段 10.4.16.0～10.4.16.255</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;add hba coordinator all (\&#34;host all all 10.4.16.0 24 md5\&#34;);&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+ nodename | values
+----------+---------
+ *        | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> row<span style=color:#f92672>)</span>
+</code></pre></div><p>例如：添加 B类地址段 10.4.0.0～10.4.255.255</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;add hba coordinator all (\&#34;host all all 10.4.0.0 16 md5\&#34;);&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+ nodename | values
+----------+---------
+ *        | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>1</span> row<span style=color:#f92672>)</span>
+</code></pre></div><h2 id=创建数据库>创建数据库</h2>
+<p>SSH 登录到集群任一服务器，然后使用 <code>psql -h 10.1.207.181 -p 15432</code> 命令连接 <code>Coordinator</code> 主(备)节点</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql>[antdb<span style=color:#f92672>@</span>oss<span style=color:#f92672>-</span>irms<span style=color:#f92672>-</span><span style=color:#ae81ff>180</span> <span style=color:#f92672>~</span>]<span style=color:#960050;background-color:#1e0010>$</span> psql <span style=color:#f92672>-</span>h <span style=color:#ae81ff>10</span>.<span style=color:#ae81ff>1</span>.<span style=color:#ae81ff>207</span>.<span style=color:#ae81ff>181</span> <span style=color:#f92672>-</span>p <span style=color:#ae81ff>15432</span>
+psql (<span style=color:#ae81ff>5</span>.<span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>1</span> based <span style=color:#66d9ef>on</span> PG <span style=color:#ae81ff>11</span>.<span style=color:#ae81ff>10</span>)
+<span style=color:#66d9ef>Type</span> <span style=color:#e6db74>&#34;help&#34;</span> <span style=color:#66d9ef>for</span> help.
+
+antdb<span style=color:#f92672>=#</span> <span style=color:#66d9ef>create</span> <span style=color:#66d9ef>database</span> testdb;
+<span style=color:#66d9ef>CREATE</span> <span style=color:#66d9ef>DATABASE</span>
+
+antdb<span style=color:#f92672>=#</span> <span style=color:#66d9ef>create</span> <span style=color:#66d9ef>user</span> testdbuser <span style=color:#66d9ef>with</span> <span style=color:#66d9ef>encrypted</span> password <span style=color:#e6db74>&#39;testdbpass&#39;</span>;
+<span style=color:#66d9ef>CREATE</span> <span style=color:#66d9ef>ROLE</span>
+
+antdb<span style=color:#f92672>=#</span> <span style=color:#66d9ef>grant</span> <span style=color:#66d9ef>all</span> <span style=color:#66d9ef>privileges</span> <span style=color:#66d9ef>on</span> <span style=color:#66d9ef>database</span> testdb <span style=color:#66d9ef>to</span> testdbuser;
+<span style=color:#66d9ef>GRANT</span>
+</code></pre></div><p>通过 Coordinator 主节 <strong>10.1.207.181</strong> 连接数据库</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>antdb@oss-irms-180 ~<span style=color:#f92672>]</span>$ psql -h 10.1.207.181 -p <span style=color:#ae81ff>15432</span> -d testdb -U testdbuser -w testdbpass
+psql: warning: extra command-line argument <span style=color:#e6db74>&#34;testdbpass&#34;</span> ignored
+psql <span style=color:#f92672>(</span>5.0.1 based on PG 11.10<span style=color:#f92672>)</span>
+Type <span style=color:#e6db74>&#34;help&#34;</span> <span style=color:#66d9ef>for</span> help.
+
+testdb<span style=color:#f92672>=</span>&gt;
+</code></pre></div><p>通过 Coordinator 备节点 <strong>10.1.207.182</strong> 连接数据库</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>antdb@oss-irms-180 ~<span style=color:#f92672>]</span>$ psql -h 10.1.207.182 -p <span style=color:#ae81ff>15432</span> -d testdb -U testdbuser -w testdbpass
+psql: warning: extra command-line argument <span style=color:#e6db74>&#34;testdbpass&#34;</span> ignored
+psql <span style=color:#f92672>(</span>5.0.1 based on PG 11.10<span style=color:#f92672>)</span>
+Type <span style=color:#e6db74>&#34;help&#34;</span> <span style=color:#66d9ef>for</span> help.
+
+testdb<span style=color:#f92672>=</span>&gt;
+</code></pre></div><h2 id=常用运维命令>常用运维命令</h2>
+<p>登录到 MGR 主节点 <strong>10.1.207.180</strong>，查看集群主机列表</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;list host;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+   name   | user  | port  | protocol | agentport |   address    |      adbhome
+----------+-------+-------+----------+-----------+--------------+-------------------
+ antdb180 | antdb | <span style=color:#ae81ff>22022</span> | ssh      |     <span style=color:#ae81ff>18432</span> | 10.1.207.180 | /data01/antdb/app
+ antdb181 | antdb | <span style=color:#ae81ff>22022</span> | ssh      |     <span style=color:#ae81ff>18432</span> | 10.1.207.181 | /data01/antdb/app
+ antdb182 | antdb | <span style=color:#ae81ff>22022</span> | ssh      |     <span style=color:#ae81ff>18432</span> | 10.1.207.182 | /data01/antdb/app
+<span style=color:#f92672>(</span><span style=color:#ae81ff>3</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>登录到 MGR 主节点 <strong>10.1.207.180</strong>，查看集群节点列表</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;list node;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+     name      |   host   |        type        | mastername  | port  | sync_state |               path               | initialized | incluster | zone
+---------------+----------+--------------------+-------------+-------+------------+----------------------------------+-------------+-----------+-------
+ gtm_master    | antdb180 | gtmcoord master    |             | <span style=color:#ae81ff>16655</span> |            | /data01/antdb/data/gtm_master    | t           | t         | local
+ gtm_slave_1   | antdb181 | gtmcoord slave     | gtm_master  | <span style=color:#ae81ff>16655</span> | sync       | /data01/antdb/data/gtm_slave_1   | t           | t         | local
+ coordinator_1 | antdb181 | coordinator master |             | <span style=color:#ae81ff>15432</span> |            | /data01/antdb/data/coordinator_1 | t           | t         | local
+ coordinator_2 | antdb182 | coordinator master |             | <span style=color:#ae81ff>15432</span> |            | /data01/antdb/data/coordinator_2 | t           | t         | local
+ dn_master_1   | antdb180 | datanode master    |             | <span style=color:#ae81ff>14332</span> |            | /data01/antdb/data/dn_master_1   | t           | t         | local
+ dn_master_2   | antdb181 | datanode master    |             | <span style=color:#ae81ff>14332</span> |            | /data01/antdb/data/dn_master_2   | t           | t         | local
+ dn_master_3   | antdb182 | datanode master    |             | <span style=color:#ae81ff>14332</span> |            | /data01/antdb/data/dn_master_3   | t           | t         | local
+ dn_slave_1    | antdb180 | datanode slave     | dn_master_1 | <span style=color:#ae81ff>14333</span> | sync       | /data01/antdb/data/dn_slave_1    | t           | t         | local
+ dn_slave_2    | antdb181 | datanode slave     | dn_master_2 | <span style=color:#ae81ff>14333</span> | sync       | /data01/antdb/data/dn_slave_2    | t           | t         | local
+ dn_slave_3    | antdb182 | datanode slave     | dn_master_3 | <span style=color:#ae81ff>14333</span> | sync       | /data01/antdb/data/dn_slave_3    | t           | t         | local
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>查看所有服务器上 AntDB 集群相关的进程</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep [/]data01/antdb/app/bin&#39;</span>
+10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+antdb    <span style=color:#ae81ff>25907</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:35 ?        00:00:00 /data01/antdb/app/bin/agent -b -P <span style=color:#ae81ff>18432</span>
+antdb    <span style=color:#ae81ff>25938</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:36 ?        00:00:00 /data01/antdb/app/bin/postgres --gtm_coord -D /data01/antdb/data/gtm_slave_1 -i
+antdb    <span style=color:#ae81ff>25987</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:36 ?        00:00:00 /data01/antdb/app/bin/postgres --coordinator -D /data01/antdb/data/coordinator_1 -i
+antdb    <span style=color:#ae81ff>26085</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:36 ?        00:00:00 /data01/antdb/app/bin/postgres --datanode -D /data01/antdb/data/dn_master_2 -i
+antdb    <span style=color:#ae81ff>26149</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:36 ?        00:00:00 /data01/antdb/app/bin/postgres --datanode -D /data01/antdb/data/dn_slave_2 -i
+
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+antdb    <span style=color:#ae81ff>13429</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:39 ?        00:00:00 /data01/antdb/app/bin/adbmgrd -D /data01/antdb/mgr
+antdb    <span style=color:#ae81ff>14465</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:39 ?        00:00:00 /data01/antdb/app/bin/agent -b -P <span style=color:#ae81ff>18432</span>
+antdb    <span style=color:#ae81ff>14588</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:39 ?        00:00:00 /data01/antdb/app/bin/postgres --gtm_coord -D /data01/antdb/data/gtm_master -i
+antdb    <span style=color:#ae81ff>14723</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:40 ?        00:00:00 /data01/antdb/app/bin/postgres --datanode -D /data01/antdb/data/dn_master_1 -i
+antdb    <span style=color:#ae81ff>14779</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:40 ?        00:00:00 /data01/antdb/app/bin/postgres --datanode -D /data01/antdb/data/dn_slave_1 -i
+
+10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+antdb    <span style=color:#ae81ff>18597</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:35 ?        00:00:00 /data01/antdb/app/bin/agent -b -P <span style=color:#ae81ff>18432</span>
+antdb    <span style=color:#ae81ff>18643</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:35 ?        00:00:00 /data01/antdb/app/bin/postgres --coordinator -D /data01/antdb/data/coordinator_2 -i
+antdb    <span style=color:#ae81ff>18722</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:35 ?        00:00:00 /data01/antdb/app/bin/postgres --datanode -D /data01/antdb/data/dn_master_3 -i
+antdb    <span style=color:#ae81ff>18775</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 13:35 ?        00:00:00 /data01/antdb/app/bin/postgres --datanode -D /data01/antdb/data/dn_slave_3 -i
+</code></pre></div><p>停止所有节点</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;stop all mode f;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+     operation type      |   nodename    | status | description
+-------------------------+---------------+--------+-------------
+ stop datanode slave     | dn_slave_1    | t      | success
+ stop datanode slave     | dn_slave_2    | t      | success
+ stop datanode slave     | dn_slave_3    | t      | success
+ stop datanode master    | dn_master_1   | t      | success
+ stop datanode master    | dn_master_2   | t      | success
+ stop datanode master    | dn_master_3   | t      | success
+ stop coordinator master | coordinator_1 | t      | success
+ stop coordinator master | coordinator_2 | t      | success
+ stop gtmcoord slave     | gtm_slave_1   | t      | success
+ stop gtmcoord master    | gtm_master    | t      | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_slave_1 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_slave_2 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_slave_3 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> datanode slave to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_master_1 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_master_2 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_master_3 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> datanode master to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/coordinator_1 -Z coordinator -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/coordinator_2 -Z coordinator -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> coordinator master to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP GTMCOORD SLAVE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/gtm_slave_1 -Z gtm_coord -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> gtmcoord slave to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/gtm_master -Z coordinator -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> gtmcoord master to stop ...
+</code></pre></div><p>启动所有节点</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;start all;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+      operation type      |   nodename    | status | description
+--------------------------+---------------+--------+-------------
+ start gtmcoord master    | gtm_master    | t      | success
+ start gtmcoord slave     | gtm_slave_1   | t      | success
+ start coordinator master | coordinator_1 | t      | success
+ start coordinator master | coordinator_2 | t      | success
+ start datanode master    | dn_master_1   | t      | success
+ start datanode master    | dn_master_2   | t      | success
+ start datanode master    | dn_master_3   | t      | success
+ start datanode slave     | dn_slave_1    | t      | success
+ start datanode slave     | dn_slave_2    | t      | success
+ start datanode slave     | dn_slave_3    | t      | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START GTMCOORD MASTER BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/gtm_master -Z gtm_coord -o -i -c -W -l /data01/antdb/data/gtm_master/logfile<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> gtmcoord master to start ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START GTMCOORD SLAVE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/gtm_slave_1 -Z gtm_coord -o -i -c -W -l /data01/antdb/data/gtm_slave_1/logfile<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> gtmcoord slave to start ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/coordinator_1 -Z coordinator -o -i -c -W -l /data01/antdb/data/coordinator_1/logfile<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/coordinator_2 -Z coordinator -o -i -c -W -l /data01/antdb/data/coordinator_2/logfile<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> coordinator master to start ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/dn_master_1 -Z datanode -o -i -c -W -l /data01/antdb/data/dn_master_1/logfile<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/dn_master_2 -Z datanode -o -i -c -W -l /data01/antdb/data/dn_master_2/logfile<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/dn_master_3 -Z datanode -o -i -c -W -l /data01/antdb/data/dn_master_3/logfile<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> datanode master to start ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/dn_slave_1 -Z datanode -o -i -c -W -l /data01/antdb/data/dn_slave_1/logfile<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/dn_slave_2 -Z datanode -o -i -c -W -l /data01/antdb/data/dn_slave_2/logfile<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>START DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> start -D /data01/antdb/data/dn_slave_3 -Z datanode -o -i -c -W -l /data01/antdb/data/dn_slave_3/logfile<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> datanode slave to start ...
+</code></pre></div><p>查看节点数据库配置</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;show param dn_master_1 max;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+            type             | status |                             message
+-----------------------------+--------+-----------------------------------------------------------------
+ datanode master dn_master_1 | t      | autovacuum_freeze_max_age <span style=color:#f92672>=</span> <span style=color:#ae81ff>200000000</span>                          +
+                             |        | autovacuum_max_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>                                     +
+                             |        | autovacuum_multixact_freeze_max_age <span style=color:#f92672>=</span> <span style=color:#ae81ff>400000000</span>                +
+                             |        | bgwriter_lru_maxpages <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>                                    +
+                             |        | max_cn_prealloc_xid_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>                                   +
+                             |        | max_connections <span style=color:#f92672>=</span> <span style=color:#ae81ff>1000</span>                                         +
+                             |        | max_coordinators <span style=color:#f92672>=</span> <span style=color:#ae81ff>16</span>                                          +
+                             |        | max_datanodes <span style=color:#f92672>=</span> <span style=color:#ae81ff>16</span>                                             +
+                             |        | max_files_per_process <span style=color:#f92672>=</span> <span style=color:#ae81ff>1000</span>                                   +
+                             |        | max_function_args <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>                                        +
+                             |        | max_identifier_length <span style=color:#f92672>=</span> <span style=color:#ae81ff>63</span>                                     +
+                             |        | max_index_keys <span style=color:#f92672>=</span> <span style=color:#ae81ff>32</span>                                            +
+                             |        | max_locks_per_transaction <span style=color:#f92672>=</span> <span style=color:#ae81ff>256</span>                                +
+                             |        | max_logical_replication_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>                            +
+                             |        | max_parallel_maintenance_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                           +
+                             |        | max_parallel_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span>                                       +
+                             |        | max_parallel_workers_per_gather <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                            +
+                             |        | max_pool_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>                                            +
+                             |        | max_pred_locks_per_page <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                                    +
+                             |        | max_pred_locks_per_relation <span style=color:#f92672>=</span> -2                               +
+                             |        | max_pred_locks_per_transaction <span style=color:#f92672>=</span> <span style=color:#ae81ff>64</span>                            +
+                             |        | max_prepared_transactions <span style=color:#f92672>=</span> <span style=color:#ae81ff>1000</span>                               +
+                             |        | max_replication_slots <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>                                     +
+                             |        | max_stack_depth <span style=color:#f92672>=</span> 8MB                                          +
+                             |        | max_standby_archive_delay <span style=color:#f92672>=</span> 30s                                +
+                             |        | max_standby_streaming_delay <span style=color:#f92672>=</span> 30s                              +
+                             |        | max_sync_workers_per_subscription <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                          +
+                             |        | max_wal_senders <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>                                            +
+                             |        | max_wal_size <span style=color:#f92672>=</span> 1GB                                             +
+                             |        | max_worker_processes <span style=color:#f92672>=</span> <span style=color:#ae81ff>32</span>                                      +
+                             |        | reduce_scan_max_buckets <span style=color:#f92672>=</span> <span style=color:#ae81ff>2048</span>                                 +
+                             |        | rep_max_avail_flag <span style=color:#f92672>=</span> off                                       +
+                             |        | rep_max_avail_lsn_lag <span style=color:#f92672>=</span> <span style=color:#ae81ff>8192</span>                                   +
+                             |        | use_aux_max_times <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+ datanode slave dn_slave_1   | f      | could not connect to server: Connection refused                +
+                             |        |         Is the server running on host <span style=color:#e6db74>&#34;127.0.0.1&#34;</span> and accepting+
+                             |        |         TCP/IP connections on port 14333?                      +
+                             |        |
+<span style=color:#f92672>(</span><span style=color:#ae81ff>2</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><h2 id=q--a>Q & A</h2>
+<h4 id=多服务器如何规划节点类型>多服务器如何规划节点类型</h4>
+<blockquote>
+<p>生产环境请以官方建议为准</p>
+</blockquote>
+<p>3 服务器推荐规划</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>MGR</th>
+<th>GTM</th>
+<th>Coordinator</th>
+<th>DataNode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.207.180</td>
+<td>Master</td>
+<td>Master</td>
+<td></td>
+<td>DataNode_Master_1, DataNode_Slave_3</td>
+</tr>
+<tr>
+<td>10.1.207.181</td>
+<td></td>
+<td>Slave_1</td>
+<td>Coordinator_1</td>
+<td>DataNode_Master_2, DataNode_Slave_1</td>
+</tr>
+<tr>
+<td>10.1.207.182</td>
+<td>Slave_1</td>
+<td></td>
+<td>Coordinator_2</td>
+<td>DataNode_Master_3, DataNode_Slave_2</td>
+</tr>
+</tbody>
+</table>
+<p>4 服务器推荐规划</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>MGR</th>
+<th>GTM</th>
+<th>Coordinator</th>
+<th>DataNode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.207.180</td>
+<td>Master</td>
+<td></td>
+<td></td>
+<td>DataNode_Master_1, DataNode_Slave_3</td>
+</tr>
+<tr>
+<td>10.1.207.181</td>
+<td>Slave_1</td>
+<td></td>
+<td>Coordinator_1</td>
+<td>DataNode_Master_2, DataNode_Slave_1</td>
+</tr>
+<tr>
+<td>10.1.207.182</td>
+<td></td>
+<td>Master</td>
+<td></td>
+<td>DataNode_Slave_2</td>
+</tr>
+<tr>
+<td>10.1.207.183</td>
+<td></td>
+<td>Slave_1</td>
+<td>Coordinator_2</td>
+<td>DataNode_Master_3</td>
+</tr>
+</tbody>
+</table>
+<p>5 服务器推荐规划</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>MGR</th>
+<th>GTM</th>
+<th>Coordinator</th>
+<th>DataNode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1.207.180</td>
+<td></td>
+<td>Slave_1</td>
+<td>Coordinator_1</td>
+<td>DataNode_Master_1, DataNode_Slave_5</td>
+</tr>
+<tr>
+<td>10.1.207.181</td>
+<td></td>
+<td>Slave_2</td>
+<td>Coordinator_2</td>
+<td>DataNode_Master_2, DataNode_Slave_1</td>
+</tr>
+<tr>
+<td>10.1.207.182</td>
+<td>Slave_1</td>
+<td>Master</td>
+<td>Coordinator_3</td>
+<td>DataNode_Master_3, DataNode_Slave_2</td>
+</tr>
+<tr>
+<td>10.1.207.183</td>
+<td>Slave_2</td>
+<td></td>
+<td>Coordinator_4</td>
+<td>DataNode_Master_4, DataNode_Slave_3</td>
+</tr>
+<tr>
+<td>10.1.207.184</td>
+<td>Master</td>
+<td></td>
+<td>Coordinator_5</td>
+<td>DataNode_Master_5, DataNode_Slave_4</td>
+</tr>
+</tbody>
+</table>
+<h4 id=如何强制卸载-antdb-分布式集群>如何强制卸载 AntDB 分布式集群</h4>
+<p>使用强制卸载脚本，此脚本将 <strong>kill 所有 AndDB 进程，并删除程序和数据目录</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/antdb_uninstall.sh&#39;</span>
+</code></pre></div><h4 id=如何正常卸载-antdb-分布式集群>如何正常卸载 AntDB 分布式集群</h4>
+<p>连接 MGR 主节点，停止所有节点服务</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;stop all mode f;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+     operation type      |   nodename    | status | description
+-------------------------+---------------+--------+-------------
+ stop datanode slave     | dn_slave_1    | t      | success
+ stop datanode slave     | dn_slave_2    | t      | success
+ stop datanode slave     | dn_slave_3    | t      | success
+ stop datanode master    | dn_master_1   | t      | success
+ stop datanode master    | dn_master_2   | t      | success
+ stop datanode master    | dn_master_3   | t      | success
+ stop coordinator master | coordinator_1 | t      | success
+ stop coordinator master | coordinator_2 | t      | success
+ stop gtmcoord slave     | gtm_slave_1   | t      | success
+ stop gtmcoord master    | gtm_master    | t      | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_slave_1 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_slave_2 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_slave_3 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> datanode slave to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_master_1 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_master_2 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP DATANODE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/dn_master_3 -Z datanode -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> datanode master to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/coordinator_1 -Z coordinator -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.182<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/coordinator_2 -Z coordinator -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> coordinator master to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.181<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP GTMCOORD SLAVE BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/gtm_slave_1 -Z gtm_coord -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> gtmcoord slave to stop ...
+
+NOTICE:  <span style=color:#f92672>[</span>SUCCESS<span style=color:#f92672>]</span> host<span style=color:#f92672>(</span>10.1.207.180<span style=color:#f92672>)</span> cmd<span style=color:#f92672>(</span>STOP COORD BACKEND<span style=color:#f92672>)</span> params<span style=color:#f92672>(</span> stop -D /data01/antdb/data/gtm_master -Z coordinator -m fast -o -i -c -W<span style=color:#f92672>)</span>.
+NOTICE:  waiting max <span style=color:#ae81ff>90</span> seconds <span style=color:#66d9ef>for</span> gtmcoord master to stop ...
+</code></pre></div><p>连接 MGR 主节点，清理数据</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;clean all;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+   nodename    |      nodetype      | status | description
+---------------+--------------------+--------+-------------
+ dn_slave_1    | datanode slave     | t      | success
+ dn_slave_2    | datanode slave     | t      | success
+ dn_slave_3    | datanode slave     | t      | success
+ dn_master_1   | datanode master    | t      | success
+ dn_master_2   | datanode master    | t      | success
+ dn_master_3   | datanode master    | t      | success
+ coordinator_1 | coordinator master | t      | success
+ coordinator_2 | coordinator master | t      | success
+ gtm_slave_1   | gtm slave          | t      | success
+ gtm_master    | gtm master         | t      | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>连接 MGR 主节点，停止所有节点 Agent</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;stop agent all;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+ nodename | status | description
+----------+--------+-------------
+ antdb180 | t      | success
+ antdb181 | t      | success
+ antdb182 | t      | success
+<span style=color:#f92672>(</span><span style=color:#ae81ff>3</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>查询所有服务器上 AntDB 进程都已经停止</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep /data01/antdb/app/bin&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+antdb    <span style=color:#ae81ff>16992</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 10:46 ?        00:00:00 /data01/antdb/app/bin/adbmgrd -D /data01/antdb/mgr
+antdb    <span style=color:#ae81ff>29175</span> <span style=color:#ae81ff>29174</span> <span style=color:#ae81ff>27</span> 11:42 pts/2    00:00:00 /bin/sh -c ps -ef | grep /data01/antdb/app/bin
+antdb    <span style=color:#ae81ff>29177</span> <span style=color:#ae81ff>29175</span>  <span style=color:#ae81ff>0</span> 11:42 pts/2    00:00:00 grep /data01/antdb/app/bin
+
+10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+antdb    <span style=color:#ae81ff>31995</span> <span style=color:#ae81ff>31994</span>  <span style=color:#ae81ff>0</span> 11:38 pts/3    00:00:00 /bin/sh -c ps -ef | grep /data01/antdb/app/bin
+antdb    <span style=color:#ae81ff>31998</span> <span style=color:#ae81ff>31995</span>  <span style=color:#ae81ff>0</span> 11:38 pts/3    00:00:00 grep /data01/antdb/app/bin
+
+10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+antdb    <span style=color:#ae81ff>29370</span> <span style=color:#ae81ff>29369</span>  <span style=color:#ae81ff>0</span> 11:37 pts/3    00:00:00 /bin/sh -c ps -ef | grep /data01/antdb/app/bin
+antdb    <span style=color:#ae81ff>29372</span> <span style=color:#ae81ff>29370</span>  <span style=color:#ae81ff>0</span> 11:37 pts/3    00:00:00 grep /data01/antdb/app/bin
+</code></pre></div><p>查询所有服务器上的数据文件都已经删除</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ls /data01/antdb&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+
+
+10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+
+
+10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</code></pre></div><h4 id=从节点启动失败-日志提示-hot-standby-is-not-possible-because-xxx--xxx-is-a-lower-setting-than-on-the-master-server>从节点启动失败, 日志提示 <strong>hot standby is not possible because xxx = xxx is a lower setting than on the master server</strong></h4>
+<p>使用 monitor all 命令，查看到从节点启动失败。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>
+bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;monitor all;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+   nodename    |      nodetype      | status | description |     host     | port  | recovery |           boot time           | nodezone
+---------------+--------------------+--------+-------------+--------------+-------+----------+-------------------------------+----------
+ gtm_master    | gtmcoord master    | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>16655</span> | false    | 2021-12-01 10:49:12.169417+08 | local
+ gtm_slave_1   | gtmcoord slave     | f      | not running | 10.1.207.181 | <span style=color:#ae81ff>16655</span> | unknown  | unknown                       | local
+ coordinator_2 | coordinator master | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>15432</span> | false    | 2021-12-01 10:46:03.882011+08 | local
+ coordinator_1 | coordinator master | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>15432</span> | false    | 2021-12-01 10:46:56.865553+08 | local
+ dn_master_2   | datanode master    | t      | running     | 10.1.207.181 | <span style=color:#ae81ff>14332</span> | false    | 2021-12-01 10:46:57.42246+08  | local
+ dn_master_3   | datanode master    | t      | running     | 10.1.207.182 | <span style=color:#ae81ff>14332</span> | false    | 2021-12-01 10:46:04.535587+08 | local
+ dn_master_1   | datanode master    | t      | running     | 10.1.207.180 | <span style=color:#ae81ff>14332</span> | false    | 2021-12-01 10:50:43.884491+08 | local
+ dn_slave_1    | datanode slave     | f      | not running | 10.1.207.180 | <span style=color:#ae81ff>14333</span> | unknown  | unknown                       | local
+ dn_slave_2    | datanode slave     | f      | not running | 10.1.207.181 | <span style=color:#ae81ff>14333</span> | unknown  | unknown                       | local
+ dn_slave_3    | datanode slave     | f      | not running | 10.1.207.182 | <span style=color:#ae81ff>14333</span> | unknown  | unknown                       | local
+<span style=color:#f92672>(</span><span style=color:#ae81ff>10</span> rows<span style=color:#f92672>)</span>WARNING:  gtmcoord slave gtm_slave_1 recovery status is unknown
+WARNING:  datanode slave dn_slave_1 recovery status is unknown
+WARNING:  datanode slave dn_slave_2 recovery status is unknown
+WARNING:  datanode slave dn_slave_3 recovery status is unknown
+</code></pre></div><p>例如： gtm_slave_1 这个从节点状态为 not running</p>
+<p>在 <code>/data01/antdb/data/gtm_slave_1/pg_log</code> 目录下查看最新日志，发现从节点 <code>max_worker_processes</code> 参数值小于主节点对应参数值，导致启动失败。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>antdb@oss-irms-181 gtm_slave_1<span style=color:#f92672>]</span>$ cat pg_log/postgresql-2021-12-01_104526.csv
+2021-12-01 10:45:26.926 CST,,,28219,,61a6e1c6.6e3b,3,,2021-12-01 10:45:26 CST,,0,FATAL,22023,<span style=color:#e6db74>&#34;hot standby is not possible because max_worker_processes = 32 is a lower setting than on the master server (its value was 108)&#34;</span>,,,,,,,,,<span style=color:#e6db74>&#34;&#34;</span>
+2021-12-01 10:45:26.929 CST,,,28215,,61a6e1c6.6e37,2,,2021-12-01 10:45:26 CST,,0,LOG,00000,<span style=color:#e6db74>&#34;startup process (PID 28219) exited with exit code 1&#34;</span>,,,,,,,,,<span style=color:#e6db74>&#34;&#34;</span>
+2021-12-01 10:45:26.929 CST,,,28215,,61a6e1c6.6e37,3,,2021-12-01 10:45:26 CST,,0,LOG,00000,<span style=color:#e6db74>&#34;aborting startup due to startup process failure&#34;</span>,,,,,,,,,<span style=color:#e6db74>&#34;&#34;</span>
+2021-12-01 10:45:26.948 CST,,,28215,,61a6e1c6.6e37,4,,2021-12-01 10:45:26 CST,,0,LOG,00000,<span style=color:#e6db74>&#34;database system is shut down&#34;</span>,,,,,,,,,<span style=color:#e6db74>&#34;&#34;</span>
+</code></pre></div><p>但是服务器上的主节点对应参数值也是 32，108 这个数值是注释掉的</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>antdb@oss-irms-180 gtm_master<span style=color:#f92672>]</span>$ cat postgresql.conf | grep max_worker_processes
+<span style=color:#75715e>#max_worker_processes = 108		# (change requires restart)</span>
+<span style=color:#75715e>#max_parallel_workers = 8		# maximum number of max_worker_processes that</span>
+<span style=color:#75715e>#max_logical_replication_workers = 4	# taken from max_worker_processes</span>
+max_worker_processes <span style=color:#f92672>=</span> <span style=color:#ae81ff>32</span>
+</code></pre></div><p>使用命令查看主节点 max_worker_processes 值也是 32</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible 10.1.207.180 -m shell -a <span style=color:#e6db74>&#39;psql -p 16432 -d postgres -c &#34;show param gtm_master max;&#34;&#39;</span>
+10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+            type            | status |                             message
+----------------------------+--------+-----------------------------------------------------------------
+ gtmcoord slave gtm_slave_1 | f      | could not connect to server: Connection refused                +
+                            |        |         Is the server running on host <span style=color:#e6db74>&#34;127.0.0.1&#34;</span> and accepting+
+                            |        |         TCP/IP connections on port 16655?                      +
+                            |        |
+ gtmcoord master gtm_master | t      | autovacuum_freeze_max_age <span style=color:#f92672>=</span> <span style=color:#ae81ff>200000000</span>                          +
+                            |        | autovacuum_max_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>                                     +
+                            |        | autovacuum_multixact_freeze_max_age <span style=color:#f92672>=</span> <span style=color:#ae81ff>400000000</span>                +
+                            |        | bgwriter_lru_maxpages <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>                                    +
+                            |        | max_cn_prealloc_xid_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>                                   +
+                            |        | max_connections <span style=color:#f92672>=</span> <span style=color:#ae81ff>1000</span>                                         +
+                            |        | max_coordinators <span style=color:#f92672>=</span> <span style=color:#ae81ff>16</span>                                          +
+                            |        | max_datanodes <span style=color:#f92672>=</span> <span style=color:#ae81ff>16</span>                                             +
+                            |        | max_files_per_process <span style=color:#f92672>=</span> <span style=color:#ae81ff>1000</span>                                   +
+                            |        | max_function_args <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>                                        +
+                            |        | max_identifier_length <span style=color:#f92672>=</span> <span style=color:#ae81ff>63</span>                                     +
+                            |        | max_index_keys <span style=color:#f92672>=</span> <span style=color:#ae81ff>32</span>                                            +
+                            |        | max_locks_per_transaction <span style=color:#f92672>=</span> <span style=color:#ae81ff>256</span>                                +
+                            |        | max_logical_replication_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>                            +
+                            |        | max_parallel_maintenance_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                           +
+                            |        | max_parallel_workers <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span>                                       +
+                            |        | max_parallel_workers_per_gather <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                            +
+                            |        | max_pool_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>                                            +
+                            |        | max_pred_locks_per_page <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                                    +
+                            |        | max_pred_locks_per_relation <span style=color:#f92672>=</span> -2                               +
+                            |        | max_pred_locks_per_transaction <span style=color:#f92672>=</span> <span style=color:#ae81ff>64</span>                            +
+                            |        | max_prepared_transactions <span style=color:#f92672>=</span> <span style=color:#ae81ff>1000</span>                               +
+                            |        | max_replication_slots <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>                                     +
+                            |        | max_stack_depth <span style=color:#f92672>=</span> 8MB                                          +
+                            |        | max_standby_archive_delay <span style=color:#f92672>=</span> 30s                                +
+                            |        | max_standby_streaming_delay <span style=color:#f92672>=</span> 30s                              +
+                            |        | max_sync_workers_per_subscription <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>                          +
+                            |        | max_wal_senders <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>                                            +
+                            |        | max_wal_size <span style=color:#f92672>=</span> 1GB                                             +
+                            |        | max_worker_processes <span style=color:#f92672>=</span> <span style=color:#ae81ff>32</span>                                      +
+                            |        | reduce_scan_max_buckets <span style=color:#f92672>=</span> <span style=color:#ae81ff>2048</span>                                 +
+                            |        | rep_max_avail_flag <span style=color:#f92672>=</span> off                                       +
+                            |        | rep_max_avail_lsn_lag <span style=color:#f92672>=</span> <span style=color:#ae81ff>8192</span>                                   +
+                            |        | use_aux_max_times <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+<span style=color:#f92672>(</span><span style=color:#ae81ff>2</span> rows<span style=color:#f92672>)</span>
+</code></pre></div><p>因为默认值是 108，通过 PG 流复制安装从节点参数值只能往大改。所以要不就不设置这个参数，要不就修改为大于等于 108。</p>
+</div>
+<div class=post-footer>
+<div class=info>
+<span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
+<span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/antdb/>antdb</a></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
+</html>
