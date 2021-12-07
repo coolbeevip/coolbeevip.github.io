@@ -69,6 +69,30 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/redis/redis-setting-up-redis-for-production/>Setting up Redis for Production</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>安装 官方建议的安装方法是从源代码编译安装，您可以从 redis.io 下载最新稳定版的 TAR 包
+wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xvzf redis-6.2.5.tar.gz cd redis-6.2.5 make 此时，您可以通过键入 make test 来测试您的构建是否正常工作。编译后 redis-6.2.5/src 目录填充了一部分可执行文件。 最好将编译后的 Redis 执行文件都复制到适当的位置，或者使用以下命令手动复制（假设我们的安装路径是 /usr/local/redis）：
+# 可执行文件 sudo mkdir -p /usr/local/redis/bin sudo cp src/redis-server /usr/local/redis/bin sudo cp src/redis-cli /usr/local/redis/bin sudo cp src/redis-sentinel /usr/local/redis/bin sudo cp src/redis-benchmark /usr/local/redis/bin sudo cp src/redis-check-aof /usr/local/redis/bin sudo cp src/redis-check-rdb /usr/local/redis/bin # 配置文件 sudo mkdir -p /usr/local/redis/conf sudo cp redis.conf /usr/local/redis/conf sudo cp sentinel.conf /usr/local/redis/conf # 数据目录 sudo mkdir -p /usr/local/redis/data sudo mkdir -p /usr/local/redis/log # 创建链接 sudo ln -s /usr/local/redis/bin/redis-server /usr/bin/redis-server sudo ln -s /usr/local/redis/bin/redis-cli /usr/bin/redis-cli 提示： 复制完毕后，您可以删除 redis-6.</p>
+<a href=/posts/redis/redis-setting-up-redis-for-production/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Wed, Aug 19, 2020
+</span>
+<span class=separator><a class=category href=/categories/redis/>redis</a></span>
+<span class=separator><a class=tag href=/tags/redis/>redis</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/redis/redis-using-redis-as-a-cache/>Using Redis as a Cache</a>
 </h3>
 </div>
@@ -288,30 +312,6 @@ HEAD〜2 与 HEAD ^^ 的作用相同。
 $ cat .git/HEAD ref: refs/heads/master 并且，你可以使用以下命令查看指向 HEAD 的 commit 的 Hash ID：
 $ git rev-parse --short HEAD 6f975a5 Detached HEAD HEAD 是您目前的工作分支。 当您尝试 git checkout 分支时，HEAD 指向该分支的顶部，这样您就可以继续工作而没有任何困难。</p>
 <a href=/posts/git/git-reset-head/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Tue, Aug 6, 2019
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-command-revert/>Git Revert</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>撤销上一次提交
-$ git revert HEAD 撤销上两次提交
-ISSUE-4 解决网关服务日志中无法正确显示经过代理访问的请求端 IP 问题 $ git revert [倒数第一个提交] [倒数第二个提交] </p>
-</div>
 </div>
 <div class=post-footer>
 <div class=meta>
