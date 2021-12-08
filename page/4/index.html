@@ -69,6 +69,33 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/linux/linux-commands-network/>Linux Command - Network</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>Linux 网络相关命令
+可以使用 yum install iperf3 安装这个工具，或者从网站 https://iperf.fr/iperf-download.php 下载
+测试 TCP 吞吐量 假设我们要测试 10.1.207.180 和 10.1.207.181 两个服务器之间的带宽
+先在其中一台服务器 10.1.207.181 服上启动 iperf3 服务
+[root@oss-irms-181 ~]# iperf3 -s -p 5001 ----------------------------------------------------------- Server listening on 5001 ----------------------------------------------------------- 再在另一台机器 10.1.207.180 启动客户端连接服务端 10.1.207.181 测试
+[root@oss-irms-180 ~]# iperf3 -c 10.1.207.181 -P 4 -t 30 -i 2 -p 5001 Connecting to host 10.1.207.181, port 5001 [ 4] local 10.1.207.180 port 49244 connected to 10.1.207.181 port 5001 [ 6] local 10.</p>
+<a href=/posts/linux/linux-commands-network/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Wed, Oct 2, 2019
+</span>
+<span class=separator><a class=category href=/categories/linux/>linux</a></span>
+<span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/network/>network</a><a class=tag href=/tags/iperf3/>iperf3</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/git/git-reset-head/>Git Reset HEAD</a>
 </h3>
 </div>
@@ -313,34 +340,6 @@ versions description script success 1.0.0.0 init.sql V1.0.0.0__init.sql 1 1.0.0.
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/flyway/>flyway</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/maven/maven-commands/>Maven Commands</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>常用 Maven 命令
-Parameters -D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试； -P 指定 Profile 配置，可以用于区分环境； -e 显示maven运行出错的信息； -o 离线执行命令,即不去远程仓库更新包； -f 强制指定使用 POM 文件，或者包含 POM 文件的目录 -pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔) -am 表示同时处理选定模块所依赖的模块 -amd 表示同时处理依赖选定模块的模块 -rf 表示从指定模块开始继续处理 -N 表示不递归子模块 -X 显示maven允许的debug信息； -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。 &ndash;no-snapshot-updates 禁止更新 snapshot Dependency 显示maven依赖数
-mvn dependency:tree 显示maven依赖列表
-mvn dependency:list 下载依赖包的源码
-mvn dependency:sources Maven Wrapper 自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件Maven Wrapper plugin将其自动化安装指定版本的 Maven
-mvn -N io.takari:maven:wrapper -Dmaven=3.6.3 这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理
-mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.</p>
-<a href=/posts/maven/maven-commands/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Fri, Nov 23, 2018
-</span>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/maven/>maven</a></span>
 </div>
 </div>
 </div>
