@@ -69,6 +69,29 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/docker/docker-pulling-pushing/>Synchronize between image repositories with Bash</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>从源镜像仓库批量拉取镜像，并将这些镜像推送到目标镜像仓库的批量脚本
+#!/bin/bash ################################################# # 使用方式 # 从源仓库拉取镜像到本机 # sh docker-images-pulling-pushing.sh pull # # 将本机镜像推送到目的仓库 # sh docker-images-pulling-pushing.sh push # # 清理本机的镜像 # sh docker-images-pulling-pushing.sh clean ################################################# # 源仓库地址 DOCKER_REPO_FROM= # 目标仓库地址 DOCKER_REPO_TO=192.168.2.2:8888/ DOCKER_REPO_TO_USER=test DOCKER_REPO_TO_PASS=Test123456 # 镜像定义 DOCKER_IMAGES=() DOCKER_IMAGES+=(postgres:9.6) DOCKER_IMAGES+=(elasticsearch:6.6.2) DOCKER_IMAGES+=(coolbeevip/servicecomb-pack) # 从源仓库地址拉取镜像到本机仓库 function pull(){ echo "Pull images from $DOCKER_REPO_FROM" for image in ${DOCKER_IMAGES[@]}; do docker pull $DOCKER_REPO_FROM$image done } # 本机镜像推送到目的仓库 function push(){ docker login http://$DOCKER_REPO_TO -u $DOCKER_REPO_TO_USER -p $DOCKER_REPO_TO_PASS echo "Push $DOCKER_REPO_FROMto $DOCKER_REPO_TO" for image in ${DOCKER_IMAGES[@]}; do docker image tag $DOCKER_REPO_FROM$image $DOCKER_REPO_TO$image docker push $DOCKER_REPO_TO$image done } # 清理本机拉取后的镜像 function clean(){ echo "Remove images" docker rmi -f $(docker images | grep $DOCKER_REPO_FROM | awk '{print $3}') docker rmi -f $(docker images | grep $DOCKER_REPO_TO | awk '{print $3}') } case "${@: -1}" in pull ) pull ;; clean ) clean ;; push ) push ;; esac </p>
+</div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Mon, Apr 19, 2021
+</span>
+<span class=separator><a class=category href=/categories/docker/>docker</a></span>
+<span class=separator><a class=tag href=/tags/docker/>docker</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/java/macos-switch-jdk/>MacOS Switch JDK</a>
 </h3>
 </div>
@@ -275,32 +298,6 @@ properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级�
 在当前分支执行 stash 将当前分支未提交的代码隐藏起来 $ git stash Saved working directory and index state WIP on SCB-1577: 2554be3d SCB-1593 Add notice for Boringssl support ciphers (base) bogon:servicecomb-pack zhanglei$ 此时你可以看到已经存储到一个id为 2554be3d 里了，这时你可以用 git status 查看已经没有要提交的内容了
 git status On branch SCB-1577 nothing to commit, working tree clean (base) bogon:servicecomb-pack zhanglei$ 这时你就可以切换到其他分支开始新的工作 (base) bogon:servicecomb-pack zhanglei$ git checkout master Switched to branch 'master' Your branch is up to date with 'origin/master'.</p>
 <a href=/posts/git/git-command-commit-stash/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Mon, Apr 6, 2020
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-command-rebase-upstream/>Synchronizing Your Forked Git Project</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>当你 fork 一个仓库后，可以时用此方法使你 fork 后的仓库 master 分支保持和上游 master 分支的同步
-使用 rebase 命令同步上游 master 分支到你本地的 master 分支，并推送到你 fork 后的仓库
-git fetch upstream git checkout master git rebase upstream/master git push -f origin master 或者你确定放弃你本地所有的修改，则可以简单的重置为上游版本
-git fetch upstream git checkout master git reset --hard upstream/master git push -f origin master 如果你也想同步 master 分支的修改到你的功能分支
-git checkout &lt;分支名> git rebase master git push -f origin &lt;分支名> </p>
-</div>
 </div>
 <div class=post-footer>
 <div class=meta>
