@@ -5,6 +5,10 @@ date = "2021-04-06"
 
 Some of my favorite websites/tools with excellent design and UX that I highly recommend
 
+## Open Source
+
+[Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) SemVer is a popular versioning scheme 
+
 ## Color
 
 [Adobe Color](https://color.adobe.com/)
