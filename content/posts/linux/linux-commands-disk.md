@@ -45,6 +45,18 @@ Filesystem     Size   Used  Avail Capacity iused      ifree %iused  Mounted on
 
 ## 查看文件夹空间 du
 
+查看子目录下每个文件夹占用空间
+
+```shell
+$ du -h --max-depth=1
+8.0G	./root-sh
+4.0K	./.ssh
+130M	./redis-6.2.5
+612M	./.m2
+0	./.ansible
+9.0G
+```
+
 查看当前文件夹占用空间
 
 ```shell
