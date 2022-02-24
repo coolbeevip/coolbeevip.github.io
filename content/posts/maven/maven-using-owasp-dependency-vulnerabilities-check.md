@@ -54,17 +54,13 @@ draft: false
 ```shell
 [ERROR] Failed to execute goal org.owasp:dependency-check-maven:6.5.3:aggregate (default-cli) on project nc-notifier:
 [ERROR]
-[ERROR] One or more dependencies were identified with vulnerabilities that have a CVSS score greater than or equal to '8.0':
+[ERROR] One or more dependencies were identified with vulnerabilities that have a CVSS score greater than or equal to '9.0':
 [ERROR]
 [ERROR] apache-mime4j-core-0.7.2.jar: CVE-2021-40525
 [ERROR] fastjson-1.2.58.jar: CWE-502: Deserialization of Untrusted Data
-[ERROR] logback-core-1.2.3.jar: CVE-2021-42550
-[ERROR] mybatis-plus-core-3.3.2.jar: CVE-2020-26945
 [ERROR] nacos-api-1.2.1.jar: CVE-2021-29441
-[ERROR] spring-cloud-netflix-ribbon-2.2.2.RELEASE.jar: CVE-2021-22053
-[ERROR] spring-cloud-netflix-ribbon-2.2.9.RELEASE.jar: CVE-2021-22053
-[ERROR] spring-cloud-starter-oauth2-2.2.5.RELEASE.jar: CVE-2018-1258, CVE-2021-22112
-[ERROR] spring-cloud-starter-security-2.2.5.RELEASE.jar: CVE-2018-1258, CVE-2021-22112
+[ERROR] spring-cloud-starter-oauth2-2.2.5.RELEASE.jar: CVE-2021-22112
+[ERROR] spring-cloud-starter-security-2.2.5.RELEASE.jar: CVE-2021-22112
 [ERROR]
 [ERROR] See the dependency-check report for more details.
 ```
