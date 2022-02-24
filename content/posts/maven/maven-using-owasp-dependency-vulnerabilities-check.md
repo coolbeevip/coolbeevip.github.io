@@ -79,3 +79,11 @@ draft: false
 ## 查看漏洞 HTML 报告
 
 你可以找到漏洞报告 target/dependency-check-report.html，用浏览器打开这个报告可以看到汇总信息以及每个依赖的详细信息
+
+汇总信息
+
+![cvss-1](/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-1.png)
+
+详细信息
+
+![cvss-2](/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-2.png)
