@@ -23,7 +23,7 @@ draft: false
     <configuration>
       <name>notifier-dependency-check</name>
       <format>HTML</format>
-      <failBuildOnCVSS>8</failBuildOnCVSS>
+      <failBuildOnCVSS>9</failBuildOnCVSS>
       <failBuildOnAnyVulnerability>false</failBuildOnAnyVulnerability>
       <failOnError>false</failOnError>
       <skipProvidedScope>true</skipProvidedScope>
