@@ -69,6 +69,30 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/maven/maven-using-owasp-dependency-vulnerabilities-check/>Using OWASP Dependency Vulnerabilities Check with Maven</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>使用 OWASP 依赖检查 Maven 插件 dependency-check-maven 发现依赖漏洞
+增加编译插件 在 pom.xml 中增加如下配置，如果是多模块项目请增加在最外层 pom.xml 中，并且配置 &lt;goal> 为 aggregate
+&lt;properties> &lt;dependency-check-maven.version>6.5.3&lt;/dependency-check-maven.version> &lt;/properties> &lt;build> &lt;plugins> &lt;plugin> &lt;groupId>org.owasp&lt;/groupId> &lt;artifactId>dependency-check-maven&lt;/artifactId> &lt;version>${dependency-check-maven.version}&lt;/version> &lt;configuration> &lt;name>notifier-dependency-check&lt;/name> &lt;format>HTML&lt;/format> &lt;failBuildOnCVSS>9&lt;/failBuildOnCVSS> &lt;failOnError>false&lt;/failOnError> &lt;skipProvidedScope>true&lt;/skipProvidedScope> &lt;skipRuntimeScope>true&lt;/skipRuntimeScope> &lt;skipTestScope>true&lt;/skipTestScope> &lt;skipArtifactType>pom&lt;/skipArtifactType> &lt;/configuration> &lt;executions> &lt;execution> &lt;goals> &lt;goal>aggregate&lt;/goal> &lt;/goals> &lt;/execution> &lt;/executions> &lt;/plugin> &lt;/plugins> &lt;/build> failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下 0.0 None 0.1 – 3.9 Low 4.0 – 6.9 Medium 7.0 – 8.9 High 9.0 – 10.0 Critical 执行插件命令 .</p>
+<a href=/posts/maven/maven-using-owasp-dependency-vulnerabilities-check/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Thu, Feb 24, 2022
+</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/vulnerabilities/>vulnerabilities</a><a class=tag href=/tags/owasp/>owasp</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/kubernetes/run-docker-without-docker-desktop-on-macos/>Run Docker without Docker Desktop on macOS</a>
 </h3>
 </div>
@@ -293,32 +317,6 @@ spring.datasource.hikari.connection-timeout=30000 spring.datasource.hikari.minim
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/undertow/>undertow</a><a class=tag href=/tags/hikari/>hikari</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/redis/redis-find-biggest-objects-in-redis/>Find The Biggest Objects In Redis</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>在 REDIS 中一个字符串最大512MB，一个二级数据结构（例如hash、list、set、zset）可以存储大约40亿个(2^32-1)个元素，但实际上中如果下面两种情况，我就会认为它是 bigkeys。
-字符串类型：单个 value 超过5MB 哈希、列表、集合、有序集合元素可数超过 10000 因为 REDIS 是单进程处理，所以对 BIGKEY 的访问会产生阻塞，如果你获取 100 次单体大小为 5MB 的 KEY，那么这些数据（500MB）传输到客户端就需要一定的时间，这期间其他命令都要排队等待。
-查找 BIGKEY 使用 bigkeys 命令可以统计大对象（建议在从结点执行），为了方式阻塞，我们设置一个休眠参数 -i 0.1
-redis-cli -h &lt;ip> -p &lt;port> -a &lt;password> --bigkeys -i 0.1 结果如下：
-$ redis-cli -h 192.168.51.207 -p 9015 --bigkeys Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe. # Scanning the entire keyspace to find biggest keys as well as # average sizes per key type.</p>
-<a href=/posts/redis/redis-find-biggest-objects-in-redis/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Wed, Aug 25, 2021
-</span>
-<span class=separator><a class=category href=/categories/redis/>redis</a></span>
-<span class=separator><a class=tag href=/tags/redis/>redis</a></span>
 </div>
 </div>
 </div>

@@ -69,6 +69,36 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/docker/securing-docker-ports-with-firewalld/>Securing Docker ports with firewalld</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>概述 为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。 通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，更多详细
+本文基于环境
+Docker-CE 19.03.12 CentOS Linux release 7.8.2003 Firewall 0.6.3 本文例子:
+我们使用 Docker 安装一个 Nginx，并将 80(HTTP) 端口对外映射为 8080，443(HTTPS) 端口对外映射为 8443，并通过 Firewalld 仅允许特定的 IP 访问；提示：后续的防火墙规则中配置的端口是容器内部端口，例如 80，443
+192.168.51.246 安装 Nginx Docker
+配置 192.168.51.245 可以访问 Nginx Docker
+其他机器无法访问 Nginx Docker
+重要的事情说三遍
+如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER</p>
+<a href=/posts/docker/securing-docker-ports-with-firewalld/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Tue, May 11, 2021
+</span>
+<span class=separator><a class=category href=/categories/docker/>docker</a></span>
+<span class=separator><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/firewalld/>firewalld</a><a class=tag href=/tags/centos/>centos</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/maven/maven-export-dependencies-analyse-license/>Use Maven plugin to export license info in source files and its optional dependencies</a>
 </h3>
 </div>
@@ -289,29 +319,6 @@ properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级�
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/project/>project</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/git/git-command-commit-squash/>Git Squash Commits</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>压缩合并 Commits，将多个 commit 整理合并的方法，这样可以使提交记录更加清晰
-查看提交记录，选择你要合并的范围 git log commit 6d757f70af289b5a90d00bd5e4b93d892d64a258 (HEAD -> SCB-1669) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Thu Dec 19 13:53:26 2019 +0800 SCB-1669 Fixed reverse compensation sort bug in FSM commit 37e0c5d99d0e6dae188cbd78f543ba69433b928f (origin/SCB-1669) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Thu Dec 19 02:00:20 2019 +0800 SCB-1669 Fixed Reverse compensation sort bug in FSM commit b4ea8717a86d1eba1956d21727d05c466ff6d8a2 (upstream/master, origin/master, origin/HEAD, master) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Tue Dec 10 16:25:48 2019 +0800 SCB-1658 Improve encapsulation on txEntityMap of SagaData 可以看到最后两次提交，都是为了修复 SCB-1669 这个问题，此时我想合并最后两次提交 6d757f70af289b5a90d00bd5e4b93d892d64a258 和 37e0c5d99d0e6dae188cbd78f543ba69433b928f</p>
-<a href=/posts/git/git-command-commit-squash/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Mon, Apr 6, 2020
-</span>
-<span class=separator><a class=category href=/categories/git/>git</a></span>
-<span class=separator><a class=tag href=/tags/git/>git</a></span>
 </div>
 </div>
 </div>

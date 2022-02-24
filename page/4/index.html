@@ -69,6 +69,29 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/git/git-command-commit-squash/>Git Squash Commits</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>压缩合并 Commits，将多个 commit 整理合并的方法，这样可以使提交记录更加清晰
+查看提交记录，选择你要合并的范围 git log commit 6d757f70af289b5a90d00bd5e4b93d892d64a258 (HEAD -> SCB-1669) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Thu Dec 19 13:53:26 2019 +0800 SCB-1669 Fixed reverse compensation sort bug in FSM commit 37e0c5d99d0e6dae188cbd78f543ba69433b928f (origin/SCB-1669) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Thu Dec 19 02:00:20 2019 +0800 SCB-1669 Fixed Reverse compensation sort bug in FSM commit b4ea8717a86d1eba1956d21727d05c466ff6d8a2 (upstream/master, origin/master, origin/HEAD, master) Author: Lei Zhang &lt;zhanglei@apache.org> Date: Tue Dec 10 16:25:48 2019 +0800 SCB-1658 Improve encapsulation on txEntityMap of SagaData 可以看到最后两次提交，都是为了修复 SCB-1669 这个问题，此时我想合并最后两次提交 6d757f70af289b5a90d00bd5e4b93d892d64a258 和 37e0c5d99d0e6dae188cbd78f543ba69433b928f</p>
+<a href=/posts/git/git-command-commit-squash/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Mon, Apr 6, 2020
+</span>
+<span class=separator><a class=category href=/categories/git/>git</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/git/git-command-commit-stash/>Git Stash</a>
 </h3>
 </div>
@@ -307,33 +330,6 @@ git checkout -b &lt;分支名> origin/&lt;分支名> 当前分支会退到指定
 </span>
 <span class=separator><a class=category href=/categories/docker/>docker</a></span>
 <span class=separator><a class=tag href=/tags/docker/>docker</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/flyway/flyway-hung-on-mysql-router-mgr/>Flyway hung on the MySQL Router + MGR</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>Flyway 连接 MySQL Router 后启动卡在 GET_LOCK 语句
-现象 MySQL MGR + Router 部署高可用集群 Flyway 客户端使用 jdbc:mysql:loadbalance 连接 初始化 Schema History 表、或者执行多个 SQL 脚本时 当满足以上条件时，Flyway 会卡在初始化阶段，经过分析发现停顿在执行 GET_LOCK 语句时
-原因 Flyway 默认在执行 DDL 脚本时不启用事务，在初始化时 Flyway 会先执行 GET_LOCK 锁定数据库，然后再执行 DDL 脚本。当使用 jdbc:mysql:loadbalance 连接时，会随机选择一个数据源，如果执行 GET_LOCK 和 执行 DDL 不是一个数据源，就会导致执行等待锁释放
-解决办法 在启动时设置 group=true 参数，这样 Flyway 在初始化时就会启用事务，确保一个事务内的 DDL 都在一个数据源执行
-ISSUE-3154
-public class FlywayTestManual { String url="jdbc:mysql:loadbalance://192.168.51.206:3810,192.168.51.207:3810/nc_notifier?roundRobinLoadBalance=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true"; String user="user"; String password="pass"; @Test public void test(){ Flyway flyway = Flyway.</p>
-<a href=/posts/flyway/flyway-hung-on-mysql-router-mgr/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Thu, Nov 29, 2018
-</span>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/flyway/>flyway</a><a class=tag href=/tags/mysql/>mysql</a></span>
 </div>
 </div>
 </div>
