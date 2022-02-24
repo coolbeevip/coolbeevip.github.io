@@ -10,46 +10,57 @@ draft: false
 
 ## 增加编译插件
 
+在 pom.xml 中增加如下配置，如果是多模块项目请增加在最外层 pom.xml 中，并且配置 `<goal>` 为 `aggregate`
+
 ```xml
 <properties>
   <dependency-check-maven.version>6.5.3</dependency-check-maven.version>
 </properties>  
 
-<plugins>
-  <plugin>
-    <groupId>org.owasp</groupId>
-    <artifactId>dependency-check-maven</artifactId>
-    <version>${dependency-check-maven.version}</version>
-    <configuration>
-      <name>notifier-dependency-check</name>
-      <format>HTML</format>
-      <failBuildOnCVSS>9</failBuildOnCVSS>
-      <failBuildOnAnyVulnerability>false</failBuildOnAnyVulnerability>
-      <failOnError>false</failOnError>
-      <skipProvidedScope>true</skipProvidedScope>
-      <skipRuntimeScope>true</skipRuntimeScope>
-      <skipTestScope>true</skipTestScope>
-      <skipArtifactType>pom</skipArtifactType>
-    </configuration>
-    <executions>
-      <execution>
-        <goals>
-          <goal>aggregate</goal>
-        </goals>
-      </execution>
-    </executions>
-  </plugin>
-</plugins>
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.owasp</groupId>
+      <artifactId>dependency-check-maven</artifactId>
+      <version>${dependency-check-maven.version}</version>
+      <configuration>
+        <name>notifier-dependency-check</name>
+        <format>HTML</format>
+        <failBuildOnCVSS>9</failBuildOnCVSS>
+        <failOnError>false</failOnError>
+        <skipProvidedScope>true</skipProvidedScope>
+        <skipRuntimeScope>true</skipRuntimeScope>
+        <skipTestScope>true</skipTestScope>
+        <skipArtifactType>pom</skipArtifactType>
+      </configuration>
+      <executions>
+        <execution>
+          <goals>
+            <goal>aggregate</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
 </build>
 ```
+
+* failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下
+  * 0.0	None
+  * 0.1 – 3.9	Low
+  * 4.0 – 6.9	Medium
+  * 7.0 – 8.9	High
+  * 9.0 – 10.0	Critical
 
 ## 执行插件命令
 
 ```shell
-./mvnw org.owasp:dependency-check-maven:aggregate -DskipTests
+./mvnw org.owasp:dependency-check-maven:aggregate
 ```
 
 ## 插件日志记录
+
+执行完毕后，如果还有漏洞评分大于 `9` 的依赖，则会看到如下信息
 
 ```shell
 [ERROR] Failed to execute goal org.owasp:dependency-check-maven:6.5.3:aggregate (default-cli) on project nc-notifier:
@@ -67,4 +78,4 @@ draft: false
 
 ## 查看漏洞 HTML 报告
 
-你可以找到报告汇总文件 target/dependency-check-report.html
+你可以找到漏洞报告 target/dependency-check-report.html，用浏览器打开这个报告可以看到汇总信息以及每个依赖的详细信息
