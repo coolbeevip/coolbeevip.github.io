@@ -60,6 +60,8 @@ draft: false
 ./mvnw org.owasp:dependency-check-maven:aggregate
 ```
 
+**提示：** 你可以在命令行中配置最低漏洞评分 `./mvnw org.owasp:dependency-check-maven:aggregate -DfailBuildOnCVSS=8`
+
 ## 插件日志记录
 
 执行完毕后，如果还有漏洞评分大于 `9` 的依赖，则会看到如下信息
