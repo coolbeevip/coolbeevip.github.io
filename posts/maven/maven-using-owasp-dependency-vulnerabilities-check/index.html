@@ -119,7 +119,8 @@
 </ul>
 <h2 id=执行插件命令>执行插件命令</h2>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./mvnw org.owasp:dependency-check-maven:aggregate
-</code></pre></div><h2 id=插件日志记录>插件日志记录</h2>
+</code></pre></div><p><strong>提示：</strong> 你可以在命令行中配置最低漏洞评分 <code>./mvnw org.owasp:dependency-check-maven:aggregate -DfailBuildOnCVSS=8</code></p>
+<h2 id=插件日志记录>插件日志记录</h2>
 <p>执行完毕后，如果还有漏洞评分大于 <code>9</code> 的依赖，则会看到如下信息</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>ERROR<span style=color:#f92672>]</span> Failed to execute goal org.owasp:dependency-check-maven:6.5.3:aggregate <span style=color:#f92672>(</span>default-cli<span style=color:#f92672>)</span> on project nc-notifier:
 <span style=color:#f92672>[</span>ERROR<span style=color:#f92672>]</span>
