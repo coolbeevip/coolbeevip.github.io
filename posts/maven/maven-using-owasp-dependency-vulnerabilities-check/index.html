@@ -143,7 +143,7 @@
 <p><img src=/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-1.png alt=cvss-1></p>
 <p>详细信息</p>
 <p><img src=/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-2.png alt=cvss-2></p>
-<h2 id=误报--忽略>误报 & 忽略</h2>
+<h2 id=误报抑制>误报抑制</h2>
 <p>OWASP 扫描出来的报告可能存在误报的可能，例如：</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>ERROR<span style=color:#f92672>]</span> spring-cloud-starter-security-2.2.5.RELEASE.jar: CVE-2021-22112
 </code></pre></div><p><a href=https://nvd.nist.gov/vuln/detail/CVE-2021-22112>CVE-2021-22112</a> 在 CVSS 2.0 标准中评分是 9 被认为是严重漏洞，但 <code>2.2.5.RELEASE</code> 已经是发布的最新版本，分析得知此问题是因为间接依赖的 <code>spring-security-oauth2:2.3.4.RELEASE</code> 存在漏洞，所以通过 <code>&lt;dependencyManagement></code> 使用无缺陷版本 <code>2.4.0.RELEASE</code>。</p>
