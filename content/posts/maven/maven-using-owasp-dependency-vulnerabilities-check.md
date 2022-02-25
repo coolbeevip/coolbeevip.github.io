@@ -93,7 +93,7 @@ draft: false
 
 ![cvss-2](/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-2.png)
 
-## 误报 & 忽略
+## 误报抑制
 
 OWASP 扫描出来的报告可能存在误报的可能，例如：
 
