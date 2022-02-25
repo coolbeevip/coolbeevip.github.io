@@ -16,7 +16,7 @@
 <meta name=twitter:title content="Using OWASP Dependency Vulnerabilities Check with Maven">
 <meta name=twitter:description content="使用 OWASP 依赖检查 Maven 插件 dependency-check-maven 发现依赖漏洞
 增加编译插件 在 pom.xml 中增加如下配置，如果是多模块项目请增加在最外层 pom.xml 中，并且配置 <goal> 为 aggregate
-<properties> <dependency-check-maven.version>6.5.3</dependency-check-maven.version> </properties> <build> <plugins> <plugin> <groupId>org.owasp</groupId> <artifactId>dependency-check-maven</artifactId> <version>${dependency-check-maven.version}</version> <configuration> <name>notifier-dependency-check</name> <format>HTML</format> <failBuildOnCVSS>9</failBuildOnCVSS> <failOnError>false</failOnError> <skipProvidedScope>true</skipProvidedScope> <skipRuntimeScope>true</skipRuntimeScope> <skipTestScope>true</skipTestScope> <skipArtifactType>pom</skipArtifactType> </configuration> <executions> <execution> <goals> <goal>aggregate</goal> </goals> </execution> </executions> </plugin> </plugins> </build>  failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下  0.0	None 0.1 – 3.9	Low 4.0 – 6.9	Medium 7.0 – 8.9	High 9.0 – 10.0	Critical    执行插件命令 .">
+<properties> <dependency-check-maven.version>6.5.3</dependency-check-maven.version> </properties> <build> <plugins> <plugin> <groupId>org.owasp</groupId> <artifactId>dependency-check-maven</artifactId> <version>${dependency-check-maven.version}</version> <configuration> <name>notifier-dependency-check</name> <format>HTML</format> <failBuildOnCVSS>9</failBuildOnCVSS> <failOnError>false</failOnError> <skipProvidedScope>true</skipProvidedScope> <skipRuntimeScope>true</skipRuntimeScope> <skipTestScope>true</skipTestScope> <skipDependencyManagement>false</skipDependencyManagement> <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled> <skipArtifactType>pom</skipArtifactType> </configuration> <executions> <execution> <goals> <goal>aggregate</goal> </goals> </execution> </executions> </plugin> </plugins> </build>  failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下  0.0	None 0.1 – 3.9	Low 4.0 – 6.9	Medium 7.0 – 8.9	High 9.0 – 10.0	Critical    执行插件命令 .">
 </head>
 <body><div class="sidebar .">
 <div class=logo-title>
@@ -92,6 +92,8 @@
         <span style=color:#f92672>&lt;skipProvidedScope&gt;</span>true<span style=color:#f92672>&lt;/skipProvidedScope&gt;</span>
         <span style=color:#f92672>&lt;skipRuntimeScope&gt;</span>true<span style=color:#f92672>&lt;/skipRuntimeScope&gt;</span>
         <span style=color:#f92672>&lt;skipTestScope&gt;</span>true<span style=color:#f92672>&lt;/skipTestScope&gt;</span>
+        <span style=color:#f92672>&lt;skipDependencyManagement&gt;</span>false<span style=color:#f92672>&lt;/skipDependencyManagement&gt;</span>
+        <span style=color:#f92672>&lt;retireJsAnalyzerEnabled&gt;</span>false<span style=color:#f92672>&lt;/retireJsAnalyzerEnabled&gt;</span>
         <span style=color:#f92672>&lt;skipArtifactType&gt;</span>pom<span style=color:#f92672>&lt;/skipArtifactType&gt;</span>
       <span style=color:#f92672>&lt;/configuration&gt;</span>
       <span style=color:#f92672>&lt;executions&gt;</span>
