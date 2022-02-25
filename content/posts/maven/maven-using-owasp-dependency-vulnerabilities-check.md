@@ -121,7 +121,7 @@ OWASP 扫描出来的报告可能存在误报的可能，例如：
 
 使用这个方法可以确保在我的发布包中包含 `spring-security-oauth2:2.4.0.RELEASE` 版本的 jar，但是插件还是提示 `spring-cloud-starter-security-2.2.5.RELEASE.jar: CVE-2021-22112`
 
-对于这种误报我们可以使用 `suppressionFile` 参数定义一个误报忽略文件，例如我们要忽略所有 `spring-cloud-starter-xxx` 的依赖，那么我们需要定义一个文件 `dependency-check-suppression.xml`
+对于这种误报我们可以使用 `suppressionFile` 参数定义一个误报忽略文件，例如我们要忽略 `spring-cloud-starter-security` 的依赖，那么我们需要定义一个文件 `dependency-check-suppression.xml`
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
