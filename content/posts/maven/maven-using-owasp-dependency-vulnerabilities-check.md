@@ -31,6 +31,8 @@ draft: false
         <skipProvidedScope>true</skipProvidedScope>
         <skipRuntimeScope>true</skipRuntimeScope>
         <skipTestScope>true</skipTestScope>
+        <skipDependencyManagement>false</skipDependencyManagement>
+        <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
         <skipArtifactType>pom</skipArtifactType>
       </configuration>
       <executions>
