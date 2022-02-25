@@ -16,7 +16,8 @@
 <meta name=twitter:title content="Using OWASP Dependency Vulnerabilities Check with Maven">
 <meta name=twitter:description content="使用 OWASP 依赖检查 Maven 插件 dependency-check-maven 发现依赖漏洞
 增加编译插件 在 pom.xml 中增加如下配置，如果是多模块项目请增加在最外层 pom.xml 中，并且配置 <goal> 为 aggregate
-<properties> <dependency-check-maven.version>6.5.3</dependency-check-maven.version> </properties> <build> <plugins> <plugin> <groupId>org.owasp</groupId> <artifactId>dependency-check-maven</artifactId> <version>${dependency-check-maven.version}</version> <configuration> <name>notifier-dependency-check</name> <format>HTML</format> <failBuildOnCVSS>9</failBuildOnCVSS> <failOnError>false</failOnError> <skipProvidedScope>true</skipProvidedScope> <skipRuntimeScope>true</skipRuntimeScope> <skipTestScope>true</skipTestScope> <skipDependencyManagement>false</skipDependencyManagement> <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled> <skipArtifactType>pom</skipArtifactType> </configuration> <executions> <execution> <goals> <goal>aggregate</goal> </goals> </execution> </executions> </plugin> </plugins> </build>  failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下  0.0	None 0.1 – 3.9	Low 4.0 – 6.9	Medium 7.0 – 8.9	High 9.0 – 10.0	Critical    执行插件命令 .">
+<properties> <dependency-check-maven.version>6.5.3</dependency-check-maven.version> </properties> <build> <plugins> <plugin> <groupId>org.owasp</groupId> <artifactId>dependency-check-maven</artifactId> <version>${dependency-check-maven.version}</version> <configuration> <name>notifier-dependency-check</name> <format>HTML</format> <failBuildOnCVSS>9</failBuildOnCVSS> <failOnError>false</failOnError> <skipProvidedScope>true</skipProvidedScope> <skipRuntimeScope>true</skipRuntimeScope> <skipTestScope>true</skipTestScope> <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled> <skipArtifactType>pom</skipArtifactType> </configuration> <executions> <execution> <goals> <goal>aggregate</goal> </goals> </execution> </executions> </plugin> </plugins> </build>   failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下
+ 0.0	None 0.1 – 3.9	Low 4.0 – 6.9	Medium 7.0 – 8.9	High 9.0 – 10.0	Critical    failOnError 发现 CVSS 评分大于等于 9 时编译失败">
 </head>
 <body><div class="sidebar .">
 <div class=logo-title>
@@ -92,7 +93,6 @@
         <span style=color:#f92672>&lt;skipProvidedScope&gt;</span>true<span style=color:#f92672>&lt;/skipProvidedScope&gt;</span>
         <span style=color:#f92672>&lt;skipRuntimeScope&gt;</span>true<span style=color:#f92672>&lt;/skipRuntimeScope&gt;</span>
         <span style=color:#f92672>&lt;skipTestScope&gt;</span>true<span style=color:#f92672>&lt;/skipTestScope&gt;</span>
-        <span style=color:#f92672>&lt;skipDependencyManagement&gt;</span>false<span style=color:#f92672>&lt;/skipDependencyManagement&gt;</span>
         <span style=color:#f92672>&lt;retireJsAnalyzerEnabled&gt;</span>false<span style=color:#f92672>&lt;/retireJsAnalyzerEnabled&gt;</span>
         <span style=color:#f92672>&lt;skipArtifactType&gt;</span>pom<span style=color:#f92672>&lt;/skipArtifactType&gt;</span>
       <span style=color:#f92672>&lt;/configuration&gt;</span>
@@ -107,7 +107,8 @@
   <span style=color:#f92672>&lt;/plugins&gt;</span>
 <span style=color:#f92672>&lt;/build&gt;</span>
 </code></pre></div><ul>
-<li>failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下
+<li>
+<p>failBuildOnCVSS 当发现此级别的漏洞后编译失败，评分和严重等级如下</p>
 <ul>
 <li>0.0 None</li>
 <li>0.1 – 3.9 Low</li>
@@ -116,10 +117,13 @@
 <li>9.0 – 10.0 Critical</li>
 </ul>
 </li>
+<li>
+<p>failOnError 发现 CVSS 评分大于等于 9 时编译失败</p>
+</li>
 </ul>
 <h2 id=执行插件命令>执行插件命令</h2>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./mvnw org.owasp:dependency-check-maven:aggregate
-</code></pre></div><p><strong>提示：</strong> 你可以在命令行中配置最低漏洞评分 <code>./mvnw org.owasp:dependency-check-maven:aggregate -DfailBuildOnCVSS=8</code></p>
+</code></pre></div><p><strong>提示：</strong> 你可以在命令行中通过 <code>-DfailBuildOnCVSS=8</code> 配置最低漏洞评分</p>
 <h2 id=插件日志记录>插件日志记录</h2>
 <p>执行完毕后，如果还有漏洞评分大于 <code>9</code> 的依赖，则会看到如下信息</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>ERROR<span style=color:#f92672>]</span> Failed to execute goal org.owasp:dependency-check-maven:6.5.3:aggregate <span style=color:#f92672>(</span>default-cli<span style=color:#f92672>)</span> on project nc-notifier:
@@ -139,7 +143,49 @@
 <p><img src=/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-1.png alt=cvss-1></p>
 <p>详细信息</p>
 <p><img src=/images/posts/maven-using-owasp-dependency-vulnerabilities-check/cvss-2.png alt=cvss-2></p>
-</div>
+<h2 id=误报--忽略>误报 & 忽略</h2>
+<p>OWASP 扫描出来的报告可能存在误报的可能，例如：</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>ERROR<span style=color:#f92672>]</span> spring-cloud-starter-security-2.2.5.RELEASE.jar: CVE-2021-22112
+</code></pre></div><p><a href=https://nvd.nist.gov/vuln/detail/CVE-2021-22112>CVE-2021-22112</a> 在 CVSS 2.0 标准中评分是 9 被认为是严重漏洞，但 <code>2.2.5.RELEASE</code> 已经是发布的最新版本，分析得知此问题是因为间接依赖的 <code>spring-security-oauth2:2.3.4.RELEASE</code> 存在漏洞，所以通过 <code>&lt;dependencyManagement></code> 使用无缺陷版本 <code>2.4.0.RELEASE</code>。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#f92672>&lt;properties&gt;</span>
+  <span style=color:#f92672>&lt;spring-security-oauth2.version&gt;</span>2.4.0.RELEASE<span style=color:#f92672>&lt;/spring-security-oauth2.version&gt;</span>
+<span style=color:#f92672>&lt;/properties&gt;</span>
+
+<span style=color:#f92672>&lt;dependencyManagement&gt;</span>
+  <span style=color:#f92672>&lt;dependencies&gt;</span>
+    <span style=color:#f92672>&lt;dependency&gt;</span>
+      <span style=color:#f92672>&lt;groupId&gt;</span>org.springframework.security.oauth<span style=color:#f92672>&lt;/groupId&gt;</span>
+      <span style=color:#f92672>&lt;artifactId&gt;</span>spring-security-oauth2<span style=color:#f92672>&lt;/artifactId&gt;</span>
+      <span style=color:#f92672>&lt;version&gt;</span>${spring-security-oauth2.version}<span style=color:#f92672>&lt;/version&gt;</span>
+    <span style=color:#f92672>&lt;/dependency&gt;</span>    
+  <span style=color:#f92672>&lt;/dependencies&gt;</span>
+<span style=color:#f92672>&lt;/dependencyManagement&gt;</span>
+</code></pre></div><p>使用这个方法可以确保在我的发布包中包含 <code>spring-security-oauth2:2.4.0.RELEASE</code> 版本的 jar，但是插件还是提示 <code>spring-cloud-starter-security-2.2.5.RELEASE.jar: CVE-2021-22112</code></p>
+<p>对于这种误报我们可以使用 <code>suppressionFile</code> 参数定义一个误报忽略文件，例如我们要忽略所有 <code>spring-cloud-starter-xxx</code> 的依赖，那么我们需要定义一个文件 <code>dependency-check-suppression.xml</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;suppressions</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd&#34;</span><span style=color:#f92672>&gt;</span>
+  <span style=color:#f92672>&lt;suppress&gt;</span>
+    <span style=color:#f92672>&lt;packageUrl</span> <span style=color:#a6e22e>regex=</span><span style=color:#e6db74>&#34;true&#34;</span><span style=color:#f92672>&gt;</span>
+      ^pkg:maven/org\.springframework\.cloud/spring\-cloud\-starter-security@2.2.5.RELEASE$
+    <span style=color:#f92672>&lt;/packageUrl&gt;</span>
+    <span style=color:#f92672>&lt;vulnerabilityName&gt;</span>CVE-2021-22112<span style=color:#f92672>&lt;/vulnerabilityName&gt;</span>
+  <span style=color:#f92672>&lt;/suppress&gt;</span>
+<span style=color:#f92672>&lt;/suppressions&gt;</span>
+</code></pre></div><p>在插件中增加误报忽略 <code>suppressionFiles</code> 配置，指向 <code>dependency-check-suppression.xml</code> 文件</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#f92672>&lt;plugin&gt;</span>
+  <span style=color:#f92672>&lt;groupId&gt;</span>org.owasp<span style=color:#f92672>&lt;/groupId&gt;</span>
+  <span style=color:#f92672>&lt;artifactId&gt;</span>dependency-check-maven<span style=color:#f92672>&lt;/artifactId&gt;</span>
+  <span style=color:#f92672>&lt;version&gt;</span>${dependency-check-maven.version}<span style=color:#f92672>&lt;/version&gt;</span>
+  <span style=color:#f92672>&lt;configuration&gt;</span>
+    ...
+    <span style=color:#f92672>&lt;suppressionFiles&gt;</span>
+      <span style=color:#f92672>&lt;suppressionFile&gt;</span>dependency-check-suppression.xml<span style=color:#f92672>&lt;/suppressionFile&gt;</span>
+    <span style=color:#f92672>&lt;/suppressionFiles&gt;</span>
+    ...
+  <span style=color:#f92672>&lt;/configuration&gt;</span>
+  ...
+<span style=color:#f92672>&lt;/plugin&gt;</span>
+</code></pre></div></div>
 <div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
