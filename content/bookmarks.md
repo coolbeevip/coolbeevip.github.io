@@ -7,7 +7,7 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 ## Apache Software Foundation
 
-[ASF 3rd Party License Policy])(https://www.apache.org/legal/resolved.html)
+[ASF 3rd Party License Policy](https://www.apache.org/legal/resolved.html)
 
 [ASF Committer Search](https://whimsy.apache.org/roster/committer/)
 
