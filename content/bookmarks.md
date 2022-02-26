@@ -5,9 +5,17 @@ date = "2021-04-06"
 
 Some of my favorite websites/tools with excellent design and UX that I highly recommend
 
+## Apache Software Foundation
+
+[ASF 3rd Party License Policy])(https://www.apache.org/legal/resolved.html)
+[ASF Committer Search](https://whimsy.apache.org/roster/committer/)
+[ASF Account Utility](https://id.apache.org/)
+[ASF Mail Search](https://lists.apache.org/)
+[Nearby Apache People](https://community.zones.apache.org/)
+
 ## Open Source
 
-[Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) SemVer is a popular versioning scheme 
+[Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) SemVer is a popular versioning scheme
 
 ## Color
 
