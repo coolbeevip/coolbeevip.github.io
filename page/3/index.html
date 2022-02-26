@@ -69,6 +69,40 @@
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/docker/jprofiler-with-docker/>JProfiler with Docker Sonatype Nexus3</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>使用 JProfiler 监控 Docker Sonatype Nexus3
+下载 JProfiler 从 https://www.ej-technologies.com/下载 JProfiler 和 Agent（注意版本必须一致）
+JProfiler GUI
+https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg
+JProfiler Agent
+https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
+在服务器上安装 JProfiler Agent 将下载后的 jprofiler_linux_12_0_2.sh 传到服务器上，通过 sh jprofiler_linux_12_0_2.sh 命令按提示安装即可
+默认安装路径为 /opt/jprofiler12/，这个路径在启动 Docker 的时候要映射到容器内部
+启动 Docker Sonatype Nexus3 在官方 sonatype/nexus3 容器启动参数的基础上做如下修改
+使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
+增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
+增加 -p 9899:9899 容器端口映射
+docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS="-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</p>
+<a href=/posts/docker/jprofiler-with-docker/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Fri, May 14, 2021
+</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/jprofiler/>jprofiler</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/nexus/>nexus</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/docker/securing-docker-ports-with-firewalld/>Securing Docker ports with firewalld</a>
 </h3>
 </div>
@@ -294,31 +328,6 @@ Topics 查询 topic 列表
 </span>
 <span class=separator><a class=category href=/categories/database/>database</a></span>
 <span class=separator><a class=tag href=/tags/mysql/>mysql</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/maven/maven-best-practices-for-structuring-projects-and-modules/>Maven Projects Best Practices</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API 网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。
-目标 通过多模块方式组织项目 管理项目版本、依赖，属性 规划模块依赖关系 主项目 POM 每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签
-properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级子模块; pluginRepositories: 插件仓库地址（非必须，主要解决国内访问慢的问题）; repositories: 定义 Maven 私服地址; distributionManagement: 定义发布用 Maven 私服地址 pluginManagement: 定义管理类插件版本 例如：
-&lt;?xml version="1.0" encoding="UTF-8"?> &lt;build xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> &lt;modelVersion>4.0.0&lt;/modelVersion> &lt;groupId>com.coolbeevip.apigateway&lt;/groupId> &lt;artifactId>apigateway-parent&lt;/artifactId> &lt;version>1.0.0-SNAPSHOT&lt;/version> &lt;packaging>pom&lt;/packaging> &lt;properties> &lt;!-- project --> &lt;project.build.sourceEncoding>UTF-8&lt;/project.build.sourceEncoding> &lt;project.reporting.outputEncoding>UTF-8&lt;/project.reporting.outputEncoding> &lt;maven.compiler.encoding>UTF-8&lt;/maven.compiler.encoding> &lt;maven.compiler.source>8&lt;/maven.compiler.source> &lt;maven.compiler.target>8&lt;/maven.compiler.target> &lt;!-- plugins version --> &lt;maven-compiler-plugin.version>3.1&lt;/maven-compiler-plugin.version> &lt;jacoco-maven-plugin.version>0.8.6&lt;/jacoco-maven-plugin.version> &lt;docker-maven-plugin.</p>
-<a href=/posts/maven/maven-best-practices-for-structuring-projects-and-modules/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Sat, May 2, 2020
-</span>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/project/>project</a></span>
 </div>
 </div>
 </div>

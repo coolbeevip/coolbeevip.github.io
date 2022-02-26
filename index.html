@@ -120,6 +120,34 @@ $ brew install docker $ brew install docker-compose 提示： 在执行 brew ins
 </div>
 <div class="post .">
 <div class=post-title>
+<h3><a href=/posts/kubernetes/kubectl-commands/>Kubectl Commands</a>
+</h3>
+</div>
+<div class=post-content>
+<div class=p_part>
+<p>常用 Kubectl 命令
+创建命名空间 新建一个名为 nc-namespace.yaml 的 YAML 文件
+apiVersion: v1 kind: Namespace metadata: name: nc-namespace 然后运行以下命令创建命名空间
+$ kubectl create -f nc-namespace.yaml namespace/nc-namespace created 创建命名空间资源配额文件 新建一个名为 nc-quota.yaml 的 YAML 文件
+apiVersion: v1 kind: ResourceQuota metadata: name: nc-quota namespace: nc-namespace spec: hard: pods: "10" requests.cpu: "2" requests.memory: 2Gi limits.cpu: "4" limits.memory: 4Gi 然后运行以下命令创建资源配额
+$ kubectl create -f nc-quota.yaml resourcequota/nc-quota created 创建 PV 卷和 PVC 新建一个名为 nc-pv.yaml 的 YAML 文件
+apiVersion: v1 kind: PersistentVolume metadata: name: nc-pv-volume namespace: nc-namespace spec: storageClassName: manual capacity: storage: 5Gi accessModes: - ReadWriteOnce hostPath: path: "/mnt/data" --- apiVersion: v1 kind: PersistentVolumeClaim metadata: name: nc-pv-claim namespace: nc-namespace spec: storageClassName: manual accessModes: - ReadWriteOnce resources: requests: storage: 5Gi 然后运行以下命令创建卷</p>
+<a href=/posts/kubernetes/kubectl-commands/ class=read_more>Read more</a></div>
+</div>
+<div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Sun, Dec 19, 2021
+</span>
+<span class=separator><a class=category href=/categories/kubernetes/>kubernetes</a></span>
+<span class=separator><a class=tag href=/tags/kubectl/>kubectl</a></span>
+</div>
+</div>
+</div>
+</div>
+<div class="post .">
+<div class=post-title>
 <h3><a href=/posts/ansible/ansible-kafka-cluster/>Automate Install Kafka Cluster with Ansible Playbook</a>
 </h3>
 </div>
@@ -293,31 +321,6 @@ gzip -dc nc-auth_3000.20211106.38.log.gz | grep -P 'timeCost":\d\d\d\d' </p>
 </span>
 <span class=separator><a class=category href=/categories/linux/>linux</a></span>
 <span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/grep/>grep</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
-<div class=post-title>
-<h3><a href=/posts/java/java-undertow-threads-and-jdbc-pools/>The Impact of Undertow Thread Options & Database Connection Pool on Performance</a>
-</h3>
-</div>
-<div class=post-content>
-<div class=p_part>
-<p>Hikari 线程参数和数据库连接池参数对业务吞吐率的影响分析
-场景 本例中我们使用 Undertow 作为 Web 容器，使用 Hikari 作为数据库连接池， 并通过 spring.datasource.hikari.maximum-pool-size 和 server.undertow.threads.worker 两个参数的调整，看看对于业务的性能影响有多大
-为此我准备了一个简单的 DEMO，并且执行 1000 次请求，并发 100，每次请求执行一个 SLEEP(5) 的 SQL模拟单笔耗时。并在一个 2C 的服务器上测试。应用默认参数如下
-spring.datasource.hikari.connection-timeout=30000 spring.datasource.hikari.minimum-idle=10 spring.datasource.hikari.maximum-pool-size=10 server.undertow.threads.worker(默认是 2C*8) 默认参数 $ ab -c 100 -n 1000 http://localhost:6060/test This is ApacheBench, Version 2.3 &lt;$Revision: 1879490 $> Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/ Licensed to The Apache Software Foundation, http://www.apache.org/ Benchmarking localhost (be patient) Completed 100 requests Completed 200 requests Completed 300 requests Completed 400 requests Completed 500 requests Completed 600 requests Completed 700 requests Completed 800 requests Completed 900 requests Completed 1000 requests Finished 1000 requests Server Software: Server Hostname: localhost Server Port: 6060 Document Path: /test Document Length: 14 bytes Concurrency Level: 100 Time taken for tests: 510.</p>
-<a href=/posts/java/java-undertow-threads-and-jdbc-pools/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Thu, Sep 23, 2021
-</span>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/undertow/>undertow</a><a class=tag href=/tags/hikari/>hikari</a></span>
 </div>
 </div>
 </div>
