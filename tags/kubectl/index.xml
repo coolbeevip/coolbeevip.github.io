@@ -3,5 +3,4 @@
 apiVersion: v1 kind: Namespace metadata: name: nc-namespace 然后运行以下命令创建命名空间
 $ kubectl create -f nc-namespace.yaml namespace/nc-namespace created 创建命名空间资源配额文件 新建一个名为 nc-quota.yaml 的 YAML 文件
 apiVersion: v1 kind: ResourceQuota metadata: name: nc-quota namespace: nc-namespace spec: hard: pods: &amp;#34;10&amp;#34; requests.cpu: &amp;#34;2&amp;#34; requests.memory: 2Gi limits.cpu: &amp;#34;4&amp;#34; limits.memory: 4Gi 然后运行以下命令创建资源配额
-$ kubectl create -f nc-quota.yaml resourcequota/nc-quota created 创建 PV 卷和 PVC 新建一个名为 nc-pv.yaml 的 YAML 文件
-apiVersion: v1 kind: PersistentVolume metadata: name: nc-pv-volume namespace: nc-namespace spec: storageClassName: manual capacity: storage: 5Gi accessModes: - ReadWriteOnce hostPath: path: &amp;#34;/mnt/data&amp;#34; --- apiVersion: v1 kind: PersistentVolumeClaim metadata: name: nc-pv-claim namespace: nc-namespace spec: storageClassName: manual accessModes: - ReadWriteOnce resources: requests: storage: 5Gi 然后运行以下命令创建卷</description></item></channel></rss>
+$ kubectl create -f nc-quota.yaml resourcequota/nc-quota created 创建 PV 卷和 PVC 新建一个名为 nc-pv.</description></item></channel></rss>

@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Linux Command - Disk </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | Linux Command - Disk </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,46 +10,33 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/linux/linux-commands-disk/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Linux Command - Disk">
 <meta name=twitter:description content="Linux 磁盘相关命令
 磁盘IO dd [root@localhost ~]# dd if=/dev/zero of=./a.dat bs=8K count=1M conv=fdatasync 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.8606 秒，578 MB/秒 [root@localhost ~]# dd if=./a.dat of=/dev/null bs=1M count=8k iflag=direct 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.2462 秒，603 MB/秒 磁盘空间 df 查看磁盘各个分区的空间大小、占用、可用等信息
 $ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/disk1s5 466Gi 10Gi 128Gi 8% 488463 4881964417 0% / devfs 192Ki 192Ki 0Bi 100% 663 0 100% /dev /dev/disk1s1 466Gi 318Gi 128Gi 72% 4557528 4877895352 0% /System/Volumes/Data /dev/disk1s4 466Gi 8.">
-</head>
-<body><div class="sidebar .">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -58,176 +44,145 @@ $ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/d
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Linux Command - Disk</h3>
-</div>
-<p>Linux 磁盘相关命令</p>
-<h2 id=磁盘io-dd>磁盘IO dd</h2>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span><span style=color:#75715e># dd if=/dev/zero of=./a.dat bs=8K count=1M conv=fdatasync</span>
-记录了8192+0 的读入
-记录了8192+0 的写出
-8589934592字节<span style=color:#f92672>(</span>8.6 GB<span style=color:#f92672>)</span>已复制，14.8606 秒，578 MB/秒
-<span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span><span style=color:#75715e># dd if=./a.dat of=/dev/null bs=1M count=8k iflag=direct</span>
-记录了8192+0 的读入
-记录了8192+0 的写出
-8589934592字节<span style=color:#f92672>(</span>8.6 GB<span style=color:#f92672>)</span>已复制，14.2462 秒，603 MB/秒
-</code></pre></div><h2 id=磁盘空间-df>磁盘空间 df</h2>
-<p>查看磁盘各个分区的空间大小、占用、可用等信息</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ df -h
-Filesystem      Size   Used  Avail Capacity iused      ifree %iused  Mounted on
-/dev/disk1s5   466Gi   10Gi  128Gi     8%  <span style=color:#ae81ff>488463</span> <span style=color:#ae81ff>4881964417</span>    0%   /
-devfs          192Ki  192Ki    0Bi   100%     <span style=color:#ae81ff>663</span>          <span style=color:#ae81ff>0</span>  100%   /dev
-/dev/disk1s1   466Gi  318Gi  128Gi    72% <span style=color:#ae81ff>4557528</span> <span style=color:#ae81ff>4877895352</span>    0%   /System/Volumes/Data
-/dev/disk1s4   466Gi  8.0Gi  128Gi     6%       <span style=color:#ae81ff>8</span> <span style=color:#ae81ff>4882452872</span>    0%   /private/var/vm
-map auto_home    0Bi    0Bi    0Bi   100%       <span style=color:#ae81ff>0</span>          <span style=color:#ae81ff>0</span>  100%   /System/Volumes/Data/home
-</code></pre></div><p>查看指定目录</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ df -h /opt/
-Filesystem     Size   Used  Avail Capacity iused      ifree %iused  Mounted on
-/dev/disk1s1  466Gi  318Gi  128Gi    72% <span style=color:#ae81ff>4557536</span> <span style=color:#ae81ff>4877895344</span>    0%   /System/Volumes/Data
-</code></pre></div><h2 id=查看文件夹空间-du>查看文件夹空间 du</h2>
-<p>查看子目录下每个文件夹占用空间</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ du -h --max-depth<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
-8.0G	./root-sh
-4.0K	./.ssh
-130M	./redis-6.2.5
-612M	./.m2
-0	./.ansible
-9.0G
-</code></pre></div><p>查看当前文件夹占用空间</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ du -sh
-1.8G
-</code></pre></div><p>查看指定文件夹占用空间</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ du -sh ~/mydocker/
-2.3G	/Users/zhanglei/mydocker/
-</code></pre></div><h2 id=挂载裸盘>挂载裸盘</h2>
-<p>查看并找到裸盘 /dev/vdb</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># fdisk -l</span>
-
-Disk /dev/vda: 42.9 GB, <span style=color:#ae81ff>42949672960</span> bytes, <span style=color:#ae81ff>83886080</span> sectors
-Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
-Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-Disk label type: dos
-Disk identifier: 0x00034bb9
-
-   Device Boot      Start         End      Blocks   Id  System
-/dev/vda1   *        <span style=color:#ae81ff>2048</span>     <span style=color:#ae81ff>2099199</span>     <span style=color:#ae81ff>1048576</span>   <span style=color:#ae81ff>83</span>  Linux
-/dev/vda2         <span style=color:#ae81ff>2099200</span>    <span style=color:#ae81ff>83886079</span>    <span style=color:#ae81ff>40893440</span>   8e  Linux LVM
-
-Disk /dev/mapper/centos-root: 37.7 GB, <span style=color:#ae81ff>37706792960</span> bytes, <span style=color:#ae81ff>73646080</span> sectors
-Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
-Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-
-
-Disk /dev/mapper/centos-swap: <span style=color:#ae81ff>4160</span> MB, <span style=color:#ae81ff>4160749568</span> bytes, <span style=color:#ae81ff>8126464</span> sectors
-Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
-Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-
-
-Disk /dev/vdb: 1073.7 GB, <span style=color:#ae81ff>1073741824000</span> bytes, <span style=color:#ae81ff>2097152000</span> sectors
-Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
-Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-</code></pre></div><p>对裸盘分区</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># fdisk /dev/vdb</span>
-Welcome to fdisk <span style=color:#f92672>(</span>util-linux 2.23.2<span style=color:#f92672>)</span>.
-
-Changes will remain in memory only, <span style=color:#66d9ef>until</span> you decide to write them.
-Be careful before using the write command.
-
-Device does not contain a recognized partition table
-Building a new DOS disklabel with disk identifier 0x2cdae9cc.
-
-Command <span style=color:#f92672>(</span>m <span style=color:#66d9ef>for</span> help<span style=color:#f92672>)</span>: n
-Partition type:
-   p   primary <span style=color:#f92672>(</span><span style=color:#ae81ff>0</span> primary, <span style=color:#ae81ff>0</span> extended, <span style=color:#ae81ff>4</span> free<span style=color:#f92672>)</span>
-   e   extended
-Select <span style=color:#f92672>(</span>default p<span style=color:#f92672>)</span>:
-Using default response p
-Partition number <span style=color:#f92672>(</span>1-4, default 1<span style=color:#f92672>)</span>:
-First sector <span style=color:#f92672>(</span>2048-2097151999, default 2048<span style=color:#f92672>)</span>:
-Using default value <span style=color:#ae81ff>2048</span>
-Last sector, +sectors or +size<span style=color:#f92672>{</span>K,M,G<span style=color:#f92672>}</span> <span style=color:#f92672>(</span>2048-2097151999, default 2097151999<span style=color:#f92672>)</span>:
-Using default value <span style=color:#ae81ff>2097151999</span>
-Partition <span style=color:#ae81ff>1</span> of type Linux and of size <span style=color:#ae81ff>1000</span> GiB is set
-
-Command <span style=color:#f92672>(</span>m <span style=color:#66d9ef>for</span> help<span style=color:#f92672>)</span>: p
-
-Disk /dev/vdb: 1073.7 GB, <span style=color:#ae81ff>1073741824000</span> bytes, <span style=color:#ae81ff>2097152000</span> sectors
-Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
-Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
-Disk label type: dos
-Disk identifier: 0xf0d27047
-
-   Device Boot      Start         End      Blocks   Id  System
-/dev/vdb1            <span style=color:#ae81ff>2048</span>  <span style=color:#ae81ff>2097151999</span>  <span style=color:#ae81ff>1048574976</span>   <span style=color:#ae81ff>83</span>  Linux
-
-Command <span style=color:#f92672>(</span>m <span style=color:#66d9ef>for</span> help<span style=color:#f92672>)</span>: w
-The partition table has been altered!
-
-Calling ioctl<span style=color:#f92672>()</span> to re-read partition table.
-Syncing disks.
-</code></pre></div><p>格式化分区</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># mkfs.ext4 /dev/vdb1</span>
-mke2fs 1.42.9 <span style=color:#f92672>(</span>28-Dec-2013<span style=color:#f92672>)</span>
-Filesystem label<span style=color:#f92672>=</span>
-OS type: Linux
-Block size<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span> <span style=color:#f92672>(</span>log<span style=color:#f92672>=</span>2<span style=color:#f92672>)</span>
-Fragment size<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span> <span style=color:#f92672>(</span>log<span style=color:#f92672>=</span>2<span style=color:#f92672>)</span>
-Stride<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> blocks, Stripe width<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> blocks
-<span style=color:#ae81ff>65536000</span> inodes, <span style=color:#ae81ff>262143744</span> blocks
-<span style=color:#ae81ff>13107187</span> blocks <span style=color:#f92672>(</span>5.00%<span style=color:#f92672>)</span> reserved <span style=color:#66d9ef>for</span> the super user
-First data block<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
-Maximum filesystem blocks<span style=color:#f92672>=</span><span style=color:#ae81ff>2409627648</span>
-<span style=color:#ae81ff>8000</span> block groups
-<span style=color:#ae81ff>32768</span> blocks per group, <span style=color:#ae81ff>32768</span> fragments per group
-<span style=color:#ae81ff>8192</span> inodes per group
-Superblock backups stored on blocks:
-	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
-	4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
-	102400000, <span style=color:#ae81ff>214990848</span>
-
-Allocating group tables: <span style=color:#66d9ef>done</span>
-Writing inode tables: <span style=color:#66d9ef>done</span>
-Creating journal <span style=color:#f92672>(</span><span style=color:#ae81ff>32768</span> blocks<span style=color:#f92672>)</span>: <span style=color:#66d9ef>done</span>
-Writing superblocks and filesystem accounting information: <span style=color:#66d9ef>done</span>
-</code></pre></div><p>创建目录并挂载分区</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># mkdir /data01</span>
-<span style=color:#75715e># mount /dev/vdb1 /data01/</span>
-</code></pre></div><p>查看结果</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># df -h</span>
-Filesystem               Size  Used Avail Use% Mounted on
-/dev/mapper/centos-root   36G  1.4G   34G   4% /
-devtmpfs                  16G     <span style=color:#ae81ff>0</span>   16G   0% /dev
-tmpfs                     16G     <span style=color:#ae81ff>0</span>   16G   0% /dev/shm
-tmpfs                     16G  8.5M   16G   1% /run
-tmpfs                     16G     <span style=color:#ae81ff>0</span>   16G   0% /sys/fs/cgroup
-/dev/vda1               1014M  133M  882M  14% /boot
-tmpfs                    3.2G     <span style=color:#ae81ff>0</span>  3.2G   0% /run/user/0
-/dev/vdb1                985G   77M  935G   1% /data01
-</code></pre></div></div>
-<div class=post-footer>
+<h3>Linux Command - Disk</h3></div><p>Linux 磁盘相关命令</p><h2 id=磁盘io-dd>磁盘IO dd</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span><span style=color:#75715e># dd if=/dev/zero of=./a.dat bs=8K count=1M conv=fdatasync</span>
+</span></span><span style=display:flex><span>记录了8192+0 的读入
+</span></span><span style=display:flex><span>记录了8192+0 的写出
+</span></span><span style=display:flex><span>8589934592字节<span style=color:#f92672>(</span>8.6 GB<span style=color:#f92672>)</span>已复制，14.8606 秒，578 MB/秒
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span><span style=color:#75715e># dd if=./a.dat of=/dev/null bs=1M count=8k iflag=direct</span>
+</span></span><span style=display:flex><span>记录了8192+0 的读入
+</span></span><span style=display:flex><span>记录了8192+0 的写出
+</span></span><span style=display:flex><span>8589934592字节<span style=color:#f92672>(</span>8.6 GB<span style=color:#f92672>)</span>已复制，14.2462 秒，603 MB/秒
+</span></span></code></pre></div><h2 id=磁盘空间-df>磁盘空间 df</h2><p>查看磁盘各个分区的空间大小、占用、可用等信息</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ df -h
+</span></span><span style=display:flex><span>Filesystem      Size   Used  Avail Capacity iused      ifree %iused  Mounted on
+</span></span><span style=display:flex><span>/dev/disk1s5   466Gi   10Gi  128Gi     8%  <span style=color:#ae81ff>488463</span> <span style=color:#ae81ff>4881964417</span>    0%   /
+</span></span><span style=display:flex><span>devfs          192Ki  192Ki    0Bi   100%     <span style=color:#ae81ff>663</span>          <span style=color:#ae81ff>0</span>  100%   /dev
+</span></span><span style=display:flex><span>/dev/disk1s1   466Gi  318Gi  128Gi    72% <span style=color:#ae81ff>4557528</span> <span style=color:#ae81ff>4877895352</span>    0%   /System/Volumes/Data
+</span></span><span style=display:flex><span>/dev/disk1s4   466Gi  8.0Gi  128Gi     6%       <span style=color:#ae81ff>8</span> <span style=color:#ae81ff>4882452872</span>    0%   /private/var/vm
+</span></span><span style=display:flex><span>map auto_home    0Bi    0Bi    0Bi   100%       <span style=color:#ae81ff>0</span>          <span style=color:#ae81ff>0</span>  100%   /System/Volumes/Data/home
+</span></span></code></pre></div><p>查看指定目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ df -h /opt/
+</span></span><span style=display:flex><span>Filesystem     Size   Used  Avail Capacity iused      ifree %iused  Mounted on
+</span></span><span style=display:flex><span>/dev/disk1s1  466Gi  318Gi  128Gi    72% <span style=color:#ae81ff>4557536</span> <span style=color:#ae81ff>4877895344</span>    0%   /System/Volumes/Data
+</span></span></code></pre></div><h2 id=查看文件夹空间-du>查看文件夹空间 du</h2><p>查看子目录下每个文件夹占用空间</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ du -h --max-depth<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>8.0G	./root-sh
+</span></span><span style=display:flex><span>4.0K	./.ssh
+</span></span><span style=display:flex><span>130M	./redis-6.2.5
+</span></span><span style=display:flex><span>612M	./.m2
+</span></span><span style=display:flex><span>0	./.ansible
+</span></span><span style=display:flex><span>9.0G
+</span></span></code></pre></div><p>查看当前文件夹占用空间</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ du -sh
+</span></span><span style=display:flex><span>1.8G
+</span></span></code></pre></div><p>查看指定文件夹占用空间</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ du -sh ~/mydocker/
+</span></span><span style=display:flex><span>2.3G	/Users/zhanglei/mydocker/
+</span></span></code></pre></div><h2 id=挂载裸盘>挂载裸盘</h2><p>查看并找到裸盘 /dev/vdb</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># fdisk -l</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Disk /dev/vda: 42.9 GB, <span style=color:#ae81ff>42949672960</span> bytes, <span style=color:#ae81ff>83886080</span> sectors
+</span></span><span style=display:flex><span>Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Disk label type: dos
+</span></span><span style=display:flex><span>Disk identifier: 0x00034bb9
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   Device Boot      Start         End      Blocks   Id  System
+</span></span><span style=display:flex><span>/dev/vda1   *        <span style=color:#ae81ff>2048</span>     <span style=color:#ae81ff>2099199</span>     <span style=color:#ae81ff>1048576</span>   <span style=color:#ae81ff>83</span>  Linux
+</span></span><span style=display:flex><span>/dev/vda2         <span style=color:#ae81ff>2099200</span>    <span style=color:#ae81ff>83886079</span>    <span style=color:#ae81ff>40893440</span>   8e  Linux LVM
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Disk /dev/mapper/centos-root: 37.7 GB, <span style=color:#ae81ff>37706792960</span> bytes, <span style=color:#ae81ff>73646080</span> sectors
+</span></span><span style=display:flex><span>Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Disk /dev/mapper/centos-swap: <span style=color:#ae81ff>4160</span> MB, <span style=color:#ae81ff>4160749568</span> bytes, <span style=color:#ae81ff>8126464</span> sectors
+</span></span><span style=display:flex><span>Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Disk /dev/vdb: 1073.7 GB, <span style=color:#ae81ff>1073741824000</span> bytes, <span style=color:#ae81ff>2097152000</span> sectors
+</span></span><span style=display:flex><span>Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span></code></pre></div><p>对裸盘分区</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># fdisk /dev/vdb</span>
+</span></span><span style=display:flex><span>Welcome to fdisk <span style=color:#f92672>(</span>util-linux 2.23.2<span style=color:#f92672>)</span>.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Changes will remain in memory only, <span style=color:#66d9ef>until</span> you decide to write them.
+</span></span><span style=display:flex><span>Be careful before using the write command.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Device does not contain a recognized partition table
+</span></span><span style=display:flex><span>Building a new DOS disklabel with disk identifier 0x2cdae9cc.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Command <span style=color:#f92672>(</span>m <span style=color:#66d9ef>for</span> help<span style=color:#f92672>)</span>: n
+</span></span><span style=display:flex><span>Partition type:
+</span></span><span style=display:flex><span>   p   primary <span style=color:#f92672>(</span><span style=color:#ae81ff>0</span> primary, <span style=color:#ae81ff>0</span> extended, <span style=color:#ae81ff>4</span> free<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   e   extended
+</span></span><span style=display:flex><span>Select <span style=color:#f92672>(</span>default p<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>Using default response p
+</span></span><span style=display:flex><span>Partition number <span style=color:#f92672>(</span>1-4, default 1<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>First sector <span style=color:#f92672>(</span>2048-2097151999, default 2048<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>Using default value <span style=color:#ae81ff>2048</span>
+</span></span><span style=display:flex><span>Last sector, +sectors or +size<span style=color:#f92672>{</span>K,M,G<span style=color:#f92672>}</span> <span style=color:#f92672>(</span>2048-2097151999, default 2097151999<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>Using default value <span style=color:#ae81ff>2097151999</span>
+</span></span><span style=display:flex><span>Partition <span style=color:#ae81ff>1</span> of type Linux and of size <span style=color:#ae81ff>1000</span> GiB is set
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Command <span style=color:#f92672>(</span>m <span style=color:#66d9ef>for</span> help<span style=color:#f92672>)</span>: p
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Disk /dev/vdb: 1073.7 GB, <span style=color:#ae81ff>1073741824000</span> bytes, <span style=color:#ae81ff>2097152000</span> sectors
+</span></span><span style=display:flex><span>Units <span style=color:#f92672>=</span> sectors of <span style=color:#ae81ff>1</span> * 512 <span style=color:#f92672>=</span> <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Sector size <span style=color:#f92672>(</span>logical/physical<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>I/O size <span style=color:#f92672>(</span>minimum/optimal<span style=color:#f92672>)</span>: <span style=color:#ae81ff>512</span> bytes / <span style=color:#ae81ff>512</span> bytes
+</span></span><span style=display:flex><span>Disk label type: dos
+</span></span><span style=display:flex><span>Disk identifier: 0xf0d27047
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   Device Boot      Start         End      Blocks   Id  System
+</span></span><span style=display:flex><span>/dev/vdb1            <span style=color:#ae81ff>2048</span>  <span style=color:#ae81ff>2097151999</span>  <span style=color:#ae81ff>1048574976</span>   <span style=color:#ae81ff>83</span>  Linux
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Command <span style=color:#f92672>(</span>m <span style=color:#66d9ef>for</span> help<span style=color:#f92672>)</span>: w
+</span></span><span style=display:flex><span>The partition table has been altered!
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Calling ioctl<span style=color:#f92672>()</span> to re-read partition table.
+</span></span><span style=display:flex><span>Syncing disks.
+</span></span></code></pre></div><p>格式化分区</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># mkfs.ext4 /dev/vdb1</span>
+</span></span><span style=display:flex><span>mke2fs 1.42.9 <span style=color:#f92672>(</span>28-Dec-2013<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Filesystem label<span style=color:#f92672>=</span>
+</span></span><span style=display:flex><span>OS type: Linux
+</span></span><span style=display:flex><span>Block size<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span> <span style=color:#f92672>(</span>log<span style=color:#f92672>=</span>2<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Fragment size<span style=color:#f92672>=</span><span style=color:#ae81ff>4096</span> <span style=color:#f92672>(</span>log<span style=color:#f92672>=</span>2<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Stride<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> blocks, Stripe width<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> blocks
+</span></span><span style=display:flex><span><span style=color:#ae81ff>65536000</span> inodes, <span style=color:#ae81ff>262143744</span> blocks
+</span></span><span style=display:flex><span><span style=color:#ae81ff>13107187</span> blocks <span style=color:#f92672>(</span>5.00%<span style=color:#f92672>)</span> reserved <span style=color:#66d9ef>for</span> the super user
+</span></span><span style=display:flex><span>First data block<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>Maximum filesystem blocks<span style=color:#f92672>=</span><span style=color:#ae81ff>2409627648</span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>8000</span> block groups
+</span></span><span style=display:flex><span><span style=color:#ae81ff>32768</span> blocks per group, <span style=color:#ae81ff>32768</span> fragments per group
+</span></span><span style=display:flex><span><span style=color:#ae81ff>8192</span> inodes per group
+</span></span><span style=display:flex><span>Superblock backups stored on blocks:
+</span></span><span style=display:flex><span>	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+</span></span><span style=display:flex><span>	4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+</span></span><span style=display:flex><span>	102400000, <span style=color:#ae81ff>214990848</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Allocating group tables: <span style=color:#66d9ef>done</span>
+</span></span><span style=display:flex><span>Writing inode tables: <span style=color:#66d9ef>done</span>
+</span></span><span style=display:flex><span>Creating journal <span style=color:#f92672>(</span><span style=color:#ae81ff>32768</span> blocks<span style=color:#f92672>)</span>: <span style=color:#66d9ef>done</span>
+</span></span><span style=display:flex><span>Writing superblocks and filesystem accounting information: <span style=color:#66d9ef>done</span>
+</span></span></code></pre></div><p>创建目录并挂载分区</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># mkdir /data01</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># mount /dev/vdb1 /data01/</span>
+</span></span></code></pre></div><p>查看结果</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># df -h</span>
+</span></span><span style=display:flex><span>Filesystem               Size  Used Avail Use% Mounted on
+</span></span><span style=display:flex><span>/dev/mapper/centos-root   36G  1.4G   34G   4% /
+</span></span><span style=display:flex><span>devtmpfs                  16G     <span style=color:#ae81ff>0</span>   16G   0% /dev
+</span></span><span style=display:flex><span>tmpfs                     16G     <span style=color:#ae81ff>0</span>   16G   0% /dev/shm
+</span></span><span style=display:flex><span>tmpfs                     16G  8.5M   16G   1% /run
+</span></span><span style=display:flex><span>tmpfs                     16G     <span style=color:#ae81ff>0</span>   16G   0% /sys/fs/cgroup
+</span></span><span style=display:flex><span>/dev/vda1               1014M  133M  882M  14% /boot
+</span></span><span style=display:flex><span>tmpfs                    3.2G     <span style=color:#ae81ff>0</span>  3.2G   0% /run/user/0
+</span></span><span style=display:flex><span>/dev/vdb1                985G   77M  935G   1% /data01
+</span></span></code></pre></div></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/linux/>linux</a></span>
 <span class=separator><a class=tag href=/tags/linux/>linux</a><a class=tag href=/tags/disk/>disk</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

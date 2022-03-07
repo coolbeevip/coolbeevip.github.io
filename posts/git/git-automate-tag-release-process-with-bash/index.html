@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Bash script automates the Maven project Git release process </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | Bash script automates the Maven project Git release process </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,7 +10,7 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/git/git-automate-tag-release-process-with-bash/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Bash script automates the Maven project Git release process">
 <meta name=twitter:description content="开源项目中我们大多采用主干开发模式管理我们的项目，他基本遵循以下规则
@@ -28,40 +27,27 @@
   计算版本号分支名
 根据 pom 中的版本定义，自动计算下一版本号，默认采 maven 的3段式版号方式 major.minor.patch，并以此为基准滚动 minor 版本号，如果你需要特殊的方式，可以修改脚本中的 next_version 函数
   输出发布计划">
-</head>
-<body><div class="sidebar .">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -69,105 +55,58 @@
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Bash script automates the Maven project Git release process</h3>
-</div>
-<p>开源项目中我们大多采用主干开发模式管理我们的项目，他基本遵循以下规则</p>
-<ul>
-<li>所有的 PR 都默认向主干合并</li>
-<li>主干上项目的版本号是 -SNAPSHOT</li>
-<li>当主干要发布时，我们会建立与之对应的 X 分支（此分支的目的是为了基于此分支发布补丁版本）</li>
-<li>基于当前主干去除版本号中的 -SNAPSHOT 后建立与版本对应的 TAG</li>
-<li>将主干上的版本号中的 minor 累加一，并在后边增加 -SNAPSHOT 后缀</li>
-</ul>
-<p>此过程繁琐，切容易出错。我制作了一个脚本 <a href=https://gist.github.com/coolbeevip/e2021c07c44566653d6601f68cccc8a1>maven-project-git-release.sh</a> 用来实现这个过程的规范化和自动化</p>
-<p>当然，这并不意味着你不需要掌握正手动发布的过程。</p>
-<p>由于某种原因导致自动过程中断后，你依然需要手动去处理，<strong>所以在使用这个脚本前，请确保你了解这个脚本帮你做了什么工作，以及如何做的</strong>。</p>
-<h2 id=如何使用>如何使用</h2>
-<p>maven-project-git-release.sh 脚本会帮你自动化以下工作</p>
-<ul>
+<h3>Bash script automates the Maven project Git release process</h3></div><p>开源项目中我们大多采用主干开发模式管理我们的项目，他基本遵循以下规则</p><ul>
+<li>所有的 PR 都默认向主干合并</li><li>主干上项目的版本号是 -SNAPSHOT</li><li>当主干要发布时，我们会建立与之对应的 X 分支（此分支的目的是为了基于此分支发布补丁版本）</li><li>基于当前主干去除版本号中的 -SNAPSHOT 后建立与版本对应的 TAG</li><li>将主干上的版本号中的 minor 累加一，并在后边增加 -SNAPSHOT 后缀</li></ul><p>此过程繁琐，切容易出错。我制作了一个脚本 <a href=https://gist.github.com/coolbeevip/e2021c07c44566653d6601f68cccc8a1>maven-project-git-release.sh</a> 用来实现这个过程的规范化和自动化</p><p>当然，这并不意味着你不需要掌握正手动发布的过程。</p><p>由于某种原因导致自动过程中断后，你依然需要手动去处理，<strong>所以在使用这个脚本前，请确保你了解这个脚本帮你做了什么工作，以及如何做的</strong>。</p><h2 id=如何使用>如何使用</h2><p>maven-project-git-release.sh 脚本会帮你自动化以下工作</p><ul>
 <li>
-<p>创建一个编译用的目录</p>
-<p>目录会创建在你系统的临时目录下，在我的 Mac 系统系统中看起来像 /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T</p>
-</li>
-<li>
-<p>在编译用的目录中 git clone 你的仓库代码</p>
-<p>你的仓库地址在使用脚本时通过参数指定，像这样 <code>sh maven-project-git-release.sh git@github.com:coolbeevip/license-maven-plugin.git</code></p>
-</li>
-<li>
-<p>编译你的代码确保正确</p>
-<p>默认在当前仓库根目录下执行 <code>mvn clean package</code>，如果你需要特殊的方式，可以修改脚本中的 check_source_before_release 函数</p>
-</li>
-<li>
-<p>计算版本号分支名</p>
-<p>根据 pom 中的版本定义，自动计算下一版本号，默认采 maven 的3段式版号方式 <code>major.minor.patch</code>，并以此为基准滚动 minor 版本号，如果你需要特殊的方式，可以修改脚本中的 next_version 函数</p>
-</li>
-<li>
-<p>输出发布计划</p>
-<p>发布计划中会显示你要发布的仓库地址，当前版本号、维护用 X 分支、TAG 名称、下一个版本号等信息</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>Release Plan:
-====================================================================
-OS: Darwin
-GIT_REPO_URL: git@github.com:coolbeevip/license-maven-plugin.git
-RELEASE WORK DIR: /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T/release-license-maven-plugin.EkWqLOOW
-CURRENT VERSION: 1.11.0-SNAPSHOT
-MAINTENANCE BRANCH NAME: 1.11.X
-TAG NAME: v1.11.0
-RELEASE VERSION: 1.11.0
-NEXT VERSION: 1.12.0-SNAPSHOT
-====================================================================
-STEP1: Create maintenance branch 1.11.X
-git checkout -b 1.11.X
-git push origin 1.11.X
---------------------------------------------------------------------
-STEP2: Create release Tag 1.11.0
-git checkout master
-mvn versions:set -DnewVersion=1.11.0
-mvn versions:commit
-git commit -a -m &#39;Upgrade Version to v1.11.0&#39;
-git tag -a v1.11.0 -m &#39;Release v1.11.0&#39;
-git push origin v1.11.0
---------------------------------------------------------------------
-STEP3: Update branch master version to 1.12.0-SNAPSHOT
-mvn versions:set -DnewVersion=1.12.0-SNAPSHOT
-mvn versions:commit
-git commit -a -m &#39;Upgrade Release Version 1.12.0-SNAPSHOT&#39;
-git push origin master
---------------------------------------------------------------------
-STEP4: The 1.11.0 release is successful
-STEP5: Please check branch 1.11.X exist in the git repository
-STEP6: Please check release tag v1.11.0 exist in the git repository
-STEP7: Please check master version changed to 1.12.0-SNAPSHOT in the git repository
-====================================================================
-
-Pre-release branch and TAG check...OK
-Are you release？(Y/N):  
-</code></pre></div></li>
-<li>
-<p>开始发布</p>
-<p>当你确认后，将自动创建分支、TAG 并修改主干的版本号。在发布过程中涉及到修改 pom 文件中的版本号，默认采用 versions:set 的方式，你可以通过修改脚本中的 modify_maven_project_version 函数修改这个默认行为</p>
-</li>
-</ul>
-</div>
-<div class=post-footer>
+<p>创建一个编译用的目录</p><p>目录会创建在你系统的临时目录下，在我的 Mac 系统系统中看起来像 /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T</p></li><li>
+<p>在编译用的目录中 git clone 你的仓库代码</p><p>你的仓库地址在使用脚本时通过参数指定，像这样 <code>sh maven-project-git-release.sh git@github.com:coolbeevip/license-maven-plugin.git</code></p></li><li>
+<p>编译你的代码确保正确</p><p>默认在当前仓库根目录下执行 <code>mvn clean package</code>，如果你需要特殊的方式，可以修改脚本中的 check_source_before_release 函数</p></li><li>
+<p>计算版本号分支名</p><p>根据 pom 中的版本定义，自动计算下一版本号，默认采 maven 的3段式版号方式 <code>major.minor.patch</code>，并以此为基准滚动 minor 版本号，如果你需要特殊的方式，可以修改脚本中的 next_version 函数</p></li><li>
+<p>输出发布计划</p><p>发布计划中会显示你要发布的仓库地址，当前版本号、维护用 X 分支、TAG 名称、下一个版本号等信息</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>Release Plan:
+</span></span><span style=display:flex><span>====================================================================
+</span></span><span style=display:flex><span>OS: Darwin
+</span></span><span style=display:flex><span>GIT_REPO_URL: git@github.com:coolbeevip/license-maven-plugin.git
+</span></span><span style=display:flex><span>RELEASE WORK DIR: /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T/release-license-maven-plugin.EkWqLOOW
+</span></span><span style=display:flex><span>CURRENT VERSION: 1.11.0-SNAPSHOT
+</span></span><span style=display:flex><span>MAINTENANCE BRANCH NAME: 1.11.X
+</span></span><span style=display:flex><span>TAG NAME: v1.11.0
+</span></span><span style=display:flex><span>RELEASE VERSION: 1.11.0
+</span></span><span style=display:flex><span>NEXT VERSION: 1.12.0-SNAPSHOT
+</span></span><span style=display:flex><span>====================================================================
+</span></span><span style=display:flex><span>STEP1: Create maintenance branch 1.11.X
+</span></span><span style=display:flex><span>git checkout -b 1.11.X
+</span></span><span style=display:flex><span>git push origin 1.11.X
+</span></span><span style=display:flex><span>--------------------------------------------------------------------
+</span></span><span style=display:flex><span>STEP2: Create release Tag 1.11.0
+</span></span><span style=display:flex><span>git checkout master
+</span></span><span style=display:flex><span>mvn versions:set -DnewVersion=1.11.0
+</span></span><span style=display:flex><span>mvn versions:commit
+</span></span><span style=display:flex><span>git commit -a -m &#39;Upgrade Version to v1.11.0&#39;
+</span></span><span style=display:flex><span>git tag -a v1.11.0 -m &#39;Release v1.11.0&#39;
+</span></span><span style=display:flex><span>git push origin v1.11.0
+</span></span><span style=display:flex><span>--------------------------------------------------------------------
+</span></span><span style=display:flex><span>STEP3: Update branch master version to 1.12.0-SNAPSHOT
+</span></span><span style=display:flex><span>mvn versions:set -DnewVersion=1.12.0-SNAPSHOT
+</span></span><span style=display:flex><span>mvn versions:commit
+</span></span><span style=display:flex><span>git commit -a -m &#39;Upgrade Release Version 1.12.0-SNAPSHOT&#39;
+</span></span><span style=display:flex><span>git push origin master
+</span></span><span style=display:flex><span>--------------------------------------------------------------------
+</span></span><span style=display:flex><span>STEP4: The 1.11.0 release is successful
+</span></span><span style=display:flex><span>STEP5: Please check branch 1.11.X exist in the git repository
+</span></span><span style=display:flex><span>STEP6: Please check release tag v1.11.0 exist in the git repository
+</span></span><span style=display:flex><span>STEP7: Please check master version changed to 1.12.0-SNAPSHOT in the git repository
+</span></span><span style=display:flex><span>====================================================================
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Pre-release branch and TAG check...OK
+</span></span><span style=display:flex><span>Are you release？(Y/N):  
+</span></span></code></pre></div></li><li>
+<p>开始发布</p><p>当你确认后，将自动创建分支、TAG 并修改主干的版本号。在发布过程中涉及到修改 pom 文件中的版本号，默认采用 versions:set 的方式，你可以通过修改脚本中的 modify_maven_project_version 函数修改这个默认行为</p></li></ul></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/git/>git</a></span>
 <span class=separator><a class=tag href=/tags/git/>git</a><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/release/>release</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

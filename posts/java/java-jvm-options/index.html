@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Important JVM Options </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | Important JVM Options </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,7 +10,7 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/java/java-jvm-options/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Important JVM Options">
 <meta name=twitter:description content="Heap Memory -XX:MetaspaceSize Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 -XX:MetaspaceSize=128M
@@ -25,40 +24,27 @@ GC -Xnoclassgc 表示关闭JVM对类的垃圾回收，缺省情况下，当一�
 -XX:+UseCompressedOops In short, don&rsquo;t turn it on, use a version which has it on by default.
 https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it
 -XX:+DisableExplicitGC 禁止 System.gc() 触发 GC 操作，当没有开启 DisableExplicitGC 这个参数时,你会发现JVM每个小时会执行一次Full GC,这是因为JVM在做分布式GC,为RMI服务的, 可以通过 sun.">
-</head>
-<body><div class="sidebar .">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -66,89 +52,18 @@ https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Important JVM Options</h3>
-</div>
-<h2 id=heap-memory>Heap Memory</h2>
-<h4 id=-xxmetaspacesize>-XX:MetaspaceSize</h4>
-<p>Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 <code>-XX:MetaspaceSize=128M</code></p>
-<h4 id=-xxmaxmetaspacesize>-XX:MaxMetaspaceSize</h4>
-<p>Metaspace 最大值，默认不限制大小，但是线上环境建议设置，例如 <code>-XX:MaxMetaspaceSize=512M</code></p>
-<h2 id=gc>GC</h2>
-<h4 id=-xnoclassgc>-Xnoclassgc</h4>
-<p>表示关闭JVM对类的垃圾回收，缺省情况下，当一个类没有任何活动实例时，JVM 就会从内存中卸装该类，但是这样会使性能下降。如果关闭类垃圾回收，就可以消除由于多次装入和卸装同一个类而造成的开销</p>
-<h4 id=-xxuseparnewgc>-XX:+UseParNewGC</h4>
-<p>设置年轻代为并行收集</p>
-<h4 id=-xxmaxtenuringthreshold>-XX:MaxTenuringThreshold</h4>
-<p>控制新生代需要经历多少次GC​晋升到老年代中的最大阈值，默认值 15</p>
-<h4 id=-xxcmsparallelremarkenabled>-XX:+CMSParallelRemarkEnabled</h4>
-<p>CMS收集算法步骤如下：初始标记 -> 并发标记 -> 重新标记 -> 标记清除。
+<h3>Important JVM Options</h3></div><h2 id=heap-memory>Heap Memory</h2><h4 id=-xxmetaspacesize>-XX:MetaspaceSize</h4><p>Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 <code>-XX:MetaspaceSize=128M</code></p><h4 id=-xxmaxmetaspacesize>-XX:MaxMetaspaceSize</h4><p>Metaspace 最大值，默认不限制大小，但是线上环境建议设置，例如 <code>-XX:MaxMetaspaceSize=512M</code></p><h2 id=gc>GC</h2><h4 id=-xnoclassgc>-Xnoclassgc</h4><p>表示关闭JVM对类的垃圾回收，缺省情况下，当一个类没有任何活动实例时，JVM 就会从内存中卸装该类，但是这样会使性能下降。如果关闭类垃圾回收，就可以消除由于多次装入和卸装同一个类而造成的开销</p><h4 id=-xxuseparnewgc>-XX:+UseParNewGC</h4><p>设置年轻代为并行收集</p><h4 id=-xxmaxtenuringthreshold>-XX:MaxTenuringThreshold</h4><p>控制新生代需要经历多少次GC​晋升到老年代中的最大阈值，默认值 15</p><h4 id=-xxcmsparallelremarkenabled>-XX:+CMSParallelRemarkEnabled</h4><p>CMS收集算法步骤如下：初始标记 -> 并发标记 -> 重新标记 -> 标记清除。
 其中 初始标记和重新标记都需要STW，即暂停用户线程。
-CMSParallelRemarkEnabled参数可以让重新标记阶段进行并行重新标记，减少暂停时间</p>
-<h4 id=-xxsurvivorratio>-XX:SurvivorRatio</h4>
-<p>设置 Eden、S0、S1 分配比例，默认值是 8</p>
-<p>-XX:SurvivorRatio=5 表示 Eden 占 50%，S0、S1 平分剩余空间</p>
-<h4 id=-xxusecompressedoops>-XX:+UseCompressedOops</h4>
-<p>In short, don&rsquo;t turn it on, use a version which has it on by default.</p>
-<p><a href=https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it>https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it</a></p>
-<h4 id=-xxdisableexplicitgc>-XX:+DisableExplicitGC</h4>
-<p>禁止 <code>System.gc()</code> 触发 GC 操作，当没有开启 DisableExplicitGC 这个参数时,你会发现JVM每个小时会执行一次Full GC,这是因为JVM在做分布式GC,为RMI服务的,
-可以通过 sun.rmi.dgc.server.gcInterval 这个参数来修改 GC 间隔,默认是一个小时</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>-Dsun.rmi.dgc.server.gcInterval<span style=color:#f92672>=</span><span style=color:#ae81ff>7200000</span>
--Dsun.rmi.dgc.client.gcInterval<span style=color:#f92672>=</span><span style=color:#ae81ff>7200000</span>
-</code></pre></div><p><strong>使用了 DirectByteBuffer 的不要使用此参数</strong></p>
-<h4 id=-xxparallelgcthreads>-XX:ParallelGCThreads</h4>
-<p>并行 GC 线程的数量，建议和 CPU 数量相当</p>
-<h4 id=-xxprintgcdetails>-XX:+PrintGCDetails</h4>
-<p>开启 GC 日志</p>
-<h2 id=cms>CMS</h2>
-<h4 id=-xxuseconcmarksweepgc>-XX:+UseConcMarkSweepGC</h4>
-<p>使用CMS垃圾回收器</p>
-<h4 id=-xxcmsinitiatingoccupancyfraction>-XX:CMSInitiatingOccupancyFraction</h4>
-<p>CMS垃圾收集器，当老年代达到 N% 时，触发CMS垃圾回收</p>
-<h4 id=-xxusecmsinitiatingoccupancyonly>-XX:+UseCMSInitiatingOccupancyOnly</h4>
-<p>用设定 CMSInitiatingOccupancyFraction 参数永久有效，否则只在第一次生效</p>
-<h4 id=-xxusecmscompactatfullcollection>-XX:+UseCMSCompactAtFullCollection</h4>
-<p>是否在 Full GC 时压缩</p>
-<h4 id=-xxcmsfullgcsbeforecompaction>-XX:+CMSFullGCsBeforeCompaction</h4>
-<p>在上一次CMS并发GC执行过后，到底还要再执行多少次 Full GC才会做压缩。默认是0</p>
-<h4 id=-xxcmsclassunloadingenabled>-XX:+CMSClassUnloadingEnabled</h4>
-<p>GC也会扫描PermGen，并删除不再使用的类</p>
-<h4 id=-xxexplicitgcinvokesconcurrent>-XX:+ExplicitGCInvokesConcurrent</h4>
-<p>使用 CMS 收集器来触发 Full GC</p>
-<h2 id=gc-log>GC LOG</h2>
-<h4 id=-xxusegclogfilerotation>-XX:+UseGCLogFileRotation</h4>
-<p>开启GC日志滚动记录功能，要求必须设置 -Xloggc参数</p>
-<h4 id=-xxnumberofgclogfiles>-XX:NumberOfGCLogFiles</h4>
-<p>设置滚动日志文件的个数，必须大于等于1</p>
-<h4 id=-xxgclogfilesize>-XX:GCLogFileSize</h4>
-<p>设置滚动日志文件的大小，必须大于8k</p>
-<h4 id=-xxprintgcdetails-1>-XX:+PrintGCDetails</h4>
-<p>输出详细日志</p>
-<h4 id=-xxprintgctimestamps>-XX:+PrintGCTimeStamps</h4>
-<p>JVM启动的时候的相对时间</p>
-<h4 id=-xxprintgcdatestamps>-XX:+PrintGCDateStamps</h4>
-<p>打印具体的时间</p>
-</div>
-<div class=post-footer>
+CMSParallelRemarkEnabled参数可以让重新标记阶段进行并行重新标记，减少暂停时间</p><h4 id=-xxsurvivorratio>-XX:SurvivorRatio</h4><p>设置 Eden、S0、S1 分配比例，默认值是 8</p><p>-XX:SurvivorRatio=5 表示 Eden 占 50%，S0、S1 平分剩余空间</p><h4 id=-xxusecompressedoops>-XX:+UseCompressedOops</h4><p>In short, don&rsquo;t turn it on, use a version which has it on by default.</p><p><a href=https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it>https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it</a></p><h4 id=-xxdisableexplicitgc>-XX:+DisableExplicitGC</h4><p>禁止 <code>System.gc()</code> 触发 GC 操作，当没有开启 DisableExplicitGC 这个参数时,你会发现JVM每个小时会执行一次Full GC,这是因为JVM在做分布式GC,为RMI服务的,
+可以通过 sun.rmi.dgc.server.gcInterval 这个参数来修改 GC 间隔,默认是一个小时</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>-Dsun.rmi.dgc.server.gcInterval<span style=color:#f92672>=</span><span style=color:#ae81ff>7200000</span>
+</span></span><span style=display:flex><span>-Dsun.rmi.dgc.client.gcInterval<span style=color:#f92672>=</span><span style=color:#ae81ff>7200000</span>
+</span></span></code></pre></div><p><strong>使用了 DirectByteBuffer 的不要使用此参数</strong></p><h4 id=-xxparallelgcthreads>-XX:ParallelGCThreads</h4><p>并行 GC 线程的数量，建议和 CPU 数量相当</p><h4 id=-xxprintgcdetails>-XX:+PrintGCDetails</h4><p>开启 GC 日志</p><h2 id=cms>CMS</h2><h4 id=-xxuseconcmarksweepgc>-XX:+UseConcMarkSweepGC</h4><p>使用CMS垃圾回收器</p><h4 id=-xxcmsinitiatingoccupancyfraction>-XX:CMSInitiatingOccupancyFraction</h4><p>CMS垃圾收集器，当老年代达到 N% 时，触发CMS垃圾回收</p><h4 id=-xxusecmsinitiatingoccupancyonly>-XX:+UseCMSInitiatingOccupancyOnly</h4><p>用设定 CMSInitiatingOccupancyFraction 参数永久有效，否则只在第一次生效</p><h4 id=-xxusecmscompactatfullcollection>-XX:+UseCMSCompactAtFullCollection</h4><p>是否在 Full GC 时压缩</p><h4 id=-xxcmsfullgcsbeforecompaction>-XX:+CMSFullGCsBeforeCompaction</h4><p>在上一次CMS并发GC执行过后，到底还要再执行多少次 Full GC才会做压缩。默认是0</p><h4 id=-xxcmsclassunloadingenabled>-XX:+CMSClassUnloadingEnabled</h4><p>GC也会扫描PermGen，并删除不再使用的类</p><h4 id=-xxexplicitgcinvokesconcurrent>-XX:+ExplicitGCInvokesConcurrent</h4><p>使用 CMS 收集器来触发 Full GC</p><h2 id=gc-log>GC LOG</h2><h4 id=-xxusegclogfilerotation>-XX:+UseGCLogFileRotation</h4><p>开启GC日志滚动记录功能，要求必须设置 -Xloggc参数</p><h4 id=-xxnumberofgclogfiles>-XX:NumberOfGCLogFiles</h4><p>设置滚动日志文件的个数，必须大于等于1</p><h4 id=-xxgclogfilesize>-XX:GCLogFileSize</h4><p>设置滚动日志文件的大小，必须大于8k</p><h4 id=-xxprintgcdetails-1>-XX:+PrintGCDetails</h4><p>输出详细日志</p><h4 id=-xxprintgctimestamps>-XX:+PrintGCTimeStamps</h4><p>JVM启动的时候的相对时间</p><h4 id=-xxprintgcdatestamps>-XX:+PrintGCDateStamps</h4><p>打印具体的时间</p></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/jvm/>jvm</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | MacOS Switch JDK </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | MacOS Switch JDK </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,46 +10,33 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/java/macos-switch-jdk/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="MacOS Switch JDK">
 <meta name=twitter:description content="查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
-$ /usr/libexec/java_home -V Matching Java Virtual Machines (2): 11.0.10, x86_64:	&#34;OpenJDK 11.0.10&#34;	/Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 1.8.0_201, x86_64:	&#34;Java SE 8&#34;	/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 查看当前使用的 JDK 版本 $ java -version java version &#34;1.8.0_201&#34; Java(TM) SE Runtime Environment (build 1.8.0_201-b09) Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode) 切换 JDK 切换到 JDK 11.0.10 版本，并查看切换后的 JDK 版本
-$ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk version &#34;11.">
-</head>
-<body><div class="sidebar .">
+$ /usr/libexec/java_home -V Matching Java Virtual Machines (2):  11.0.10, x86_64:	&#34;OpenJDK 11.0.10&#34;	/Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home  1.8.0_201, x86_64:	&#34;Java SE 8&#34;	/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home  /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 查看当前使用的 JDK 版本 $ java -version java version &#34;1.8.0_201&#34; Java(TM) SE Runtime Environment (build 1.8.0_201-b09) Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode) 切换 JDK 切换到 JDK 11.0.10 版本，并查看切换后的 JDK 版本
+$ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version  openjdk version &#34;11.">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -58,56 +44,33 @@ $ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk v
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>MacOS Switch JDK</h3>
-</div>
-<h4 id=查看本机-jdk-版本>查看本机 JDK 版本</h4>
-<p>命令行输入 <code>/usr/libexec/java_home -V</code> 可以看到多个 JDK 版本</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ /usr/libexec/java_home -V
-Matching Java Virtual Machines <span style=color:#f92672>(</span>2<span style=color:#f92672>)</span>:
-    11.0.10, x86_64:	<span style=color:#e6db74>&#34;OpenJDK 11.0.10&#34;</span>	/Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home
-    1.8.0_201, x86_64:	<span style=color:#e6db74>&#34;Java SE 8&#34;</span>	/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home
-
-/Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home
-</code></pre></div><h4 id=查看当前使用的-jdk-版本>查看当前使用的 JDK 版本</h4>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ java -version
-java version <span style=color:#e6db74>&#34;1.8.0_201&#34;</span>
-Java<span style=color:#f92672>(</span>TM<span style=color:#f92672>)</span> SE Runtime Environment <span style=color:#f92672>(</span>build 1.8.0_201-b09<span style=color:#f92672>)</span>
-Java HotSpot<span style=color:#f92672>(</span>TM<span style=color:#f92672>)</span> 64-Bit Server VM <span style=color:#f92672>(</span>build 25.201-b09, mixed mode<span style=color:#f92672>)</span>
-</code></pre></div><h4 id=切换-jdk>切换 JDK</h4>
-<p>切换到 JDK <code>11.0.10</code> 版本，并查看切换后的 JDK 版本</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ export JAVA_HOME<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>/usr/libexec/java_home -v 11.0.10<span style=color:#e6db74>`</span>
-$ java -version
-
-openjdk version <span style=color:#e6db74>&#34;11.0.10&#34;</span> 2021-01-19
-OpenJDK Runtime Environment AdoptOpenJDK <span style=color:#f92672>(</span>build 11.0.10+9<span style=color:#f92672>)</span>
-Eclipse OpenJ9 VM AdoptOpenJDK <span style=color:#f92672>(</span>build openj9-0.24.0, JRE <span style=color:#ae81ff>11</span> Mac OS X amd64-64-Bit Compressed References 20210120_897 <span style=color:#f92672>(</span>JIT enabled, AOT enabled<span style=color:#f92672>)</span>
-OpenJ9   - 345e1b09e
-OMR      - 741e94ea8
-JCL      - 0a86953833 based on jdk-11.0.10+9<span style=color:#f92672>)</span>
-</code></pre></div><h4 id=设置默认的-jdk-版本可选>设置默认的 JDK 版本(可选)</h4>
-<p>在 <code>~/.bash_profile</code> 文件中增加默认切换命令</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>export JAVA_HOME<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>/usr/libexec/java_home -v 1.8.0_201<span style=color:#e6db74>`</span>
-</code></pre></div></div>
-<div class=post-footer>
+<h3>MacOS Switch JDK</h3></div><h4 id=查看本机-jdk-版本>查看本机 JDK 版本</h4><p>命令行输入 <code>/usr/libexec/java_home -V</code> 可以看到多个 JDK 版本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ /usr/libexec/java_home -V
+</span></span><span style=display:flex><span>Matching Java Virtual Machines <span style=color:#f92672>(</span>2<span style=color:#f92672>)</span>:
+</span></span><span style=display:flex><span>    11.0.10, x86_64:	<span style=color:#e6db74>&#34;OpenJDK 11.0.10&#34;</span>	/Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home
+</span></span><span style=display:flex><span>    1.8.0_201, x86_64:	<span style=color:#e6db74>&#34;Java SE 8&#34;</span>	/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>/Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home
+</span></span></code></pre></div><h4 id=查看当前使用的-jdk-版本>查看当前使用的 JDK 版本</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ java -version
+</span></span><span style=display:flex><span>java version <span style=color:#e6db74>&#34;1.8.0_201&#34;</span>
+</span></span><span style=display:flex><span>Java<span style=color:#f92672>(</span>TM<span style=color:#f92672>)</span> SE Runtime Environment <span style=color:#f92672>(</span>build 1.8.0_201-b09<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Java HotSpot<span style=color:#f92672>(</span>TM<span style=color:#f92672>)</span> 64-Bit Server VM <span style=color:#f92672>(</span>build 25.201-b09, mixed mode<span style=color:#f92672>)</span>
+</span></span></code></pre></div><h4 id=切换-jdk>切换 JDK</h4><p>切换到 JDK <code>11.0.10</code> 版本，并查看切换后的 JDK 版本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ export JAVA_HOME<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>/usr/libexec/java_home -v 11.0.10<span style=color:#e6db74>`</span>
+</span></span><span style=display:flex><span>$ java -version
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>openjdk version <span style=color:#e6db74>&#34;11.0.10&#34;</span> 2021-01-19
+</span></span><span style=display:flex><span>OpenJDK Runtime Environment AdoptOpenJDK <span style=color:#f92672>(</span>build 11.0.10+9<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>Eclipse OpenJ9 VM AdoptOpenJDK <span style=color:#f92672>(</span>build openj9-0.24.0, JRE <span style=color:#ae81ff>11</span> Mac OS X amd64-64-Bit Compressed References 20210120_897 <span style=color:#f92672>(</span>JIT enabled, AOT enabled<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>OpenJ9   - 345e1b09e
+</span></span><span style=display:flex><span>OMR      - 741e94ea8
+</span></span><span style=display:flex><span>JCL      - 0a86953833 based on jdk-11.0.10+9<span style=color:#f92672>)</span>
+</span></span></code></pre></div><h4 id=设置默认的-jdk-版本可选>设置默认的 JDK 版本(可选)</h4><p>在 <code>~/.bash_profile</code> 文件中增加默认切换命令</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>export JAVA_HOME<span style=color:#f92672>=</span><span style=color:#e6db74>`</span>/usr/libexec/java_home -v 1.8.0_201<span style=color:#e6db74>`</span>
+</span></span></code></pre></div></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/macos/>macos</a><a class=tag href=/tags/jdk/>jdk</a><a class=tag href=/tags/java/>java</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

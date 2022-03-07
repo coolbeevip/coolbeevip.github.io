@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Find The Biggest Objects In Redis </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | Find The Biggest Objects In Redis </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,48 +10,35 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/redis/redis-find-biggest-objects-in-redis/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Find The Biggest Objects In Redis">
 <meta name=twitter:description content="在 REDIS 中一个字符串最大512MB，一个二级数据结构（例如hash、list、set、zset）可以存储大约40亿个(2^32-1)个元素，但实际上中如果下面两种情况，我就会认为它是 bigkeys。
  字符串类型：单个 value 超过5MB 哈希、列表、集合、有序集合元素可数超过 10000  因为 REDIS 是单进程处理，所以对 BIGKEY 的访问会产生阻塞，如果你获取 100 次单体大小为 5MB 的 KEY，那么这些数据（500MB）传输到客户端就需要一定的时间，这期间其他命令都要排队等待。
 查找 BIGKEY 使用 bigkeys 命令可以统计大对象（建议在从结点执行），为了方式阻塞，我们设置一个休眠参数 -i 0.1
 redis-cli -h <ip> -p <port> -a <password> --bigkeys -i 0.1 结果如下：
-$ redis-cli -h 192.168.51.207 -p 9015 --bigkeys Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe. # Scanning the entire keyspace to find biggest keys as well as # average sizes per key type.">
-</head>
-<body><div class="sidebar .">
+$ redis-cli -h 192.168.51.207 -p 9015 --bigkeys  Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.  # Scanning the entire keyspace to find biggest keys as well as # average sizes per key type.">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -60,115 +46,80 @@ $ redis-cli -h 192.168.51.207 -p 9015 --bigkeys Warning: Using a password with '
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Find The Biggest Objects In Redis</h3>
-</div>
-<p>在 REDIS 中一个字符串最大512MB，一个二级数据结构（例如hash、list、set、zset）可以存储大约40亿个(2^32-1)个元素，但实际上中如果下面两种情况，我就会认为它是 bigkeys。</p>
-<ul>
-<li>字符串类型：单个 value 超过5MB</li>
-<li>哈希、列表、集合、有序集合元素可数超过 10000</li>
-</ul>
-<p>因为 REDIS 是单进程处理，所以对 BIGKEY 的访问会产生阻塞，如果你获取 100 次单体大小为 5MB 的 KEY，那么这些数据（500MB）传输到客户端就需要一定的时间，这期间其他命令都要排队等待。</p>
-<h2 id=查找-bigkey>查找 BIGKEY</h2>
-<p>使用 <code>bigkeys</code> 命令可以统计大对象（<strong>建议在从结点执行</strong>），为了方式阻塞，我们设置一个休眠参数 <code>-i 0.1</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>redis-cli -h &lt;ip&gt; -p &lt;port&gt; -a &lt;password&gt; --bigkeys -i 0.1
-</code></pre></div><p>结果如下：</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ redis-cli -h 192.168.51.207 -p <span style=color:#ae81ff>9015</span> --bigkeys
-
-Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
-
-<span style=color:#75715e># Scanning the entire keyspace to find biggest keys as well as</span>
-<span style=color:#75715e># average sizes per key type.  You can use -i 0.1 to sleep 0.1 sec</span>
-<span style=color:#75715e># per 100 SCAN commands (not usually needed).</span>
-
-<span style=color:#f92672>[</span>00.00%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:access_to_refresh:82aa3bd2-ca90-4280-ba77-ff8285ad1b79&#39;</span> with <span style=color:#ae81ff>36</span> bytes
-<span style=color:#f92672>[</span>00.00%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:refresh_auth:394cadfb-0658-4cdf-9945-2f3ed2943005&#39;</span> with <span style=color:#ae81ff>15521</span> bytes
-<span style=color:#f92672>[</span>00.00%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:user_details::chengnan&#39;</span> with <span style=color:#ae81ff>159063</span> bytes
-<span style=color:#f92672>[</span>00.10%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:refresh_auth:98401f58-6fa3-4140-876c-eb0203fe4a2f&#39;</span> with <span style=color:#ae81ff>173315</span> bytes
-<span style=color:#f92672>[</span>00.33%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:auth:46199e17-2074-4bb1-8f02-72b866e9c91e&#39;</span> with <span style=color:#ae81ff>224152</span> bytes
-<span style=color:#f92672>[</span>00.33%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:vchenyuwei&#39;</span> with <span style=color:#ae81ff>4</span> members
-<span style=color:#f92672>[</span>00.46%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a9e2d0d5d4fef7d015ec69a0eb0005a&#39;</span> with <span style=color:#ae81ff>403948</span> bytes
-<span style=color:#f92672>[</span>01.23%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a9e2d0d5104019c01518fc4af27004f&#39;</span> with <span style=color:#ae81ff>655570</span> bytes
-<span style=color:#f92672>[</span>01.41%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a9e2d0d61fb015c0163f705ca8400e2&#39;</span> with <span style=color:#ae81ff>1028627</span> bytes
-<span style=color:#f92672>[</span>01.76%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:vwulei6&#39;</span> with <span style=color:#ae81ff>11</span> members
-<span style=color:#f92672>[</span>01.83%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:vchengfanjiang&#39;</span> with <span style=color:#ae81ff>25</span> members
-<span style=color:#f92672>[</span>04.20%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a993e736fac50a501720d688a252473&#39;</span> with <span style=color:#ae81ff>1344875</span> bytes
-<span style=color:#f92672>[</span>04.34%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a993e736915883301695494cbe30a0e&#39;</span> with <span style=color:#ae81ff>1904333</span> bytes
-<span style=color:#f92672>[</span>06.54%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:lvyong&#39;</span> with <span style=color:#ae81ff>77</span> members
-<span style=color:#f92672>[</span>12.05%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:wangzhe4&#39;</span> with <span style=color:#ae81ff>93</span> members
-<span style=color:#f92672>[</span>21.82%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:robot&#39;</span> with <span style=color:#ae81ff>1824</span> members
-<span style=color:#f92672>[</span>35.93%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::c3ca9bc7122a4a16ab07f6626f320d86&#39;</span> with <span style=color:#ae81ff>1909348</span> bytes
-<span style=color:#f92672>[</span>44.14%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:client_id_to_access:nc&#39;</span> with <span style=color:#ae81ff>3178</span> members
-<span style=color:#f92672>[</span>55.79%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::4ae76cbc0a134470b0dd27120b576ac0&#39;</span> with <span style=color:#ae81ff>1909943</span> bytes
-
--------- summary -------
-
-Sampled <span style=color:#ae81ff>30865</span> keys in the keyspace!
-Total key length in bytes is <span style=color:#ae81ff>1797722</span> <span style=color:#f92672>(</span>avg len 58.24<span style=color:#f92672>)</span>
-
-Biggest string found <span style=color:#e6db74>&#39;1:nc-um:function_node_details::4ae76cbc0a134470b0dd27120b576ac0&#39;</span> has <span style=color:#ae81ff>1909943</span> bytes
-Biggest    set found <span style=color:#e6db74>&#39;nc_oauth:client_id_to_access:nc&#39;</span> has <span style=color:#ae81ff>3178</span> members
-
-<span style=color:#ae81ff>0</span> lists with <span style=color:#ae81ff>0</span> items <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
-<span style=color:#ae81ff>0</span> hashs with <span style=color:#ae81ff>0</span> fields <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
-<span style=color:#ae81ff>30400</span> strings with <span style=color:#ae81ff>843125909</span> bytes <span style=color:#f92672>(</span>98.49% of keys, avg size 27734.40<span style=color:#f92672>)</span>
-<span style=color:#ae81ff>0</span> streams with <span style=color:#ae81ff>0</span> entries <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
-<span style=color:#ae81ff>465</span> sets with <span style=color:#ae81ff>8157</span> members <span style=color:#f92672>(</span>01.51% of keys, avg size 17.54<span style=color:#f92672>)</span>
-<span style=color:#ae81ff>0</span> zsets with <span style=color:#ae81ff>0</span> members <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
-</code></pre></div><p>摘要中可以看到字符串类型和集合类型中两个最大的 KEY</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>Biggest string found <span style=color:#e6db74>&#39;1:nc-um:function_node_details::4ae76cbc0a134470b0dd27120b576ac0&#39;</span> has <span style=color:#ae81ff>1909943</span> bytes
-Biggest    set found <span style=color:#e6db74>&#39;nc_oauth:client_id_to_access:nc&#39;</span> has <span style=color:#ae81ff>3178</span> members
-</code></pre></div><p>字符串类型大小 1909943 bytes (1.9MB)
-集合类型包含 3178 个成员，使用 <code>MEMORY USAGE nc_oauth:client_id_to_access:nc</code> 命令可以看到大小为 25404114 bytes（24MB）</p>
-<h2 id=统计多个-key-大小>统计多个 KEY 大小</h2>
-<p>可以通过 Lua 脚本使用 <code>SCAN</code> 统计出名称匹配的 KEY，然后使用 <code>MEMORY USAGE</code> 获取每个 KEY 的大小</p>
-<p>创建 memory-usage-pattern.lua 文件，并在脚本中定义了要统计的 KEY <code>1:nc-um:function_node_details:*</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lua data-lang=lua><span style=color:#75715e>-- 定义 KEY 模糊匹配</span>
-<span style=color:#66d9ef>local</span> pattern<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1:nc-um:function_node_details:*&#34;</span>
-
-<span style=color:#66d9ef>local</span> resp<span style=color:#f92672>=</span>redis.call(<span style=color:#e6db74>&#39;SCAN&#39;</span>,<span style=color:#ae81ff>0</span>,<span style=color:#e6db74>&#39;MATCH&#39;</span>,pattern,<span style=color:#e6db74>&#39;COUNT&#39;</span>,<span style=color:#ae81ff>999999</span>)
-<span style=color:#66d9ef>local</span> nextCursor<span style=color:#f92672>=</span>tonumber(resp[<span style=color:#ae81ff>1</span>])
-<span style=color:#66d9ef>local</span> dataList<span style=color:#f92672>=</span>resp[<span style=color:#ae81ff>2</span>]
-<span style=color:#66d9ef>local</span> totalsize<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
-<span style=color:#66d9ef>local</span> counter<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>;
-<span style=color:#66d9ef>for</span> i<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>,<span style=color:#f92672>#</span>dataList <span style=color:#66d9ef>do</span>
- <span style=color:#66d9ef>local</span> k <span style=color:#f92672>=</span> dataList[i]
- <span style=color:#66d9ef>local</span> keysize <span style=color:#f92672>=</span> redis.call(<span style=color:#e6db74>&#39;MEMORY&#39;</span>,<span style=color:#e6db74>&#39;USAGE&#39;</span>,k)
- counter<span style=color:#f92672>=</span>counter<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>
- totalsize<span style=color:#f92672>=</span>totalsize<span style=color:#f92672>+</span>keysize
-<span style=color:#66d9ef>end</span>
-<span style=color:#66d9ef>return</span> {nextCursor, counter, totalsize}
-</code></pre></div><p>使用以下命令可以查看符合条件的 KEY 共使用了多少内存，这个命令返回三个结果，</p>
-<ol>
-<li>游标位置，如果游标位置为 0 表示已经遍历完毕，否则请调整脚本中 <code>999999</code> 为更大的数</li>
-<li>符合条件 KEY 的数量</li>
-<li>服务条件 KEY 的内存占用</li>
-</ol>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ redis-cli -h 192.168.51.207 -p <span style=color:#ae81ff>9015</span> --eval memory-usage-pattern.lua
-1<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>0</span>
-2<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>3403</span>
-3<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>264671287</span>
-</code></pre></div><p>可以看到占用内存 264671287 byte(252MB)</p>
-</div>
-<div class=post-footer>
+<h3>Find The Biggest Objects In Redis</h3></div><p>在 REDIS 中一个字符串最大512MB，一个二级数据结构（例如hash、list、set、zset）可以存储大约40亿个(2^32-1)个元素，但实际上中如果下面两种情况，我就会认为它是 bigkeys。</p><ul>
+<li>字符串类型：单个 value 超过5MB</li><li>哈希、列表、集合、有序集合元素可数超过 10000</li></ul><p>因为 REDIS 是单进程处理，所以对 BIGKEY 的访问会产生阻塞，如果你获取 100 次单体大小为 5MB 的 KEY，那么这些数据（500MB）传输到客户端就需要一定的时间，这期间其他命令都要排队等待。</p><h2 id=查找-bigkey>查找 BIGKEY</h2><p>使用 <code>bigkeys</code> 命令可以统计大对象（<strong>建议在从结点执行</strong>），为了方式阻塞，我们设置一个休眠参数 <code>-i 0.1</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>redis-cli -h &lt;ip&gt; -p &lt;port&gt; -a &lt;password&gt; --bigkeys -i 0.1
+</span></span></code></pre></div><p>结果如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ redis-cli -h 192.168.51.207 -p <span style=color:#ae81ff>9015</span> --bigkeys
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Scanning the entire keyspace to find biggest keys as well as</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># average sizes per key type.  You can use -i 0.1 to sleep 0.1 sec</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># per 100 SCAN commands (not usually needed).</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.00%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:access_to_refresh:82aa3bd2-ca90-4280-ba77-ff8285ad1b79&#39;</span> with <span style=color:#ae81ff>36</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.00%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:refresh_auth:394cadfb-0658-4cdf-9945-2f3ed2943005&#39;</span> with <span style=color:#ae81ff>15521</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.00%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:user_details::chengnan&#39;</span> with <span style=color:#ae81ff>159063</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.10%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:refresh_auth:98401f58-6fa3-4140-876c-eb0203fe4a2f&#39;</span> with <span style=color:#ae81ff>173315</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.33%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;nc_oauth:auth:46199e17-2074-4bb1-8f02-72b866e9c91e&#39;</span> with <span style=color:#ae81ff>224152</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.33%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:vchenyuwei&#39;</span> with <span style=color:#ae81ff>4</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>00.46%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a9e2d0d5d4fef7d015ec69a0eb0005a&#39;</span> with <span style=color:#ae81ff>403948</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>01.23%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a9e2d0d5104019c01518fc4af27004f&#39;</span> with <span style=color:#ae81ff>655570</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>01.41%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a9e2d0d61fb015c0163f705ca8400e2&#39;</span> with <span style=color:#ae81ff>1028627</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>01.76%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:vwulei6&#39;</span> with <span style=color:#ae81ff>11</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>01.83%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:vchengfanjiang&#39;</span> with <span style=color:#ae81ff>25</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04.20%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a993e736fac50a501720d688a252473&#39;</span> with <span style=color:#ae81ff>1344875</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>04.34%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::SYS_USER-8a993e736915883301695494cbe30a0e&#39;</span> with <span style=color:#ae81ff>1904333</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>06.54%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:lvyong&#39;</span> with <span style=color:#ae81ff>77</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>12.05%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:wangzhe4&#39;</span> with <span style=color:#ae81ff>93</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>21.82%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:uname_to_access:nc:robot&#39;</span> with <span style=color:#ae81ff>1824</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>35.93%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::c3ca9bc7122a4a16ab07f6626f320d86&#39;</span> with <span style=color:#ae81ff>1909348</span> bytes
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>44.14%<span style=color:#f92672>]</span> Biggest set    found so far <span style=color:#e6db74>&#39;nc_oauth:client_id_to_access:nc&#39;</span> with <span style=color:#ae81ff>3178</span> members
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>55.79%<span style=color:#f92672>]</span> Biggest string found so far <span style=color:#e6db74>&#39;1:nc-um:function_node_details::4ae76cbc0a134470b0dd27120b576ac0&#39;</span> with <span style=color:#ae81ff>1909943</span> bytes
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>-------- summary -------
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Sampled <span style=color:#ae81ff>30865</span> keys in the keyspace!
+</span></span><span style=display:flex><span>Total key length in bytes is <span style=color:#ae81ff>1797722</span> <span style=color:#f92672>(</span>avg len 58.24<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Biggest string found <span style=color:#e6db74>&#39;1:nc-um:function_node_details::4ae76cbc0a134470b0dd27120b576ac0&#39;</span> has <span style=color:#ae81ff>1909943</span> bytes
+</span></span><span style=display:flex><span>Biggest    set found <span style=color:#e6db74>&#39;nc_oauth:client_id_to_access:nc&#39;</span> has <span style=color:#ae81ff>3178</span> members
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>0</span> lists with <span style=color:#ae81ff>0</span> items <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>0</span> hashs with <span style=color:#ae81ff>0</span> fields <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>30400</span> strings with <span style=color:#ae81ff>843125909</span> bytes <span style=color:#f92672>(</span>98.49% of keys, avg size 27734.40<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>0</span> streams with <span style=color:#ae81ff>0</span> entries <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>465</span> sets with <span style=color:#ae81ff>8157</span> members <span style=color:#f92672>(</span>01.51% of keys, avg size 17.54<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span><span style=color:#ae81ff>0</span> zsets with <span style=color:#ae81ff>0</span> members <span style=color:#f92672>(</span>00.00% of keys, avg size 0.00<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>摘要中可以看到字符串类型和集合类型中两个最大的 KEY</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Biggest string found <span style=color:#e6db74>&#39;1:nc-um:function_node_details::4ae76cbc0a134470b0dd27120b576ac0&#39;</span> has <span style=color:#ae81ff>1909943</span> bytes
+</span></span><span style=display:flex><span>Biggest    set found <span style=color:#e6db74>&#39;nc_oauth:client_id_to_access:nc&#39;</span> has <span style=color:#ae81ff>3178</span> members
+</span></span></code></pre></div><p>字符串类型大小 1909943 bytes (1.9MB)
+集合类型包含 3178 个成员，使用 <code>MEMORY USAGE nc_oauth:client_id_to_access:nc</code> 命令可以看到大小为 25404114 bytes（24MB）</p><h2 id=统计多个-key-大小>统计多个 KEY 大小</h2><p>可以通过 Lua 脚本使用 <code>SCAN</code> 统计出名称匹配的 KEY，然后使用 <code>MEMORY USAGE</code> 获取每个 KEY 的大小</p><p>创建 memory-usage-pattern.lua 文件，并在脚本中定义了要统计的 KEY <code>1:nc-um:function_node_details:*</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lua data-lang=lua><span style=display:flex><span><span style=color:#75715e>-- 定义 KEY 模糊匹配</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>local</span> pattern<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1:nc-um:function_node_details:*&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>local</span> resp<span style=color:#f92672>=</span>redis.call(<span style=color:#e6db74>&#39;SCAN&#39;</span>,<span style=color:#ae81ff>0</span>,<span style=color:#e6db74>&#39;MATCH&#39;</span>,pattern,<span style=color:#e6db74>&#39;COUNT&#39;</span>,<span style=color:#ae81ff>999999</span>)
+</span></span><span style=display:flex><span><span style=color:#66d9ef>local</span> nextCursor<span style=color:#f92672>=</span>tonumber(resp[<span style=color:#ae81ff>1</span>])
+</span></span><span style=display:flex><span><span style=color:#66d9ef>local</span> dataList<span style=color:#f92672>=</span>resp[<span style=color:#ae81ff>2</span>]
+</span></span><span style=display:flex><span><span style=color:#66d9ef>local</span> totalsize<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>local</span> counter<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> i<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>,<span style=color:#f92672>#</span>dataList <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span> <span style=color:#66d9ef>local</span> k <span style=color:#f92672>=</span> dataList[i]
+</span></span><span style=display:flex><span> <span style=color:#66d9ef>local</span> keysize <span style=color:#f92672>=</span> redis.call(<span style=color:#e6db74>&#39;MEMORY&#39;</span>,<span style=color:#e6db74>&#39;USAGE&#39;</span>,k)
+</span></span><span style=display:flex><span> counter<span style=color:#f92672>=</span>counter<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span> totalsize<span style=color:#f92672>=</span>totalsize<span style=color:#f92672>+</span>keysize
+</span></span><span style=display:flex><span><span style=color:#66d9ef>end</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>return</span> {nextCursor, counter, totalsize}
+</span></span></code></pre></div><p>使用以下命令可以查看符合条件的 KEY 共使用了多少内存，这个命令返回三个结果，</p><ol>
+<li>游标位置，如果游标位置为 0 表示已经遍历完毕，否则请调整脚本中 <code>999999</code> 为更大的数</li><li>符合条件 KEY 的数量</li><li>服务条件 KEY 的内存占用</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ redis-cli -h 192.168.51.207 -p <span style=color:#ae81ff>9015</span> --eval memory-usage-pattern.lua
+</span></span><span style=display:flex><span>1<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>2<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>3403</span>
+</span></span><span style=display:flex><span>3<span style=color:#f92672>)</span> <span style=color:#f92672>(</span>integer<span style=color:#f92672>)</span> <span style=color:#ae81ff>264671287</span>
+</span></span></code></pre></div><p>可以看到占用内存 264671287 byte(252MB)</p></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/redis/>redis</a></span>
 <span class=separator><a class=tag href=/tags/redis/>redis</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

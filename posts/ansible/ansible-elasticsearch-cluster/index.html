@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Automate Install Elasticsearch Cluster with Ansible Playbook </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | Automate Install Elasticsearch Cluster with Ansible Playbook </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,7 +10,7 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/ansible/ansible-elasticsearch-cluster/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Automate Install Elasticsearch Cluster with Ansible Playbook">
 <meta name=twitter:description content="集群概述 脚本会在此用户下安装三节点集群，因为 7.X 版本后会自带 JDK，所以我们不需要提前安装 Java 环境。
@@ -19,40 +18,27 @@
    IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS     10.1.207.180 22022 elasticsearch 123456 root123 CentOS Linux release 7.9.2009   10.1.207.181 22022 elasticsearch 123456 root123 CentOS Linux release 7.9.2009   10.1.207.182 22022 elasticsearch 123456 root123 CentOS Linux release 7.9.2009    提示： 可以参考批量自动化创建用户
 集群节点规划
    IP地址 Elasticsearch     10.">
-</head>
-<body><div class="sidebar .">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -60,353 +46,217 @@
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Automate Install Elasticsearch Cluster with Ansible Playbook</h3>
-</div>
-<h2 id=集群概述>集群概述</h2>
-<p>脚本会在此用户下安装三节点集群，因为 7.X 版本后会自带 JDK，所以我们不需要提前安装 Java 环境。</p>
-<h2 id=安装计划>安装计划</h2>
-<p>服务器规划</p>
-<table>
+<h3>Automate Install Elasticsearch Cluster with Ansible Playbook</h3></div><h2 id=集群概述>集群概述</h2><p>脚本会在此用户下安装三节点集群，因为 7.X 版本后会自带 JDK，所以我们不需要提前安装 Java 环境。</p><h2 id=安装计划>安装计划</h2><p>服务器规划</p><table>
 <thead>
 <tr>
-<th>IP地址</th>
-<th>SSH 端口</th>
-<th>SSH 用户名</th>
-<th>SSH 密码</th>
-<th>ROOT 密码</th>
-<th>OS</th>
-</tr>
-</thead>
-<tbody>
+<th>IP地址</th><th>SSH 端口</th><th>SSH 用户名</th><th>SSH 密码</th><th>ROOT 密码</th><th>OS</th></tr></thead><tbody>
 <tr>
-<td>10.1.207.180</td>
-<td>22022</td>
-<td>elasticsearch</td>
-<td>123456</td>
-<td>root123</td>
-<td>CentOS Linux release 7.9.2009</td>
-</tr>
-<tr>
-<td>10.1.207.181</td>
-<td>22022</td>
-<td>elasticsearch</td>
-<td>123456</td>
-<td>root123</td>
-<td>CentOS Linux release 7.9.2009</td>
-</tr>
-<tr>
-<td>10.1.207.182</td>
-<td>22022</td>
-<td>elasticsearch</td>
-<td>123456</td>
-<td>root123</td>
-<td>CentOS Linux release 7.9.2009</td>
-</tr>
-</tbody>
-</table>
-<p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p>
-<p>集群节点规划</p>
-<table>
+<td>10.1.207.180</td><td>22022</td><td>elasticsearch</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr>
+<td>10.1.207.181</td><td>22022</td><td>elasticsearch</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr>
+<td>10.1.207.182</td><td>22022</td><td>elasticsearch</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr></tbody></table><p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p><p>集群节点规划</p><table>
 <thead>
 <tr>
-<th>IP地址</th>
-<th>Elasticsearch</th>
-</tr>
-</thead>
-<tbody>
+<th>IP地址</th><th>Elasticsearch</th></tr></thead><tbody>
 <tr>
-<td>10.1.207.180</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>10.1.207.181</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>10.1.207.182</td>
-<td>✓</td>
-</tr>
-</tbody>
-</table>
-<p>节点安装路径</p>
-<table>
+<td>10.1.207.180</td><td>✓</td></tr><tr>
+<td>10.1.207.181</td><td>✓</td></tr><tr>
+<td>10.1.207.182</td><td>✓</td></tr></tbody></table><p>节点安装路径</p><table>
 <thead>
 <tr>
-<th>路径</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
+<th>路径</th><th>描述</th></tr></thead><tbody>
 <tr>
-<td>/opt/elasticsearch</td>
-<td>程序安装路径</td>
-</tr>
-<tr>
-<td>~/elasticsearch_uninstall.sh</td>
-<td>集群卸载脚本</td>
-</tr>
-<tr>
-<td>~/elasticsearch.sh</td>
-<td>集群启停脚本</td>
-</tr>
-<tr>
-<td>/data01/elasticsearch/logs</td>
-<td>日志文件</td>
-</tr>
-<tr>
-<td>/data01/elasticsearch/data</td>
-<td>数据文件</td>
-</tr>
-<tr>
-<td>/data01/elasticsearch/dump</td>
-<td>DUMP 文件</td>
-</tr>
-<tr>
-<td>/data01/elasticsearch/temp</td>
-<td>临时文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2>
-<p>在你的笔记本上创建 playbook 脚本存放目录</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>mkdir -p ~/my-docker-volume/ansible-playbook
-</code></pre></div><p>下载 playbook 脚本</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cd ~/my-docker-volume/ansible-playbook
-git clone https://github.com/coolbeevip/ansible-playbook.git
-</code></pre></div><p>下载 elasticsearch 安装包到 <code>~/my-docker-volume/ansible-playbook/packages</code> 目录</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>wget -P ~/my-docker-volume/ansible-playbook/packages https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.13.3-linux-x86_64.tar.gz --no-check-certificate
-</code></pre></div><h2 id=配置安装脚本>配置安装脚本</h2>
-<p>您需要根据实际情况修改如下配置文件，例如 IP 地址，端口号等</p>
-<h4 id=mainyml>main.yml</h4>
-<p>这个文件中主要定义了目标服务器的地址，登录用户名以及每个 elasticsearch 节点的名称</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
-  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>elasticsearch</span>
-  <span style=color:#ae81ff>...</span>
-- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.181</span>
-  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>elasticsearch</span>
-  <span style=color:#ae81ff>...</span>
-- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.182</span>
-  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>elasticsearch</span>
-  <span style=color:#ae81ff>...</span>
-</code></pre></div><h4 id=vars_elasticsearchyml>vars_elasticsearch.yml</h4>
-<p>这个文件中定义了安装路径、数据路径、安装包文件名、端口、内存等变量信息，你可以根据实际情况修改这些变量，这些变量在并部署时会替换到以下文件中。</p>
-<p>操作系统 Limits</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>limits_hard_nproc: <span style=color:#e6db74>&#39;65535&#39;</span>
-limits_soft_nproc: <span style=color:#e6db74>&#39;65535&#39;</span>
-limits_hard_nofile: <span style=color:#e6db74>&#39;278528&#39;</span>
-limits_soft_nofile: <span style=color:#e6db74>&#39;278528&#39;</span>
-limits_hard_stack: <span style=color:#e6db74>&#39;unlimited&#39;</span>
-limits_soft_stack: <span style=color:#e6db74>&#39;unlimited&#39;</span>
-</code></pre></div><p>安装用的用户名、用户组</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>es_user: <span style=color:#e6db74>&#34;elasticsearch&#34;</span>
-es_group: <span style=color:#e6db74>&#34;elasticsearch&#34;</span>
-</code></pre></div><p>安装介质名称以及解压后的目录名</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>es_tar: <span style=color:#e6db74>&#34;elasticsearch-7.13.3-linux-x86_64.tar.gz&#34;</span>
-es_tar_unzip_dir: <span style=color:#e6db74>&#34;elasticsearch-7.13.3&#34;</span>
-</code></pre></div><p>安装路径</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>es_home_dir: <span style=color:#e6db74>&#34;/opt/elasticsearch&#34;</span>
-es_log_dir: <span style=color:#e6db74>&#34;/data01/elasticsearch/logs&#34;</span>
-es_data_dir: <span style=color:#e6db74>&#34;/data01/elasticsearch/data&#34;</span>
-es_heap_dump_path: <span style=color:#e6db74>&#34;/data01/elasticsearch/dump&#34;</span>
-es_temp_dir: <span style=color:#e6db74>&#34;/data01/elasticsearch/temp&#34;</span>
-</code></pre></div><p>服务配置</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 网路信息</span>
-es_network_host: <span style=color:#e6db74>&#34;0.0.0.0&#34;</span>
-es_http_port: <span style=color:#ae81ff>39200</span>
-es_transport_port: <span style=color:#ae81ff>39010</span>
-<span style=color:#75715e># 集群名称</span>
-es_cluster_name: <span style=color:#e6db74>&#34;my-elasticsearch&#34;</span>
-<span style=color:#75715e># 自动创建索引</span>
-es_action_auto_create_index: <span style=color:#e6db74>&#34;true&#34;</span>
-<span style=color:#75715e># 内存配置</span>
-es_heap_size: 8g
-es_bootstrap_memory_lock: false
-</code></pre></div><p>集群名称配置</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 集群节点名称（注意这不是主机名)</span>
-node_names:
-  10.1.207.180:
-    es_node_name: node-180
-  10.1.207.181:
-    es_node_name: node-181
-  10.1.207.182:
-    es_node_name: node-182
-</code></pre></div><p><strong>提示：</strong> 其他更多默认配置，请参考如下文件</p>
-<ul>
-<li>ansible-playbook/elasticsearch/config/elasticsearch.yml.j2</li>
-<li>ansible-playbook/elasticsearch/config/jvm.options.j2</li>
-<li>ansible-playbook/elasticsearch/config/jvm.options.d/gc.options.j2</li>
-</ul>
-<h2 id=开始安装>开始安装</h2>
-<p>启动 Ansible 工具连接到目标服务器，并将 <code>~/my-docker-volume/ansible-playbook</code> 目录挂在到容器中。</p>
-<p><strong>提示：</strong> ANSIBLE_SSH_USERS，ANSIBLE_SSH_PASSS 配置成您之前在目标服务器上创建的用户名 <code>elasticsearch</code> 和密码 <code>123456</code></p>
-<p><strong>提示：</strong> ANSIBLE_SU_PASSS 为 root 用户的密码</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker run --name ansible --rm -it <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_HOSTS<span style=color:#f92672>=</span>10.1.207.180,10.1.207.181,10.1.207.182 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PORTS<span style=color:#f92672>=</span>22022,22022,22022 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_USERS<span style=color:#f92672>=</span>elasticsearch,elasticsearch,elasticsearch <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PASSS<span style=color:#f92672>=</span>123456,123456,123456 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SU_PASSS<span style=color:#f92672>=</span>root123,root123,root123 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -v ~/my-docker-volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  /bin/bash
-</code></pre></div><h4 id=安装-elasticsearch-集群>安装 Elasticsearch 集群</h4>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/elasticsearch/main.yml
-</code></pre></div><p>如果你看到如下信息，说明安装完成</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
-ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
-    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
-<span style=color:#f92672>}</span>
-</code></pre></div><p><strong>提示:</strong> 因为第一次执行脚本时，会上传 Elasticsearch 安装包到所有服务器（约 327MB），所以执行时间较长（取决于你的客户端和服务器之间的网络速度）。 你也可以在执行以上脚本前手动将安装包上传到服务器的安装路径 <code>/opt/elasticsearch</code> 下。在我本地环境首次安装大概耗时 5 分钟（上传安装包大概 2 分钟，安装集群大概 3 分钟）</p>
-<p><strong>提示:</strong> 此脚本只适合初始化安装，重复执行此命令可能会收到 <code>Elasticsearch has been installed, please uninstall and then reinstall</code> 提示，此时需要先要使用 <code>ansible all -m shell -a '~/elasticsearch_uninstall.sh'</code> 命令卸载之前的安装。</p>
-<p><strong>提示:</strong> 您可以使用以下脚本删除不在使用的安装包</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#34;rm -rf /opt/elasticsearch/elasticsearch-7.13.3-linux-x86_64.tar.gz&#34;</span>
-</code></pre></div><h4 id=验证-elasticsearch-集群>验证 Elasticsearch 集群</h4>
-<p>查看目标服务器上进程, 你可以看到每个服务上有两个进程</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps aux | grep [/]opt/elasticsearch | wc -l&#39;</span>
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#ae81ff>2</span>
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#ae81ff>2</span>
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#ae81ff>2</span>
-</code></pre></div><p>查看目标服 elasticsearch 服务，可以看到每个节点服务都已经启动</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;curl http://0.0.0.0:39200/?pretty&#39;</span>
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#f92672>{</span>
-  <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;node-182&#34;</span>,
-  <span style=color:#e6db74>&#34;cluster_name&#34;</span> : <span style=color:#e6db74>&#34;nc-elasticsearch&#34;</span>,
-  <span style=color:#e6db74>&#34;cluster_uuid&#34;</span> : <span style=color:#e6db74>&#34;_na_&#34;</span>,
-  <span style=color:#e6db74>&#34;version&#34;</span> : <span style=color:#f92672>{</span>
-    <span style=color:#e6db74>&#34;number&#34;</span> : <span style=color:#e6db74>&#34;7.13.3&#34;</span>,
-    <span style=color:#e6db74>&#34;build_flavor&#34;</span> : <span style=color:#e6db74>&#34;default&#34;</span>,
-    <span style=color:#e6db74>&#34;build_type&#34;</span> : <span style=color:#e6db74>&#34;tar&#34;</span>,
-    <span style=color:#e6db74>&#34;build_hash&#34;</span> : <span style=color:#e6db74>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span>,
-    <span style=color:#e6db74>&#34;build_date&#34;</span> : <span style=color:#e6db74>&#34;2021-07-02T12:06:10.804015202Z&#34;</span>,
-    <span style=color:#e6db74>&#34;build_snapshot&#34;</span> : false,
-    <span style=color:#e6db74>&#34;lucene_version&#34;</span> : <span style=color:#e6db74>&#34;8.8.2&#34;</span>,
-    <span style=color:#e6db74>&#34;minimum_wire_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.8.0&#34;</span>,
-    <span style=color:#e6db74>&#34;minimum_index_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.0.0-beta1&#34;</span>
-  <span style=color:#f92672>}</span>,
-  <span style=color:#e6db74>&#34;tagline&#34;</span> : <span style=color:#e6db74>&#34;You Know, for Search&#34;</span>
-<span style=color:#f92672>}</span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-<span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3279</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3303</span>
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#f92672>{</span>
-  <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;node-181&#34;</span>,
-  <span style=color:#e6db74>&#34;cluster_name&#34;</span> : <span style=color:#e6db74>&#34;nc-elasticsearch&#34;</span>,
-  <span style=color:#e6db74>&#34;cluster_uuid&#34;</span> : <span style=color:#e6db74>&#34;_na_&#34;</span>,
-  <span style=color:#e6db74>&#34;version&#34;</span> : <span style=color:#f92672>{</span>
-    <span style=color:#e6db74>&#34;number&#34;</span> : <span style=color:#e6db74>&#34;7.13.3&#34;</span>,
-    <span style=color:#e6db74>&#34;build_flavor&#34;</span> : <span style=color:#e6db74>&#34;default&#34;</span>,
-    <span style=color:#e6db74>&#34;build_type&#34;</span> : <span style=color:#e6db74>&#34;tar&#34;</span>,
-    <span style=color:#e6db74>&#34;build_hash&#34;</span> : <span style=color:#e6db74>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span>,
-    <span style=color:#e6db74>&#34;build_date&#34;</span> : <span style=color:#e6db74>&#34;2021-07-02T12:06:10.804015202Z&#34;</span>,
-    <span style=color:#e6db74>&#34;build_snapshot&#34;</span> : false,
-    <span style=color:#e6db74>&#34;lucene_version&#34;</span> : <span style=color:#e6db74>&#34;8.8.2&#34;</span>,
-    <span style=color:#e6db74>&#34;minimum_wire_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.8.0&#34;</span>,
-    <span style=color:#e6db74>&#34;minimum_index_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.0.0-beta1&#34;</span>
-  <span style=color:#f92672>}</span>,
-  <span style=color:#e6db74>&#34;tagline&#34;</span> : <span style=color:#e6db74>&#34;You Know, for Search&#34;</span>
-<span style=color:#f92672>}</span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-<span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3195</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3222</span>
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#f92672>{</span>
-  <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;node-180&#34;</span>,
-  <span style=color:#e6db74>&#34;cluster_name&#34;</span> : <span style=color:#e6db74>&#34;nc-elasticsearch&#34;</span>,
-  <span style=color:#e6db74>&#34;cluster_uuid&#34;</span> : <span style=color:#e6db74>&#34;_na_&#34;</span>,
-  <span style=color:#e6db74>&#34;version&#34;</span> : <span style=color:#f92672>{</span>
-    <span style=color:#e6db74>&#34;number&#34;</span> : <span style=color:#e6db74>&#34;7.13.3&#34;</span>,
-    <span style=color:#e6db74>&#34;build_flavor&#34;</span> : <span style=color:#e6db74>&#34;default&#34;</span>,
-    <span style=color:#e6db74>&#34;build_type&#34;</span> : <span style=color:#e6db74>&#34;tar&#34;</span>,
-    <span style=color:#e6db74>&#34;build_hash&#34;</span> : <span style=color:#e6db74>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span>,
-    <span style=color:#e6db74>&#34;build_date&#34;</span> : <span style=color:#e6db74>&#34;2021-07-02T12:06:10.804015202Z&#34;</span>,
-    <span style=color:#e6db74>&#34;build_snapshot&#34;</span> : false,
-    <span style=color:#e6db74>&#34;lucene_version&#34;</span> : <span style=color:#e6db74>&#34;8.8.2&#34;</span>,
-    <span style=color:#e6db74>&#34;minimum_wire_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.8.0&#34;</span>,
-    <span style=color:#e6db74>&#34;minimum_index_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.0.0-beta1&#34;</span>
-  <span style=color:#f92672>}</span>,
-  <span style=color:#e6db74>&#34;tagline&#34;</span> : <span style=color:#e6db74>&#34;You Know, for Search&#34;</span>
-<span style=color:#f92672>}</span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-<span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3139</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3163</span>
-</code></pre></div><p>查看集群状态，可以看到三节点集群已经建立</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;curl http://0.0.0.0:39200/_cat/nodes?v&#39;</span>
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-ip           heap.percent ram.percent cpu load_1m load_5m load_15m node.role   master name
-10.1.207.181            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>73</span>  <span style=color:#ae81ff>17</span>    0.77    0.47     0.37 cdfhilmrstw -      node-181
-10.1.207.182            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>35</span>  <span style=color:#ae81ff>15</span>    0.64    0.29     0.25 cdfhilmrstw -      node-182
-10.1.207.180            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>99</span>  <span style=color:#ae81ff>30</span>    3.47    1.92     1.76 cdfhilmrstw *      node-180  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-<span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3079</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3107</span>
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-ip           heap.percent ram.percent cpu load_1m load_5m load_15m node.role   master name
-10.1.207.181            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>73</span>  <span style=color:#ae81ff>17</span>    0.77    0.47     0.37 cdfhilmrstw -      node-181
-10.1.207.180            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>99</span>  <span style=color:#ae81ff>30</span>    3.47    1.92     1.76 cdfhilmrstw *      node-180
-10.1.207.182            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>35</span>  <span style=color:#ae81ff>15</span>    0.64    0.29     0.25 cdfhilmrstw -      node-182  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-<span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3719</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3722</span>
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-ip           heap.percent ram.percent cpu load_1m load_5m load_15m node.role   master name
-10.1.207.181            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>73</span>  <span style=color:#ae81ff>17</span>    0.77    0.47     0.37 cdfhilmrstw -      node-181
-10.1.207.180            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>99</span>  <span style=color:#ae81ff>30</span>    3.47    1.92     1.76 cdfhilmrstw *      node-180
-10.1.207.182            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>35</span>  <span style=color:#ae81ff>15</span>    0.64    0.29     0.25 cdfhilmrstw -      node-182  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-<span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>9153</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>9400</span>
-</code></pre></div><h2 id=常用运维命令>常用运维命令</h2>
-<p>启动集群</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/elasticsearch.sh start&#39;</span>
-</code></pre></div><p>停止集群</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/elasticsearch.sh stop&#39;</span>
-</code></pre></div><h2 id=q--a>Q & A</h2>
-<h4 id=如何彻底删除-elasticsearch-集群>如何彻底删除 Elasticsearch 集群</h4>
-<p>A: <code>~/elasticsearch_uninstall.sh</code> 脚本将 <strong>kill Elasticsearch 进程，删除程序文件和所有数据文件</strong></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/elasticsearch_uninstall.sh&#39;</span>
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-Kill Elasticsearch process
-Delete Elasticsearch data
-Delete Elasticsearch programs
-Delete elasticsearch_uninstall.sh
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-Kill Elasticsearch process
-Delete Elasticsearch data
-Delete Elasticsearch programs
-Delete elasticsearch_uninstall.sh
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-Kill Elasticsearch process
-Delete Elasticsearch data
-Delete Elasticsearch programs
-Delete elasticsearch_uninstall.sh
-</code></pre></div></div>
-<div class=post-footer>
+<td>/opt/elasticsearch</td><td>程序安装路径</td></tr><tr>
+<td>~/elasticsearch_uninstall.sh</td><td>集群卸载脚本</td></tr><tr>
+<td>~/elasticsearch.sh</td><td>集群启停脚本</td></tr><tr>
+<td>/data01/elasticsearch/logs</td><td>日志文件</td></tr><tr>
+<td>/data01/elasticsearch/data</td><td>数据文件</td></tr><tr>
+<td>/data01/elasticsearch/dump</td><td>DUMP 文件</td></tr><tr>
+<td>/data01/elasticsearch/temp</td><td>临时文件</td></tr></tbody></table><h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2><p>在你的笔记本上创建 playbook 脚本存放目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/my-docker-volume/ansible-playbook
+</span></span></code></pre></div><p>下载 playbook 脚本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/my-docker-volume/ansible-playbook
+</span></span><span style=display:flex><span>git clone https://github.com/coolbeevip/ansible-playbook.git
+</span></span></code></pre></div><p>下载 elasticsearch 安装包到 <code>~/my-docker-volume/ansible-playbook/packages</code> 目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>wget -P ~/my-docker-volume/ansible-playbook/packages https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.13.3-linux-x86_64.tar.gz --no-check-certificate
+</span></span></code></pre></div><h2 id=配置安装脚本>配置安装脚本</h2><p>您需要根据实际情况修改如下配置文件，例如 IP 地址，端口号等</p><h4 id=mainyml>main.yml</h4><p>这个文件中主要定义了目标服务器的地址，登录用户名以及每个 elasticsearch 节点的名称</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>elasticsearch</span>
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>...</span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.181</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>elasticsearch</span>
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>...</span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.182</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>elasticsearch</span>
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>...</span>
+</span></span></code></pre></div><h4 id=vars_elasticsearchyml>vars_elasticsearch.yml</h4><p>这个文件中定义了安装路径、数据路径、安装包文件名、端口、内存等变量信息，你可以根据实际情况修改这些变量，这些变量在并部署时会替换到以下文件中。</p><p>操作系统 Limits</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>limits_hard_nproc: <span style=color:#e6db74>&#39;65535&#39;</span>
+</span></span><span style=display:flex><span>limits_soft_nproc: <span style=color:#e6db74>&#39;65535&#39;</span>
+</span></span><span style=display:flex><span>limits_hard_nofile: <span style=color:#e6db74>&#39;278528&#39;</span>
+</span></span><span style=display:flex><span>limits_soft_nofile: <span style=color:#e6db74>&#39;278528&#39;</span>
+</span></span><span style=display:flex><span>limits_hard_stack: <span style=color:#e6db74>&#39;unlimited&#39;</span>
+</span></span><span style=display:flex><span>limits_soft_stack: <span style=color:#e6db74>&#39;unlimited&#39;</span>
+</span></span></code></pre></div><p>安装用的用户名、用户组</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>es_user: <span style=color:#e6db74>&#34;elasticsearch&#34;</span>
+</span></span><span style=display:flex><span>es_group: <span style=color:#e6db74>&#34;elasticsearch&#34;</span>
+</span></span></code></pre></div><p>安装介质名称以及解压后的目录名</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>es_tar: <span style=color:#e6db74>&#34;elasticsearch-7.13.3-linux-x86_64.tar.gz&#34;</span>
+</span></span><span style=display:flex><span>es_tar_unzip_dir: <span style=color:#e6db74>&#34;elasticsearch-7.13.3&#34;</span>
+</span></span></code></pre></div><p>安装路径</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>es_home_dir: <span style=color:#e6db74>&#34;/opt/elasticsearch&#34;</span>
+</span></span><span style=display:flex><span>es_log_dir: <span style=color:#e6db74>&#34;/data01/elasticsearch/logs&#34;</span>
+</span></span><span style=display:flex><span>es_data_dir: <span style=color:#e6db74>&#34;/data01/elasticsearch/data&#34;</span>
+</span></span><span style=display:flex><span>es_heap_dump_path: <span style=color:#e6db74>&#34;/data01/elasticsearch/dump&#34;</span>
+</span></span><span style=display:flex><span>es_temp_dir: <span style=color:#e6db74>&#34;/data01/elasticsearch/temp&#34;</span>
+</span></span></code></pre></div><p>服务配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># 网路信息</span>
+</span></span><span style=display:flex><span>es_network_host: <span style=color:#e6db74>&#34;0.0.0.0&#34;</span>
+</span></span><span style=display:flex><span>es_http_port: <span style=color:#ae81ff>39200</span>
+</span></span><span style=display:flex><span>es_transport_port: <span style=color:#ae81ff>39010</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 集群名称</span>
+</span></span><span style=display:flex><span>es_cluster_name: <span style=color:#e6db74>&#34;my-elasticsearch&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 自动创建索引</span>
+</span></span><span style=display:flex><span>es_action_auto_create_index: <span style=color:#e6db74>&#34;true&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 内存配置</span>
+</span></span><span style=display:flex><span>es_heap_size: 8g
+</span></span><span style=display:flex><span>es_bootstrap_memory_lock: false
+</span></span></code></pre></div><p>集群名称配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># 集群节点名称（注意这不是主机名)</span>
+</span></span><span style=display:flex><span>node_names:
+</span></span><span style=display:flex><span>  10.1.207.180:
+</span></span><span style=display:flex><span>    es_node_name: node-180
+</span></span><span style=display:flex><span>  10.1.207.181:
+</span></span><span style=display:flex><span>    es_node_name: node-181
+</span></span><span style=display:flex><span>  10.1.207.182:
+</span></span><span style=display:flex><span>    es_node_name: node-182
+</span></span></code></pre></div><p><strong>提示：</strong> 其他更多默认配置，请参考如下文件</p><ul>
+<li>ansible-playbook/elasticsearch/config/elasticsearch.yml.j2</li><li>ansible-playbook/elasticsearch/config/jvm.options.j2</li><li>ansible-playbook/elasticsearch/config/jvm.options.d/gc.options.j2</li></ul><h2 id=开始安装>开始安装</h2><p>启动 Ansible 工具连接到目标服务器，并将 <code>~/my-docker-volume/ansible-playbook</code> 目录挂在到容器中。</p><p><strong>提示：</strong> ANSIBLE_SSH_USERS，ANSIBLE_SSH_PASSS 配置成您之前在目标服务器上创建的用户名 <code>elasticsearch</code> 和密码 <code>123456</code></p><p><strong>提示：</strong> ANSIBLE_SU_PASSS 为 root 用户的密码</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>docker run --name ansible --rm -it <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_HOSTS<span style=color:#f92672>=</span>10.1.207.180,10.1.207.181,10.1.207.182 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PORTS<span style=color:#f92672>=</span>22022,22022,22022 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_USERS<span style=color:#f92672>=</span>elasticsearch,elasticsearch,elasticsearch <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PASSS<span style=color:#f92672>=</span>123456,123456,123456 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SU_PASSS<span style=color:#f92672>=</span>root123,root123,root123 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -v ~/my-docker-volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  /bin/bash
+</span></span></code></pre></div><h4 id=安装-elasticsearch-集群>安装 Elasticsearch 集群</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible-playbook -C /ansible-playbook/elasticsearch/main.yml
+</span></span></code></pre></div><p>如果你看到如下信息，说明安装完成</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
+</span></span><span style=display:flex><span>ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p><strong>提示:</strong> 因为第一次执行脚本时，会上传 Elasticsearch 安装包到所有服务器（约 327MB），所以执行时间较长（取决于你的客户端和服务器之间的网络速度）。 你也可以在执行以上脚本前手动将安装包上传到服务器的安装路径 <code>/opt/elasticsearch</code> 下。在我本地环境首次安装大概耗时 5 分钟（上传安装包大概 2 分钟，安装集群大概 3 分钟）</p><p><strong>提示:</strong> 此脚本只适合初始化安装，重复执行此命令可能会收到 <code>Elasticsearch has been installed, please uninstall and then reinstall</code> 提示，此时需要先要使用 <code>ansible all -m shell -a '~/elasticsearch_uninstall.sh'</code> 命令卸载之前的安装。</p><p><strong>提示:</strong> 您可以使用以下脚本删除不在使用的安装包</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#34;rm -rf /opt/elasticsearch/elasticsearch-7.13.3-linux-x86_64.tar.gz&#34;</span>
+</span></span></code></pre></div><h4 id=验证-elasticsearch-集群>验证 Elasticsearch 集群</h4><p>查看目标服务器上进程, 你可以看到每个服务上有两个进程</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps aux | grep [/]opt/elasticsearch | wc -l&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#ae81ff>2</span>
+</span></span></code></pre></div><p>查看目标服 elasticsearch 服务，可以看到每个节点服务都已经启动</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;curl http://0.0.0.0:39200/?pretty&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;node-182&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;cluster_name&#34;</span> : <span style=color:#e6db74>&#34;nc-elasticsearch&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;cluster_uuid&#34;</span> : <span style=color:#e6db74>&#34;_na_&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;version&#34;</span> : <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;number&#34;</span> : <span style=color:#e6db74>&#34;7.13.3&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_flavor&#34;</span> : <span style=color:#e6db74>&#34;default&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_type&#34;</span> : <span style=color:#e6db74>&#34;tar&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_hash&#34;</span> : <span style=color:#e6db74>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_date&#34;</span> : <span style=color:#e6db74>&#34;2021-07-02T12:06:10.804015202Z&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_snapshot&#34;</span> : false,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;lucene_version&#34;</span> : <span style=color:#e6db74>&#34;8.8.2&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;minimum_wire_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.8.0&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;minimum_index_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.0.0-beta1&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;tagline&#34;</span> : <span style=color:#e6db74>&#34;You Know, for Search&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style=display:flex><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style=display:flex><span><span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3279</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3303</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;node-181&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;cluster_name&#34;</span> : <span style=color:#e6db74>&#34;nc-elasticsearch&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;cluster_uuid&#34;</span> : <span style=color:#e6db74>&#34;_na_&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;version&#34;</span> : <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;number&#34;</span> : <span style=color:#e6db74>&#34;7.13.3&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_flavor&#34;</span> : <span style=color:#e6db74>&#34;default&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_type&#34;</span> : <span style=color:#e6db74>&#34;tar&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_hash&#34;</span> : <span style=color:#e6db74>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_date&#34;</span> : <span style=color:#e6db74>&#34;2021-07-02T12:06:10.804015202Z&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_snapshot&#34;</span> : false,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;lucene_version&#34;</span> : <span style=color:#e6db74>&#34;8.8.2&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;minimum_wire_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.8.0&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;minimum_index_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.0.0-beta1&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;tagline&#34;</span> : <span style=color:#e6db74>&#34;You Know, for Search&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style=display:flex><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style=display:flex><span><span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3195</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3222</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;node-180&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;cluster_name&#34;</span> : <span style=color:#e6db74>&#34;nc-elasticsearch&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;cluster_uuid&#34;</span> : <span style=color:#e6db74>&#34;_na_&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;version&#34;</span> : <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;number&#34;</span> : <span style=color:#e6db74>&#34;7.13.3&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_flavor&#34;</span> : <span style=color:#e6db74>&#34;default&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_type&#34;</span> : <span style=color:#e6db74>&#34;tar&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_hash&#34;</span> : <span style=color:#e6db74>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_date&#34;</span> : <span style=color:#e6db74>&#34;2021-07-02T12:06:10.804015202Z&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;build_snapshot&#34;</span> : false,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;lucene_version&#34;</span> : <span style=color:#e6db74>&#34;8.8.2&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;minimum_wire_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.8.0&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;minimum_index_compatibility_version&#34;</span> : <span style=color:#e6db74>&#34;6.0.0-beta1&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;tagline&#34;</span> : <span style=color:#e6db74>&#34;You Know, for Search&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style=display:flex><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style=display:flex><span><span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>522</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3139</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3163</span>
+</span></span></code></pre></div><p>查看集群状态，可以看到三节点集群已经建立</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;curl http://0.0.0.0:39200/_cat/nodes?v&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>ip           heap.percent ram.percent cpu load_1m load_5m load_15m node.role   master name
+</span></span><span style=display:flex><span>10.1.207.181            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>73</span>  <span style=color:#ae81ff>17</span>    0.77    0.47     0.37 cdfhilmrstw -      node-181
+</span></span><span style=display:flex><span>10.1.207.182            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>35</span>  <span style=color:#ae81ff>15</span>    0.64    0.29     0.25 cdfhilmrstw -      node-182
+</span></span><span style=display:flex><span>10.1.207.180            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>99</span>  <span style=color:#ae81ff>30</span>    3.47    1.92     1.76 cdfhilmrstw *      node-180  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style=display:flex><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style=display:flex><span><span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3079</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3107</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>ip           heap.percent ram.percent cpu load_1m load_5m load_15m node.role   master name
+</span></span><span style=display:flex><span>10.1.207.181            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>73</span>  <span style=color:#ae81ff>17</span>    0.77    0.47     0.37 cdfhilmrstw -      node-181
+</span></span><span style=display:flex><span>10.1.207.180            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>99</span>  <span style=color:#ae81ff>30</span>    3.47    1.92     1.76 cdfhilmrstw *      node-180
+</span></span><span style=display:flex><span>10.1.207.182            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>35</span>  <span style=color:#ae81ff>15</span>    0.64    0.29     0.25 cdfhilmrstw -      node-182  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style=display:flex><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style=display:flex><span><span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>3719</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>3722</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>ip           heap.percent ram.percent cpu load_1m load_5m load_15m node.role   master name
+</span></span><span style=display:flex><span>10.1.207.181            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>73</span>  <span style=color:#ae81ff>17</span>    0.77    0.47     0.37 cdfhilmrstw -      node-181
+</span></span><span style=display:flex><span>10.1.207.180            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>99</span>  <span style=color:#ae81ff>30</span>    3.47    1.92     1.76 cdfhilmrstw *      node-180
+</span></span><span style=display:flex><span>10.1.207.182            <span style=color:#ae81ff>5</span>          <span style=color:#ae81ff>35</span>  <span style=color:#ae81ff>15</span>    0.64    0.29     0.25 cdfhilmrstw -      node-182  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style=display:flex><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style=display:flex><span><span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>  <span style=color:#ae81ff>100</span>   <span style=color:#ae81ff>376</span>    <span style=color:#ae81ff>0</span>     <span style=color:#ae81ff>0</span>   <span style=color:#ae81ff>9153</span>      <span style=color:#ae81ff>0</span> --:--:-- --:--:-- --:--:--  <span style=color:#ae81ff>9400</span>
+</span></span></code></pre></div><h2 id=常用运维命令>常用运维命令</h2><p>启动集群</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/elasticsearch.sh start&#39;</span>
+</span></span></code></pre></div><p>停止集群</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/elasticsearch.sh stop&#39;</span>
+</span></span></code></pre></div><h2 id=q--a>Q & A</h2><h4 id=如何彻底删除-elasticsearch-集群>如何彻底删除 Elasticsearch 集群</h4><p>A: <code>~/elasticsearch_uninstall.sh</code> 脚本将 <strong>kill Elasticsearch 进程，删除程序文件和所有数据文件</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/elasticsearch_uninstall.sh&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>Kill Elasticsearch process
+</span></span><span style=display:flex><span>Delete Elasticsearch data
+</span></span><span style=display:flex><span>Delete Elasticsearch programs
+</span></span><span style=display:flex><span>Delete elasticsearch_uninstall.sh
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>Kill Elasticsearch process
+</span></span><span style=display:flex><span>Delete Elasticsearch data
+</span></span><span style=display:flex><span>Delete Elasticsearch programs
+</span></span><span style=display:flex><span>Delete elasticsearch_uninstall.sh
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>Kill Elasticsearch process
+</span></span><span style=display:flex><span>Delete Elasticsearch data
+</span></span><span style=display:flex><span>Delete Elasticsearch programs
+</span></span><span style=display:flex><span>Delete elasticsearch_uninstall.sh
+</span></span></code></pre></div></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
 <span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/elasticsearch/>elasticsearch</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

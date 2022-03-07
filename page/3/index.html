@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -12,44 +11,31 @@
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/>
 <link rel=alternate type=application/rss+xml href=/index.xml title>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content>
 <meta name=twitter:description content="This is my knowledge base. I document things here">
-</head>
-<body><div class="sidebar .">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -57,22 +43,13 @@
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a class=current href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a class=current href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
-</div>
-<div class="post .">
+</div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/docker/jprofiler-with-docker/>JProfiler with Docker Sonatype Nexus3</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>使用 JProfiler 监控 Docker Sonatype Nexus3
 下载 JProfiler 从 https://www.ej-technologies.com/下载 JProfiler 和 Agent（注意版本必须一致）
@@ -86,10 +63,7 @@ https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
 使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
 增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
 增加 -p 9899:9899 容器端口映射
-docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS="-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</p>
-<a href=/posts/docker/jprofiler-with-docker/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS="-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</p><a href=/posts/docker/jprofiler-with-docker/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -97,16 +71,10 @@ docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS="-Xms10g -Xm
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/jprofiler/>jprofiler</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/nexus/>nexus</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/docker/securing-docker-ports-with-firewalld/>Securing Docker ports with firewalld</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>概述 为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。 通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，更多详细
 本文基于环境
@@ -116,10 +84,7 @@ Docker-CE 19.03.12 CentOS Linux release 7.8.2003 Firewall 0.6.3 本文例子:
 配置 192.168.51.245 可以访问 Nginx Docker
 其他机器无法访问 Nginx Docker
 重要的事情说三遍
-如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER</p>
-<a href=/posts/docker/securing-docker-ports-with-firewalld/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER</p><a href=/posts/docker/securing-docker-ports-with-firewalld/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -127,16 +92,10 @@ Docker-CE 19.03.12 CentOS Linux release 7.8.2003 Firewall 0.6.3 本文例子:
 </span>
 <span class=separator><a class=category href=/categories/docker/>docker</a></span>
 <span class=separator><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/firewalld/>firewalld</a><a class=tag href=/tags/centos/>centos</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/maven/maven-export-dependencies-analyse-license/>Use Maven plugin to export license info in source files and its optional dependencies</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>有的时候我们那需要分析多模块 Maven 项目的依赖使用情况，并希望能够分析出这些依赖的 LICENSE 信息。使用 io.github.coolbeevip:license-maven-plugin 插件 可以生成 TXT 或者 CSV 格式的分析报告
 youtube
@@ -145,10 +104,7 @@ CSV 格式的报告 NOTICE.CSV NOTICE-LICENSE.CSV TXT 格式的报告 NOTICE.TXT
 导出 CSV
 mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv 导出 TXT
 mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=txt 提示： 导出的报告位置在 ./target/distribute 目录下
-导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.</p>
-<a href=/posts/maven/maven-export-dependencies-analyse-license/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.</p><a href=/posts/maven/maven-export-dependencies-analyse-license/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -156,22 +112,13 @@ mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -D
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/license/>license</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/docker/docker-pulling-pushing/>Synchronize between image repositories with Bash</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>从源镜像仓库批量拉取镜像，并将这些镜像推送到目标镜像仓库的批量脚本
-#!/bin/bash ################################################# # 使用方式 # 从源仓库拉取镜像到本机 # sh docker-images-pulling-pushing.sh pull # # 将本机镜像推送到目的仓库 # sh docker-images-pulling-pushing.sh push # # 清理本机的镜像 # sh docker-images-pulling-pushing.sh clean ################################################# # 源仓库地址 DOCKER_REPO_FROM= # 目标仓库地址 DOCKER_REPO_TO=192.168.2.2:8888/ DOCKER_REPO_TO_USER=test DOCKER_REPO_TO_PASS=Test123456 # 镜像定义 DOCKER_IMAGES=() DOCKER_IMAGES+=(postgres:9.6) DOCKER_IMAGES+=(elasticsearch:6.6.2) DOCKER_IMAGES+=(coolbeevip/servicecomb-pack) # 从源仓库地址拉取镜像到本机仓库 function pull(){ echo "Pull images from $DOCKER_REPO_FROM" for image in ${DOCKER_IMAGES[@]}; do docker pull $DOCKER_REPO_FROM$image done } # 本机镜像推送到目的仓库 function push(){ docker login http://$DOCKER_REPO_TO -u $DOCKER_REPO_TO_USER -p $DOCKER_REPO_TO_PASS echo "Push $DOCKER_REPO_FROMto $DOCKER_REPO_TO" for image in ${DOCKER_IMAGES[@]}; do docker image tag $DOCKER_REPO_FROM$image $DOCKER_REPO_TO$image docker push $DOCKER_REPO_TO$image done } # 清理本机拉取后的镜像 function clean(){ echo "Remove images" docker rmi -f $(docker images | grep $DOCKER_REPO_FROM | awk '{print $3}') docker rmi -f $(docker images | grep $DOCKER_REPO_TO | awk '{print $3}') } case "${@: -1}" in pull ) pull ;; clean ) clean ;; push ) push ;; esac </p>
-</div>
-</div>
-<div class=post-footer>
+#!/bin/bash ################################################# # 使用方式 # 从源仓库拉取镜像到本机 # sh docker-images-pulling-pushing.sh pull # # 将本机镜像推送到目的仓库 # sh docker-images-pulling-pushing.sh push # # 清理本机的镜像 # sh docker-images-pulling-pushing.sh clean ################################################# # 源仓库地址 DOCKER_REPO_FROM= # 目标仓库地址 DOCKER_REPO_TO=192.168.2.2:8888/ DOCKER_REPO_TO_USER=test DOCKER_REPO_TO_PASS=Test123456 # 镜像定义 DOCKER_IMAGES=() DOCKER_IMAGES+=(postgres:9.6) DOCKER_IMAGES+=(elasticsearch:6.6.2) DOCKER_IMAGES+=(coolbeevip/servicecomb-pack) # 从源仓库地址拉取镜像到本机仓库 function pull(){ echo "Pull images from $DOCKER_REPO_FROM" for image in ${DOCKER_IMAGES[@]}; do docker pull $DOCKER_REPO_FROM$image done } # 本机镜像推送到目的仓库 function push(){ docker login http://$DOCKER_REPO_TO -u $DOCKER_REPO_TO_USER -p $DOCKER_REPO_TO_PASS echo "Push $DOCKER_REPO_FROMto $DOCKER_REPO_TO" for image in ${DOCKER_IMAGES[@]}; do docker image tag $DOCKER_REPO_FROM$image $DOCKER_REPO_TO$image docker push $DOCKER_REPO_TO$image done } # 清理本机拉取后的镜像 function clean(){ echo "Remove images" docker rmi -f $(docker images | grep $DOCKER_REPO_FROM | awk '{print $3}') docker rmi -f $(docker images | grep $DOCKER_REPO_TO | awk '{print $3}') } case "${@: -1}" in pull ) pull ;; clean ) clean ;; push ) push ;; esac </p></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -179,23 +126,14 @@ mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -D
 </span>
 <span class=separator><a class=category href=/categories/docker/>docker</a></span>
 <span class=separator><a class=tag href=/tags/docker/>docker</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/java/macos-switch-jdk/>MacOS Switch JDK</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
 $ /usr/libexec/java_home -V Matching Java Virtual Machines (2): 11.0.10, x86_64: "OpenJDK 11.0.10" /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 1.8.0_201, x86_64: "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 查看当前使用的 JDK 版本 $ java -version java version "1.8.0_201" Java(TM) SE Runtime Environment (build 1.8.0_201-b09) Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode) 切换 JDK 切换到 JDK 11.0.10 版本，并查看切换后的 JDK 版本
-$ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk version "11.</p>
-<a href=/posts/java/macos-switch-jdk/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+$ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk version "11.</p><a href=/posts/java/macos-switch-jdk/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -203,24 +141,15 @@ $ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk v
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/macos/>macos</a><a class=tag href=/tags/jdk/>jdk</a><a class=tag href=/tags/java/>java</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/>Oracle Proxy Using HAProxy Docker</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>下载 HAProxy Docker
 docker pull haproxy:2.3 创建工作目录
 mkdir -p /opt/haproxy-oracle/docker_volume 在 /opt/haproxy-oracle/docker_volume 目录下创建如下 haproxy.cfg 文件，请将文件尾部的 oracle 地址和端口改为你的地址和端口
-global daemon log 127.0.0.1 local0 log 127.0.0.1 local1 notice maxconn 4096 tune.ssl.default-dh-param 2048 defaults log global retries 3 maxconn 2000 timeout connect 5s timeout client 50s timeout server 50s listen stats bind *:9090 balance mode http stats enable stats auth admin:admin stats uri /stats listen oracle-proxy log global bind :1521 mode tcp balance roundrobin server oracle-1 10.</p>
-<a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+global daemon log 127.0.0.1 local0 log 127.0.0.1 local1 notice maxconn 4096 tune.ssl.default-dh-param 2048 defaults log global retries 3 maxconn 2000 timeout connect 5s timeout client 50s timeout server 50s listen stats bind *:9090 balance mode http stats enable stats auth admin:admin stats uri /stats listen oracle-proxy log global bind :1521 mode tcp balance roundrobin server oracle-1 10.</p><a href=/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -228,23 +157,14 @@ global daemon log 127.0.0.1 local0 log 127.0.0.1 local1 notice maxconn 4096 tune
 </span>
 <span class=separator><a class=category href=/categories/haproxy/>haproxy</a></span>
 <span class=separator><a class=tag href=/tags/haproxy/>haproxy</a><a class=tag href=/tags/oracle/>oracle</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/redis/redis-setting-up-redis-for-production/>Setting up Redis for Production</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>安装 官方建议的安装方法是从源代码编译安装，您可以从 redis.io 下载最新稳定版的 TAR 包
 wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xvzf redis-6.2.5.tar.gz cd redis-6.2.5 make 此时，您可以通过键入 make test 来测试您的构建是否正常工作。编译后 redis-6.2.5/src 目录填充了一部分可执行文件。 最好将编译后的 Redis 执行文件都复制到适当的位置，或者使用以下命令手动复制（假设我们的安装路径是 /usr/local/redis）：
-# 可执行文件 sudo mkdir -p /usr/local/redis/bin sudo cp src/redis-server /usr/local/redis/bin sudo cp src/redis-cli /usr/local/redis/bin sudo cp src/redis-sentinel /usr/local/redis/bin sudo cp src/redis-benchmark /usr/local/redis/bin sudo cp src/redis-check-aof /usr/local/redis/bin sudo cp src/redis-check-rdb /usr/local/redis/bin # 配置文件 sudo mkdir -p /usr/local/redis/conf sudo cp redis.conf /usr/local/redis/conf sudo cp sentinel.conf /usr/local/redis/conf # 数据目录 sudo mkdir -p /usr/local/redis/data sudo mkdir -p /usr/local/redis/log # 创建链接 sudo ln -s /usr/local/redis/bin/redis-server /usr/bin/redis-server sudo ln -s /usr/local/redis/bin/redis-cli /usr/bin/redis-cli 提示： 复制完毕后，您可以删除 redis-6.</p>
-<a href=/posts/redis/redis-setting-up-redis-for-production/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+# 可执行文件 sudo mkdir -p /usr/local/redis/bin sudo cp src/redis-server /usr/local/redis/bin sudo cp src/redis-cli /usr/local/redis/bin sudo cp src/redis-sentinel /usr/local/redis/bin sudo cp src/redis-benchmark /usr/local/redis/bin sudo cp src/redis-check-aof /usr/local/redis/bin sudo cp src/redis-check-rdb /usr/local/redis/bin # 配置文件 sudo mkdir -p /usr/local/redis/conf sudo cp redis.conf /usr/local/redis/conf sudo cp sentinel.conf /usr/local/redis/conf # 数据目录 sudo mkdir -p /usr/local/redis/data sudo mkdir -p /usr/local/redis/log # 创建链接 sudo ln -s /usr/local/redis/bin/redis-server /usr/bin/redis-server sudo ln -s /usr/local/redis/bin/redis-cli /usr/bin/redis-cli 提示： 复制完毕后，您可以删除 redis-6.</p><a href=/posts/redis/redis-setting-up-redis-for-production/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -252,25 +172,16 @@ wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xvzf redis-6.2.5.
 </span>
 <span class=separator><a class=category href=/categories/redis/>redis</a></span>
 <span class=separator><a class=tag href=/tags/redis/>redis</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/redis/redis-using-redis-as-a-cache/>Using Redis as a Cache</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>当 Redis 用作缓存时，通常可以方便地让它在您添加新数据时自动驱逐旧数据。Redis 支持 6 种驱逐策略，你可以使用 maxmemory-policy 修改驱逐策略。默认是不驱逐，也就是说如果使用的内存超过了 maxmemory 限制，将提示 OOM。
 你可以在 redis.conf 通过 maxmemory 2gb 设置，也可以通过 config set maxmemory 2gb 方式动态设置，注意： 在64bit系统下，maxmemory设置为0表示不限制内存使用，在32bit系统下，maxmemory不能超过3GB
 驱逐策略 noenviction: 禁止驱逐数据(默认淘汰策略) 当 redis 内存数据达到 maxmemory，在该策略下，直接返回OOM错误； volatile-lru: 驱逐已设置过期时间的内存数据集中最近最少使用的数据； volatile-ttl: 驱逐已设置过期时间的内存数据集中即将过期的数据； volatile-random: 驱逐已设置过期时间的内存数据集中任意挑选数据； allkeys-lru: 驱逐内存数据集中最近最少使用的数据； allkeys-random: 驱逐数据集中任意挑选数据； volatile-lfu 驱逐已设置过期时间的内存数据集中使用频率最少的数据；（since 4.0） allkeys-lfu 驱逐内存数据集中使用频率最少的数据；（since 4.0） 如果 KEY 未设置过期时间，那么 volatile-random、volatile-ttl 和 volatile-lru 等同于 noenviction。
 驱逐程序如何运作 重要的是要了解驱逐过程的工作方式如下：
-客户端运行新命令，导致添加更多数据。 Redis 检查内存使用情况，如果大于 maxmemory limit ，则根据策略驱逐键。 执行新命令，等等。 所以我们不断地越过内存限制的边界，越过它，然后通过驱逐键返回到限制之下。 如果某个命令导致使用大量内存一段时间，则内存限制可能会明显超出。</p>
-</div>
-</div>
-<div class=post-footer>
+客户端运行新命令，导致添加更多数据。 Redis 检查内存使用情况，如果大于 maxmemory limit ，则根据策略驱逐键。 执行新命令，等等。 所以我们不断地越过内存限制的边界，越过它，然后通过驱逐键返回到限制之下。 如果某个命令导致使用大量内存一段时间，则内存限制可能会明显超出。</p></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -278,26 +189,17 @@ wget https://download.redis.io/releases/redis-6.2.5.tar.gz tar xvzf redis-6.2.5.
 </span>
 <span class=separator><a class=category href=/categories/redis/>redis</a></span>
 <span class=separator><a class=tag href=/tags/redis/>redis</a><a class=tag href=/tags/cache/>cache</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
 <h3><a href=/posts/kafka-commands/>Kafka Commands</a>
-</h3>
-</div>
-<div class=post-content>
+</h3></div><div class=post-content>
 <div class=p_part>
 <p>常用 Kafka 命令
 Topics 查询 topic 列表
 ./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --list 查看 topic 描述
 ./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --describe --topic my-topic Consumer Groups 查询消费组列表
 ./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --list 查询指定的组各 topic 消息消费情况
-./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group my-group </p>
-</div>
-</div>
-<div class=post-footer>
+./bin/kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group my-group </p></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
@@ -305,66 +207,41 @@ Topics 查询 topic 列表
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/kafka/>kafka</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class="post .">
+</div></div></div></div><div class="post .">
 <div class=post-title>
-<h3><a href=/posts/mysql/mysql-commands/>MySQL Commands</a>
-</h3>
-</div>
-<div class=post-content>
+<h3><a href=/posts/elasticsearch/migrate-spring-data-elasticsearch-from-3.x-version-to-4.x/>Migrate Spring Data Elasticsearch from 3.x version to 4.x</a>
+</h3></div><div class=post-content>
 <div class=p_part>
-<p>常用 MySQL 命令
-连接数配置 查看允许的最大连接数 show variables like '%max_connection%'; 如果过去曾达到此限制，则可以使用以下方法检查 SHOW GLOBAL STATUS LIKE 'max_use%'; 配置用户的最大并发连接数 GRANT USAGE ON *.* TO 'repl'@'%' WITH MAX_CONNECTIONS_PER_HOUR 100 MAX_USER_CONNECTIONS 10; 查看用户的最大并发连接数 SELECT User, Host, max_connections, max_user_connections FROM mysql.user; 设置最大连接数 set global max_connections=1000; 查看当前连接数 show status like 'Threads%'; Threads_cached 当前线程池中缓存有多少空闲线程 Threads_connected 当前的连接数 ( 也就是线程数 ) Threads_running 已经创建的线程总数 Threads_created 当前激活的线程数 ( Threads_connected 中的线程有些可能处于休眠状态 ) thread_cache_size 值过小会导致频繁创建线程，直接反映就是 show status 查看 Threads_created 值过大。 当 Threads_cached 越来越少 但 Threads_connected 始终不降 且 Threads_created 持续升高 这时可适当增加 thread_cache_size 的大小</p>
-<a href=/posts/mysql/mysql-commands/ class=read_more>Read more</a></div>
-</div>
-<div class=post-footer>
+<p>Spring Data Elasticsearch 从 3.X 迁移到 4.X
+因为需要将产品的 spring boot 2.1.6.RELEASE 升级到 2.3.12.RELEASE，升级过程中发现有一些需要迁移的部分，特此整理记录。 本文不是迁移指南，仅仅是工作中遇到的迁移问题笔记
+依赖组件 组件 迁移前 迁移后 spring-data-elasticsearch 3.1.9 4.0.9 elasticsearch 6.4.3 7.6.2 GetQuery 已废弃 以下代码中 GetQuery 已经被废弃，并且 getQuery.setId 方法已经被删除
+GetQuery getQuery = new GetQuery(); getQuery.setId(globalTxId); GlobalTransactionDocument globalTransaction = this.template .queryForObject(getQuery, GlobalTransactionDocument.class); 使用以下代码替换
+Query query = new NativeSearchQueryBuilder().withIds(Collections.singletonList(globalTxId)).build(); SearchHit&lt;GlobalTransactionDocument> result = this.template.searchOne(query, GlobalTransactionDocument.class); GlobalTransactionDocument globalTransaction = result.</p><a href=/posts/elasticsearch/migrate-spring-data-elasticsearch-from-3.x-version-to-4.x/ class=read_more>Read more</a></div></div><div class=post-footer>
 <div class=meta>
 <div class=info>
 <em class="fas fa-calendar-day"></em>
-<span class=date> Mon, May 11, 2020
+<span class=date> Tue, Jul 28, 2020
 </span>
-<span class=separator><a class=category href=/categories/database/>database</a></span>
-<span class=separator><a class=tag href=/tags/mysql/>mysql</a></span>
-</div>
-</div>
-</div>
-</div>
-<div class=pagination>
+<span class=separator><a class=category href=/categories/java/>java</a><a class=category href=/categories/elasticsearch/>elasticsearch</a><a class=category href=/categories/spring-boot/>spring-boot</a></span>
+<span class=separator><a class=tag href=/tags/elasticsearch/>elasticsearch</a><a class=tag href=/tags/spring-data-elasticsearch/>spring-data-elasticsearch</a></span>
+</div></div></div></div><div class=pagination>
 <ul class="pagination pagination-default">
 <li class=page-item>
 <a href=/ aria-label=First class=page-link role=button><span aria-hidden=true>&#171;&#171;</span></a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/page/2/ aria-label=Previous class=page-link role=button><span aria-hidden=true>&#171;</span></a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/ aria-label="Page 1" class=page-link role=button>1</a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/page/2/ aria-label="Page 2" class=page-link role=button>2</a>
-</li>
-<li class="page-item active">
+</li><li class="page-item active">
 <a aria-current=page aria-label="Page 3" class=page-link role=button>3</a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/page/4/ aria-label="Page 4" class=page-link role=button>4</a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/page/5/ aria-label="Page 5" class=page-link role=button>5</a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/page/4/ aria-label=Next class=page-link role=button><span aria-hidden=true>&#187;</span></a>
-</li>
-<li class=page-item>
+</li><li class=page-item>
 <a href=/page/5/ aria-label=Last class=page-link role=button><span aria-hidden=true>&#187;&#187;</span></a>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</li></ul></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

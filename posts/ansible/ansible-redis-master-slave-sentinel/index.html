@@ -1,6 +1,5 @@
 <!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Automate Install Redis Master-Slave Sentinel with Ansible Playbook </title>
-<meta charset=utf-8><meta name=generator content="Hugo 0.92.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title> Lei Zhang | Automate Install Redis Master-Slave Sentinel with Ansible Playbook </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name=description content="This is my knowledge base. I document things here">
 <link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
 <link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
@@ -11,7 +10,7 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
 <link rel=canonical href=/posts/ansible/ansible-redis-master-slave-sentinel/>
-<script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script>
+<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
 <meta name=twitter:card content="summary">
 <meta name=twitter:title content="Automate Install Redis Master-Slave Sentinel with Ansible Playbook">
 <meta name=twitter:description content="集群概述 请先在目标服务器创建 redis 用户，此脚本在此用户下使用源代码编译的方式安装一主两从三哨兵的集群
@@ -19,40 +18,27 @@
    IP SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS     10.1.207.180 22022 redis redis123 root123 CentOS Linux release 7.9.2009   10.1.207.181 22022 redis redis123 root123 CentOS Linux release 7.9.2009   10.1.207.182 22022 redis redis123 root123 CentOS Linux release 7.9.2009    提示： 可以参考批量自动化创建用户
 集群节点规划
    IP Redis Sentinel     10.">
-</head>
-<body><div class="sidebar .">
+</head><body><div class="sidebar .">
 <div class=logo-title>
 <div class=title>
 <img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3>
-<div class=description>
-<p>This is my knowledge base. I document things here</p>
-</div>
-</div>
-<p>
+<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
+<p>This is my knowledge base. I document things here</p></div></div><p>
 <a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p>
-</div>
-<ul class=social-links>
+</p></div><ul class=social-links>
 <li>
 <a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
 <i class="fab fa-github fa-2x" aria-hidden=true></i>
 </a>
-</li>
-<li>
+</li><li>
 <a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
 <i class="fas fa-envelope fa-2x" aria-hidden=true></i>
 </a>
-</li>
-</ul>
-<div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div>
-</div>
-</div>
-<div class=main>
+</li></ul><div class=footer>
+<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
 <div class="page-top .">
 <a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
 <span aria-hidden=true></span>
@@ -60,361 +46,216 @@
 <span aria-hidden=true></span>
 </a>
 <ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li>
-<li><a href=/posts title>Blog</a></li>
-<li><a href=/bookmarks title>Bookmarks</a></li>
-<li><a href=/about/ title>About</a></li>
-</ul>
-</div>
-<div class=autopagerize_page_element>
+<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
 <div class=content>
 <div class="post .">
 <div class=post-content>
 <div class=post-title>
-<h3>Automate Install Redis Master-Slave Sentinel with Ansible Playbook</h3>
-</div>
-<h2 id=集群概述>集群概述</h2>
-<p>请先在目标服务器创建 <code>redis</code> 用户，此脚本在此用户下使用源代码编译的方式安装一主两从三哨兵的集群</p>
-<h2 id=安装计划>安装计划</h2>
-<p>服务器规划</p>
-<table>
+<h3>Automate Install Redis Master-Slave Sentinel with Ansible Playbook</h3></div><h2 id=集群概述>集群概述</h2><p>请先在目标服务器创建 <code>redis</code> 用户，此脚本在此用户下使用源代码编译的方式安装一主两从三哨兵的集群</p><h2 id=安装计划>安装计划</h2><p>服务器规划</p><table>
 <thead>
 <tr>
-<th>IP</th>
-<th>SSH 端口</th>
-<th>SSH 用户名</th>
-<th>SSH 密码</th>
-<th>ROOT 密码</th>
-<th>OS</th>
-</tr>
-</thead>
-<tbody>
+<th>IP</th><th>SSH 端口</th><th>SSH 用户名</th><th>SSH 密码</th><th>ROOT 密码</th><th>OS</th></tr></thead><tbody>
 <tr>
-<td>10.1.207.180</td>
-<td>22022</td>
-<td>redis</td>
-<td>redis123</td>
-<td>root123</td>
-<td>CentOS Linux release 7.9.2009</td>
-</tr>
-<tr>
-<td>10.1.207.181</td>
-<td>22022</td>
-<td>redis</td>
-<td>redis123</td>
-<td>root123</td>
-<td>CentOS Linux release 7.9.2009</td>
-</tr>
-<tr>
-<td>10.1.207.182</td>
-<td>22022</td>
-<td>redis</td>
-<td>redis123</td>
-<td>root123</td>
-<td>CentOS Linux release 7.9.2009</td>
-</tr>
-</tbody>
-</table>
-<p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p>
-<p>集群节点规划</p>
-<table>
+<td>10.1.207.180</td><td>22022</td><td>redis</td><td>redis123</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr>
+<td>10.1.207.181</td><td>22022</td><td>redis</td><td>redis123</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr>
+<td>10.1.207.182</td><td>22022</td><td>redis</td><td>redis123</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr></tbody></table><p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p><p>集群节点规划</p><table>
 <thead>
 <tr>
-<th>IP</th>
-<th>Redis</th>
-<th>Sentinel</th>
-</tr>
-</thead>
-<tbody>
+<th>IP</th><th>Redis</th><th>Sentinel</th></tr></thead><tbody>
 <tr>
-<td>10.1.207.180</td>
-<td>master</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>10.1.207.181</td>
-<td>slave</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>10.1.207.182</td>
-<td>slave</td>
-<td>✓</td>
-</tr>
-</tbody>
-</table>
-<p>节点安装路径</p>
-<table>
+<td>10.1.207.180</td><td>master</td><td>✓</td></tr><tr>
+<td>10.1.207.181</td><td>slave</td><td>✓</td></tr><tr>
+<td>10.1.207.182</td><td>slave</td><td>✓</td></tr></tbody></table><p>节点安装路径</p><table>
 <thead>
 <tr>
-<th>路径</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
+<th>路径</th><th>描述</th></tr></thead><tbody>
 <tr>
-<td>/opt/redis</td>
-<td>源代码上传路径</td>
-</tr>
-<tr>
-<td>~/redis_uninstall.sh</td>
-<td>集群卸载脚本</td>
-</tr>
-<tr>
-<td>~/redis.sh</td>
-<td>Redis 启停脚本</td>
-</tr>
-<tr>
-<td>~/sentinel.sh</td>
-<td>Sentinel 启停脚本</td>
-</tr>
-<tr>
-<td>/data01/redis/bin</td>
-<td>redis 编译后的程序</td>
-</tr>
-<tr>
-<td>/data01/redis/log</td>
-<td>日志目录</td>
-</tr>
-<tr>
-<td>/data01/redis/data</td>
-<td>数据目录</td>
-</tr>
-<tr>
-<td>/data01/redis/conf</td>
-<td>配置文件目录</td>
-</tr>
-</tbody>
-</table>
-<h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2>
-<p>在客户机上创建 playbook 脚本存放目录</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>mkdir -p ~/my-docker-volume/ansible-playbook
-</code></pre></div><p>下载 playbook 脚本</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cd ~/my-docker-volume/ansible-playbook
-git clone https://github.com/coolbeevip/ansible-playbook.git
-</code></pre></div><p>下载 redis 安装包到 <code>~/my-docker-volume/ansible-playbook/packages</code> 目录</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>wget -P ~/my-docker-volume/ansible-playbook/packages https://download.redis.io/releases/redis-6.2.6.tar.gz --no-check-certificate
-</code></pre></div><h2 id=配置安装脚本>配置安装脚本</h2>
-<blockquote>
-<p>你可以编辑如下文件修改默认配置</p>
-</blockquote>
-<h4 id=main-installyml>main-install.yml</h4>
-<p>您可以在此处定义目标服务器，您可以看到这里定义了三个目标服务器，使用 <code>redis</code> 用户登录。</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
-  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>redis</span>
-  <span style=color:#ae81ff>...</span>
-- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.181</span>
-  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>redis</span>
-  <span style=color:#ae81ff>...</span>
-- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.182</span>
-  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>redis</span>
-  <span style=color:#ae81ff>...</span>
-</code></pre></div><h4 id=var_redisyml>var_redis.yml</h4>
-<p>您可以在此处定义安装目录，版本，端口，默认主节点地址等配置信息。</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#75715e># 源码包</span>
-redis_tar: <span style=color:#e6db74>&#34;redis-6.2.6.tar.gz&#34;</span>       <span style=color:#75715e># 源码包文件名</span>
-redis_tar_unzip_dir: <span style=color:#e6db74>&#34;redis-6.2.6&#34;</span>    <span style=color:#75715e># 源码包解压后的目录名</span>
-
-<span style=color:#75715e># 安装目录</span>
-redis_home_dir: <span style=color:#e6db74>&#34;/opt/redis&#34;</span>          <span style=color:#75715e># 源码包上传目录</span>
-redis_bin_dir: <span style=color:#e6db74>&#34;/data01/redis/bin&#34;</span>    <span style=color:#75715e># 编译后程序文件</span>
-redis_log_dir: <span style=color:#e6db74>&#34;/data01/redis/logs&#34;</span>   <span style=color:#75715e># 运行日志，PID 文件</span>
-redis_data_dir: <span style=color:#e6db74>&#34;/data01/redis/data&#34;</span>  <span style=color:#75715e># 数据文件</span>
-redis_conf_dir: <span style=color:#e6db74>&#34;/data01/redis/conf&#34;</span>  <span style=color:#75715e># 配置文件</span>
-
-<span style=color:#75715e># 操作系统用户和组</span>
-redis_user: <span style=color:#e6db74>&#34;redis&#34;</span>                   <span style=color:#75715e># 操作系统用户名</span>
-redis_group: <span style=color:#e6db74>&#34;redis&#34;</span>                  <span style=color:#75715e># 操作系统组名</span>
-
-<span style=color:#75715e># redis configuration</span>
-redis_password: <span style=color:#e6db74>&#34;redis&#34;</span>               <span style=color:#75715e># redis 密码</span>
-redis_network_host: <span style=color:#e6db74>&#34;0.0.0.0&#34;</span>         <span style=color:#75715e># 服务绑定 IP 地址</span>
-redis_port: <span style=color:#ae81ff>7000</span>                      <span style=color:#75715e># Redis 服务端口</span>
-redis_maxmemory: <span style=color:#ae81ff>31457280</span>             <span style=color:#75715e># 最大内存</span>
-redis_maxclients: <span style=color:#ae81ff>1000</span>                <span style=color:#75715e># 客户端最大连接数</span>
-redis_io_threads_do_reads: <span style=color:#e6db74>&#34;yes&#34;</span>      <span style=color:#75715e># 开启多线程支持</span>
-redis_io_threads: <span style=color:#ae81ff>4</span>                   <span style=color:#75715e># 线程数，线程数一定要小于机器核数并且不要大于 8</span>
-redis_master_ip: 10.1.207.180         <span style=color:#75715e># 主节点 IP 地址</span>
-
-<span style=color:#75715e># sentinel configuration</span>
-redis_sentinel_port: <span style=color:#ae81ff>27000</span>            <span style=color:#75715e># Sentinel 端口</span>
-redis_sentinel_master: <span style=color:#e6db74>&#34;mymaster&#34;</span>     <span style=color:#75715e># 监控 master 名称</span>
-redis_sentinel_master_quorum: <span style=color:#ae81ff>2</span>       <span style=color:#75715e># master 切换投票数，当集群中有 N 个sentinel 认为 master 宕机后就切换</span>
-redis_sentinel_down_after_milliseconds: <span style=color:#ae81ff>5000</span>  <span style=color:#75715e># master ping 检测超时时间</span>
-redis_sentinel_failover_timeout: <span style=color:#ae81ff>10000</span>        <span style=color:#75715e># 故障切换超时时间</span>
-redis_sentinel_parallel_syncs: <span style=color:#ae81ff>2</span>              <span style=color:#75715e># 故障切换后，每次向新的主节点发起复制操作的从节点个数</span>
-</code></pre></div><p>您可以在 <code>redis/config/redis.conf.j2</code> 和 <code>redis/config/sentinel.conf.j2</code> 文件中找到更多的默认配置</p>
-<h2 id=开始安装>开始安装</h2>
-<p>启动 ansible 容器工具连接目标服务器，并将 <code>~/my-docker-volume/ansible-playbook</code> 目录挂在到容器中。</p>
-<p><strong>提示：</strong> ANSIBLE_SSH_USERS，ANSIBLE_SSH_PASSS 配置成您之前在目标服务器上创建的用户名 <code>redis</code> 和密码 <code>redis123</code></p>
-<p><strong>提示：</strong> ANSIBLE_SU_PASSS 为 root 用户的密码</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>docker run --name ansible --rm -it <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_HOSTS<span style=color:#f92672>=</span>10.1.207.180,10.1.207.181,10.1.207.182 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PORTS<span style=color:#f92672>=</span>22022,22022,22022 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_USERS<span style=color:#f92672>=</span>redis,redis,redis <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PASSS<span style=color:#f92672>=</span>redis123,redis123,redis123 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -e ANSIBLE_SU_PASSS<span style=color:#f92672>=</span>root123,root123,root123 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -v ~/my-docker-volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  /bin/bash
-bash-5.0#  
-</code></pre></div><h2 id=安装集群>安装集群</h2>
-<p>这个脚本将自动化完成如下操作：</p>
-<ul>
-<li>安装 Redis 编译用依赖库</li>
-<li>上传 Redis 源码包到每个服务器</li>
-<li>配置 Redis 执行文件 PATH 路径</li>
-<li>配置 Redis 和 Sentinel 配置文件</li>
-<li>启动 Redis 和 Sentinel 服务</li>
-</ul>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible-playbook -C /ansible-playbook/redis/main-install.yml /ansible-playbook/redis/main-start-redis.yml /ansible-playbook/redis/main-start-sentinel.yml
-</code></pre></div><p>如果你看到如下信息，说明安装完成</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
-ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
-    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
-<span style=color:#f92672>}</span>
-</code></pre></div><p><strong>提示:</strong> 因为第一次执行脚本时，会上传 Redis 源码包（约 2.5MB）到所有服务器并在服务器上编译（每服务器约 1分钟）。在我本地环境首次安装大概耗时 5 分钟</p>
-<p><strong>提示:</strong> 此脚本只适合初始化安装，重复执行此命令可能会收到 <code>Redis has been installed, please uninstall and then reinstall</code> 提示，此时需要先要使用 <code>ansible all -m shell -a '~/redis_uninstall.sh'</code> 命令卸载之前的安装。</p>
-<h2 id=验证集群>验证集群</h2>
-<p>查看每个目标服务器 redis 进程信息，可以看到每个节点 redis 和 sentinel 进程都已经启动</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep [b]in/redis-&#39;</span>
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-redis    <span style=color:#ae81ff>19121</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:59 ?        00:00:00 /data01/redis/bin/redis-server 0.0.0.0:7000
-redis    <span style=color:#ae81ff>20011</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 19:01 ?        00:00:00 /data01/redis/bin/redis-sentinel 0.0.0.0:27000 <span style=color:#f92672>[</span>sentinel<span style=color:#f92672>]</span>
-
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-redis    <span style=color:#ae81ff>22537</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:55 ?        00:00:00 /data01/redis/bin/redis-server 0.0.0.0:7000
-redis    <span style=color:#ae81ff>23467</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:59 ?        00:00:00 /data01/redis/bin/redis-sentinel 0.0.0.0:27000 <span style=color:#f92672>[</span>sentinel<span style=color:#f92672>]</span>
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-redis    <span style=color:#ae81ff>10009</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:55 ?        00:00:00 /data01/redis/bin/redis-server 0.0.0.0:7000
-redis    <span style=color:#ae81ff>11187</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:59 ?        00:00:00 /data01/redis/bin/redis-sentinel 0.0.0.0:27000 <span style=color:#f92672>[</span>sentinel<span style=color:#f92672>]</span>
-</code></pre></div><p>查看每个节点的复制信息</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;redis-cli -h 0.0.0.0 -p 7000 -a redis info Replication&#39;</span>
-
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#75715e># Replication</span>
-role:slave
-master_host:10.1.207.180
-master_port:7000
-master_link_status:up
-master_last_io_seconds_ago:1
-master_sync_in_progress:0
-slave_read_repl_offset:73780
-slave_repl_offset:73780
-slave_priority:100
-slave_read_only:1
-replica_announced:1
-connected_slaves:0
-master_failover_state:no-failover
-master_replid:4dc6d9bc49043bc1bc8c495f88c470523af3b030
-master_replid2:0000000000000000000000000000000000000000
-master_repl_offset:73780
-second_repl_offset:-1
-repl_backlog_active:1
-repl_backlog_size:1048576
-repl_backlog_first_byte_offset:1
-repl_backlog_histlen:73780Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#75715e># Replication</span>
-role:slave
-master_host:10.1.207.180
-master_port:7000
-master_link_status:up
-master_last_io_seconds_ago:0
-master_sync_in_progress:0
-slave_read_repl_offset:73919
-slave_repl_offset:73919
-slave_priority:100
-slave_read_only:1
-replica_announced:1
-connected_slaves:0
-master_failover_state:no-failover
-master_replid:4dc6d9bc49043bc1bc8c495f88c470523af3b030
-master_replid2:0000000000000000000000000000000000000000
-master_repl_offset:73919
-second_repl_offset:-1
-repl_backlog_active:1
-repl_backlog_size:1048576
-repl_backlog_first_byte_offset:1
-repl_backlog_histlen:73919Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-<span style=color:#75715e># Replication</span>
-role:master
-connected_slaves:2
-slave0:ip<span style=color:#f92672>=</span>10.1.207.182,port<span style=color:#f92672>=</span>7000,state<span style=color:#f92672>=</span>online,offset<span style=color:#f92672>=</span>73502,lag<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
-slave1:ip<span style=color:#f92672>=</span>10.1.207.181,port<span style=color:#f92672>=</span>7000,state<span style=color:#f92672>=</span>online,offset<span style=color:#f92672>=</span>73502,lag<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
-master_failover_state:no-failover
-master_replid:4dc6d9bc49043bc1bc8c495f88c470523af3b030
-master_replid2:0000000000000000000000000000000000000000
-master_repl_offset:73780
-second_repl_offset:-1
-repl_backlog_active:1
-repl_backlog_size:1048576
-repl_backlog_first_byte_offset:1
-repl_backlog_histlen:73780Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
-
-bash-5.0#
-</code></pre></div><p>连接任意哨兵节点获取 Redis Master 地址</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;redis-cli -h 10.1.207.182 -p 27000 sentinel get-master-addr-by-name mymaster | head -n 1&#39;</span>
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-10.1.207.180
-
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-10.1.207.180
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-10.1.207.180
-</code></pre></div><h2 id=常用运维命令>常用运维命令</h2>
-<p><strong>提示：</strong> 哨兵模式集群需要按 <code>Master->Slave->Sentinel</code> 顺序启动各个节点</p>
-<p>启动 Redis</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis.sh start&#39;</span>
-</code></pre></div><p>停止 Redis</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis.sh stop&#39;</span>
-</code></pre></div><p>重启 Redis</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis.sh restart&#39;</span>
-</code></pre></div><p>启动 Sentinel</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/sentinel.sh start&#39;</span>
-</code></pre></div><p>停止 Sentinel</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/sentinel.sh stop&#39;</span>
-</code></pre></div><p>重启 Sentinel</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/sentinel.sh restart&#39;</span>
-</code></pre></div><h2 id=q--a>Q & A</h2>
-<h4 id=如何彻底删除-redis-主从哨兵集群>如何彻底删除 Redis 主从哨兵集群</h4>
-<p>A: <code>~/redis_uninstall.sh</code> 脚本将 <strong>kill Redis 和 Sentinel，删除程序文件和所有数据文件</strong></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis_uninstall.sh&#39;</span>
-10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-Kill Redis Process
-Kill Sentinel Process
-Delete Redis Data Files
-Delete Redis Package
-Delete redis_uninstall.sh
-
-10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-Kill Redis Process
-Kill Sentinel Process
-Delete Redis Data Files
-Delete Redis Package
-Delete redis_uninstall.sh
-
-10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-Kill Redis Process
-Kill Sentinel Process
-Delete Redis Data Files
-Delete Redis Package
-Delete redis_uninstall.sh
-</code></pre></div></div>
-<div class=post-footer>
+<td>/opt/redis</td><td>源代码上传路径</td></tr><tr>
+<td>~/redis_uninstall.sh</td><td>集群卸载脚本</td></tr><tr>
+<td>~/redis.sh</td><td>Redis 启停脚本</td></tr><tr>
+<td>~/sentinel.sh</td><td>Sentinel 启停脚本</td></tr><tr>
+<td>/data01/redis/bin</td><td>redis 编译后的程序</td></tr><tr>
+<td>/data01/redis/log</td><td>日志目录</td></tr><tr>
+<td>/data01/redis/data</td><td>数据目录</td></tr><tr>
+<td>/data01/redis/conf</td><td>配置文件目录</td></tr></tbody></table><h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2><p>在客户机上创建 playbook 脚本存放目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/my-docker-volume/ansible-playbook
+</span></span></code></pre></div><p>下载 playbook 脚本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/my-docker-volume/ansible-playbook
+</span></span><span style=display:flex><span>git clone https://github.com/coolbeevip/ansible-playbook.git
+</span></span></code></pre></div><p>下载 redis 安装包到 <code>~/my-docker-volume/ansible-playbook/packages</code> 目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>wget -P ~/my-docker-volume/ansible-playbook/packages https://download.redis.io/releases/redis-6.2.6.tar.gz --no-check-certificate
+</span></span></code></pre></div><h2 id=配置安装脚本>配置安装脚本</h2><blockquote>
+<p>你可以编辑如下文件修改默认配置</p></blockquote><h4 id=main-installyml>main-install.yml</h4><p>您可以在此处定义目标服务器，您可以看到这里定义了三个目标服务器，使用 <code>redis</code> 用户登录。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.180</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>redis</span>
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>...</span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.181</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>redis</span>
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>...</span>
+</span></span><span style=display:flex><span>- <span style=color:#f92672>hosts</span>: <span style=color:#ae81ff>10.1.207.182</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>user</span>: <span style=color:#ae81ff>redis</span>
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>...</span>
+</span></span></code></pre></div><h4 id=var_redisyml>var_redis.yml</h4><p>您可以在此处定义安装目录，版本，端口，默认主节点地址等配置信息。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># 源码包</span>
+</span></span><span style=display:flex><span>redis_tar: <span style=color:#e6db74>&#34;redis-6.2.6.tar.gz&#34;</span>       <span style=color:#75715e># 源码包文件名</span>
+</span></span><span style=display:flex><span>redis_tar_unzip_dir: <span style=color:#e6db74>&#34;redis-6.2.6&#34;</span>    <span style=color:#75715e># 源码包解压后的目录名</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装目录</span>
+</span></span><span style=display:flex><span>redis_home_dir: <span style=color:#e6db74>&#34;/opt/redis&#34;</span>          <span style=color:#75715e># 源码包上传目录</span>
+</span></span><span style=display:flex><span>redis_bin_dir: <span style=color:#e6db74>&#34;/data01/redis/bin&#34;</span>    <span style=color:#75715e># 编译后程序文件</span>
+</span></span><span style=display:flex><span>redis_log_dir: <span style=color:#e6db74>&#34;/data01/redis/logs&#34;</span>   <span style=color:#75715e># 运行日志，PID 文件</span>
+</span></span><span style=display:flex><span>redis_data_dir: <span style=color:#e6db74>&#34;/data01/redis/data&#34;</span>  <span style=color:#75715e># 数据文件</span>
+</span></span><span style=display:flex><span>redis_conf_dir: <span style=color:#e6db74>&#34;/data01/redis/conf&#34;</span>  <span style=color:#75715e># 配置文件</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 操作系统用户和组</span>
+</span></span><span style=display:flex><span>redis_user: <span style=color:#e6db74>&#34;redis&#34;</span>                   <span style=color:#75715e># 操作系统用户名</span>
+</span></span><span style=display:flex><span>redis_group: <span style=color:#e6db74>&#34;redis&#34;</span>                  <span style=color:#75715e># 操作系统组名</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># redis configuration</span>
+</span></span><span style=display:flex><span>redis_password: <span style=color:#e6db74>&#34;redis&#34;</span>               <span style=color:#75715e># redis 密码</span>
+</span></span><span style=display:flex><span>redis_network_host: <span style=color:#e6db74>&#34;0.0.0.0&#34;</span>         <span style=color:#75715e># 服务绑定 IP 地址</span>
+</span></span><span style=display:flex><span>redis_port: <span style=color:#ae81ff>7000</span>                      <span style=color:#75715e># Redis 服务端口</span>
+</span></span><span style=display:flex><span>redis_maxmemory: <span style=color:#ae81ff>31457280</span>             <span style=color:#75715e># 最大内存</span>
+</span></span><span style=display:flex><span>redis_maxclients: <span style=color:#ae81ff>1000</span>                <span style=color:#75715e># 客户端最大连接数</span>
+</span></span><span style=display:flex><span>redis_io_threads_do_reads: <span style=color:#e6db74>&#34;yes&#34;</span>      <span style=color:#75715e># 开启多线程支持</span>
+</span></span><span style=display:flex><span>redis_io_threads: <span style=color:#ae81ff>4</span>                   <span style=color:#75715e># 线程数，线程数一定要小于机器核数并且不要大于 8</span>
+</span></span><span style=display:flex><span>redis_master_ip: 10.1.207.180         <span style=color:#75715e># 主节点 IP 地址</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># sentinel configuration</span>
+</span></span><span style=display:flex><span>redis_sentinel_port: <span style=color:#ae81ff>27000</span>            <span style=color:#75715e># Sentinel 端口</span>
+</span></span><span style=display:flex><span>redis_sentinel_master: <span style=color:#e6db74>&#34;mymaster&#34;</span>     <span style=color:#75715e># 监控 master 名称</span>
+</span></span><span style=display:flex><span>redis_sentinel_master_quorum: <span style=color:#ae81ff>2</span>       <span style=color:#75715e># master 切换投票数，当集群中有 N 个sentinel 认为 master 宕机后就切换</span>
+</span></span><span style=display:flex><span>redis_sentinel_down_after_milliseconds: <span style=color:#ae81ff>5000</span>  <span style=color:#75715e># master ping 检测超时时间</span>
+</span></span><span style=display:flex><span>redis_sentinel_failover_timeout: <span style=color:#ae81ff>10000</span>        <span style=color:#75715e># 故障切换超时时间</span>
+</span></span><span style=display:flex><span>redis_sentinel_parallel_syncs: <span style=color:#ae81ff>2</span>              <span style=color:#75715e># 故障切换后，每次向新的主节点发起复制操作的从节点个数</span>
+</span></span></code></pre></div><p>您可以在 <code>redis/config/redis.conf.j2</code> 和 <code>redis/config/sentinel.conf.j2</code> 文件中找到更多的默认配置</p><h2 id=开始安装>开始安装</h2><p>启动 ansible 容器工具连接目标服务器，并将 <code>~/my-docker-volume/ansible-playbook</code> 目录挂在到容器中。</p><p><strong>提示：</strong> ANSIBLE_SSH_USERS，ANSIBLE_SSH_PASSS 配置成您之前在目标服务器上创建的用户名 <code>redis</code> 和密码 <code>redis123</code></p><p><strong>提示：</strong> ANSIBLE_SU_PASSS 为 root 用户的密码</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>docker run --name ansible --rm -it <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_HOSTS<span style=color:#f92672>=</span>10.1.207.180,10.1.207.181,10.1.207.182 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PORTS<span style=color:#f92672>=</span>22022,22022,22022 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_USERS<span style=color:#f92672>=</span>redis,redis,redis <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SSH_PASSS<span style=color:#f92672>=</span>redis123,redis123,redis123 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e ANSIBLE_SU_PASSS<span style=color:#f92672>=</span>root123,root123,root123 <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -v ~/my-docker-volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  /bin/bash
+</span></span><span style=display:flex><span>bash-5.0#  
+</span></span></code></pre></div><h2 id=安装集群>安装集群</h2><p>这个脚本将自动化完成如下操作：</p><ul>
+<li>安装 Redis 编译用依赖库</li><li>上传 Redis 源码包到每个服务器</li><li>配置 Redis 执行文件 PATH 路径</li><li>配置 Redis 和 Sentinel 配置文件</li><li>启动 Redis 和 Sentinel 服务</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible-playbook -C /ansible-playbook/redis/main-install.yml /ansible-playbook/redis/main-start-redis.yml /ansible-playbook/redis/main-start-sentinel.yml
+</span></span></code></pre></div><p>如果你看到如下信息，说明安装完成</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
+</span></span><span style=display:flex><span>ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><p><strong>提示:</strong> 因为第一次执行脚本时，会上传 Redis 源码包（约 2.5MB）到所有服务器并在服务器上编译（每服务器约 1分钟）。在我本地环境首次安装大概耗时 5 分钟</p><p><strong>提示:</strong> 此脚本只适合初始化安装，重复执行此命令可能会收到 <code>Redis has been installed, please uninstall and then reinstall</code> 提示，此时需要先要使用 <code>ansible all -m shell -a '~/redis_uninstall.sh'</code> 命令卸载之前的安装。</p><h2 id=验证集群>验证集群</h2><p>查看每个目标服务器 redis 进程信息，可以看到每个节点 redis 和 sentinel 进程都已经启动</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;ps -ef | grep [b]in/redis-&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>redis    <span style=color:#ae81ff>19121</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:59 ?        00:00:00 /data01/redis/bin/redis-server 0.0.0.0:7000
+</span></span><span style=display:flex><span>redis    <span style=color:#ae81ff>20011</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 19:01 ?        00:00:00 /data01/redis/bin/redis-sentinel 0.0.0.0:27000 <span style=color:#f92672>[</span>sentinel<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>redis    <span style=color:#ae81ff>22537</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:55 ?        00:00:00 /data01/redis/bin/redis-server 0.0.0.0:7000
+</span></span><span style=display:flex><span>redis    <span style=color:#ae81ff>23467</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:59 ?        00:00:00 /data01/redis/bin/redis-sentinel 0.0.0.0:27000 <span style=color:#f92672>[</span>sentinel<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>redis    <span style=color:#ae81ff>10009</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:55 ?        00:00:00 /data01/redis/bin/redis-server 0.0.0.0:7000
+</span></span><span style=display:flex><span>redis    <span style=color:#ae81ff>11187</span>     <span style=color:#ae81ff>1</span>  <span style=color:#ae81ff>0</span> 18:59 ?        00:00:00 /data01/redis/bin/redis-sentinel 0.0.0.0:27000 <span style=color:#f92672>[</span>sentinel<span style=color:#f92672>]</span>
+</span></span></code></pre></div><p>查看每个节点的复制信息</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;redis-cli -h 0.0.0.0 -p 7000 -a redis info Replication&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#75715e># Replication</span>
+</span></span><span style=display:flex><span>role:slave
+</span></span><span style=display:flex><span>master_host:10.1.207.180
+</span></span><span style=display:flex><span>master_port:7000
+</span></span><span style=display:flex><span>master_link_status:up
+</span></span><span style=display:flex><span>master_last_io_seconds_ago:1
+</span></span><span style=display:flex><span>master_sync_in_progress:0
+</span></span><span style=display:flex><span>slave_read_repl_offset:73780
+</span></span><span style=display:flex><span>slave_repl_offset:73780
+</span></span><span style=display:flex><span>slave_priority:100
+</span></span><span style=display:flex><span>slave_read_only:1
+</span></span><span style=display:flex><span>replica_announced:1
+</span></span><span style=display:flex><span>connected_slaves:0
+</span></span><span style=display:flex><span>master_failover_state:no-failover
+</span></span><span style=display:flex><span>master_replid:4dc6d9bc49043bc1bc8c495f88c470523af3b030
+</span></span><span style=display:flex><span>master_replid2:0000000000000000000000000000000000000000
+</span></span><span style=display:flex><span>master_repl_offset:73780
+</span></span><span style=display:flex><span>second_repl_offset:-1
+</span></span><span style=display:flex><span>repl_backlog_active:1
+</span></span><span style=display:flex><span>repl_backlog_size:1048576
+</span></span><span style=display:flex><span>repl_backlog_first_byte_offset:1
+</span></span><span style=display:flex><span>repl_backlog_histlen:73780Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#75715e># Replication</span>
+</span></span><span style=display:flex><span>role:slave
+</span></span><span style=display:flex><span>master_host:10.1.207.180
+</span></span><span style=display:flex><span>master_port:7000
+</span></span><span style=display:flex><span>master_link_status:up
+</span></span><span style=display:flex><span>master_last_io_seconds_ago:0
+</span></span><span style=display:flex><span>master_sync_in_progress:0
+</span></span><span style=display:flex><span>slave_read_repl_offset:73919
+</span></span><span style=display:flex><span>slave_repl_offset:73919
+</span></span><span style=display:flex><span>slave_priority:100
+</span></span><span style=display:flex><span>slave_read_only:1
+</span></span><span style=display:flex><span>replica_announced:1
+</span></span><span style=display:flex><span>connected_slaves:0
+</span></span><span style=display:flex><span>master_failover_state:no-failover
+</span></span><span style=display:flex><span>master_replid:4dc6d9bc49043bc1bc8c495f88c470523af3b030
+</span></span><span style=display:flex><span>master_replid2:0000000000000000000000000000000000000000
+</span></span><span style=display:flex><span>master_repl_offset:73919
+</span></span><span style=display:flex><span>second_repl_offset:-1
+</span></span><span style=display:flex><span>repl_backlog_active:1
+</span></span><span style=display:flex><span>repl_backlog_size:1048576
+</span></span><span style=display:flex><span>repl_backlog_first_byte_offset:1
+</span></span><span style=display:flex><span>repl_backlog_histlen:73919Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span><span style=color:#75715e># Replication</span>
+</span></span><span style=display:flex><span>role:master
+</span></span><span style=display:flex><span>connected_slaves:2
+</span></span><span style=display:flex><span>slave0:ip<span style=color:#f92672>=</span>10.1.207.182,port<span style=color:#f92672>=</span>7000,state<span style=color:#f92672>=</span>online,offset<span style=color:#f92672>=</span>73502,lag<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>slave1:ip<span style=color:#f92672>=</span>10.1.207.181,port<span style=color:#f92672>=</span>7000,state<span style=color:#f92672>=</span>online,offset<span style=color:#f92672>=</span>73502,lag<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>master_failover_state:no-failover
+</span></span><span style=display:flex><span>master_replid:4dc6d9bc49043bc1bc8c495f88c470523af3b030
+</span></span><span style=display:flex><span>master_replid2:0000000000000000000000000000000000000000
+</span></span><span style=display:flex><span>master_repl_offset:73780
+</span></span><span style=display:flex><span>second_repl_offset:-1
+</span></span><span style=display:flex><span>repl_backlog_active:1
+</span></span><span style=display:flex><span>repl_backlog_size:1048576
+</span></span><span style=display:flex><span>repl_backlog_first_byte_offset:1
+</span></span><span style=display:flex><span>repl_backlog_histlen:73780Warning: Using a password with <span style=color:#e6db74>&#39;-a&#39;</span> or <span style=color:#e6db74>&#39;-u&#39;</span> option on the command line interface may not be safe.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>bash-5.0#
+</span></span></code></pre></div><p>连接任意哨兵节点获取 Redis Master 地址</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;redis-cli -h 10.1.207.182 -p 27000 sentinel get-master-addr-by-name mymaster | head -n 1&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>10.1.207.180
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>10.1.207.180
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>10.1.207.180
+</span></span></code></pre></div><h2 id=常用运维命令>常用运维命令</h2><p><strong>提示：</strong> 哨兵模式集群需要按 <code>Master->Slave->Sentinel</code> 顺序启动各个节点</p><p>启动 Redis</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis.sh start&#39;</span>
+</span></span></code></pre></div><p>停止 Redis</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis.sh stop&#39;</span>
+</span></span></code></pre></div><p>重启 Redis</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis.sh restart&#39;</span>
+</span></span></code></pre></div><p>启动 Sentinel</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/sentinel.sh start&#39;</span>
+</span></span></code></pre></div><p>停止 Sentinel</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/sentinel.sh stop&#39;</span>
+</span></span></code></pre></div><p>重启 Sentinel</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/sentinel.sh restart&#39;</span>
+</span></span></code></pre></div><h2 id=q--a>Q & A</h2><h4 id=如何彻底删除-redis-主从哨兵集群>如何彻底删除 Redis 主从哨兵集群</h4><p>A: <code>~/redis_uninstall.sh</code> 脚本将 <strong>kill Redis 和 Sentinel，删除程序文件和所有数据文件</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible all -m shell -a <span style=color:#e6db74>&#39;~/redis_uninstall.sh&#39;</span>
+</span></span><span style=display:flex><span>10.1.207.182 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>Kill Redis Process
+</span></span><span style=display:flex><span>Kill Sentinel Process
+</span></span><span style=display:flex><span>Delete Redis Data Files
+</span></span><span style=display:flex><span>Delete Redis Package
+</span></span><span style=display:flex><span>Delete redis_uninstall.sh
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>Kill Redis Process
+</span></span><span style=display:flex><span>Kill Sentinel Process
+</span></span><span style=display:flex><span>Delete Redis Data Files
+</span></span><span style=display:flex><span>Delete Redis Package
+</span></span><span style=display:flex><span>Delete redis_uninstall.sh
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>10.1.207.180 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
+</span></span><span style=display:flex><span>Kill Redis Process
+</span></span><span style=display:flex><span>Kill Sentinel Process
+</span></span><span style=display:flex><span>Delete Redis Data Files
+</span></span><span style=display:flex><span>Delete Redis Package
+</span></span><span style=display:flex><span>Delete redis_uninstall.sh
+</span></span></code></pre></div></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
 <span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/redis/>redis</a><a class=tag href=/tags/sentinel/>sentinel</a></span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<script type=text/javascript src=/js/medium-zoom.min.2d6fd0be87fa98f0c9b4dc2536b312bbca48757f584f6ea1f394abc9bcc38fbc.js integrity="sha256-LW/Qvof6mPDJtNwlNrMSu8pIdX9YT26h85SrybzDj7w=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body>
-</html>
+</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
