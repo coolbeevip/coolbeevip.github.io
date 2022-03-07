@@ -1,6 +1,6 @@
 ---
 title: "Migrate Spring Data Elasticsearch from 3.x version to 4.x"
-date: 2020-07-28T13:24:14+08:00
+date: 2022-03-06T13:24:14+08:00
 tags: [elasticsearch, spring-data-elasticsearch]
 categories: [java, elasticsearch, spring-boot]
 draft: false
