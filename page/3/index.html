@@ -48,6 +48,32 @@
 <div class="post .">
 </div><div class="post .">
 <div class=post-title>
+<h3><a href=/posts/git/git-automate-tag-release-process-with-bash/>Bash script automates the Maven project Git release process</a>
+</h3></div><div class=post-content>
+<div class=p_part>
+<p>开源项目中我们大多采用主干开发模式管理我们的项目，他基本遵循以下规则
+所有的 PR 都默认向主干合并 主干上项目的版本号是 -SNAPSHOT 当主干要发布时，我们会建立与之对应的 X 分支（此分支的目的是为了基于此分支发布补丁版本） 基于当前主干去除版本号中的 -SNAPSHOT 后建立与版本对应的 TAG 将主干上的版本号中的 minor 累加一，并在后边增加 -SNAPSHOT 后缀 此过程繁琐，切容易出错。我制作了一个脚本 maven-project-git-release.sh 用来实现这个过程的规范化和自动化
+当然，这并不意味着你不需要掌握正手动发布的过程。
+由于某种原因导致自动过程中断后，你依然需要手动去处理，所以在使用这个脚本前，请确保你了解这个脚本帮你做了什么工作，以及如何做的。
+如何使用 maven-project-git-release.sh 脚本会帮你自动化以下工作
+创建一个编译用的目录
+目录会创建在你系统的临时目录下，在我的 Mac 系统系统中看起来像 /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T
+在编译用的目录中 git clone 你的仓库代码
+你的仓库地址在使用脚本时通过参数指定，像这样 sh maven-project-git-release.sh git@github.com:coolbeevip/license-maven-plugin.git
+编译你的代码确保正确
+默认在当前仓库根目录下执行 mvn clean package，如果你需要特殊的方式，可以修改脚本中的 check_source_before_release 函数
+计算版本号分支名
+根据 pom 中的版本定义，自动计算下一版本号，默认采 maven 的3段式版号方式 major.minor.patch，并以此为基准滚动 minor 版本号，如果你需要特殊的方式，可以修改脚本中的 next_version 函数
+输出发布计划</p><a href=/posts/git/git-automate-tag-release-process-with-bash/ class=read_more>Read more</a></div></div><div class=post-footer>
+<div class=meta>
+<div class=info>
+<em class="fas fa-calendar-day"></em>
+<span class=date> Sun, May 16, 2021
+</span>
+<span class=separator><a class=category href=/categories/git/>git</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/release/>release</a></span>
+</div></div></div></div><div class="post .">
+<div class=post-title>
 <h3><a href=/posts/docker/jprofiler-with-docker/>JProfiler with Docker Sonatype Nexus3</a>
 </h3></div><div class=post-content>
 <div class=p_part>
@@ -207,23 +233,6 @@ Topics 查询 topic 列表
 </span>
 <span class=separator><a class=category href=/categories/java/>java</a></span>
 <span class=separator><a class=tag href=/tags/kafka/>kafka</a></span>
-</div></div></div></div><div class="post .">
-<div class=post-title>
-<h3><a href=/posts/elasticsearch/migrate-spring-data-elasticsearch-from-3.x-version-to-4.x/>Migrate Spring Data Elasticsearch from 3.x version to 4.x</a>
-</h3></div><div class=post-content>
-<div class=p_part>
-<p>Spring Data Elasticsearch 从 3.X 迁移到 4.X
-因为需要将产品的 spring boot 2.1.6.RELEASE 升级到 2.3.12.RELEASE，升级过程中发现有一些需要迁移的部分，特此整理记录。 本文不是迁移指南，仅仅是工作中遇到的迁移问题笔记
-依赖组件 组件 迁移前 迁移后 spring-data-elasticsearch 3.1.9 4.0.9 elasticsearch 6.4.3 7.6.2 GetQuery 已废弃 以下代码中 GetQuery 已经被废弃，并且 getQuery.setId 方法已经被删除
-GetQuery getQuery = new GetQuery(); getQuery.setId(globalTxId); GlobalTransactionDocument globalTransaction = this.template .queryForObject(getQuery, GlobalTransactionDocument.class); 使用以下代码替换
-Query query = new NativeSearchQueryBuilder().withIds(Collections.singletonList(globalTxId)).build(); SearchHit&lt;GlobalTransactionDocument> result = this.template.searchOne(query, GlobalTransactionDocument.class); GlobalTransactionDocument globalTransaction = result.</p><a href=/posts/elasticsearch/migrate-spring-data-elasticsearch-from-3.x-version-to-4.x/ class=read_more>Read more</a></div></div><div class=post-footer>
-<div class=meta>
-<div class=info>
-<em class="fas fa-calendar-day"></em>
-<span class=date> Tue, Jul 28, 2020
-</span>
-<span class=separator><a class=category href=/categories/java/>java</a><a class=category href=/categories/elasticsearch/>elasticsearch</a><a class=category href=/categories/spring-boot/>spring-boot</a></span>
-<span class=separator><a class=tag href=/tags/elasticsearch/>elasticsearch</a><a class=tag href=/tags/spring-data-elasticsearch/>spring-data-elasticsearch</a></span>
 </div></div></div></div><div class=pagination>
 <ul class="pagination pagination-default">
 <li class=page-item>
