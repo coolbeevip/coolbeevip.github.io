@@ -130,7 +130,9 @@ Query query = new NativeSearchQueryBuilder().withIds(Collections.singletonList(g
 </span></span><span style=display:flex><span><span style=color:#f92672>}</span>
 </span></span></code></pre></div><h4 id=索引刷新>索引刷新</h4><p>ElasticsearchTemplate 的方法</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>template<span style=color:#f92672>.</span><span style=color:#a6e22e>refresh</span><span style=color:#f92672>(</span>INDEX_NAME<span style=color:#f92672>);</span>
 </span></span></code></pre></div><p>迁移后 ElasticsearchRestTemplate 的方法</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>template<span style=color:#f92672>.</span><span style=color:#a6e22e>indexOps</span><span style=color:#f92672>(</span>IndexCoordinates<span style=color:#f92672>.</span><span style=color:#a6e22e>of</span><span style=color:#f92672>(</span>INDEX_NAME<span style=color:#f92672>)).</span><span style=color:#a6e22e>refresh</span><span style=color:#f92672>();</span>
-</span></span></code></pre></div></div><div class=post-footer>
+</span></span></code></pre></div><h4 id=spring-boot-配置>Spring Boot 配置</h4><p>旧的配置</p><pre tabindex=0><code class=language-properties data-lang=properties>spring.data.elasticsearch.cluster-nodes=localhost:9300
+</code></pre><p>迁移后的配置</p><pre tabindex=0><code class=language-properties data-lang=properties>spring.elasticsearch.rest.uris=http://localhost:9200
+</code></pre></div><div class=post-footer>
 <div class=info>
 <span class=separator><a class=category href=/categories/java/>java</a><a class=category href=/categories/elasticsearch/>elasticsearch</a><a class=category href=/categories/spring-boot/>spring-boot</a></span>
 <span class=separator><a class=tag href=/tags/elasticsearch/>elasticsearch</a><a class=tag href=/tags/spring-data-elasticsearch/>spring-data-elasticsearch</a></span>
