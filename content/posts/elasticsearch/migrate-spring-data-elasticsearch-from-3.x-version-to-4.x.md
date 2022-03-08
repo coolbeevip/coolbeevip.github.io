@@ -153,3 +153,17 @@ template.refresh(INDEX_NAME);
 ```java
 template.indexOps(IndexCoordinates.of(INDEX_NAME)).refresh();
 ```
+
+#### Spring Boot 配置
+
+旧的配置
+
+```properties
+spring.data.elasticsearch.cluster-nodes=localhost:9300
+```
+
+迁移后的配置
+
+```properties
+spring.elasticsearch.rest.uris=http://localhost:9200
+```
