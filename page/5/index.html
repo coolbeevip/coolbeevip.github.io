@@ -3,7 +3,12 @@
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a class=current href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."></div><div class="post ."><div class=post-title><h3><a href=/posts/java/java-jvm-options/>Important JVM Options</a></h3></div><div class=post-content><div class=p_part><p>Heap Memory -XX:MetaspaceSize Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 -XX:MetaspaceSize=128M
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a class=current href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."></div><div class="post ."><div class=post-title><h3><a href=/posts/git/git-command-revert/>Git Revert</a></h3></div><div class=post-content><div class=p_part><p>撤销上一次提交
+$ git revert HEAD 撤销上两次提交
+ISSUE-4 解决网关服务日志中无法正确显示经过代理访问的请求端 IP 问题 $ git revert [倒数第一个提交] [倒数第二个提交]</p></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
+<span class=date>Tue, Aug 6, 2019</span>
+<span class=separator><a class=category href=/categories/git/>git</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/java/java-jvm-options/>Important JVM Options</a></h3></div><div class=post-content><div class=p_part><p>Heap Memory -XX:MetaspaceSize Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 -XX:MetaspaceSize=128M
 -XX:MaxMetaspaceSize Metaspace 最大值，默认不限制大小，但是线上环境建议设置，例如 -XX:MaxMetaspaceSize=512M
 GC -Xnoclassgc 表示关闭JVM对类的垃圾回收，缺省情况下，当一个类没有任何活动实例时，JVM 就会从内存中卸装该类，但是这样会使性能下降。如果关闭类垃圾回收，就可以消除由于多次装入和卸装同一个类而造成的开销
 -XX:+UseParNewGC 设置年轻代为并行收集
