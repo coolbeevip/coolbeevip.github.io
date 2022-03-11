@@ -1,0 +1,161 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Docker IPv6 Support</title><meta charset=utf-8><meta name=generator content="Hugo 0.94.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/ipv6/ipv6-docker/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Docker IPv6 Support"><meta name=twitter:description content="本文介绍在 IPv6 网络主机上部署 Docker
+主机 IPv6 网络检查 使用 ifconfig 命令查看是否已经配置了 IPv6 网络
+$ ifconfig eth1 eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST> mtu 1500  inet 10.252.248.152 netmask 255.255.255.128 broadcast 10.252.248.255  inet6 2409:8010:5ac0:400:200::2d prefixlen 128 scopeid 0x0<global>  inet6 fe80::f816:3eff:fe84:bc36 prefixlen 64 scopeid 0x20<link>  ether fa:16:3e:84:bc:36 txqueuelen 1000 (Ethernet)  RX packets 7150695 bytes 4751783652 (4.4 GiB)  RX errors 0 dropped 0 overruns 0 frame 0  TX packets 5018420 bytes 4436770306 (4."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Docker IPv6 Support</h3></div><p>本文介绍在 IPv6 网络主机上部署 Docker</p><h2 id=主机-ipv6-网络检查>主机 IPv6 网络检查</h2><p>使用 <code>ifconfig</code> 命令查看是否已经配置了 IPv6 网络</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ ifconfig eth1
+</span></span><span style=display:flex><span>eth1: flags<span style=color:#f92672>=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span style=color:#ae81ff>1500</span>
+</span></span><span style=display:flex><span>        inet 10.252.248.152  netmask 255.255.255.128  broadcast 10.252.248.255
+</span></span><span style=display:flex><span>        inet6 2409:8010:5ac0:400:200::2d  prefixlen <span style=color:#ae81ff>128</span>  scopeid 0x0&lt;global&gt;
+</span></span><span style=display:flex><span>        inet6 fe80::f816:3eff:fe84:bc36  prefixlen <span style=color:#ae81ff>64</span>  scopeid 0x20&lt;link&gt;
+</span></span><span style=display:flex><span>        ether fa:16:3e:84:bc:36  txqueuelen <span style=color:#ae81ff>1000</span>  <span style=color:#f92672>(</span>Ethernet<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>        RX packets <span style=color:#ae81ff>7150695</span>  bytes <span style=color:#ae81ff>4751783652</span> <span style=color:#f92672>(</span>4.4 GiB<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>        RX errors <span style=color:#ae81ff>0</span>  dropped <span style=color:#ae81ff>0</span>  overruns <span style=color:#ae81ff>0</span>  frame <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>        TX packets <span style=color:#ae81ff>5018420</span>  bytes <span style=color:#ae81ff>4436770306</span> <span style=color:#f92672>(</span>4.1 GiB<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>        TX errors <span style=color:#ae81ff>0</span>  dropped <span style=color:#ae81ff>0</span> overruns <span style=color:#ae81ff>0</span>  carrier <span style=color:#ae81ff>0</span>  collisions <span style=color:#ae81ff>0</span>
+</span></span></code></pre></div><ul><li>你可以看到主机已经获取到了 IPv6 地址 <strong>inet6 2409:8010:5ac0:400:200::2d</strong></li><li><strong>注意：</strong> fe80:: 开头的地址只是链接本地地址</li></ul><p>分别在主机和其他主机使用 <code>ping6</code> 命令验证网络是否可达</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ ping6 2409:8010:5ac0:400:200::2d
+</span></span><span style=display:flex><span>PING 2409:8010:5ac0:400:200::2d<span style=color:#f92672>(</span>2409:8010:5ac0:400:200::2d<span style=color:#f92672>)</span> <span style=color:#ae81ff>56</span> data bytes
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: icmp_seq<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>64</span> time<span style=color:#f92672>=</span>43.5 ms
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: icmp_seq<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>64</span> time<span style=color:#f92672>=</span>0.211 ms
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: icmp_seq<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>64</span> time<span style=color:#f92672>=</span>0.222 ms
+</span></span></code></pre></div><p>至此，你的主机已经正确分配了 IPv6 地址，并且网络可达。</p><h2 id=docker-配置-ipv6>Docker 配置 IPv6</h2><p>Docker 版本至少要 19.03 以上</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ docker -v
+</span></span><span style=display:flex><span>Docker version 19.03.12, build 48a66213fe
+</span></span></code></pre></div><p>编辑 /etc/docker/daemon.json 文件，加上如下的内容</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;ipv6&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;fixed-cidr-v6&#34;</span>: <span style=color:#e6db74>&#34;2001:db8:1::/64&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>重新加载 Docker 配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>sudo systemctl reload docker
+</span></span></code></pre></div><p>手动配置 IPv6 路由网络（否则容器内无法连接到外部 IPv6 网络）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>sudo ip6tables -t nat -I POSTROUTING -j MASQUERADE
+</span></span></code></pre></div><h2 id=检查-docker-ipv6-配置>检查 Docker IPv6 配置</h2><p>使用 <code>ip aaddr show</code> 命令查看 docker0 网络是否有 IPv6 地址 <strong>inet6 2001:db8:1::1/64</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>6033: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu <span style=color:#ae81ff>1500</span> qdisc noqueue state DOWN group default
+</span></span><span style=display:flex><span>    link/ether 02:42:0c:c3:c3:42 brd ff:ff:ff:ff:ff:ff
+</span></span><span style=display:flex><span>    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+</span></span><span style=display:flex><span>       valid_lft forever preferred_lft forever
+</span></span><span style=display:flex><span>    inet6 2001:db8:1::1/64 scope global tentative
+</span></span><span style=display:flex><span>       valid_lft forever preferred_lft forever
+</span></span><span style=display:flex><span>    inet6 fe80::1/64 scope link tentative
+</span></span><span style=display:flex><span>       valid_lft forever preferred_lft forever
+</span></span></code></pre></div><p><strong>注意：</strong> 如果 docker0 网络没有 IPv6 地址，则需要使用如下命令重建 docker0 网络</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>pkill docker
+</span></span><span style=display:flex><span>iptables -t filter -F
+</span></span><span style=display:flex><span>iptables -t filter -X
+</span></span><span style=display:flex><span>iptables -t nat -F
+</span></span><span style=display:flex><span>iptables -t nat -X
+</span></span><span style=display:flex><span>ifconfig docker0 down
+</span></span><span style=display:flex><span>ip link del docker0
+</span></span><span style=display:flex><span>systemctl restart docker
+</span></span></code></pre></div><p>执行 docker network inspect bridge 命令查看容器默认网络是否已经 <strong>EnableIPv6=true</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ docker network inspect bridge
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Name&#34;</span>: <span style=color:#e6db74>&#34;bridge&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Id&#34;</span>: <span style=color:#e6db74>&#34;9ca5a393724ae742f29537572920dd69187465be04bcb660f1d146fa0f7836da&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Created&#34;</span>: <span style=color:#e6db74>&#34;2021-12-16T14:38:41.371029327+08:00&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Scope&#34;</span>: <span style=color:#e6db74>&#34;local&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Driver&#34;</span>: <span style=color:#e6db74>&#34;bridge&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;EnableIPv6&#34;</span>: true,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;IPAM&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Driver&#34;</span>: <span style=color:#e6db74>&#34;default&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Options&#34;</span>: null,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Config&#34;</span>: <span style=color:#f92672>[</span>
+</span></span><span style=display:flex><span>                <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>&#34;Subnet&#34;</span>: <span style=color:#e6db74>&#34;172.17.0.0/16&#34;</span>,
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>&#34;Gateway&#34;</span>: <span style=color:#e6db74>&#34;172.17.0.1&#34;</span>
+</span></span><span style=display:flex><span>                <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>                <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>&#34;Subnet&#34;</span>: <span style=color:#e6db74>&#34;2001:db8:1::/64&#34;</span>
+</span></span><span style=display:flex><span>                <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>            <span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Internal&#34;</span>: false,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Attachable&#34;</span>: false,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Ingress&#34;</span>: false,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;ConfigFrom&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Network&#34;</span>: <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;ConfigOnly&#34;</span>: false,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Containers&#34;</span>: <span style=color:#f92672>{}</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Options&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;com.docker.network.bridge.default_bridge&#34;</span>: <span style=color:#e6db74>&#34;true&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;com.docker.network.bridge.enable_icc&#34;</span>: <span style=color:#e6db74>&#34;true&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;com.docker.network.bridge.enable_ip_masquerade&#34;</span>: <span style=color:#e6db74>&#34;true&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;com.docker.network.bridge.host_binding_ipv4&#34;</span>: <span style=color:#e6db74>&#34;0.0.0.0&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;com.docker.network.bridge.name&#34;</span>: <span style=color:#e6db74>&#34;docker0&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;com.docker.network.driver.mtu&#34;</span>: <span style=color:#e6db74>&#34;1500&#34;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Labels&#34;</span>: <span style=color:#f92672>{}</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>]</span>
+</span></span></code></pre></div><p>启动一个容器，验证容器内是否正确获取了 IPv6 地址</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ docker run --rm -it alpine:3.14 ifconfig
+</span></span><span style=display:flex><span>eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02  
+</span></span><span style=display:flex><span>          inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
+</span></span><span style=display:flex><span>          inet6 addr: 2001:db8:1::242:ac11:2/64 Scope:Global
+</span></span><span style=display:flex><span>          inet6 addr: fe80::42:acff:fe11:2/64 Scope:Link
+</span></span><span style=display:flex><span>          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+</span></span><span style=display:flex><span>          RX packets:1 errors:0 dropped:0 overruns:0 frame:0
+</span></span><span style=display:flex><span>          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0
+</span></span><span style=display:flex><span>          collisions:0 txqueuelen:0
+</span></span><span style=display:flex><span>          RX bytes:110 <span style=color:#f92672>(</span>110.0 B<span style=color:#f92672>)</span>  TX bytes:90 <span style=color:#f92672>(</span>90.0 B<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>lo        Link encap:Local Loopback  
+</span></span><span style=display:flex><span>          inet addr:127.0.0.1  Mask:255.0.0.0
+</span></span><span style=display:flex><span>          inet6 addr: ::1/128 Scope:Host
+</span></span><span style=display:flex><span>          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+</span></span><span style=display:flex><span>          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</span></span><span style=display:flex><span>          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</span></span><span style=display:flex><span>          collisions:0 txqueuelen:1000
+</span></span><span style=display:flex><span>          RX bytes:0 <span style=color:#f92672>(</span>0.0 B<span style=color:#f92672>)</span>  TX bytes:0 <span style=color:#f92672>(</span>0.0 B<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>进入容器内部尝试 ping6 外部主机</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ docker run --rm -it alpine:3.14 ping6 2409:8010:5ac0:400:200::2d
+</span></span><span style=display:flex><span>PING 2409:8010:5ac0:400:200::2d <span style=color:#f92672>(</span>2409:8010:5ac0:400:200::2d<span style=color:#f92672>)</span>: <span style=color:#ae81ff>56</span> data bytes
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: seq<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>63</span> time<span style=color:#f92672>=</span>45.846 ms
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: seq<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>63</span> time<span style=color:#f92672>=</span>0.444 ms
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: seq<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>63</span> time<span style=color:#f92672>=</span>0.406 ms
+</span></span><span style=display:flex><span><span style=color:#ae81ff>64</span> bytes from 2409:8010:5ac0:400:200::2d: seq<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span> ttl<span style=color:#f92672>=</span><span style=color:#ae81ff>63</span> time<span style=color:#f92672>=</span>0.334 ms
+</span></span></code></pre></div><h2 id=启动-nginx-docker-验证-ipv6-地址访问>启动 Nginx Docker 验证 IPv6 地址访问</h2><p>启动一个镜像</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ docker run --rm --name my-nginx -d -p 8080:80 my-nginx
+</span></span></code></pre></div><p>使用 IPv6 地址访问</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ curl -g http://<span style=color:#f92672>[</span>2409:8010:5ac0:400:200::2d<span style=color:#f92672>]</span>:8080
+</span></span><span style=display:flex><span>*   Trying 127.0.0.1:8080...
+</span></span><span style=display:flex><span>* TCP_NODELAY set
+</span></span><span style=display:flex><span>* Connected to localhost <span style=color:#f92672>(</span>127.0.0.1<span style=color:#f92672>)</span> port <span style=color:#ae81ff>8080</span> <span style=color:#f92672>(</span><span style=color:#75715e>#0)</span>
+</span></span><span style=display:flex><span>&gt; GET / HTTP/1.1
+</span></span><span style=display:flex><span>&gt; Host: localhost:8080
+</span></span><span style=display:flex><span>&gt; User-Agent: curl/7.65.2
+</span></span><span style=display:flex><span>&gt; Accept: */*
+</span></span><span style=display:flex><span>&gt;
+</span></span><span style=display:flex><span>* Mark bundle as not supporting multiuse
+</span></span><span style=display:flex><span>&lt; HTTP/1.1 <span style=color:#ae81ff>200</span> OK
+</span></span><span style=display:flex><span>&lt; Server: nginx/1.20.1
+</span></span><span style=display:flex><span>&lt; Date: Fri, <span style=color:#ae81ff>09</span> Jul <span style=color:#ae81ff>2021</span> 08:49:02 GMT
+</span></span><span style=display:flex><span>&lt; Content-Type: text/html
+</span></span><span style=display:flex><span>&lt; Content-Length: <span style=color:#ae81ff>612</span>
+</span></span><span style=display:flex><span>&lt; Last-Modified: Tue, <span style=color:#ae81ff>25</span> May <span style=color:#ae81ff>2021</span> 13:41:16 GMT
+</span></span><span style=display:flex><span>&lt; Connection: keep-alive
+</span></span><span style=display:flex><span>&lt; ETag: <span style=color:#e6db74>&#34;60acfe7c-264&#34;</span>
+</span></span><span style=display:flex><span>&lt; Accept-Ranges: bytes
+</span></span><span style=display:flex><span>&lt;
+</span></span><span style=display:flex><span>&lt;!DOCTYPE html&gt;
+</span></span><span style=display:flex><span>&lt;html&gt;
+</span></span><span style=display:flex><span>&lt;head&gt;
+</span></span><span style=display:flex><span>&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+</span></span><span style=display:flex><span>&lt;style&gt;
+</span></span><span style=display:flex><span>    body <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>        width: 35em;
+</span></span><span style=display:flex><span>        margin: <span style=color:#ae81ff>0</span> auto;
+</span></span><span style=display:flex><span>        font-family: Tahoma, Verdana, Arial, sans-serif;
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>&lt;/style&gt;
+</span></span><span style=display:flex><span>&lt;/head&gt;
+</span></span><span style=display:flex><span>&lt;body&gt;
+</span></span><span style=display:flex><span>&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+</span></span><span style=display:flex><span>&lt;p&gt;If you see this page, the nginx web server is successfully installed and
+</span></span><span style=display:flex><span>working. Further configuration is required.&lt;/p&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>&lt;p&gt;For online documentation and support please refer to
+</span></span><span style=display:flex><span>&lt;a href<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;http://nginx.org/&#34;</span>&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+</span></span><span style=display:flex><span>Commercial support is available at
+</span></span><span style=display:flex><span>&lt;a href<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;http://nginx.com/&#34;</span>&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>&lt;p&gt;&lt;em&gt;Thank you <span style=color:#66d9ef>for</span> using nginx.&lt;/em&gt;&lt;/p&gt;
+</span></span><span style=display:flex><span>&lt;/body&gt;
+</span></span><span style=display:flex><span>&lt;/html&gt;
+</span></span><span style=display:flex><span>* Connection <span style=color:#75715e>#0 to host localhost left intact</span>
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/ipv6/>ipv6</a></span>
+<span class=separator><a class=tag href=/tags/ipv6/>ipv6</a><a class=tag href=/tags/docker/>docker</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

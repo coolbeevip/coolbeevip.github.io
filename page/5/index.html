@@ -3,7 +3,20 @@
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
 <img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a class=current href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."></div><div class="post ."><div class=post-title><h3><a href=/posts/linux/linux-commands-disk/>Linux Command - Disk</a></h3></div><div class=post-content><div class=p_part><p>Linux 磁盘相关命令
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a class=current href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."></div><div class="post ."><div class=post-title><h3><a href=/posts/java/java-jvm-options/>Important JVM Options</a></h3></div><div class=post-content><div class=p_part><p>Heap Memory -XX:MetaspaceSize Metaspace 空间初始大小，如果不设置的话，默认是20.79M。这个初始大小是触发首次 Metaspace Full GC 的阈值，例如 -XX:MetaspaceSize=128M
+-XX:MaxMetaspaceSize Metaspace 最大值，默认不限制大小，但是线上环境建议设置，例如 -XX:MaxMetaspaceSize=512M
+GC -Xnoclassgc 表示关闭JVM对类的垃圾回收，缺省情况下，当一个类没有任何活动实例时，JVM 就会从内存中卸装该类，但是这样会使性能下降。如果关闭类垃圾回收，就可以消除由于多次装入和卸装同一个类而造成的开销
+-XX:+UseParNewGC 设置年轻代为并行收集
+-XX:MaxTenuringThreshold 控制新生代需要经历多少次GC​晋升到老年代中的最大阈值，默认值 15
+-XX:+CMSParallelRemarkEnabled CMS收集算法步骤如下：初始标记 -> 并发标记 -> 重新标记 -> 标记清除。 其中 初始标记和重新标记都需要STW，即暂停用户线程。 CMSParallelRemarkEnabled参数可以让重新标记阶段进行并行重新标记，减少暂停时间
+-XX:SurvivorRatio 设置 Eden、S0、S1 分配比例，默认值是 8
+-XX:SurvivorRatio=5 表示 Eden 占 50%，S0、S1 平分剩余空间
+-XX:+UseCompressedOops In short, don&rsquo;t turn it on, use a version which has it on by default.
+https://stackoverflow.com/questions/11054548/what-does-the-usecompressedoops-jvm-flag-do-and-when-should-i-use-it
+-XX:+DisableExplicitGC 禁止 System.gc() 触发 GC 操作，当没有开启 DisableExplicitGC 这个参数时,你会发现JVM每个小时会执行一次Full GC,这是因为JVM在做分布式GC,为RMI服务的, 可以通过 sun.</p><a href=/posts/java/java-jvm-options/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
+<span class=date>Tue, Aug 6, 2019</span>
+<span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/jvm/>jvm</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/linux/linux-commands-disk/>Linux Command - Disk</a></h3></div><div class=post-content><div class=p_part><p>Linux 磁盘相关命令
 磁盘IO dd [root@localhost ~]# dd if=/dev/zero of=./a.dat bs=8K count=1M conv=fdatasync 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.8606 秒，578 MB/秒 [root@localhost ~]# dd if=./a.dat of=/dev/null bs=1M count=8k iflag=direct 记录了8192+0 的读入 记录了8192+0 的写出 8589934592字节(8.6 GB)已复制，14.2462 秒，603 MB/秒 磁盘空间 df 查看磁盘各个分区的空间大小、占用、可用等信息
 $ df -h Filesystem Size Used Avail Capacity iused ifree %iused Mounted on /dev/disk1s5 466Gi 10Gi 128Gi 8% 488463 4881964417 0% / devfs 192Ki 192Ki 0Bi 100% 663 0 100% /dev /dev/disk1s1 466Gi 318Gi 128Gi 72% 4557528 4877895352 0% /System/Volumes/Data /dev/disk1s4 466Gi 8.</p><a href=/posts/linux/linux-commands-disk/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Mon, May 6, 2019</span>
