@@ -200,3 +200,18 @@ tmpfs                     16G     0   16G   0% /sys/fs/cgroup
 tmpfs                    3.2G     0  3.2G   0% /run/user/0
 /dev/vdb1                985G   77M  935G   1% /data01
 ```
+
+## 进程磁盘使用情况
+
+```shell
+# pidstat -p 139348 -d
+Linux 3.10.0-1160.31.1.el7.x86_64 (10-1-207-194) 	2022年03月11日 	_x86_64_	(64 CPU)
+
+10时01分57秒   UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s  Command
+10时01分57秒   200    139348      0.01      0.13      0.01  java
+```
+
+* kB_rd/s: 每秒进程从磁盘读取的数据量(以kB为单位)。
+* kB_wr/s: 每秒进程向磁盘写的数据量(以kB为单位)。
+* kB_ccwr/s：每秒进程被取消向磁盘写的数据量(以kB为单位)。
+* Command:：拉起进程对应的命令
