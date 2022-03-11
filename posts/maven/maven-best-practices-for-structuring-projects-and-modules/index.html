@@ -1,59 +1,13 @@
-<!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Maven Projects Best Practices </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name=description content="This is my knowledge base. I document things here">
-<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
-<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
-<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
-<link rel=canonical href=/posts/maven/maven-best-practices-for-structuring-projects-and-modules/>
-<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Maven Projects Best Practices">
-<meta name=twitter:description content="本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API 网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Maven Projects Best Practices</title><meta charset=utf-8><meta name=generator content="Hugo 0.94.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/maven/maven-best-practices-for-structuring-projects-and-modules/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Maven Projects Best Practices"><meta name=twitter:description content="本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API 网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。
 目标  通过多模块方式组织项目 管理项目版本、依赖，属性 规划模块依赖关系  主项目 POM 每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签
  properties: 定义字符集编码、JDK 版本、插件版本; modules: 下级子模块; pluginRepositories: 插件仓库地址（非必须，主要解决国内访问慢的问题）; repositories: 定义 Maven 私服地址; distributionManagement: 定义发布用 Maven 私服地址 pluginManagement: 定义管理类插件版本  例如：
-<?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?> <build xmlns=&#34;http://maven.apache.org/POM/4.0.0&#34;  xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;  xsi:schemaLocation=&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;>   <modelVersion>4.0.0</modelVersion>   <groupId>com.coolbeevip.apigateway</groupId>  <artifactId>apigateway-parent</artifactId>  <version>1.0.0-SNAPSHOT</version>  <packaging>pom</packaging>   <properties>   <!-- project -->  <project.">
-</head><body><div class="sidebar .">
-<div class=logo-title>
-<div class=title>
-<img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
-<p>This is my knowledge base. I document things here</p></div></div><p>
-<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+<?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?> <build xmlns=&#34;http://maven.apache.org/POM/4.0.0&#34;  xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;  xsi:schemaLocation=&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;>   <modelVersion>4.0.0</modelVersion>   <groupId>com.coolbeevip.apigateway</groupId>  <artifactId>apigateway-parent</artifactId>  <version>1.0.0-SNAPSHOT</version>  <packaging>pom</packaging>   <properties>   <!-- project -->  <project."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
-<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p></div><ul class=social-links>
-<li>
-<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
-<i class="fab fa-github fa-2x" aria-hidden=true></i>
-</a>
-</li><li>
-<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
-<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
-</a>
-</li></ul><div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
-<div class="page-top .">
-<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span>
-<span aria-hidden=true></span>
-</a>
-<ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
-<div class=content>
-<div class="post .">
-<div class=post-content>
-<div class=post-title>
-<h3>Maven Projects Best Practices</h3></div><p>本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API
-网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。</p><h2 id=目标>目标</h2><ul>
-<li>通过多模块方式组织项目</li><li>管理项目版本、依赖，属性</li><li>规划模块依赖关系</li></ul><h3 id=主项目-pom>主项目 POM</h3><p>每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签</p><ul>
-<li>properties: 定义字符集编码、JDK 版本、插件版本;</li><li>modules: 下级子模块;</li><li>pluginRepositories: 插件仓库地址（非必须，主要解决国内访问慢的问题）;</li><li>repositories: 定义 Maven 私服地址;</li><li>distributionManagement: 定义发布用 Maven 私服地址</li><li>pluginManagement: 定义管理类插件版本</li></ul><p>例如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Maven Projects Best Practices</h3></div><p>本文整理构建Maven项目和模块的最佳实践的关键事项，其中包含依赖、版本、属性、模块划分等关键因素，推荐使用 Maven 3.6.3 及以上版本。 为了便于理解，我们假设有一个 API
+网关项目，这个网关项目包含服务端、客户端、通知服务端支持插件。</p><h2 id=目标>目标</h2><ul><li>通过多模块方式组织项目</li><li>管理项目版本、依赖，属性</li><li>规划模块依赖关系</li></ul><h3 id=主项目-pom>主项目 POM</h3><p>每个项目都应该在项目根目录下有一个主 POM 文件，并通过主 POM 文件管理下级子模块。在主 POM 中至少会使用一下标签</p><ul><li>properties: 定义字符集编码、JDK 版本、插件版本;</li><li>modules: 下级子模块;</li><li>pluginRepositories: 插件仓库地址（非必须，主要解决国内访问慢的问题）;</li><li>repositories: 定义 Maven 私服地址;</li><li>distributionManagement: 定义发布用 Maven 私服地址</li><li>pluginManagement: 定义管理类插件版本</li></ul><p>例如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;build</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
 </span></span><span style=display:flex><span>       <span style=color:#a6e22e>xmlns:xsi=</span><span style=color:#e6db74>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
 </span></span><span style=display:flex><span>       <span style=color:#a6e22e>xsi:schemaLocation=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style=color:#f92672>&gt;</span>
@@ -229,8 +183,7 @@
 </span></span><span style=display:flex><span>  <span style=color:#75715e>&lt;!-- 网关客户端服 --&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;module&gt;</span>apigateway-client<span style=color:#f92672>&lt;/module&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;/modules&gt;</span>
-</span></span></code></pre></div><ul>
-<li>服务端模块 <code>pigateway-server</code>，包含 <code>apigateway-dependencies</code>，<code>apigateway-server-common</code>，<code>apigateway-server-plugins</code> 模块;</li><li>客户端模块 <code>apigateway-client</code> 包含 <code>apigateway-dependencies</code>，<code>apigateway-common</code> 模块;</li><li>插件模块 <code>apigateway-server-plugins</code> 包含 <code>apigateway-dependencies</code>，<code>apigateway-server-common</code> 模块;</li></ul><p>子模块的 POM 要继承上级 POM</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span></code></pre></div><ul><li>服务端模块 <code>pigateway-server</code>，包含 <code>apigateway-dependencies</code>，<code>apigateway-server-common</code>，<code>apigateway-server-plugins</code> 模块;</li><li>客户端模块 <code>apigateway-client</code> 包含 <code>apigateway-dependencies</code>，<code>apigateway-common</code> 模块;</li><li>插件模块 <code>apigateway-server-plugins</code> 包含 <code>apigateway-dependencies</code>，<code>apigateway-server-common</code> 模块;</li></ul><p>子模块的 POM 要继承上级 POM</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;project</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
 </span></span><span style=display:flex><span>         <span style=color:#a6e22e>xmlns:xsi=</span><span style=color:#e6db74>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
 </span></span><span style=display:flex><span>         <span style=color:#a6e22e>xsi:schemaLocation=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style=color:#f92672>&gt;</span>
@@ -243,9 +196,7 @@
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;artifactId&gt;</span>apigateway-server<span style=color:#f92672>&lt;/artifactId&gt;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;/project&gt;</span>
-</span></span></code></pre></div><ul>
-<li>子模块只能继承本系统的模块（只有这样参数才能继承，避免重复定义）</li><li>子模块中不要单独定义版本号</li></ul><h3 id=依赖定义子模块>依赖定义子模块</h3><p>通常在项目中必须有一个地方几种定义依赖的版本，承担这个功能的模块一般是主 pom 或者一个单独的子模块，例如 <code>apigateway-dependencies</code>. 在这个模块里通常会用到以下定义</p><ul>
-<li>properties</li><li>dependencyManagement</li><li>pluginManagement</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span></code></pre></div><ul><li>子模块只能继承本系统的模块（只有这样参数才能继承，避免重复定义）</li><li>子模块中不要单独定义版本号</li></ul><h3 id=依赖定义子模块>依赖定义子模块</h3><p>通常在项目中必须有一个地方几种定义依赖的版本，承担这个功能的模块一般是主 pom 或者一个单独的子模块，例如 <code>apigateway-dependencies</code>. 在这个模块里通常会用到以下定义</p><ul><li>properties</li><li>dependencyManagement</li><li>pluginManagement</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;project</span> <span style=color:#a6e22e>xmlns=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0&#34;</span>
 </span></span><span style=display:flex><span>         <span style=color:#a6e22e>xmlns:xsi=</span><span style=color:#e6db74>&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
 </span></span><span style=display:flex><span>         <span style=color:#a6e22e>xsi:schemaLocation=</span><span style=color:#e6db74>&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span style=color:#f92672>&gt;</span>
@@ -323,8 +274,5 @@
 </span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;/pluginManagement&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;/build&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;/project&gt;</span>
-</span></span></code></pre></div></div><div class=post-footer>
-<div class=info>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/project/>project</a></span>
-</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/maven/>maven</a><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/project/>project</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

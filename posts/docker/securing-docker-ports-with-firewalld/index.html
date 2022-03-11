@@ -1,19 +1,4 @@
-<!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Securing Docker ports with firewalld </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name=description content="This is my knowledge base. I document things here">
-<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
-<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
-<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
-<link rel=canonical href=/posts/docker/securing-docker-ports-with-firewalld/>
-<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Securing Docker ports with firewalld">
-<meta name=twitter:description content="概述 为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。 通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，更多详细
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Securing Docker ports with firewalld</title><meta charset=utf-8><meta name=generator content="Hugo 0.94.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/docker/securing-docker-ports-with-firewalld/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Securing Docker ports with firewalld"><meta name=twitter:description content="概述 为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。 通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，更多详细
 本文基于环境
  Docker-CE 19.03.12 CentOS Linux release 7.8.2003 Firewall 0.6.3  本文例子:
 我们使用 Docker 安装一个 Nginx，并将 80(HTTP) 端口对外映射为 8080，443(HTTPS) 端口对外映射为 8443，并通过 Firewalld 仅允许特定的 IP 访问；提示：后续的防火墙规则中配置的端口是容器内部端口，例如 80，443
@@ -21,47 +6,13 @@
   配置 192.168.51.245 可以访问 Nginx Docker
   其他机器无法访问 Nginx Docker
   重要的事情说三遍
-如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER">
-</head><body><div class="sidebar .">
-<div class=logo-title>
-<div class=title>
-<img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
-<p>This is my knowledge base. I document things here</p></div></div><p>
-<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER"></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
-<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p></div><ul class=social-links>
-<li>
-<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
-<i class="fab fa-github fa-2x" aria-hidden=true></i>
-</a>
-</li><li>
-<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
-<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
-</a>
-</li></ul><div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
-<div class="page-top .">
-<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span>
-<span aria-hidden=true></span>
-</a>
-<ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
-<div class=content>
-<div class="post .">
-<div class=post-content>
-<div class=post-title>
-<h3>Securing Docker ports with firewalld</h3></div><h2 id=概述>概述</h2><p>为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。
-通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，<a href=https://docs.docker.com/network/iptables/>更多详细</a></p><p>本文基于环境</p><ul>
-<li>Docker-CE 19.03.12</li><li>CentOS Linux release 7.8.2003</li><li>Firewall 0.6.3</li></ul><p>本文例子:</p><p>我们使用 Docker 安装一个 Nginx，并将 80(HTTP) 端口对外映射为 8080，443(HTTPS) 端口对外映射为 8443，并通过 Firewalld 仅允许特定的 IP 访问；<strong>提示：后续的防火墙规则中配置的端口是容器内部端口，例如 80，443</strong></p><ul>
-<li>
-<p>192.168.51.246 安装 Nginx Docker</p></li><li>
-<p>配置 192.168.51.245 可以访问 Nginx Docker</p></li><li>
-<p>其他机器无法访问 Nginx Docker</p></li></ul><p><strong>重要的事情说三遍</strong></p><p>如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER</p><p><strong>不要在 Docker 运行时重启 firewalld</strong></p><p><strong>不要在 Docker 运行时重启 firewalld</strong></p><p><strong>不要在 Docker 运行时重启 firewalld</strong></p><h2 id=准备>准备</h2><p>清除所有 iptables 配置并重启 Docker。否则在启动 Nginx Docker 时可能会看到 <code>failed: iptables: No chain/target/match by that name</code> 错误</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>iptables -t filter -F
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Securing Docker ports with firewalld</h3></div><h2 id=概述>概述</h2><p>为了保护 Docker 暴露的端口不受外部访问的影响，可以使用 firewalld 配置防火墙规则，只允许特定的 IP 访问。
+通过让 firewalld 创建 DOCKER-USER 链，我们可以实现由 firewalld 维护的安全 Docker 端口, Docker 处理 iptables 规则以提供网络隔离，<a href=https://docs.docker.com/network/iptables/>更多详细</a></p><p>本文基于环境</p><ul><li>Docker-CE 19.03.12</li><li>CentOS Linux release 7.8.2003</li><li>Firewall 0.6.3</li></ul><p>本文例子:</p><p>我们使用 Docker 安装一个 Nginx，并将 80(HTTP) 端口对外映射为 8080，443(HTTPS) 端口对外映射为 8443，并通过 Firewalld 仅允许特定的 IP 访问；<strong>提示：后续的防火墙规则中配置的端口是容器内部端口，例如 80，443</strong></p><ul><li><p>192.168.51.246 安装 Nginx Docker</p></li><li><p>配置 192.168.51.245 可以访问 Nginx Docker</p></li><li><p>其他机器无法访问 Nginx Docker</p></li></ul><p><strong>重要的事情说三遍</strong></p><p>如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER</p><p><strong>不要在 Docker 运行时重启 firewalld</strong></p><p><strong>不要在 Docker 运行时重启 firewalld</strong></p><p><strong>不要在 Docker 运行时重启 firewalld</strong></p><h2 id=准备>准备</h2><p>清除所有 iptables 配置并重启 Docker。否则在启动 Nginx Docker 时可能会看到 <code>failed: iptables: No chain/target/match by that name</code> 错误</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>iptables -t filter -F
 </span></span><span style=display:flex><span>iptables -t filter -X
 </span></span><span style=display:flex><span>iptables -t nat -F
 </span></span><span style=display:flex><span>iptables -t nat -X
@@ -95,14 +46,11 @@
 </span></span><span style=display:flex><span>&lt;p&gt;&lt;em&gt;Thank you <span style=color:#66d9ef>for</span> using nginx.&lt;/em&gt;&lt;/p&gt;
 </span></span><span style=display:flex><span>&lt;/body&gt;
 </span></span><span style=display:flex><span>&lt;/html&gt;
-</span></span></code></pre></div><h2 id=配置-firewalld>配置 Firewalld</h2><ol>
-<li>停止 Docker</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>systemctl stop docker
-</span></span></code></pre></div><ol start=2>
-<li>在 firewalld 中重建 DOCKER-USER iptables chain（请忽略任何警告）</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --remove-chain ipv4 filter DOCKER-USER
+</span></span></code></pre></div><h2 id=配置-firewalld>配置 Firewalld</h2><ol><li>停止 Docker</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>systemctl stop docker
+</span></span></code></pre></div><ol start=2><li>在 firewalld 中重建 DOCKER-USER iptables chain（请忽略任何警告）</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --remove-chain ipv4 filter DOCKER-USER
 </span></span><span style=display:flex><span>firewall-cmd --permanent --direct --remove-rules ipv4 filter DOCKER-USER
 </span></span><span style=display:flex><span>firewall-cmd --permanent --direct --add-chain ipv4 filter DOCKER-USER
-</span></span></code></pre></div><ol start=3>
-<li>添加 iptables 规则到 DOCKER-USER chain</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --add-rule ipv4 filter DOCKER-USER <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>\
+</span></span></code></pre></div><ol start=3><li>添加 iptables 规则到 DOCKER-USER chain</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --add-rule ipv4 filter DOCKER-USER <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -m conntrack <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --ctstate RELATED,ESTABLISHED -j ACCEPT <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -m comment --comment <span style=color:#e6db74>&#39;Allow containers to connect to the outside world&#39;</span>
@@ -111,22 +59,17 @@
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -j RETURN <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -s 172.17.0.0/16 <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -m comment --comment <span style=color:#e6db74>&#39;allow internal docker communication&#39;</span>
-</span></span></code></pre></div><p><strong>提示: 172.17.0.0/16 是 Docker 的默认子网地址, 也可以改为你实际的 Docker 子网地址</strong></p><ol start=4>
-<li>为 机器 192.168.51.245 配置允许访问 Nginx Docker 80，443 端口，优先级为1（您可以在以后添加更多优先级为 0 的规则。请参见下文）</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --add-rule ipv4 filter DOCKER-USER <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>\
+</span></span></code></pre></div><p><strong>提示: 172.17.0.0/16 是 Docker 的默认子网地址, 也可以改为你实际的 Docker 子网地址</strong></p><ol start=4><li>为 机器 192.168.51.245 配置允许访问 Nginx Docker 80，443 端口，优先级为1（您可以在以后添加更多优先级为 0 的规则。请参见下文）</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --add-rule ipv4 filter DOCKER-USER <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -o docker0 <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -p tcp -m multiport <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --dports 80,443 -s 192.168.51.245/32 -j ACCEPT <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -m comment <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --comment <span style=color:#e6db74>&#39;Allow IP 192.168.51.245 to access http and https docker ports&#39;</span>
-</span></span></code></pre></div><p><strong>提示：这里的端口是指的 Docker 的内部端口 80，443，而不是映射的外部端口 8080，8443</strong></p><ol start=5>
-<li>阻止所有其他IP。 此规则的优先级最低，您可以稍后在此规则之前添加规则</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --add-rule ipv4 filter DOCKER-USER <span style=color:#ae81ff>10</span> <span style=color:#ae81ff>\
+</span></span></code></pre></div><p><strong>提示：这里的端口是指的 Docker 的内部端口 80，443，而不是映射的外部端口 8080，8443</strong></p><ol start=5><li>阻止所有其他IP。 此规则的优先级最低，您可以稍后在此规则之前添加规则</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --permanent --direct --add-rule ipv4 filter DOCKER-USER <span style=color:#ae81ff>10</span> <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -j REJECT -m comment --comment <span style=color:#e6db74>&#39;reject all other traffic to DOCKER-USER&#39;</span>
-</span></span></code></pre></div><ol start=6>
-<li>激活规则</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --reload
-</span></span></code></pre></div><ol start=7>
-<li>启动 Docker</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>systemctl start docker
-</span></span></code></pre></div><ol start=8>
-<li>配置完毕</li></ol><p>你能在文件 <code>/etc/firewalld/direct.xml</code> 中看到规则配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span></code></pre></div><ol start=6><li>激活规则</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>firewall-cmd --reload
+</span></span></code></pre></div><ol start=7><li>启动 Docker</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>systemctl start docker
+</span></span></code></pre></div><ol start=8><li>配置完毕</li></ol><p>你能在文件 <code>/etc/firewalld/direct.xml</code> 中看到规则配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;direct&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;chain</span> <span style=color:#a6e22e>table=</span><span style=color:#e6db74>&#34;filter&#34;</span> <span style=color:#a6e22e>ipv=</span><span style=color:#e6db74>&#34;ipv4&#34;</span> <span style=color:#a6e22e>chain=</span><span style=color:#e6db74>&#34;DOCKER-USER&#34;</span><span style=color:#f92672>/&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;rule</span> <span style=color:#a6e22e>priority=</span><span style=color:#e6db74>&#34;1&#34;</span> <span style=color:#a6e22e>table=</span><span style=color:#e6db74>&#34;filter&#34;</span> <span style=color:#a6e22e>ipv=</span><span style=color:#e6db74>&#34;ipv4&#34;</span> <span style=color:#a6e22e>chain=</span><span style=color:#e6db74>&#34;DOCKER-USER&#34;</span><span style=color:#f92672>&gt;</span>-m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT -m comment --comment &#39;Allow containers to connect to the outside world&#39;<span style=color:#f92672>&lt;/rule&gt;</span>
@@ -163,8 +106,5 @@
 </span></span><span style=display:flex><span>rm -rf /etc/firewalld/direct.xml
 </span></span><span style=display:flex><span>systemctl start firewalld
 </span></span><span style=display:flex><span>systemctl start docker
-</span></span></code></pre></div></div><div class=post-footer>
-<div class=info>
-<span class=separator><a class=category href=/categories/docker/>docker</a></span>
-<span class=separator><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/firewalld/>firewalld</a><a class=tag href=/tags/centos/>centos</a></span>
-</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/docker/>docker</a></span>
+<span class=separator><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/firewalld/>firewalld</a><a class=tag href=/tags/centos/>centos</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

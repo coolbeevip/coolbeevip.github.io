@@ -1,98 +1,18 @@
-<!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Automate Install MySQL InnoDB Cluster with Ansible Playbook </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name=description content="This is my knowledge base. I document things here">
-<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
-<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
-<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
-<link rel=canonical href=/posts/ansible/ansible-mysql-innodb-cluster/>
-<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Automate Install MySQL InnoDB Cluster with Ansible Playbook">
-<meta name=twitter:description content="集群概述 MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Automate Install MySQL InnoDB Cluster with Ansible Playbook</title><meta charset=utf-8><meta name=generator content="Hugo 0.94.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/ansible/ansible-mysql-innodb-cluster/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Automate Install MySQL InnoDB Cluster with Ansible Playbook"><meta name=twitter:description content="集群概述 MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。
 MySQL InnoDB 集群有以下服务组成
  MySQL shell Group Replication ( GR ) MySQL Router  安装计划 服务器规划
-   IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS     10.1.207.180 22022 mysql 123456 root123 CentOS Linux release 7.9.2009   10.1.207.181 22022 mysql 123456 root123 CentOS Linux release 7.9.2009   10.">
-</head><body><div class="sidebar .">
-<div class=logo-title>
-<div class=title>
-<img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
-<p>This is my knowledge base. I document things here</p></div></div><p>
-<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+   IP地址 SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS     10.1.207.180 22022 mysql 123456 root123 CentOS Linux release 7.9.2009   10.1.207.181 22022 mysql 123456 root123 CentOS Linux release 7.9.2009   10."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
-<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p></div><ul class=social-links>
-<li>
-<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
-<i class="fab fa-github fa-2x" aria-hidden=true></i>
-</a>
-</li><li>
-<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
-<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
-</a>
-</li></ul><div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
-<div class="page-top .">
-<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span>
-<span aria-hidden=true></span>
-</a>
-<ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
-<div class=content>
-<div class="post .">
-<div class=post-content>
-<div class=post-title>
-<h3>Automate Install MySQL InnoDB Cluster with Ansible Playbook</h3></div><h2 id=集群概述>集群概述</h2><p>MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。</p><p><img src=/images/posts/ansible/ansible-mysql-innodb-cluster/mysql-innodb-cluster-architecture.png alt=image-apisix-dashboard></p><p>MySQL InnoDB 集群有以下服务组成</p><ul>
-<li>MySQL shell</li><li>Group Replication ( GR )</li><li>MySQL Router</li></ul><h2 id=安装计划>安装计划</h2><p>服务器规划</p><table>
-<thead>
-<tr>
-<th>IP地址</th><th>SSH 端口</th><th>SSH 用户名</th><th>SSH 密码</th><th>ROOT 密码</th><th>OS</th></tr></thead><tbody>
-<tr>
-<td>10.1.207.180</td><td>22022</td><td>mysql</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr>
-<td>10.1.207.181</td><td>22022</td><td>mysql</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr>
-<td>10.1.207.182</td><td>22022</td><td>mysql</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr></tbody></table><p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p><p>集群节点规划</p><table>
-<thead>
-<tr>
-<th>IP地址</th><th>MySQL Server</th><th>MySQL Router</th><th>MySQL Shell</th></tr></thead><tbody>
-<tr>
-<td>10.1.207.180</td><td>Primary</td><td>Primary</td><td>Primary</td></tr><tr>
-<td>10.1.207.181</td><td>Secondary</td><td>Primary</td><td>Primary</td></tr><tr>
-<td>10.1.207.182</td><td>Secondary</td><td>Primary</td><td>Primary</td></tr></tbody></table><p>节点安装路径</p><table>
-<thead>
-<tr>
-<th>路径</th><th>描述</th></tr></thead><tbody>
-<tr>
-<td>/etc/hosts</td><td>所有节点 IP 地址和主机名映射</td></tr><tr>
-<td>/opt/mysql</td><td>MySQL server、MySQL Shell、MySQL router 程序安装路径</td></tr><tr>
-<td>~/.bash_profile</td><td>设置 MySQL 环境变量</td></tr><tr>
-<td>~/.my.cnf</td><td>MySQL 配置文件</td></tr><tr>
-<td>~/mysql_uninstall.sh</td><td>MySQL InnoDB 集群卸载脚本</td></tr><tr>
-<td>~/mysql.server</td><td>MySQL server 的启停脚本</td></tr><tr>
-<td>~/mysql_router_start.sh</td><td>MySQL router 启动脚本软连接</td></tr><tr>
-<td>~/mysql_router_stop.sh</td><td>MySQL router 停止脚本软连接</td></tr><tr>
-<td>/data01/mysql/run</td><td>MySQL server pid 文件路径</td></tr><tr>
-<td>/data01/mysql/logs</td><td>MySQL server 日志文件路径</td></tr><tr>
-<td>/data01/mysql/data</td><td>MySQL server 数据文件路径</td></tr><tr>
-<td>/data01/mysql/dump</td><td>MySQL server 只允许在这个目录下进行导入导出操作</td></tr><tr>
-<td>/data01/mysql/script</td><td>安装过程中临时脚本存放的目录</td></tr><tr>
-<td>/data01/mysql/binlog</td><td>MySQL server bin-log 文件存储路径</td></tr><tr>
-<td>/data01/mysql/relaylog</td><td>MySQL server relay-log 文件存储路径</td></tr><tr>
-<td>/data01/mysql/router/mycluster</td><td>MySQL router 的配置文件、数据文件、日志文件</td></tr></tbody></table><p><strong>提示:</strong> 系统自带 /etc/my.cnf /etc/mysql/my.cnf 文件将被重命名为 /etc/my.cnf.deleted /etc/mysql/my.cnf.deleted</p><h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2><p>在客户机上创建 playbook 脚本存放目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/my-docker-volume/ansible-playbook
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Automate Install MySQL InnoDB Cluster with Ansible Playbook</h3></div><h2 id=集群概述>集群概述</h2><p>MySQL InnoDB Cluster 是 MySQL 团队为了高可用性 (HA) 目的而引入的。它为 MySQL 提供了完整的高可用解决方案。我将通过 Ansible Playbook 展示三个节点的 InnoDB 集群配置。</p><p><img src=/images/posts/ansible/ansible-mysql-innodb-cluster/mysql-innodb-cluster-architecture.png alt=image-apisix-dashboard></p><p>MySQL InnoDB 集群有以下服务组成</p><ul><li>MySQL shell</li><li>Group Replication ( GR )</li><li>MySQL Router</li></ul><h2 id=安装计划>安装计划</h2><p>服务器规划</p><table><thead><tr><th>IP地址</th><th>SSH 端口</th><th>SSH 用户名</th><th>SSH 密码</th><th>ROOT 密码</th><th>OS</th></tr></thead><tbody><tr><td>10.1.207.180</td><td>22022</td><td>mysql</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr><td>10.1.207.181</td><td>22022</td><td>mysql</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr><tr><td>10.1.207.182</td><td>22022</td><td>mysql</td><td>123456</td><td>root123</td><td>CentOS Linux release 7.9.2009</td></tr></tbody></table><p><strong>提示：</strong> 可以参考<a href=https://github.com/coolbeevip/ansible-playbook/blob/main/README_ZH.md#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84>批量自动化创建用户</a></p><p>集群节点规划</p><table><thead><tr><th>IP地址</th><th>MySQL Server</th><th>MySQL Router</th><th>MySQL Shell</th></tr></thead><tbody><tr><td>10.1.207.180</td><td>Primary</td><td>Primary</td><td>Primary</td></tr><tr><td>10.1.207.181</td><td>Secondary</td><td>Primary</td><td>Primary</td></tr><tr><td>10.1.207.182</td><td>Secondary</td><td>Primary</td><td>Primary</td></tr></tbody></table><p>节点安装路径</p><table><thead><tr><th>路径</th><th>描述</th></tr></thead><tbody><tr><td>/etc/hosts</td><td>所有节点 IP 地址和主机名映射</td></tr><tr><td>/opt/mysql</td><td>MySQL server、MySQL Shell、MySQL router 程序安装路径</td></tr><tr><td>~/.bash_profile</td><td>设置 MySQL 环境变量</td></tr><tr><td>~/.my.cnf</td><td>MySQL 配置文件</td></tr><tr><td>~/mysql_uninstall.sh</td><td>MySQL InnoDB 集群卸载脚本</td></tr><tr><td>~/mysql.server</td><td>MySQL server 的启停脚本</td></tr><tr><td>~/mysql_router_start.sh</td><td>MySQL router 启动脚本软连接</td></tr><tr><td>~/mysql_router_stop.sh</td><td>MySQL router 停止脚本软连接</td></tr><tr><td>/data01/mysql/run</td><td>MySQL server pid 文件路径</td></tr><tr><td>/data01/mysql/logs</td><td>MySQL server 日志文件路径</td></tr><tr><td>/data01/mysql/data</td><td>MySQL server 数据文件路径</td></tr><tr><td>/data01/mysql/dump</td><td>MySQL server 只允许在这个目录下进行导入导出操作</td></tr><tr><td>/data01/mysql/script</td><td>安装过程中临时脚本存放的目录</td></tr><tr><td>/data01/mysql/binlog</td><td>MySQL server bin-log 文件存储路径</td></tr><tr><td>/data01/mysql/relaylog</td><td>MySQL server relay-log 文件存储路径</td></tr><tr><td>/data01/mysql/router/mycluster</td><td>MySQL router 的配置文件、数据文件、日志文件</td></tr></tbody></table><p><strong>提示:</strong> 系统自带 /etc/my.cnf /etc/mysql/my.cnf 文件将被重命名为 /etc/my.cnf.deleted /etc/mysql/my.cnf.deleted</p><h2 id=下载安装包和-playbook-脚本>下载安装包和 Playbook 脚本</h2><p>在客户机上创建 playbook 脚本存放目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/my-docker-volume/ansible-playbook
 </span></span></code></pre></div><p>下载 playbook 脚本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/my-docker-volume/ansible-playbook
 </span></span><span style=display:flex><span>git clone https://github.com/coolbeevip/ansible-playbook.git
 </span></span></code></pre></div><p>下载 MySQL 安装包到 <code>~/my-docker-volume/ansible-playbook/packages</code> 目录</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>wget -P ~/my-docker-volume/ansible-playbook/packages http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-8.0/mysql-8.0.27-linux-glibc2.12-x86_64.tar.xz --no-check-certificate
 </span></span><span style=display:flex><span>wget -P ~/my-docker-volume/ansible-playbook/packages http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-Shell/mysql-shell-8.0.27-linux-glibc2.12-x86-64bit.tar.gz --no-check-certificate
 </span></span><span style=display:flex><span>wget -P ~/my-docker-volume/ansible-playbook/packages http://ftp.ntu.edu.tw/MySQL/Downloads/MySQL-Router/mysql-router-8.0.27-linux-glibc2.12-x86_64.tar.xz --no-check-certificate
-</span></span></code></pre></div><h2 id=配置安装脚本>配置安装脚本</h2><blockquote>
-<p>您可以编辑以下配置文件，修改默认参数</p></blockquote><h4 id=main-mysqlyml>main-mysql.yml</h4><p>安装 MySQL Server 的服务器 IP 地址，以及系统用户名</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>- hosts: 10.1.207.180
+</span></span></code></pre></div><h2 id=配置安装脚本>配置安装脚本</h2><blockquote><p>您可以编辑以下配置文件，修改默认参数</p></blockquote><h4 id=main-mysqlyml>main-mysql.yml</h4><p>安装 MySQL Server 的服务器 IP 地址，以及系统用户名</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>- hosts: 10.1.207.180
 </span></span><span style=display:flex><span>  user: mysql
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>- hosts: 10.1.207.181
@@ -175,8 +95,7 @@ MySQL InnoDB 集群有以下服务组成
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -v /Users/zhanglei/mydocker/volume/ansible-playbook:/ansible-playbook <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  coolbeevip/ansible:2.8.11-alpine <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  /bin/bash  
-</span></span></code></pre></div><h4 id=安装-mysql-集群>安装 MySQL 集群</h4><p>这个脚本将自动化完成如下操作：</p><ul>
-<li>配置操作系统参数</li><li>上传安装介质到每个服务器</li><li>配置每个服务器上的 MySQL 环境变量</li><li>初始化每个服务器的 MySQL 数据库，设置 root 密码并启动</li><li>子主节点服务器上配置 MySQL 主从复制关系</li><li>在每个服务器上安装 MySQL router 并启动</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-mysql.yml /ansible-playbook/mysql/main-cluster.yml /ansible-playbook/mysql/main-router.yml
+</span></span></code></pre></div><h4 id=安装-mysql-集群>安装 MySQL 集群</h4><p>这个脚本将自动化完成如下操作：</p><ul><li>配置操作系统参数</li><li>上传安装介质到每个服务器</li><li>配置每个服务器上的 MySQL 环境变量</li><li>初始化每个服务器的 MySQL 数据库，设置 root 密码并启动</li><li>子主节点服务器上配置 MySQL 主从复制关系</li><li>在每个服务器上安装 MySQL router 并启动</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>bash-5.0# ansible-playbook -C /ansible-playbook/mysql/main-mysql.yml /ansible-playbook/mysql/main-cluster.yml /ansible-playbook/mysql/main-router.yml
 </span></span></code></pre></div><p><strong>提示:</strong> 因为第一次执行脚本时，会上传MySQL 安装包到所有服务器（约1.3GB），所以执行时间较长（取决于你的客户端和服务器之间的网络速度）。 你也可以在执行以上脚本前手动将安装包上传到服务器的安装路径 <code>/opt/mysql</code> 下。在我本地环境首次安装大概耗时 25 分钟（上传安装包大概 5 分钟，安装集群大概 20 分钟）</p><p>如果你看到如下信息，说明安装完成</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>TASK <span style=color:#f92672>[</span>Install Succeed<span style=color:#f92672>]</span> ********************************************************************************************************************************************************************************************************
 </span></span><span style=display:flex><span>ok: <span style=color:#f92672>[</span>10.1.207.180<span style=color:#f92672>]</span> <span style=color:#f92672>=</span>&gt; <span style=color:#f92672>{</span>
 </span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;msg&#34;</span>: <span style=color:#e6db74>&#34;Install Succeed!&#34;</span>
@@ -477,8 +396,5 @@ MySQL InnoDB 集群有以下服务组成
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>10.1.207.181 | CHANGED | rc<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> &gt;&gt;
-</span></span></code></pre></div></div><div class=post-footer>
-<div class=info>
-<span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
-<span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/mysql/>mysql</a></span>
-</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/ansible/>ansible</a></span>
+<span class=separator><a class=tag href=/tags/ansible/>ansible</a><a class=tag href=/tags/mysql/>mysql</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

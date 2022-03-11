@@ -1,19 +1,4 @@
-<!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | JProfiler with Docker Sonatype Nexus3 </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name=description content="This is my knowledge base. I document things here">
-<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
-<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
-<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
-<link rel=canonical href=/posts/docker/jprofiler-with-docker/>
-<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="JProfiler with Docker Sonatype Nexus3">
-<meta name=twitter:description content="使用 JProfiler 监控 Docker Sonatype Nexus3
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | JProfiler with Docker Sonatype Nexus3</title><meta charset=utf-8><meta name=generator content="Hugo 0.94.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/docker/jprofiler-with-docker/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="JProfiler with Docker Sonatype Nexus3"><meta name=twitter:description content="使用 JProfiler 监控 Docker Sonatype Nexus3
 下载 JProfiler 从 https://www.ej-technologies.com/下载 JProfiler 和 Agent（注意版本必须一致）
 JProfiler GUI
 https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg
@@ -25,45 +10,12 @@ https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
   使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
   增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
   增加 -p 9899:9899 容器端口映射
-  docker run -d \  -e NEXUS_CONTEXT=nexus \  -e INSTALL4J_ADD_VM_PARAMS=&#34;-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.">
-</head><body><div class="sidebar .">
-<div class=logo-title>
-<div class=title>
-<img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
-<p>This is my knowledge base. I document things here</p></div></div><p>
-<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+  docker run -d \  -e NEXUS_CONTEXT=nexus \  -e INSTALL4J_ADD_VM_PARAMS=&#34;-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
-<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p></div><ul class=social-links>
-<li>
-<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
-<i class="fab fa-github fa-2x" aria-hidden=true></i>
-</a>
-</li><li>
-<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
-<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
-</a>
-</li></ul><div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
-<div class="page-top .">
-<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span>
-<span aria-hidden=true></span>
-</a>
-<ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
-<div class=content>
-<div class="post .">
-<div class=post-content>
-<div class=post-title>
-<h3>JProfiler with Docker Sonatype Nexus3</h3></div><p>使用 JProfiler 监控 Docker Sonatype Nexus3</p><h2 id=下载-jprofiler>下载 JProfiler</h2><p>从 <a href=https://www.ej-technologies.com/download/jprofiler/files>https://www.ej-technologies.com/</a>下载 JProfiler 和 Agent（注意版本必须一致）</p><p>JProfiler GUI</p><p><a href=https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg>https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg</a></p><p>JProfiler Agent</p><p><a href=https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh>https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh</a></p><h2 id=在服务器上安装-jprofiler-agent>在服务器上安装 JProfiler Agent</h2><p>将下载后的 <code>jprofiler_linux_12_0_2.sh</code> 传到服务器上，通过 <code>sh jprofiler_linux_12_0_2.sh</code> 命令按提示安装即可</p><p>默认安装路径为 <code>/opt/jprofiler12/</code>，这个路径在启动 Docker 的时候要映射到容器内部</p><h2 id=启动-docker-sonatype-nexus3>启动 Docker Sonatype Nexus3</h2><p>在官方 <code>sonatype/nexus3</code> 容器启动参数的基础上做如下修改</p><ol>
-<li>
-<p>使用 <code>-v /opt/jprofiler12:/opt/jprofiler12</code> 将 jprofiler 路径映射到容器内部</p></li><li>
-<p>增加 <code>-agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899</code> JVM 参数，设置监听端口为 9899</p></li><li>
-<p>增加 <code>-p 9899:9899</code> 容器端口映射</p></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>docker run -d <span style=color:#ae81ff>\
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>JProfiler with Docker Sonatype Nexus3</h3></div><p>使用 JProfiler 监控 Docker Sonatype Nexus3</p><h2 id=下载-jprofiler>下载 JProfiler</h2><p>从 <a href=https://www.ej-technologies.com/download/jprofiler/files>https://www.ej-technologies.com/</a>下载 JProfiler 和 Agent（注意版本必须一致）</p><p>JProfiler GUI</p><p><a href=https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg>https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_12_0_2.dmg</a></p><p>JProfiler Agent</p><p><a href=https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh>https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh</a></p><h2 id=在服务器上安装-jprofiler-agent>在服务器上安装 JProfiler Agent</h2><p>将下载后的 <code>jprofiler_linux_12_0_2.sh</code> 传到服务器上，通过 <code>sh jprofiler_linux_12_0_2.sh</code> 命令按提示安装即可</p><p>默认安装路径为 <code>/opt/jprofiler12/</code>，这个路径在启动 Docker 的时候要映射到容器内部</p><h2 id=启动-docker-sonatype-nexus3>启动 Docker Sonatype Nexus3</h2><p>在官方 <code>sonatype/nexus3</code> 容器启动参数的基础上做如下修改</p><ol><li><p>使用 <code>-v /opt/jprofiler12:/opt/jprofiler12</code> 将 jprofiler 路径映射到容器内部</p></li><li><p>增加 <code>-agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899</code> JVM 参数，设置监听端口为 9899</p></li><li><p>增加 <code>-p 9899:9899</code> 容器端口映射</p></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>docker run -d <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e NEXUS_CONTEXT<span style=color:#f92672>=</span>nexus <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -e INSTALL4J_ADD_VM_PARAMS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms10g -Xmx10g \
 </span></span></span><span style=display:flex><span><span style=color:#e6db74>  -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 \
@@ -91,9 +43,5 @@ https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -v /data/nexus/nexus-data:/nexus-data <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  -v /opt/jprofiler12:/opt/jprofiler12 <span style=color:#ae81ff>\
 </span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  sonatype/nexus3  
-</span></span></code></pre></div><h2 id=打开-jprofiler-gui-连接>打开 JProfiler GUI 连接</h2><p>点击 <code>Start Center</code> 选择 <code>New Session</code>.</p><p><img src=/images/posts/jprofiler-with-docker/jprofiler_new.png alt=jprofiler_new></p><ol>
-<li>Session Name: 输入一个合适的名字 Nexus3</li><li>Attach: 选择 Attach to remote JVM</li><li>Profiled JVM Settings: IP 地址输入容器宿主机地址，端口输入 9899</li><li>点击 OK 后，可以看到如下监控界面</li></ol><p><img src=/images/posts/jprofiler-with-docker/jprofiler_main.png alt=jprofiler_main></p></div><div class=post-footer>
-<div class=info>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/jprofiler/>jprofiler</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/nexus/>nexus</a></span>
-</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
+</span></span></code></pre></div><h2 id=打开-jprofiler-gui-连接>打开 JProfiler GUI 连接</h2><p>点击 <code>Start Center</code> 选择 <code>New Session</code>.</p><p><img src=/images/posts/jprofiler-with-docker/jprofiler_new.png alt=jprofiler_new></p><ol><li>Session Name: 输入一个合适的名字 Nexus3</li><li>Attach: 选择 Attach to remote JVM</li><li>Profiled JVM Settings: IP 地址输入容器宿主机地址，端口输入 9899</li><li>点击 OK 后，可以看到如下监控界面</li></ol><p><img src=/images/posts/jprofiler-with-docker/jprofiler_main.png alt=jprofiler_main></p></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/jprofiler/>jprofiler</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/nexus/>nexus</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

@@ -1,71 +1,22 @@
-<!doctype html><html lang=en data-theme><head>
-<title> Lei Zhang | Maven Commands </title><meta charset=utf-8><meta name=generator content="Hugo 0.93.2"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name=description content="This is my knowledge base. I document things here">
-<link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css>
-<link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous>
-<link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon>
-<link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png>
-<link rel=canonical href=/posts/maven/maven-commands/>
-<script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script>
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Maven Commands">
-<meta name=twitter:description content="常用 Maven 命令
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Maven Commands</title><meta charset=utf-8><meta name=generator content="Hugo 0.94.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/maven/maven-commands/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Maven Commands"><meta name=twitter:description content="常用 Maven 命令
 Parameters  -D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试； -P 指定 Profile 配置，可以用于区分环境； -e 显示maven运行出错的信息； -o 离线执行命令,即不去远程仓库更新包； -f 强制指定使用 POM 文件，或者包含 POM 文件的目录 -pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔) -am 表示同时处理选定模块所依赖的模块 -amd 表示同时处理依赖选定模块的模块 -rf 表示从指定模块开始继续处理 -N 表示不递归子模块 -X 显示maven允许的debug信息； -U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。 &ndash;no-snapshot-updates 禁止更新 snapshot  Dependency 显示maven依赖数
 mvn dependency:tree 显示maven依赖列表
 mvn dependency:list 下载依赖包的源码
 mvn dependency:sources Maven Wrapper 自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件Maven Wrapper plugin将其自动化安装指定版本的 Maven
 mvn -N io.takari:maven:wrapper -Dmaven=3.6.3 这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理
- mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.">
-</head><body><div class="sidebar .">
-<div class=logo-title>
-<div class=title>
-<img src=/images/profile.jpg alt="profile picture">
-<h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description>
-<p>This is my knowledge base. I document things here</p></div></div><p>
-<a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
+ mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&style=social" alt="GitHub coolbeevip"></a>
 <img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
 <img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
-<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge">
-</p></div><ul class=social-links>
-<li>
-<a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub>
-<i class="fab fa-github fa-2x" aria-hidden=true></i>
-</a>
-</li><li>
-<a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail>
-<i class="fas fa-envelope fa-2x" aria-hidden=true></i>
-</a>
-</li></ul><div class=footer>
-<div class=by_farbox>&copy; Lei Zhang 2022 </div></div></div><div class=main>
-<div class="page-top .">
-<a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false>
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2022</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
 <span aria-hidden=true></span>
-<span aria-hidden=true></span>
-<span aria-hidden=true></span>
-</a>
-<ul class=nav id=navMenu>
-<li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element>
-<div class=content>
-<div class="post .">
-<div class=post-content>
-<div class=post-title>
-<h3>Maven Commands</h3></div><p>常用 Maven 命令</p><h2 id=parameters>Parameters</h2><ul>
-<li>-D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试；</li><li>-P 指定 Profile 配置，可以用于区分环境；</li><li>-e 显示maven运行出错的信息；</li><li>-o 离线执行命令,即不去远程仓库更新包；</li><li>-f 强制指定使用 POM 文件，或者包含 POM 文件的目录</li><li>-pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔)</li><li>-am 表示同时处理选定模块所依赖的模块</li><li>-amd 表示同时处理依赖选定模块的模块</li><li>-rf 表示从指定模块开始继续处理</li><li>-N 表示不递归子模块</li><li>-X 显示maven允许的debug信息；</li><li>-U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。</li><li>&ndash;no-snapshot-updates 禁止更新 snapshot</li></ul><h2 id=dependency>Dependency</h2><p>显示maven依赖数</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn dependency:tree
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Maven Commands</h3></div><p>常用 Maven 命令</p><h2 id=parameters>Parameters</h2><ul><li>-D 指定参数，如 -Dmaven.test.skip=true 跳过单元测试；</li><li>-P 指定 Profile 配置，可以用于区分环境；</li><li>-e 显示maven运行出错的信息；</li><li>-o 离线执行命令,即不去远程仓库更新包；</li><li>-f 强制指定使用 POM 文件，或者包含 POM 文件的目录</li><li>-pl 选项后可跟随{groupId}:{artifactId}或者所选模块的相对路径(多个模块以逗号分隔)</li><li>-am 表示同时处理选定模块所依赖的模块</li><li>-amd 表示同时处理依赖选定模块的模块</li><li>-rf 表示从指定模块开始继续处理</li><li>-N 表示不递归子模块</li><li>-X 显示maven允许的debug信息；</li><li>-U 强制去远程更新 snapshot的插件或依赖，默认每天只更新一次。</li><li>&ndash;no-snapshot-updates 禁止更新 snapshot</li></ul><h2 id=dependency>Dependency</h2><p>显示maven依赖数</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn dependency:tree
 </span></span></code></pre></div><p>显示maven依赖列表</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn dependency:list
 </span></span></code></pre></div><p>下载依赖包的源码</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn dependency:sources
 </span></span></code></pre></div><h2 id=maven-wrapper>Maven Wrapper</h2><p>自动安装 maven 的包装器（适合不想手动安装Maven的用户），使用插件<a href=https://github.com/takari/takari-maven-plugin>Maven Wrapper plugin</a>将其自动化安装指定版本的 Maven</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn -N io.takari:maven:wrapper -Dmaven<span style=color:#f92672>=</span>3.6.3
-</span></span></code></pre></div><p>这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理</p><ul>
-<li>mvnw: 这是 Linux Script 可执行文件，用来代替 <code>mvn</code></li><li>mvnw.cmd: 这是 Windows Script 可执行文件，用来代替 <code>mvn</code></li><li>mvn: 隐藏的文件夹，其中包含Maven Wrapper Java库及其属性文件</li></ul><p>首次执行 <code>mvnw</code> 或者 <code>mvnw.cmd</code> 时会自动下载对应版本的 Maven 到本地，支持 Linux、OSX 、Windows 、Solaris。</p><p>在 Linux 下执行编译</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>./mvnw clean install
+</span></span></code></pre></div><p>这个命令会在你的项目中生成如下文件，请将这些文件与源代码一起管理</p><ul><li>mvnw: 这是 Linux Script 可执行文件，用来代替 <code>mvn</code></li><li>mvnw.cmd: 这是 Windows Script 可执行文件，用来代替 <code>mvn</code></li><li>mvn: 隐藏的文件夹，其中包含Maven Wrapper Java库及其属性文件</li></ul><p>首次执行 <code>mvnw</code> 或者 <code>mvnw.cmd</code> 时会自动下载对应版本的 Maven 到本地，支持 Linux、OSX 、Windows 、Solaris。</p><p>在 Linux 下执行编译</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>./mvnw clean install
 </span></span></code></pre></div><p>在 Windows 下执行编译</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>./mvnw.cmd clean install
 </span></span></code></pre></div><h3 id=批量修改-pom-版本号>批量修改 POM 版本号</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn versions:set -DnewVersion<span style=color:#f92672>=</span>4.1.9
 </span></span></code></pre></div><p>确认修改</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn versions:commit
 </span></span></code></pre></div><p>取消修改</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn versions:revert
-</span></span></code></pre></div></div><div class=post-footer>
-<div class=info>
-<span class=separator><a class=category href=/categories/java/>java</a></span>
-<span class=separator><a class=tag href=/tags/maven/>maven</a></span>
-</div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/java/>java</a></span>
+<span class=separator><a class=tag href=/tags/maven/>maven</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.404e25d56ecefa87be4f21be4a6883aa550b493b32677d13d7f47762dc3537cf.js integrity="sha256-QE4l1W7O+oe+TyG+SmiDqlULSTsyZ30T1/R3Ytw1N88=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
