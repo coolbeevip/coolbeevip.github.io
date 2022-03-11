@@ -19,7 +19,7 @@ docker rmi -f $(docker images | awk '{print $3}')
 #### 删除所有 dangling 镜像
 
 ```shell
-docker rmi -f $(docker images -a | grep "<none>" | awk '{print $3}') 
+docker rmi -f $(docker images -a | grep "<none>" | awk '{print $3}')
 ```
 
 #### 导出镜像
@@ -66,6 +66,20 @@ grep docker /proc/*/mountinfo | grep overlay
 
 然后杀死进程
 
+#### 进入容器
+
+登录到容器内部
+
+```shell
+docker exec -it <CONTAINER> bash   
+```
+
+已 root 身份登录容器内部
+
+```shell
+docker exec -u 0 -it <CONTAINER> bash   
+```
+
 ## 数据卷
 
 #### 删除所有 dangling 数据卷
@@ -109,12 +123,12 @@ docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAdd
 #### 重建 Docker0
 
 ```shell
-pkill docker 
+pkill docker
 iptables -t filter -F
 iptables -t filter -X
 iptables -t nat -F
 iptables -t nat -X
-ifconfig docker0 down 
+ifconfig docker0 down
 ip link del docker0
 systemctl restart docker
 ```
