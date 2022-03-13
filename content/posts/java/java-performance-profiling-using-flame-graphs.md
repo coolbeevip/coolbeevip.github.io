@@ -58,7 +58,7 @@ notifier>
 
 **因为我们的客户端和服务端通过 GRPC 协议进行通信，并且服务端只做消息入队列和持久化到数据库，理论上 QPS 至少应该达到 1000**
 
-## 分析
+## 分析 (IntelliJ IDEA Ultimate)
 
 因为在 IntelliJ IDEA Ultimate 中生成火焰图比较方便，所以我直接使用 Async Profiler 插件，重做一次基准测试并生成如下火焰图
 
@@ -138,3 +138,28 @@ notifier>
 优化后的火焰图可以看到，处理 10000 比请求中 NotifierMessage.uniqueId() 方法的总耗时从 **15.23%** 下降到了 **4.34%**
 
 ![notifier-cpu-flame-after](/images/posts/java/java-performance-profiling-using-flame-graphs/notifier-cpu-flame-after.png)
+
+## 附件
+
+#### 在服务器上生成火焰图
+
+你可以直接下载 [Async Profiler](https://github.com/jvm-profiling-tools/async-profiler) 工具，抓取服务器上对应 PID 的服务火焰图
+
+例如：监控 PID 进程 30 秒，并生成火焰图文件 cpu.html
+
+```shell
+./profiler.sh -d 30 -f cpu.html <pid>
+```
+
+![notifier-cpu-flame-before](/images/posts/java/java-performance-profiling-using-flame-graphs/async-profiler.png)
+
+* 绿⾊：代表java执⾏的代码 (主要)
+
+* 黄色：代表 C/C++ ⼀类的 Native 代码, 包括编译器/**GC**执⾏ (次要)
+
+* 红色：代表系统调⽤层, 或是未知的执⾏代码段
+
+#### 引用
+
+* [Java Performance Analysis on Linux with Flame Graphs](https://www.brendangregg.com/Slides/JavaOne2016_JavaFlameGraphs.pdf)
+* [Brendan Gregg's Blog Java Warmup](https://www.brendangregg.com/blog/2016-09-28/java-warmup.html）
