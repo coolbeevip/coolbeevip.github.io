@@ -139,9 +139,7 @@ notifier>
 
 ![notifier-cpu-flame-after](/images/posts/java/java-performance-profiling-using-flame-graphs/notifier-cpu-flame-after.png)
 
-## 附件
-
-#### 在服务器上生成火焰图
+## 在服务器上生成火焰图
 
 你可以直接下载 [Async Profiler](https://github.com/jvm-profiling-tools/async-profiler) 工具，抓取服务器上对应 PID 的服务火焰图
 
@@ -154,12 +152,10 @@ notifier>
 ![notifier-cpu-flame-before](/images/posts/java/java-performance-profiling-using-flame-graphs/async-profiler.png)
 
 * 绿⾊：代表java执⾏的代码 (主要)
-
-* 黄色：代表 C/C++ ⼀类的 Native 代码, 包括编译器/**GC**执⾏ (次要)
-
+* 黄色：代表 C/C++ ⼀类的 Native 代码, 包括编译器 GC 执⾏ (次要)
 * 红色：代表系统调⽤层, 或是未知的执⾏代码段
 
-#### 引用
+## 引用
 
 * [Java Performance Analysis on Linux with Flame Graphs](https://www.brendangregg.com/Slides/JavaOne2016_JavaFlameGraphs.pdf)
-* [Brendan Gregg's Blog Java Warmup](https://www.brendangregg.com/blog/2016-09-28/java-warmup.html）
+* [Brendan Gregg's Blog Java Warmup](https://www.brendangregg.com/blog/2016-09-28/java-warmup.html)
