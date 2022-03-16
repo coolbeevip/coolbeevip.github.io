@@ -19,9 +19,13 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [ASF INFRA Deploy snapshots to Nexus from Github Actions](https://issues.apache.org/jira/browse/INFRA-21587)
 
+[ASF INFRA Secret Repo Tokens for use with GitHub-Actions](https://issues.apache.org/jira/browse/INFRA-21569)
+
 ## Open Source
 
 [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) SemVer is a popular versioning scheme
+
+[Nexus Repository Publisher for GitHub Actions](https://issues.sonatype.org/browse/OSSRH-68657)
 
 ## Color
 
