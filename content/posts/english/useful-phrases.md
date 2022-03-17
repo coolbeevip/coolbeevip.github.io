@@ -13,3 +13,4 @@ draft: true
 * Going even further 更进一步
 * On the other hand 另一方面
 * In a nutshell 简而言之
+* In the previous post 在上一篇文章中

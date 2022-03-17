@@ -21,6 +21,11 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [ASF INFRA Secret Repo Tokens for use with GitHub-Actions](https://issues.apache.org/jira/browse/INFRA-21569)
 
+## Specification
+
+[JSONPath specification](https://goessner.net/articles/JsonPath/)
+
+
 ## Open Source
 
 [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) SemVer is a popular versioning scheme
