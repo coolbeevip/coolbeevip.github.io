@@ -38,10 +38,12 @@ draft: false
 
   <groupId>com.coolbeevip.apigateway</groupId>
   <artifactId>apigateway-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
 
   <properties>
+    <!-- 使用 revision 管理项目版本 -->
+    <revision>1.0.0-SNAPSHOT</revision>
 
     <!-- project -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,11 +59,13 @@ draft: false
     <maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
     <sonar-maven-plugin.version>3.8.0.2131</sonar-maven-plugin.version>
+    <dependency-check-maven.version>6.5.3</dependency-check-maven.version>
 
     <!-- sonar plugin -->
-    <sonar.host.url>http://10.19.88.60:59000</sonar.host.url>
+    <sonar.host.url>http://private.sonar:59000</sonar.host.url>
 
     <!-- maven deploy -->
+    <distribution.url>private.nexus:8099</distribution.url>
     <distribution.username/>
     <distribution.password/>
   </properties>
@@ -102,7 +106,7 @@ draft: false
     <repository>
       <id>releases</id>
       <name>releases</name>
-      <url>http://192.168.1.10:8082/nexus/repository/releases/</url>
+      <url>http://${distribution.url}/nexus/repository/releases/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -113,7 +117,7 @@ draft: false
     <repository>
       <id>snapshots</id>
       <name>Snapshots</name>
-      <url>http://192.168.1.10:8082/nexus/repository/snapshots/</url>
+      <url>http://${distribution.url}/nexus/repository/snapshots/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -130,14 +134,14 @@ draft: false
       <id>releases</id>
       <name>Release Repository</name>
       <url>
-        http://${distribution.username}:${distribution.password}@192.168.1.10:8082/nexus/repository/releases/
+        http://${distribution.username}:${distribution.password}@${distribution.url}/nexus/repository/releases/
       </url>
     </repository>
     <snapshotRepository>
       <id>snapshots</id>
       <name>Snapshot Repository</name>
       <url>
-        http://${distribution.username}:${distribution.password}@192.168.1.10:8082/nexus/repository/snapshots/
+        http://${distribution.username}:${distribution.password}@${distribution.url}/nexus/repository/snapshots/
       </url>
     </snapshotRepository>
   </distributionManagement>
@@ -188,6 +192,42 @@ draft: false
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <!-- 缺陷检查插件 ./mvnw org.owasp:dependency-check-maven:aggregate -->
+      <id>owasp</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>${dependency-check-maven.version}</version>
+            <configuration>
+              <name>notifier-dependency-check</name>
+              <format>HTML</format>
+              <failBuildOnCVSS>9</failBuildOnCVSS>
+              <failBuildOnAnyVulnerability>false</failBuildOnAnyVulnerability>
+              <failOnError>false</failOnError>
+              <skipProvidedScope>true</skipProvidedScope>
+              <skipRuntimeScope>true</skipRuntimeScope>
+              <skipTestScope>true</skipTestScope>
+              <skipDependencyManagement>true</skipDependencyManagement>
+              <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>              
+              <skipArtifactType>pom</skipArtifactType>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>  
 </project>
 ```
 
@@ -235,7 +275,7 @@ draft: false
   <parent>
     <groupId>com.coolbeevip.apigateway</groupId>
     <artifactId>apigateway-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
   <artifactId>apigateway-server</artifactId>
 
@@ -263,7 +303,7 @@ draft: false
   <parent>
     <groupId>com.coolbeevip.apigateway</groupId>
     <artifactId>apigateway-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
   <artifactId>apigateway-dependencies</artifactId>
 
@@ -273,7 +313,7 @@ draft: false
     <dom4j.version>2.1.3</dom4j.version>
     <commons-httpclient.version>3.0</commons-httpclient.version>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <!-- 管理依赖版本 -->
@@ -294,7 +334,7 @@ draft: false
       </dependency>      
     </dependencies>
   </dependencyManagement>
-  
+
   <build>
     <pluginManagement>
       <plugins>
