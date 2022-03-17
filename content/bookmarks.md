@@ -39,11 +39,6 @@ https://account.jetbrains.com/)
 
 [Nexus Repository Publisher for GitHub Actions](https://issues.sonatype.org/browse/OSSRH-68657)
 
-## Color
-
-[Adobe Color](https://color.adobe.com/)
-
-[terminal.sexy](https://terminal.sexy/)
 
 ## Dev
 
@@ -64,6 +59,12 @@ https://account.jetbrains.com/)
 ## Resources
 
 [Icônes](https://icones.netlify.app/) Iconify Explorer with Instant searching
+
+## Color
+
+[Adobe Color](https://color.adobe.com/)
+
+[terminal.sexy](https://terminal.sexy/)
 
 ## UI/UX
 
