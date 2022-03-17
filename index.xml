@@ -139,9 +139,9 @@ ASF Mail Search
 Nearby Apache People
 ASF INFRA Deploy snapshots to Nexus from Github Actions
 ASF INFRA Secret Repo Tokens for use with GitHub-Actions
+Specification JSONPath specification
 Open Source Semantic Versioning v2.0.0 SemVer is a popular versioning scheme
-Nexus Repository Publisher for GitHub Actions
-Color Adobe Color</description></item><item><title>MacOS Switch JDK</title><link>https://coolbeevip.github.io/posts/java/macos-switch-jdk/</link><pubDate>Thu, 25 Mar 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/java/macos-switch-jdk/</guid><description>查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
+Nexus Repository Publisher for GitHub Actions</description></item><item><title>MacOS Switch JDK</title><link>https://coolbeevip.github.io/posts/java/macos-switch-jdk/</link><pubDate>Thu, 25 Mar 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/java/macos-switch-jdk/</guid><description>查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
 $ /usr/libexec/java_home -V Matching Java Virtual Machines (2): 11.0.10, x86_64: &amp;#34;OpenJDK 11.0.10&amp;#34; /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 1.8.0_201, x86_64: &amp;#34;Java SE 8&amp;#34; /Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home /Users/zhanglei/Library/Java/JavaVirtualMachines/adopt-openj9-11.0.10/Contents/Home 查看当前使用的 JDK 版本 $ java -version java version &amp;#34;1.8.0_201&amp;#34; Java(TM) SE Runtime Environment (build 1.8.0_201-b09) Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode) 切换 JDK 切换到 JDK 11.0.10 版本，并查看切换后的 JDK 版本
 $ export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` $ java -version openjdk version &amp;#34;11.</description></item><item><title>Oracle Proxy Using HAProxy Docker</title><link>https://coolbeevip.github.io/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/</link><pubDate>Tue, 01 Sep 2020 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/haproxy/haproxy_oracle_proxy_using_haproxy_docker/</guid><description>下载 HAProxy Docker
 docker pull haproxy:2.3 创建工作目录
