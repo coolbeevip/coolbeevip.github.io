@@ -139,7 +139,7 @@ ASF Mail Search
 Nearby Apache People
 ASF INFRA Deploy snapshots to Nexus from Github Actions
 ASF INFRA Secret Repo Tokens for use with GitHub-Actions
-[JetBrains All Products Packs for Apache committers](https://www.jetbrains.com/shop/eform/apache?product=ALL https://account.jetbrains.com/)
+JetBrains All Products Packs for Apache committers
 JProfiler Products for Open Source Licenses
 Specification JSONPath specification
 SMPP(Short Message Peer-to-Peer) Protocol Specification</description></item><item><title>MacOS Switch JDK</title><link>https://coolbeevip.github.io/posts/java/macos-switch-jdk/</link><pubDate>Thu, 25 Mar 2021 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/java/macos-switch-jdk/</guid><description>查看本机 JDK 版本 命令行输入 /usr/libexec/java_home -V 可以看到多个 JDK 版本
