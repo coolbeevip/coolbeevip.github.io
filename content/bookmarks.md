@@ -30,6 +30,8 @@ https://account.jetbrains.com/)
 
 [JSONPath specification](https://goessner.net/articles/JsonPath/)
 
+[SMPP(Short Message Peer-to-Peer) Protocol Specification](https://smpp.org/)
+
 
 ## Open Source
 
