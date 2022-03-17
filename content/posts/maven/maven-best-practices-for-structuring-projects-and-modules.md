@@ -25,6 +25,7 @@ draft: false
 * repositories: 定义 Maven 私服地址;
 * distributionManagement: 定义发布用 Maven 私服地址
 * pluginManagement: 定义管理类插件版本
+* profiles: (非必须)
 
 例如：
 
