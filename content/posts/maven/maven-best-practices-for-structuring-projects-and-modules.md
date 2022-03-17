@@ -48,7 +48,8 @@ draft: false
 
     <!-- project -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.reporting.outputEncodi
+      ng>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
@@ -373,4 +374,50 @@ draft: false
     </pluginManagement>
   </build>
 </project>
+```
+
+## 常用命令
+
+编译
+
+```shell
+./mvnw clean package
+```
+
+编译 & 跳过测试
+
+```shell
+./mvnw clean package -DskipTests
+```
+
+编译 & 推送 Maven 私服
+
+```shell
+./mvnw clean package deploy -DskipTests \
+-Ddistribution.url=private.nexus:8099 \
+-Ddistribution.username=myuser \
+-Ddistribution.password=mypass
+```
+
+编译 & 测试 & 推送 SONAR
+
+```shell
+./mvnw clean package sonar:sonar \
+-Dsonar.projectKey=mykey \
+-Dsonar.host.url=http://private.sonar:59000 \
+-Dsonar.login=mypass
+```
+
+编译 & 测试 & 推送 Docker 私服
+
+```shell
+./mvnw -s settings.xml docker:build docker:push \
+-Ddocker.username=myuser \
+-Ddocker.password=mypass
+```
+
+生成缺陷报告
+
+```shell
+./mvnw org.owasp:dependency-check-maven:aggregate
 ```
