@@ -21,6 +21,9 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [ASF INFRA Secret Repo Tokens for use with GitHub-Actions](https://issues.apache.org/jira/browse/INFRA-21569)
 
+[JetBrains All Products Packs for Apache committers](https://www.jetbrains.com/shop/eform/apache?product=ALL
+https://account.jetbrains.com/)
+
 ## Specification
 
 [JSONPath specification](https://goessner.net/articles/JsonPath/)
