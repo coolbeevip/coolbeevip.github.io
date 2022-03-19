@@ -31,10 +31,6 @@ draft: false
 ---
 * [百度网盘](http://pan.baidu.com/download?from=header#pan)
 
-## 画图
----
-* [Draw.io](https://drawio-app.com) 支持多种图形，多种格式导出
-
 ## 工具
 ---
 * [The Unarchiver](https://theunarchiver.com/) 解压许多不同种类的归档压缩文件
@@ -70,14 +66,19 @@ draft: false
 ---
 * [Github Pages](https://pages.github.com/)
 
-## 截图
+## 画图
+---
+* [Draw.io](https://drawio-app.com) 支持多种图形，多种格式导出
+* [PlantUML](https://plantuml.com/zh/) 用代码画图
 
+## 截图
+---
 * Shift + Control + Command + 4 手工拖拽区域截屏到粘贴板
 * Shift + Command + 4 手工拖拽区域截屏存文件
 * Shift + Control + Command + 3 截全屏到粘贴板
 * Shift + Command + 3 截全屏存文件
 
-## 音视频
+## 媒体
 ---
 * [SPlayer](https://www.splayer.org/) 视频播放器自动下载字幕
 * [OBS Studio](https://obsproject.com/) 视频直播录制软件

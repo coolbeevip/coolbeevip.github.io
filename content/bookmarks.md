@@ -38,6 +38,7 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [Nexus Repository Publisher for GitHub Actions](https://issues.sonatype.org/browse/OSSRH-68657)
 
+[Free Programming Books](https://github.com/EbookFoundation/free-programming-books)
 
 ## Dev
 
