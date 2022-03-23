@@ -31,6 +31,9 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [SMPP(Short Message Peer-to-Peer) Protocol Specification](https://smpp.org/)
 
+[Eclipse MicroProfile LRA](https://download.eclipse.org/microprofile/microprofile-lra-1.0-M1/microprofile-lra-spec.html)
+
+[Saga Pattern](https://microservices.io/patterns/data/saga.html)
 
 ## Open Source
 
