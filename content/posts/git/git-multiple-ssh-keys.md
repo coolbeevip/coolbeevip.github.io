@@ -21,15 +21,15 @@ ssh-keygen -t ed25519 -C "coolbeevip@github.com"
 
 使用同样的方法我们分别创建 `id_gitlab` 和 `id_github`，这时在的本地的 `~/.ssh` 目录下会得到如下文件
 
-* id_github、id_github.pub
-* id_gitlab、id_gitlab.pub
+* id_github(私钥)、id_github.pub(公钥)
+* id_gitlab(私钥)、id_gitlab.pub(公钥)
 
 将 *.pub 文件内容分别导入到 Git 服务中，详细方式请参考 [Github and SSH keys](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) 、
 [GitLab and SSH keys](https://docs.gitlab.com/ee/ssh/) 或 [JetBrains Space and SSH keys](https://www.jetbrains.com/help/space/git-keys-and-passwords.html)
 
 ## 配置 SSH
 
-编辑 `~/.ssh/config` 文件为每个 Git 地址配置不同的 KEY
+编辑 `~/.ssh/config` 文件为每个 Git 地址配置不同的私钥
 
 ```shell
 Host github.com
@@ -55,4 +55,20 @@ Hi coolbeevip! You've successfully authenticated, but GitHub does not provide sh
 ```shell
 ssh -T git@mycompany.com -p 20022
 Welcome to GitLab, @zhanglei!
+```
+
+## 用户和邮件信息
+
+我们知道可以通过一下命令设置全局用户名和邮箱
+
+```shell
+git config --global user.name "Lei Zhang"
+git config --global user.email coolbeevip@gmail.com
+```
+
+当你需要在不同的仓库设置不同的用户信息时，您可以在本地代码仓库目录下执行如下命令
+
+```shell
+git config user.name "coolbeevip"
+git config user.email coolbeevip@gmail.com
 ```
