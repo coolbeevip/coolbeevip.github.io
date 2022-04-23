@@ -161,3 +161,25 @@ Build Cache         0                   0                   0B                  
 ```shell
 docker builder prune
 ```
+
+#### 删除不再使用的数据卷
+
+```shell
+docker volume prune
+```
+
+#### 批量清理
+
+移除所有停止的容器，移除所有未使用的网络，移除所有悬空的镜像，移除所有悬空的构建缓存
+
+```shell
+docker system prune
+```
+
+#### 深度批量清理
+
+清理得更加彻底，可以将没有容器使用 Docker镜像都删掉
+
+```shell
+docker system prune -a
+```
