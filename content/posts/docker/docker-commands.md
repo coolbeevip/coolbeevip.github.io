@@ -10,6 +10,12 @@ draft: false
 
 ## 镜像
 
+### 镜像列表按照大小排序
+
+```shell
+docker images --format "{{.ID}}\t{{.Size}}\t{{.Repository}}" | sort -k 2 -h
+```
+
 #### 删除所有镜像
 
 ```shell
