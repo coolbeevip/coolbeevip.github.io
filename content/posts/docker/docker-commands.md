@@ -153,3 +153,11 @@ Build Cache         0                   0                   0B                  
 ```
 
 镜像占用了 9.786GB，容器占用 0，数据卷占用 11.99GB
+
+## 清理
+
+#### 清理构建缓存
+
+```shell
+docker builder prune
+```
