@@ -233,7 +233,7 @@ git clone https://github.com/apache/servicecomb-pack.git
 
 5. Share the staging repo with peers to verify on different OS and machines using the demo.
 
-6. If everything is fine then push the tag to master.
+6. If everything is fine then push the tag to master.（在这之前好像遗漏了 TAG 推送和 X 分支推送）
 
 7. Close the staging repo is apache repositories.
 
