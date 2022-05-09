@@ -6,7 +6,7 @@ categories: [ASF]
 draft: false
 ---
 
-**注意:** 本文档基于 `0.7.0` 正式版发布过程编写，实际操作时请替换文档中的版本号 `0.7.0-SNAPSHOT` 和 `0.7.0` 为实际的版本号。
+**注意:** 本文档基于 `0.7.0` 正式版发布过程编写，实际操作时请替换文档中的版本号 `0.7.0-SNAPSHOT`， `0.7.0` 和 `0.8.0-SNAPSHOT` 为实际的版本号。
 
 **注意：** 开始发布前，请提前一周通过 `dev@servicecomb.apache.org` 预告即将开始发布，确认代码是否已经准备就绪。
 
@@ -222,7 +222,7 @@ $ mvn --encrypt-password <密钥密码>
 
 #### 发布到临时筹备库
 
-1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除的临时筹备仓库(Staging Repositories)中多余的版本
+1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除的临时筹备仓库(Staging Repositories)中与 pack 相关的多余版本
 
 2. 下载代码
 
@@ -237,7 +237,7 @@ git clone https://github.com/apache/servicecomb-pack.git
 mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 ```
 
-4. 使用 Apache LDAP 账号登录 `https://repository.apache.org/`，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close
+4. 使用 Apache LDAP 账号登录 `https://repository.apache.org/`，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close 后完成临时发布。
 
 #### 测试临时筹备库
 
@@ -287,30 +287,27 @@ mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstage
 mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 ```
 
-5. 如果一切正常，我们将创建 `0.7.X` 分支，创建 `0.7.0` TAG,修改主干版本为 `0.8.0-SNAPSHOT`
+5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG,修改主干版本为 `0.8.0-SNAPSHOT`
 
-创建并推送 `0.7.X` 分支
+创建并推送 `0.7.x` 分支
 
 ```shell
 git checkout master
-git checkout -b 0.7.X
+git checkout -b 0.7.x
 mvn versions:set-property -Dproperty=revision -DnewVersion=0.7.0
 git add pom.xml
 git commit -m 'Cut 0.7.0 Release'
-git push origin 0.7.X
+git push origin 0.7.x
 ```
 
-git branch -D 0.7.X
-git push origin --delete 0.7.X
-
-创建并推送 `0.7.0` TAG
+在 0.7.x 分支上创建并推送 `0.7.0` TAG
 
 ```shell
 git tag -a 0.7.0 -m "ServiceComb Pack 0.7.0 Release"
 git push origin 0.7.0
 ```
 
-修改主干版本为 `0.8.0-SNAPSHOT` 并推送
+切换到主版本，修改版本号为 `0.8.0-SNAPSHOT` 并推送
 
 ```shell
 git checkout master
