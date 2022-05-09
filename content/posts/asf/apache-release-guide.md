@@ -6,11 +6,9 @@ categories: [ASF]
 draft: false
 ---
 
-## Apache Servicecomb Pack 发布指南
-
 **注意:** 本文档基于 `0.7.0` 正式版发布过程编写，实际操作时请替换文档中的版本号 `0.7.0-SNAPSHOT` 和 `0.7.0` 为实际的版本号。
 
-**注意：** 开始发布前，请通过 `dev@servicecomb.apache.org` 预告即将开始发布，确认代码是否已经准备就绪。
+**注意：** 开始发布前，请提前一周通过 `dev@servicecomb.apache.org` 预告即将开始发布，确认代码是否已经准备就绪。
 
 ```shell
 Hello All,
@@ -24,7 +22,7 @@ I will be cutting a new release tomorrow morning from the branch https://github.
 Regards
 ```
 
-**注意:** 发布流程中的 **PMC投票** 环节通常需要 1 周才能完成，并且在没有任何 PMC 投反对票后才能正式发布，因此请提前计划发布活动。
+**注意:** 发布流程中的 **PMC投票** 环节通常需要 3 天，并且在没有任何 PMC 投反对票后才能正式发布，因此请提前计划发布活动。
 
 ## 发布环境准备
 
@@ -252,7 +250,7 @@ Download all the releases from SVN and verify the signature and checksum.
 
 #### PMC 投票
 
-Send the voting mail in dev@servicecomb.apache.org.
+发送投票邮件到 dev@servicecomb.apache.org，投票持续 3 天
 
 ```html
 Hi All,
