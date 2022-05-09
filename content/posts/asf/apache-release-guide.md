@@ -211,42 +211,147 @@ $ mvn --encrypt-password <密钥密码>
 
 ## Servicecomb Pack 发布
 
-#### 打包 & 上传
+#### 发布到临时筹备库
 
-1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除的临时筹备仓库(staging repository)中多余的版本
+1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除的临时筹备仓库(Staging Repositories)中多余的版本
 
 2. 下载代码
 
 ```shell
+mkdir ~/github-apache
 git clone https://github.com/apache/servicecomb-pack.git
 ```
 
 3. 执行 Maven 部署命令
 
 ```shell
-./mvnw deploy -DskipTests -Ppassphrase -Prelease -Drevision=0.7.0
+mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 ```
 
-4. Once every thing is uploaded then use the staging repo to verify the build using the acceptance test.
+4. 使用 Apache LDAP 账号登录 `https://repository.apache.org/`，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close
+
+#### 测试临时筹备库
+
+在发起投票前，我们需要使用临时存储库中的组件执行验收测试，我们需要一些配置步骤让验收测试从临时存储库中拉取依赖包，更多详细说明可以参考 [Guide to Testing Staged Releases](https://maven.apache.org/guides/development/guide-testing-releases.html)
+
+
+1. 删除本地仓库中组件
+
+```shell
+mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
+```
+
+2. 增加临时存储库配置
+
+在 `~/.m2/settings.xml` 中增加如下配置
+
+```xml
+<profiles>
+  <profile>
+    <id>staged-releases</id>
+    <repositories>
+      <repository>
+        <id>staged-releases</id>
+        <url>https://repository.apache.org/content/groups/staging/</url>
+      </repository>
+    </repositories>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>staged-releases</id>
+        <url>https://repository.apache.org/content/groups/staging/</url>
+      </pluginRepository>
+    </pluginRepositories>
+  </profile>
+</profiles>
+```
+
+3. 执行验收测试
+
+```shell
+mvn clean verify -B -f demo -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
+mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
+```
+
+4. 执行验收测试成功后删除本地仓库中的组件
+
+```shell
+mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
+```
 
 5. Share the staging repo with peers to verify on different OS and machines using the demo.
 
 6. If everything is fine then push the tag to master.（在这之前好像遗漏了 TAG 推送和 X 分支推送）
 
-7. Close the staging repo is apache repositories.
 
+#### 签署版本 & 上传到 Apache SVN
 
-#### 签署版本
+1. 拉取 SVN 仓库到本地
 
-Download the source code and distribution from the staging repo.
+```shell
+mkdir ~/apache-dist
+cd ~/apache-dist
+svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
+```
 
-Sign the 2 releases(distribution, src) and checksum.
+2. 创建发布包目录
 
-Create a new directory Apache dev Release SVN with release package name and release candidate number. (for example : if you want to release 1.0.0-m2 and this is the third attempt of the release then the folder structure will be 1.0.0-m2/rc03)
+如果你是第 1 次发布 0.7.0 版本，那么创建 `0.7.0/rc01` 目录，例如：
 
-Upload the release to directory created in last step.
+```shell
+mkdir -p ~/apache-dist/servicecomb-pack/0.7.0/rc01
+```
 
-Download all the releases from SVN and verify the signature and checksum.
+3. 复制发布包到发布目录
+
+```shell
+cd ~/apache-dist/servicecomb-pack/0.7.0/rc01
+cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
+cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
+cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
+cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
+```
+
+6. 生成 SHA512 签名
+
+```shell
+cd ~/apache-dist/servicecomb-pack/0.7.0/rc01
+shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-bin.zip >> apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
+shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-src.zip >> apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
+```
+
+7. 提交 Aapache SVN
+
+```shell
+cd ~/apache-dist/servicecomb-pack
+svn add 0.7.0
+svn commit -m 'prepare for 0.7.0 RC1'  --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
+```
+
+8. 验证发布候选版本
+
+从 Apache SVN https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下载发布包检查 GPG 签名和 SHA512 哈希
+
+检查 SHA512 哈希
+
+```shell
+$ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
+$ shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
+```
+
+导入公钥
+
+```shell
+curl https://dist.apache.org/repos/dist/dev/servicecomb/KEYS >> KEYS
+$ gpg --import KEYS
+```  
+
+检查 GPG 签名，如果是第一次检查，需要首先导入公钥。
+
+```shell
+gpg --verify apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc apache-servicecomb-pack-distribution-0.7.0-bin.zip
+gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servicecomb-pack-distribution-0.7.0-src.zip
+
+```
 
 #### PMC 投票
 
