@@ -154,6 +154,15 @@ gpg -a -o public-file.key --export <密钥ID>
 gpg -a -o private-file.key --export-secret-keys <密钥ID>
 ```
 
+8. 将公钥追加到 https://dist.apache.org/repos/dist/dev/servicecomb/KEYS 文件中
+
+```shell
+svn co --depth=empty https://dist.apache.org/repos/dist/dev/servicecomb
+svn up KEYS
+cat public-file.key >> KEYS
+svn commit -m 'add zhanglei@apache.org gpg public key'
+```
+
 #### Apache Maven 认证配置
 
 在发布前我们需要配置 Apache Maven 仓库的服务器地址、账号和密码。为了安全我们使用 [Password Encryption](https://maven.apache.org/guides/mini/guide-encryption.html) 对 Apache LDAP 密码加密
@@ -278,10 +287,38 @@ mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstage
 mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 ```
 
-5. Share the staging repo with peers to verify on different OS and machines using the demo.
+5. 如果一切正常，我们将创建 `0.7.X` 分支，创建 `0.7.0` TAG,修改主干版本为 `0.8.0-SNAPSHOT`
 
-6. If everything is fine then push the tag to master.（在这之前好像遗漏了 TAG 推送和 X 分支推送）
+创建并推送 `0.7.X` 分支
 
+```shell
+git checkout master
+git checkout -b 0.7.X
+mvn versions:set-property -Dproperty=revision -DnewVersion=0.7.0
+git add pom.xml
+git commit -m 'Cut 0.7.0 Release'
+git push origin 0.7.X
+```
+
+git branch -D 0.7.X
+git push origin --delete 0.7.X
+
+创建并推送 `0.7.0` TAG
+
+```shell
+git tag -a 0.7.0 -m "ServiceComb Pack 0.7.0 Release"
+git push origin 0.7.0
+```
+
+修改主干版本为 `0.8.0-SNAPSHOT` 并推送
+
+```shell
+git checkout master
+mvn versions:set-property -Dproperty=revision -DnewVersion=0.8.0-SNAPSHOT
+git add pom.xml
+git commit -m 'Update Release Number to 0.8.0-SNAPSHOT'
+git push origin master
+```
 
 #### 签署版本 & 上传到 Apache SVN
 
@@ -338,14 +375,14 @@ $ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 $ shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
 
-导入公钥
+如果是第一次验证，需要先导入公钥
 
 ```shell
 curl https://dist.apache.org/repos/dist/dev/servicecomb/KEYS >> KEYS
 $ gpg --import KEYS
 ```  
 
-检查 GPG 签名，如果是第一次检查，需要首先导入公钥。
+检查 GPG 签名
 
 ```shell
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc apache-servicecomb-pack-distribution-0.7.0-bin.zip
@@ -353,7 +390,7 @@ gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servi
 
 ```
 
-#### PMC 投票
+#### PMC 投票(未整理)
 
 发送投票邮件到 dev@servicecomb.apache.org，投票持续 3 天
 
