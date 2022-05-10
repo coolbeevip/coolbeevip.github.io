@@ -14,14 +14,14 @@ Hello All,  Since from last ServiceComb pack 0.6.0 release we have done signific
 </span></span><span style=display:flex><span>@PMC/@Committers please let me know <span style=color:#66d9ef>if</span> there is any important patch we need to merge before this release.
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Regards
-</span></span></code></pre></div><p><strong>注意:</strong> 发布流程中的 <strong>PMC投票</strong> 环节通常需要 3 天，并且在没有任何 PMC 投反对票后才能正式发布，因此请提前计划发布活动。</p><h2 id=发布环境准备>发布环境准备</h2><h4 id=生成签名密钥>生成签名密钥</h4><ol><li>安装 GPG</li></ol><p>在<a href=https://www.gnupg.org/download/index.html>GnuPG官网</a>下载 2.X 安装包. 安装完毕后可以使用如下命令查看版本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ gpg --version
+</span></span></code></pre></div><p><strong>注意:</strong> 发布流程中的 <strong>PMC投票</strong> 环节通常需要 3 天，在没有任何 PMC 投 -1 票后才能正式发布，因此请提前计划发布活动。</p><h2 id=发布环境准备>发布环境准备</h2><h4 id=生成签名密钥>生成签名密钥</h4><ol><li>安装 GPG</li></ol><p>在<a href=https://www.gnupg.org/download/index.html>GnuPG官网</a>下载 2.X 安装包. 安装完毕后可以使用如下命令查看版本</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ gpg --version
 </span></span><span style=display:flex><span>gpg <span style=color:#f92672>(</span>GnuPG/MacGPG2<span style=color:#f92672>)</span> 2.2.20
 </span></span><span style=display:flex><span>libgcrypt 1.8.5
 </span></span><span style=display:flex><span>Copyright <span style=color:#f92672>(</span>C<span style=color:#f92672>)</span> <span style=color:#ae81ff>2020</span> Free Software Foundation, Inc.
 </span></span></code></pre></div><ol start=2><li>配置 GPG</li></ol><p>安装完毕后你可以找到 <code>$HOME/.gnupg/gpg.conf</code> 文件，并增加如下<a href=https://infra.apache.org/openpgp.html#sha-defaults>推荐配置</a></p><pre tabindex=0><code class=language-properties data-lang=properties>personal-digest-preferences SHA512
 cert-digest-algo SHA512
 default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
-</code></pre><ol start=3><li>用 GPG 生成密钥</li></ol><p>根据提示使用 Apache 邮箱生成 GPG 的密钥，更多详细说明请参考<a href=https://infra.apache.org/openpgp.html#generate-key>Generaate Key with OPENGPG</a></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ gpg --full-gen-key
+</code></pre><ol start=3><li>用 GPG 生成密钥</li></ol><p>根据提示使用 Apache 邮箱生成 GPG 的密钥，更多详细说明请参考 <a href=https://infra.apache.org/openpgp.html#generate-key>Generaate Key with OPENGPG</a></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ gpg --full-gen-key
 </span></span><span style=display:flex><span>gpg <span style=color:#f92672>(</span>GnuPG/MacGPG2<span style=color:#f92672>)</span> 2.2.20; Copyright <span style=color:#f92672>(</span>C<span style=color:#f92672>)</span> <span style=color:#ae81ff>2020</span> Free Software Foundation, Inc.
 </span></span><span style=display:flex><span>This is free software: you are free to change and redistribute it.
 </span></span><span style=display:flex><span>There is NO WARRANTY, to the extent permitted by law.
@@ -55,13 +55,13 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 </span></span><span style=display:flex><span>    “Lei Zhang <span style=color:#f92672>(</span>CODE SIGNING KEY<span style=color:#f92672>)</span> zhanglei@apache.org”
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>更改姓名（N）、注释（C）、电子邮件地址（E）或确定（O）/退出（Q）？ O
-</span></span></code></pre></div><p>输入确定 <code>O</code> 会车后根据提示输入 <strong>【密钥密码】</strong> 后完成操作。请保存这个密钥密码，以后会经常使用。</p><ol start=4><li>查看密钥ID</li></ol><p>你可以使用如下命令查看生成的密钥，请保存 <strong>【密钥ID】</strong>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ gpg --list-keys
+</span></span></code></pre></div><p>输入 <code>O</code> 确定，并根据提示输入 <strong>【密钥密码】</strong> 后完成操作。请保存这个密钥密码，以后会经常使用。</p><ol start=4><li>查看密钥 ID</li></ol><p>你可以使用如下命令查看生成的密钥，请保存 <strong>【密钥ID】</strong>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ gpg --list-keys
 </span></span><span style=display:flex><span>pub   rsa4096 2022-05-05 <span style=color:#f92672>[</span>SC<span style=color:#f92672>]</span>
 </span></span><span style=display:flex><span>      &lt;密钥ID&gt;
 </span></span><span style=display:flex><span>uid           <span style=color:#f92672>[</span> 绝对 <span style=color:#f92672>]</span> Lei Zhang <span style=color:#f92672>(</span>CODE SIGNING KEY<span style=color:#f92672>)</span> zhanglei@apache.org
 </span></span><span style=display:flex><span>sub   rsa4096 2022-05-05 <span style=color:#f92672>[</span>E<span style=color:#f92672>]</span>
-</span></span></code></pre></div><ol start=5><li>发布公钥到 keyserver</li></ol><p>使用 <strong>【密钥ID】</strong> 将公钥发布到 <code>pgpkeys.mit.edu</code>，发布后稍等一会就会自动同步到其他 keyserver</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>gpg --keyserver pgpkeys.mit.edu --send-key &lt;密钥ID&gt;
-</span></span></code></pre></div><p>使用如下命令验证公钥是否发布成功（因为发布后后台需要同步，所以可能需要多试几次）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>gpg --keyserver hkp://pgpkeys.mit.edu --recv-keys &lt;密钥ID&gt;
+</span></span></code></pre></div><ol start=5><li>发布公钥到密钥服务器</li></ol><p>使用 <strong>【密钥ID】</strong> 将公钥发布到 <code>pgpkeys.mit.edu</code>，发布后稍等一会就会自动同步到其他密钥服务器</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>gpg --keyserver pgpkeys.mit.edu --send-key &lt;密钥ID&gt;
+</span></span></code></pre></div><p>使用如下命令验证公钥是否发布成功（因为发布后后台需要同步，所以可能需等待一会）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>gpg --keyserver hkp://pgpkeys.mit.edu --recv-keys &lt;密钥ID&gt;
 </span></span></code></pre></div><p>如果你看到如下信息，说明已经发布成功</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>gpg: &lt;密钥ID&gt;：“Lei Zhang <span style=color:#f92672>(</span>CODE SIGNING KEY<span style=color:#f92672>)</span> &lt;zhanglei@apache.org&gt;” 未改变
 </span></span><span style=display:flex><span>gpg: 处理的总数：1
 </span></span><span style=display:flex><span>gpg:              未改变：1
@@ -82,7 +82,7 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;/settingsSecurity&gt;</span>
 </span></span></code></pre></div><ol start=2><li>加密你的 Apache LDAP 密码</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ mvn --encrypt-password &lt;Apache LDAP 密码&gt;
 </span></span></code></pre></div><ol start=3><li>加密你的密钥密码</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ mvn --encrypt-password &lt;密钥密码&gt;
-</span></span></code></pre></div><ol start=4><li>在 <code>~/.m2/settings.xml</code> 文件中配置发布服务器地址和配置加密后的密码</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#f92672>&lt;settings&gt;</span>
+</span></span></code></pre></div><ol start=4><li>在 <code>~/.m2/settings.xml</code> 文件中配置发布服务器地址和加密后的密码</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#f92672>&lt;settings&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;servers&gt;</span>
 </span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;server&gt;</span>
 </span></span><span style=display:flex><span>      <span style=color:#f92672>&lt;id&gt;</span>apache.snapshots.https<span style=color:#f92672>&lt;/id&gt;</span>
@@ -100,10 +100,12 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 </span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;/server&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;/servers&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;/settings&gt;</span>
-</span></span></code></pre></div><h2 id=servicecomb-pack-发布>Servicecomb Pack 发布</h2><h4 id=发布到临时筹备库>发布到临时筹备库</h4><ol><li><p>使用 Apache LDAP 账号登录 <code>https://repository.apache.org/</code> 清除的临时筹备仓库(Staging Repositories)中与 pack 相关的多余版本</p></li><li><p>下载代码</p></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir ~/github-apache
+</span></span></code></pre></div><h2 id=servicecomb-pack-发布>Servicecomb Pack 发布</h2><h4 id=发布到临时筹备库staging-repositorie>发布到临时筹备库（Staging Repositorie）</h4><ol><li><p>使用 Apache LDAP 账号登录 <code>https://repository.apache.org/</code> 清除 Staging Repositories 中与 Pack 相关的多余版本</p></li><li><p>下载代码</p></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir ~/apache-release-workspace
 </span></span><span style=display:flex><span>git clone https://github.com/apache/servicecomb-pack.git
-</span></span></code></pre></div><ol start=3><li>执行 Maven 部署命令</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn deploy -DskipTests -Prelease -Drevision<span style=color:#f92672>=</span>0.7.0
-</span></span></code></pre></div><ol start=4><li>使用 Apache LDAP 账号登录 <code>https://repository.apache.org/</code>，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close 后完成临时发布。</li></ol><h4 id=测试临时筹备库>测试临时筹备库</h4><p>在发起投票前，我们需要使用临时存储库中的组件执行验收测试，我们需要一些配置步骤让验收测试从临时存储库中拉取依赖包，更多详细说明可以参考 <a href=https://maven.apache.org/guides/development/guide-testing-releases.html>Guide to Testing Staged Releases</a></p><ol><li>删除本地仓库中组件</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn dependency:purge-local-repository -Drevision<span style=color:#f92672>=</span>0.7.0 -DreResolve<span style=color:#f92672>=</span>false
+</span></span></code></pre></div><ol start=3><li>执行 Maven 部署命令</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>mvn deploy -DskipTests -Prelease -Drevision<span style=color:#f92672>=</span>0.7.0
+</span></span></code></pre></div><ol start=4><li>使用 Apache LDAP 账号登录 <code>https://repository.apache.org/</code>，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close 后完成临时发布。</li></ol><h4 id=测试临时筹备库中的-artifacts>测试临时筹备库中的 Artifacts</h4><p>在发起投票前，我们需要使用测试 Staging Repositories 中刚刚发布的 Artifacts ，我们需要配置一些参数，让验收测试从 Staging Repositories 中拉取依 Artifacts，更多详细说明可以参考 <a href=https://maven.apache.org/guides/development/guide-testing-releases.html>Guide to Testing Staged Releases</a></p><ol><li>删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>mvn dependency:purge-local-repository -Drevision<span style=color:#f92672>=</span>0.7.0 -DreResolve<span style=color:#f92672>=</span>false
 </span></span></code></pre></div><ol start=2><li>增加临时存储库配置</li></ol><p>在 <code>~/.m2/settings.xml</code> 中增加如下配置</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span><span style=color:#f92672>&lt;profiles&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;profile&gt;</span>
 </span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;id&gt;</span>staged-releases<span style=color:#f92672>&lt;/id&gt;</span>
@@ -121,59 +123,64 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 </span></span><span style=display:flex><span>    <span style=color:#f92672>&lt;/pluginRepositories&gt;</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>&lt;/profile&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>&lt;/profiles&gt;</span>
-</span></span></code></pre></div><ol start=3><li>执行验收测试</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn clean verify -B -f demo -Pdemo -Pdocker -Drevision<span style=color:#f92672>=</span>0.7.0 -Pstaged-releases
+</span></span></code></pre></div><ol start=3><li>执行验收测试</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>mvn clean verify -B -f demo -Pdemo -Pdocker -Drevision<span style=color:#f92672>=</span>0.7.0 -Pstaged-releases
 </span></span><span style=display:flex><span>mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision<span style=color:#f92672>=</span>0.7.0 -Pstaged-releases
-</span></span></code></pre></div><ol start=4><li>执行验收测试成功后删除本地仓库中的组件</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mvn dependency:purge-local-repository -Drevision<span style=color:#f92672>=</span>0.7.0 -DreResolve<span style=color:#f92672>=</span>false
-</span></span></code></pre></div><ol start=5><li>如果一切正常，我们将创建 <code>0.7.x</code> 分支，创建 <code>0.7.0</code> TAG,修改主干版本为 <code>0.8.0-SNAPSHOT</code></li></ol><p>创建并推送 <code>0.7.x</code> 分支</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>git checkout master
+</span></span></code></pre></div><ol start=4><li>执行验收测试成功后删除本地仓库中的组件</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>mvn dependency:purge-local-repository -Drevision<span style=color:#f92672>=</span>0.7.0 -DreResolve<span style=color:#f92672>=</span>false
+</span></span></code></pre></div><ol start=5><li>如果一切正常，我们将创建 <code>0.7.x</code> 分支，创建 <code>0.7.0</code> TAG，修改主干版本号为 <code>0.8.0-SNAPSHOT</code></li></ol><p>创建并推送 <code>0.7.x</code> 分支</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>git checkout master
 </span></span><span style=display:flex><span>git checkout -b 0.7.x
 </span></span><span style=display:flex><span>mvn versions:set-property -Dproperty<span style=color:#f92672>=</span>revision -DnewVersion<span style=color:#f92672>=</span>0.7.0
 </span></span><span style=display:flex><span>git add pom.xml
 </span></span><span style=display:flex><span>git commit -m <span style=color:#e6db74>&#39;Cut 0.7.0 Release&#39;</span>
 </span></span><span style=display:flex><span>git push origin 0.7.x
-</span></span></code></pre></div><p>在 0.7.x 分支上创建并推送 <code>0.7.0</code> TAG</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>git tag -a 0.7.0 -m <span style=color:#e6db74>&#34;ServiceComb Pack 0.7.0 Release&#34;</span>
+</span></span></code></pre></div><p>在 0.7.x 分支上创建并推送 <code>0.7.0</code> TAG</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>git tag -a 0.7.0 -m <span style=color:#e6db74>&#34;ServiceComb Pack 0.7.0 Release&#34;</span>
 </span></span><span style=display:flex><span>git push origin 0.7.0
-</span></span></code></pre></div><p>切换到主版本，修改版本号为 <code>0.8.0-SNAPSHOT</code> 并推送</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>git checkout master
+</span></span></code></pre></div><p>切换到主版本，修改版本号为 <code>0.8.0-SNAPSHOT</code> 并推送</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/servicecomb-pack
+</span></span><span style=display:flex><span>git checkout master
 </span></span><span style=display:flex><span>mvn versions:set-property -Dproperty<span style=color:#f92672>=</span>revision -DnewVersion<span style=color:#f92672>=</span>0.8.0-SNAPSHOT
 </span></span><span style=display:flex><span>git add pom.xml
 </span></span><span style=display:flex><span>git commit -m <span style=color:#e6db74>&#39;Update Release Number to 0.8.0-SNAPSHOT&#39;</span>
 </span></span><span style=display:flex><span>git push origin master
-</span></span></code></pre></div><h4 id=签署版本--上传到-apache-svn>签署版本 & 上传到 Apache SVN</h4><ol><li>拉取 SVN 仓库到本地</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir ~/apache-dist
-</span></span><span style=display:flex><span>cd ~/apache-dist
-</span></span><span style=display:flex><span>svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username<span style=color:#f92672>=</span>&lt;Apache LDAP 用户名&gt; --password<span style=color:#f92672>=</span>&lt;Apache LDAP 密码&gt;
-</span></span></code></pre></div><ol start=2><li>创建发布包目录</li></ol><p>如果你是第 1 次发布 0.7.0 版本，那么创建 <code>0.7.0/rc01</code> 目录，例如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/apache-dist/servicecomb-pack/0.7.0/rc01
-</span></span></code></pre></div><ol start=3><li>复制发布包到发布目录</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-dist/servicecomb-pack/0.7.0/rc01
-</span></span><span style=display:flex><span>cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
-</span></span><span style=display:flex><span>cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
-</span></span><span style=display:flex><span>cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
-</span></span><span style=display:flex><span>cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
-</span></span></code></pre></div><ol start=6><li>生成 SHA512 签名</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-dist/servicecomb-pack/0.7.0/rc01
+</span></span></code></pre></div><h4 id=签署版本--上传到-apache-svn>签署版本 & 上传到 Apache SVN</h4><ol><li>拉取 SVN 仓库到本地</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir ~/apache-release-workspace/dist
+</span></span><span style=display:flex><span>cd ~/apache-release-workspace/dist
+</span></span><span style=display:flex><span>svn co --depth<span style=color:#f92672>=</span>empty https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username<span style=color:#f92672>=</span>&lt;Apache LDAP 用户名&gt; --password<span style=color:#f92672>=</span>&lt;Apache LDAP 密码&gt;
+</span></span></code></pre></div><ol start=2><li>创建发布包目录</li></ol><p>如果你是第 1 次发布 0.7.0 版本，那么创建 <code>0.7.0/rc01</code> 目录，例如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
+</span></span></code></pre></div><ol start=3><li>复制发布包到发布目录</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
+</span></span><span style=display:flex><span>cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
+</span></span><span style=display:flex><span>cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
+</span></span><span style=display:flex><span>cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
+</span></span><span style=display:flex><span>cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
+</span></span></code></pre></div><ol start=4><li>生成 SHA512 签名</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
 </span></span><span style=display:flex><span>shasum -a <span style=color:#ae81ff>512</span> apache-servicecomb-pack-distribution-0.7.0-bin.zip &gt;&gt; apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 </span></span><span style=display:flex><span>shasum -a <span style=color:#ae81ff>512</span> apache-servicecomb-pack-distribution-0.7.0-src.zip &gt;&gt; apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
-</span></span></code></pre></div><ol start=7><li>提交 Aapache SVN</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-dist/servicecomb-pack
+</span></span></code></pre></div><ol start=5><li>提交 Aapache SVN</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/dist/servicecomb-pack
 </span></span><span style=display:flex><span>svn add 0.7.0
 </span></span><span style=display:flex><span>svn commit -m <span style=color:#e6db74>&#39;prepare for 0.7.0 RC1&#39;</span>  --username<span style=color:#f92672>=</span>&lt;Apache LDAP 用户名&gt; --password<span style=color:#f92672>=</span>&lt;Apache LDAP 密码&gt;
-</span></span></code></pre></div><ol start=8><li>验证发布候选版本</li></ol><p>从 Apache SVN <a href=https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/>https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/</a> 下载发布包检查 GPG 签名和 SHA512 哈希</p><p>检查 SHA512 哈希</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
+</span></span></code></pre></div><ol start=6><li>验证发布候选版本</li></ol><p>从 <a href=https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/>https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/</a> 下载发布包检查 GPG 签名和 SHA512 哈希</p><p>检查 SHA512 哈希</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 </span></span><span style=display:flex><span>$ shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
-</span></span></code></pre></div><p>如果是第一次验证，需要先导入公钥</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>curl https://dist.apache.org/repos/dist/dev/servicecomb/KEYS &gt;&gt; KEYS
+</span></span></code></pre></div><p>导入公钥（首次导入即可）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>curl https://dist.apache.org/repos/dist/dev/servicecomb/KEYS &gt;&gt; KEYS
 </span></span><span style=display:flex><span>$ gpg --import KEYS
 </span></span></code></pre></div><p>检查 GPG 签名</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>gpg --verify apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc apache-servicecomb-pack-distribution-0.7.0-bin.zip
 </span></span><span style=display:flex><span>gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servicecomb-pack-distribution-0.7.0-src.zip
 </span></span></code></pre></div><h4 id=pmc-投票未整理>PMC 投票(未整理)</h4><p>发送投票邮件到 <a href=mailto:dev@servicecomb.apache.org>dev@servicecomb.apache.org</a>，投票持续 3 天</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hi All,
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>This is a call for Vote to release Apache ServiceComb Pack version 0.7.0
+</span></span><span style=display:flex><span>This is a call for Vote to release Apache ServiceComb Pack version &lt;<span style=color:#f92672>version</span>&gt;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Release Candidate :
-</span></span><span style=display:flex><span>https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc-01/
+</span></span><span style=display:flex><span>https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/&lt;<span style=color:#f92672>version</span>&gt;/&lt;<span style=color:#f92672>rc</span> <span style=color:#a6e22e>number</span>&gt;/
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Staging Repository :
-</span></span><span style=display:flex><span>https://repository.apache.org/content/repositories/orgapacheservicecomb-xxx
+</span></span><span style=display:flex><span>https://repository.apache.org/content/repositories/orgapacheservicecomb-&lt;<span style=color:#f92672>id</span>&gt;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Release Tag : https://github.com/apache/servicecomb-pack/releases/tag/0.7.0
+</span></span><span style=display:flex><span>Release Tag : https://github.com/apache/servicecomb-pack/releases/tag/&lt;<span style=color:#f92672>version</span>&gt;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Release CommitID : d315a88027e278c473b7c257c45dead970b02694
+</span></span><span style=display:flex><span>Release CommitID : &lt;<span style=color:#f92672>commit</span> <span style=color:#a6e22e>id</span>&gt;
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Release Notes :
 </span></span><span style=display:flex><span>https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=xxx<span style=color:#960050;background-color:#1e0010>&amp;</span>version=xxx
@@ -182,26 +189,26 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 </span></span><span style=display:flex><span>Keys to verify the Release Candidate :
 </span></span><span style=display:flex><span>https://dist.apache.org/repos/dist/dev/servicecomb/KEYS
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Voting will start now ( Thursday, 21st May, 2020) and will remain open for
+</span></span><span style=display:flex><span>Voting will start now ( &lt;<span style=color:#f92672>Week</span>&gt;, &lt;<span style=color:#f92672>Day</span>&gt;st &lt;<span style=color:#f92672>Month</span>&gt;, &lt;<span style=color:#f92672>Year</span>&gt;) and will remain open for
 </span></span><span style=display:flex><span>at-least 72 hours, Request all PMC members to give their vote.
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>[ ] +1 Release this package as 0.7.0
+</span></span><span style=display:flex><span>[ ] +1 Release this package as &lt;<span style=color:#f92672>version</span>&gt;
 </span></span><span style=display:flex><span>[ ] +0 No Opinion
 </span></span><span style=display:flex><span>[ ] -1 Do not release this package because....
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>On the behalf of ServiceComb Team
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Lei Zhang
-</span></span></code></pre></div><p>Wait for 72 hours or unless you get 3 +1 binding vote with no -1 vote. If you get even one -1 binding vote then fix the issue and start again from Step 1.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hi All,
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>Your</span> <span style=color:#a6e22e>Name</span>&gt;
+</span></span></code></pre></div><p>等待 72 小时后，你需要将投票结果发送到 <a href=mailto:dev@servicecomb.apache.org>dev@servicecomb.apache.org</a>。如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续后续的步骤。否则请解决问题并从 <strong>Servicecomb Pack 发布</strong> 重新开始。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hi All,
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Thanks everyone for voting on this release, the vote has been closed now and we will announce the results shortly.
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Regards
-</span></span></code></pre></div><p>Publish the result of the vote in <a href=mailto:dev@servicecomb.apache.org>dev@servicecomb.apache.org</a>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hello All,
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hello All,
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack 0.7.0 release with the following results:
+</span></span><span style=display:flex><span>We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack &lt;<span style=color:#f92672>version</span>&gt; release with the following results:
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>+1 binding: X (xxx, xxx, xxx)
+</span></span><span style=display:flex><span>+1 binding: X (&lt;<span style=color:#f92672>username</span>&gt;, &lt;<span style=color:#f92672>username</span>&gt;, &lt;<span style=color:#f92672>username</span>&gt;)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>We will be publishing the release binaries soon.
 </span></span><span style=display:flex><span>
