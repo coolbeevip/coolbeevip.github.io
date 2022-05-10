@@ -10,12 +10,12 @@ draft: false
 
 **注意：** 开始发布前，请提前一周通过 `dev@servicecomb.apache.org` 预告即将开始发布，确认代码是否已经准备就绪。
 
-```shell
+```html
 Hello All,
 
-Since from last ServiceComb pack 0.6.0 release we have done significant changes so now is the time to release the new version 0.7.0.
+Since from last ServiceComb pack <old-version> release we have done significant changes so now is the time to release the new version <version>.
 
-I will be cutting a new release tomorrow morning from the branch https://github.com/apache/servicecomb-pack/tree/0.7.x .
+I will be cutting a new release tomorrow morning from the branch https://github.com/apache/servicecomb-pack/tree/<x version> .
 
 @PMC/@Committers please let me know if there is any important patch we need to merge before this release.
 
