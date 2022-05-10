@@ -22,7 +22,7 @@ I will be cutting a new release tomorrow morning from the branch https://github.
 Regards
 ```
 
-**注意:** 发布流程中的 **PMC投票** 环节通常需要 3 天，并且在没有任何 PMC 投反对票后才能正式发布，因此请提前计划发布活动。
+**注意:** 发布流程中的 **PMC投票** 环节通常需要 3 天，在没有任何 PMC 投 -1 票后才能正式发布，因此请提前计划发布活动。
 
 ## 发布环境准备
 
@@ -51,7 +51,7 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 
 3. 用 GPG 生成密钥
 
-根据提示使用 Apache 邮箱生成 GPG 的密钥，更多详细说明请参考[Generaate Key with OPENGPG](https://infra.apache.org/openpgp.html#generate-key)
+根据提示使用 Apache 邮箱生成 GPG 的密钥，更多详细说明请参考 [Generaate Key with OPENGPG](https://infra.apache.org/openpgp.html#generate-key)
 
 ```shell
 $ gpg --full-gen-key
@@ -90,9 +90,9 @@ GnuPG 需要构建用户标识以辨认您的密钥。
 更改姓名（N）、注释（C）、电子邮件地址（E）或确定（O）/退出（Q）？ O
 ```
 
-输入确定 `O` 会车后根据提示输入 **【密钥密码】** 后完成操作。请保存这个密钥密码，以后会经常使用。
+输入 `O` 确定，并根据提示输入 **【密钥密码】** 后完成操作。请保存这个密钥密码，以后会经常使用。
 
-4. 查看密钥ID
+4. 查看密钥 ID
 
 你可以使用如下命令查看生成的密钥，请保存 **【密钥ID】**。
 
@@ -104,15 +104,15 @@ uid           [ 绝对 ] Lei Zhang (CODE SIGNING KEY) zhanglei@apache.org
 sub   rsa4096 2022-05-05 [E]
 ```
 
-5. 发布公钥到 keyserver
+5. 发布公钥到密钥服务器
 
-使用 **【密钥ID】** 将公钥发布到 `pgpkeys.mit.edu`，发布后稍等一会就会自动同步到其他 keyserver
+使用 **【密钥ID】** 将公钥发布到 `pgpkeys.mit.edu`，发布后稍等一会就会自动同步到其他密钥服务器
 
 ```shell
 gpg --keyserver pgpkeys.mit.edu --send-key <密钥ID>
 ```
 
-使用如下命令验证公钥是否发布成功（因为发布后后台需要同步，所以可能需要多试几次）
+使用如下命令验证公钥是否发布成功（因为发布后后台需要同步，所以可能需等待一会）
 
 ```shell
 gpg --keyserver hkp://pgpkeys.mit.edu --recv-keys <密钥ID>
@@ -195,7 +195,7 @@ $ mvn --encrypt-password <Apache LDAP 密码>
 $ mvn --encrypt-password <密钥密码>
 ```
 
-4. 在 `~/.m2/settings.xml` 文件中配置发布服务器地址和配置加密后的密码
+4. 在 `~/.m2/settings.xml` 文件中配置发布服务器地址和加密后的密码
 
 ```xml
 <settings>
@@ -220,33 +220,35 @@ $ mvn --encrypt-password <密钥密码>
 
 ## Servicecomb Pack 发布
 
-#### 发布到临时筹备库
+#### 发布到临时筹备库（Staging Repositorie）
 
-1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除的临时筹备仓库(Staging Repositories)中与 pack 相关的多余版本
+1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除 Staging Repositories 中与 Pack 相关的多余版本
 
 2. 下载代码
 
 ```shell
-mkdir ~/github-apache
+mkdir ~/apache-release-workspace
 git clone https://github.com/apache/servicecomb-pack.git
 ```
 
 3. 执行 Maven 部署命令
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 ```
 
 4. 使用 Apache LDAP 账号登录 `https://repository.apache.org/`，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close 后完成临时发布。
 
-#### 测试临时筹备库
+#### 测试临时筹备库中的 Artifacts
 
-在发起投票前，我们需要使用临时存储库中的组件执行验收测试，我们需要一些配置步骤让验收测试从临时存储库中拉取依赖包，更多详细说明可以参考 [Guide to Testing Staged Releases](https://maven.apache.org/guides/development/guide-testing-releases.html)
+在发起投票前，我们需要使用测试 Staging Repositories 中刚刚发布的 Artifacts ，我们需要配置一些参数，让验收测试从 Staging Repositories 中拉取依 Artifacts，更多详细说明可以参考 [Guide to Testing Staged Releases](https://maven.apache.org/guides/development/guide-testing-releases.html)
 
 
-1. 删除本地仓库中组件
+1. 删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 ```
 
@@ -277,6 +279,7 @@ mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 3. 执行验收测试
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 mvn clean verify -B -f demo -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
 mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
 ```
@@ -284,14 +287,16 @@ mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstage
 4. 执行验收测试成功后删除本地仓库中的组件
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 ```
 
-5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG,修改主干版本为 `0.8.0-SNAPSHOT`
+5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG，修改主干版本号为 `0.8.0-SNAPSHOT`
 
 创建并推送 `0.7.x` 分支
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 git checkout master
 git checkout -b 0.7.x
 mvn versions:set-property -Dproperty=revision -DnewVersion=0.7.0
@@ -303,6 +308,7 @@ git push origin 0.7.x
 在 0.7.x 分支上创建并推送 `0.7.0` TAG
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 git tag -a 0.7.0 -m "ServiceComb Pack 0.7.0 Release"
 git push origin 0.7.0
 ```
@@ -310,6 +316,7 @@ git push origin 0.7.0
 切换到主版本，修改版本号为 `0.8.0-SNAPSHOT` 并推送
 
 ```shell
+cd ~/apache-release-workspace/servicecomb-pack
 git checkout master
 mvn versions:set-property -Dproperty=revision -DnewVersion=0.8.0-SNAPSHOT
 git add pom.xml
@@ -322,9 +329,9 @@ git push origin master
 1. 拉取 SVN 仓库到本地
 
 ```shell
-mkdir ~/apache-dist
-cd ~/apache-dist
-svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
+mkdir ~/apache-release-workspace/dist
+cd ~/apache-release-workspace/dist
+svn co --depth=empty https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
 ```
 
 2. 创建发布包目录
@@ -332,38 +339,38 @@ svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --use
 如果你是第 1 次发布 0.7.0 版本，那么创建 `0.7.0/rc01` 目录，例如：
 
 ```shell
-mkdir -p ~/apache-dist/servicecomb-pack/0.7.0/rc01
+mkdir -p ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
 ```
 
 3. 复制发布包到发布目录
 
 ```shell
-cd ~/apache-dist/servicecomb-pack/0.7.0/rc01
-cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
-cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
-cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
-cp ~/github-apache/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
+cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
+cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
+cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
+cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
+cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
 ```
 
-6. 生成 SHA512 签名
+4. 生成 SHA512 签名
 
 ```shell
-cd ~/apache-dist/servicecomb-pack/0.7.0/rc01
+cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-bin.zip >> apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-src.zip >> apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
 
-7. 提交 Aapache SVN
+5. 提交 Aapache SVN
 
 ```shell
-cd ~/apache-dist/servicecomb-pack
+cd ~/apache-release-workspace/dist/servicecomb-pack
 svn add 0.7.0
 svn commit -m 'prepare for 0.7.0 RC1'  --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
 ```
 
-8. 验证发布候选版本
+6. 验证发布候选版本
 
-从 Apache SVN https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下载发布包检查 GPG 签名和 SHA512 哈希
+从 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下载发布包检查 GPG 签名和 SHA512 哈希
 
 检查 SHA512 哈希
 
@@ -372,7 +379,7 @@ $ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 $ shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
 
-如果是第一次验证，需要先导入公钥
+导入公钥（首次导入即可）
 
 ```shell
 curl https://dist.apache.org/repos/dist/dev/servicecomb/KEYS >> KEYS
@@ -384,7 +391,6 @@ $ gpg --import KEYS
 ```shell
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc apache-servicecomb-pack-distribution-0.7.0-bin.zip
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servicecomb-pack-distribution-0.7.0-src.zip
-
 ```
 
 #### PMC 投票(未整理)
@@ -394,20 +400,20 @@ gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servi
 ```html
 Hi All,
 
-This is a call for Vote to release Apache ServiceComb Pack version 0.7.0
+This is a call for Vote to release Apache ServiceComb Pack version <version>
 
 Release Candidate :
-https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc-01/
+https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/<version>/<rc number>/
 
 
 Staging Repository :
-https://repository.apache.org/content/repositories/orgapacheservicecomb-xxx
+https://repository.apache.org/content/repositories/orgapacheservicecomb-<id>
 
 
-Release Tag : https://github.com/apache/servicecomb-pack/releases/tag/0.7.0
+Release Tag : https://github.com/apache/servicecomb-pack/releases/tag/<version>
 
 
-Release CommitID : d315a88027e278c473b7c257c45dead970b02694
+Release CommitID : <commit id>
 
 Release Notes :
 https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=xxx&version=xxx
@@ -416,19 +422,19 @@ https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=xxx&version=xxx
 Keys to verify the Release Candidate :
 https://dist.apache.org/repos/dist/dev/servicecomb/KEYS
 
-Voting will start now ( Thursday, 21st May, 2020) and will remain open for
+Voting will start now ( <Week>, <Day>st <Month>, <Year>) and will remain open for
 at-least 72 hours, Request all PMC members to give their vote.
 
-[ ] +1 Release this package as 0.7.0
+[ ] +1 Release this package as <version>
 [ ] +0 No Opinion
 [ ] -1 Do not release this package because....
 
 On the behalf of ServiceComb Team
 
-Lei Zhang
+<Your Name>
 ```
 
-Wait for 72 hours or unless you get 3 +1 binding vote with no -1 vote. If you get even one -1 binding vote then fix the issue and start again from Step 1.
+等待 72 小时后，你需要将投票结果发送到 dev@servicecomb.apache.org。如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续后续的步骤。否则请解决问题并从 **Servicecomb Pack 发布** 重新开始。
 
 ```html
 Hi All,
@@ -438,14 +444,13 @@ Thanks everyone for voting on this release, the vote has been closed now and we 
 Regards
 ```
 
-Publish the result of the vote in dev@servicecomb.apache.org.
 
 ```html
 Hello All,
 
-We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack 0.7.0 release with the following results:
+We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack <version> release with the following results:
 
-+1 binding: X (xxx, xxx, xxx)
++1 binding: X (<username>, <username>, <username>)
 
 We will be publishing the release binaries soon.
 
