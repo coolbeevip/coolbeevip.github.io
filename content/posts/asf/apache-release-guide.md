@@ -228,6 +228,7 @@ $ mvn --encrypt-password <密钥密码>
 
 ```shell
 mkdir ~/apache-release-workspace
+cd ~/apache-release-workspace
 git clone https://github.com/apache/servicecomb-pack.git
 ```
 
@@ -331,21 +332,21 @@ git push origin master
 ```shell
 mkdir ~/apache-release-workspace/dist
 cd ~/apache-release-workspace/dist
-svn co --depth=empty https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
+svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
 ```
 
 2. 创建发布包目录
 
-如果你是第 1 次发布 0.7.0 版本，那么创建 `0.7.0/rc01` 目录，例如：
+如果你是第 1 次发布 0.7.0 版本，那么创建 `0.7.0/rc1` 目录，例如：
 
 ```shell
-mkdir -p ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
+mkdir -p ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
 ```
 
 3. 复制发布包到发布目录
 
 ```shell
-cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
+cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
 cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
 cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
 cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
@@ -355,7 +356,7 @@ cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servic
 4. 生成 SHA512 签名
 
 ```shell
-cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc01
+cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-bin.zip >> apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-src.zip >> apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
@@ -370,13 +371,25 @@ svn commit -m 'prepare for 0.7.0 RC1'  --username=<Apache LDAP 用户名> --pass
 
 6. 验证发布候选版本
 
-从 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下载发布包检查 GPG 签名和 SHA512 哈希
+从 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/ 下载发布包检查 GPG 签名和 SHA512 哈希
+
+```shell
+mkdir ~/apache-release-workspace/verify
+cd ~/apache-release-workspace/verify
+curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-bin.zip
+curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc
+curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
+curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-src.zip
+curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc
+curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
+```
 
 检查 SHA512 哈希
 
 ```shell
-$ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
-$ shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
+cd ~/apache-release-workspace/verify
+shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
+shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
 
 导入公钥（首次导入即可）
@@ -389,52 +402,57 @@ $ gpg --import KEYS
 检查 GPG 签名
 
 ```shell
+cd ~/apache-release-workspace/verify
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc apache-servicecomb-pack-distribution-0.7.0-bin.zip
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servicecomb-pack-distribution-0.7.0-src.zip
 ```
 
-#### PMC 投票(未整理)
+#### 整理发布说明
 
-发送投票邮件到 dev@servicecomb.apache.org，投票持续 3 天
+https://confluence.atlassian.com/adminjiraserver/creating-release-notes-938847219.html
+
+#### PMC 发布投票
+
+发送投票邮件 `[VOTE] Release Apache ServiceComb Pack version 0.7.0` 到 `dev@servicecomb.apache.org`
 
 ```html
-Hi All,
+Hi all,
 
-This is a call for Vote to release Apache ServiceComb Pack version <version>
+This is a call for Vote to release Apache ServiceComb Pack version 0.7.0
 
-Release Candidate :
-https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/<version>/<rc number>/
+Release Candidate:
+https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/
 
+Staging Repository:
+https://repository.apache.org/content/repositories/orgapacheservicecomb-1490
 
-Staging Repository :
-https://repository.apache.org/content/repositories/orgapacheservicecomb-<id>
+Release Tag:
+https://github.com/apache/servicecomb-pack/releases/tag/0.7.0
 
+Release CommitID:
+fae7326c0bac2b07e06ba83cf2cc284648ab1713
 
-Release Tag : https://github.com/apache/servicecomb-pack/releases/tag/<version>
+Release Notes:
+https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12321626&version=12348307
 
-
-Release CommitID : <commit id>
-
-Release Notes :
-https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=xxx&version=xxx
-
-
-Keys to verify the Release Candidate :
+Keys to verify the Release Candidate:
 https://dist.apache.org/repos/dist/dev/servicecomb/KEYS
 
-Voting will start now ( <Week>, <Day>st <Month>, <Year>) and will remain open for
+Voting will start now (Thursday, 12st May 2022) and will remain open for
 at-least 72 hours, Request all PMC members to give their vote.
 
-[ ] +1 Release this package as <version>
+[ ] +1 Release this package as 0.7.0
 [ ] +0 No Opinion
 [ ] -1 Do not release this package because....
 
-On the behalf of ServiceComb Team
+On behalf of the ServiceComb Team
 
-<Your Name>
+Lei Zhang
 ```
 
-等待 72 小时后，你需要将投票结果发送到 dev@servicecomb.apache.org。如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续后续的步骤。否则请解决问题并从 **Servicecomb Pack 发布** 重新开始。
+等待 72 小时后，你需要将投票结果发送到 `dev@servicecomb.apache.org`。如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续后续的步骤。否则请解决问题并从 **Servicecomb Pack 发布** 重新开始。
+
+投票结束
 
 ```html
 Hi All,
@@ -444,6 +462,7 @@ Thanks everyone for voting on this release, the vote has been closed now and we 
 Regards
 ```
 
+投票结果
 
 ```html
 Hello All,
