@@ -480,7 +480,7 @@ Thanks all for your participation in this vote.
 
 #### 公告
 
-1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的筹备库，点击 Release 按钮，等待 24 小时候将同步到 Maven 中央库。
+1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的筹备库，点击 Release 按钮。需要一段时间后会自动同步到 [Maven Central Repository](https://mvnrepository.com/repos/central) 中央库。
 
 2. 上传发布包到 Apache 仓库
 
@@ -519,11 +519,13 @@ svn delete 0.6.0
 svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
 ```
 
-5. 在 Github 上创建 0.7.0 Tag 的 Release
+5. 等待 [Maven Central Repository](https://mvnrepository.com/repos/central) 中央库已经同步完毕
+
+6. 在 Github 上创建 0.7.0 Tag 的 Release
 
 打开 `https://github.com/apache/servicecomb-pack/releases/tag/0.7.0` 点击 `Create release from tag` 按钮。发布内容填写来自 Jira 的 [Release Notes](https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12321626&version=12348307)
 
-6. 更新 [ServiceComb Website](https://github.com/apache/servicecomb-website)
+7. 更新 [ServiceComb Website](https://github.com/apache/servicecomb-website)
 
 * https://github.com/apache/servicecomb-website/blob/master/_release/cn/pack_downloads.md
 * https://github.com/apache/servicecomb-website/blob/master/_release/cn/pack_releaseNotes.md
@@ -532,7 +534,7 @@ svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
 * https://github.com/apache/servicecomb-website/blob/master/_release/pack_releaseNotes.md
 * https://github.com/apache/servicecomb-website/blob/master/_release/release.md
 
-7. 发送 `[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released` 邮件到 dev@servicecomb.apache.org, announce@apache.org
+8. 发送 `[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released` 邮件到 dev@servicecomb.apache.org, announce@apache.org
 
 ```html
 Hello All,
