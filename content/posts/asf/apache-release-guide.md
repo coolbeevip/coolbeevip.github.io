@@ -533,6 +533,8 @@ svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
 * https://github.com/apache/servicecomb-website/blob/master/_release/pack_downloads.md
 * https://github.com/apache/servicecomb-website/blob/master/_release/pack_releaseNotes.md
 * https://github.com/apache/servicecomb-website/blob/master/_release/release.md
+* https://github.com/apache/servicecomb-website/blob/master/_pages/cn/home.md
+* https://github.com/apache/servicecomb-website/blob/master/_pages/home.md
 
 8. 发送 `[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released` 邮件到 dev@servicecomb.apache.org, announce@apache.org
 
