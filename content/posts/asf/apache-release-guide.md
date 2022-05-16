@@ -457,7 +457,7 @@ Lei Zhang
 ```html
 Hi All,
 
-Thanks everyone for voting on this release, the vote has been closed now and we will announce the results shortly.
+Thanks all for voting on this release, the vote has been closed now and we will announce the results shortly.
 
 Regards
 ```
@@ -467,23 +467,95 @@ Regards
 ```html
 Hello All,
 
-We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack <version> release with the following results:
+We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack 0.7.0 release with the following results:
 
-+1 binding: X (<username>, <username>, <username>)
++1 binding: 3 (Liu Bao, Zheng Feng, Willem Jiang)
 
 We will be publishing the release binaries soon.
 
-Thanks All for your participation in this vote.
+On the behalf of ServiceComb Team
+
+Thanks all for your participation in this vote.
 ```
 
 #### 公告
 
-Upload the releases to Apache release repository.
+1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的筹备库，点击 Release 按钮，等待 24 小时候将同步到 Maven 中央库。
 
-Wait for 24 hours to replicate the release in all the mirrors.
+2. 上传发布包到 Apache 仓库
 
-Delete old releases from dev and [release] (https://dist.apache.org/repos/dist/release) and check for the old release in archive, update the same links in the website for old releases.
+将 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下的内容放到 https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.7.0
 
-Upload the release page of ServiceComb Website.
+```shell
+mkdir -p ~/apache-release-workspace/release
+cd ~/apache-release-workspace/release
+svn co https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack
+mkdir -p ~/apache-release-workspace/release/servicecomb-pack/0.7.0
+cp ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1/* ~/apache-release-workspace/release/servicecomb-pack/0.7.0
+cd ~/apache-release-workspace/release/servicecomb-pack
+svn add 0.7.0
+svn commit -m 'Upload Servicecomb Pack 0.7.0 Release'
+```
 
-Send the announcement mails to dev@servicecomb.apache.org, announce@apache.org
+3. 删除之前的 RC 版本
+
+删除 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0
+
+```shell
+cd ~/apache-release-workspace/dist/servicecomb-pack
+rm -rf 0.7.0
+svn delete 0.7.0
+svn commit -m 'Remove Servicecomb Pack 0.7.0 RC'
+```
+
+4. 删除之前的 0.6.0 Release 版本
+
+删除 https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.6.0/
+
+```shell
+cd ~/apache-release-workspace/release/servicecomb-pack
+rm -rf 0.6.0
+svn delete 0.6.0
+svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
+```
+
+5. 在 Github 上创建 0.7.0 Tag 的 Release
+
+打开 `https://github.com/apache/servicecomb-pack/releases/tag/0.7.0` 点击 `Create release from tag` 按钮。发布内容填写来自 Jira 的 [Release Notes](https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12321626&version=12348307)
+
+6. 更新 [ServiceComb Website](https://github.com/apache/servicecomb-website)
+
+* [http://servicecomb.apache.org/release/pack-downloads
+* http://servicecomb.apache.org/release/pack-release-notes/
+
+7. 发送 `[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released` 邮件到 dev@servicecomb.apache.org, announce@apache.org
+
+```html
+Hello All,
+
+Apache ServiceComb Team is glad to announce the release of Apache
+ServiceComb Pack 0.7.0
+
+Apache ServiceComb Pack(https://github.com/apache/servicecomb-pack) is an
+eventually data consistency solution for micro-service applications.
+ServiceComb Pack currently have TCC and Saga distributed transaction
+co-ordination protocol. ServiceComb Pack is composed of Alpha which plays
+as a co-ordinator for the management of transactions and Omega which plays
+as an agent and is integral part of micro-services intercepting the
+outgoing/incoming requests and reports transaction events to Alpha.
+
+Download Links : http://servicecomb.apache.org/release/pack-downloads/
+
+Release Notes : http://servicecomb.apache.org/release/pack-release-notes/
+
+Know more about ServiceComb: http://servicecomb.apache.org/
+
+ServiceComb Usefull Links :
+- JIRA : https://issues.apache.org/jira/browse/SCB
+- Mailing lists: dev@servicecomb.apache.org
+- Gitter : https://gitter.im/ServiceCombUsers/Saga
+
+On the behalf of ServiceComb Team
+
+Lei Zhang
+```
