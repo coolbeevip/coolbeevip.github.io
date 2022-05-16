@@ -210,17 +210,62 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 </span></span><span style=display:flex><span>Lei Zhang
 </span></span></code></pre></div><p>等待 72 小时后，你需要将投票结果发送到 <code>dev@servicecomb.apache.org</code>。如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续后续的步骤。否则请解决问题并从 <strong>Servicecomb Pack 发布</strong> 重新开始。</p><p>投票结束</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hi All,
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Thanks everyone for voting on this release, the vote has been closed now and we will announce the results shortly.
+</span></span><span style=display:flex><span>Thanks all for voting on this release, the vote has been closed now and we will announce the results shortly.
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Regards
 </span></span></code></pre></div><p>投票结果</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hello All,
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack &lt;<span style=color:#f92672>version</span>&gt; release with the following results:
+</span></span><span style=display:flex><span>We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack 0.7.0 release with the following results:
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>+1 binding: X (&lt;<span style=color:#f92672>username</span>&gt;, &lt;<span style=color:#f92672>username</span>&gt;, &lt;<span style=color:#f92672>username</span>&gt;)
+</span></span><span style=display:flex><span>+1 binding: 3 (Liu Bao, Zheng Feng, Willem Jiang)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>We will be publishing the release binaries soon.
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Thanks All for your participation in this vote.
-</span></span></code></pre></div><h4 id=公告>公告</h4><p>Upload the releases to Apache release repository.</p><p>Wait for 24 hours to replicate the release in all the mirrors.</p><p>Delete old releases from dev and [release] (<a href=https://dist.apache.org/repos/dist/release>https://dist.apache.org/repos/dist/release</a>) and check for the old release in archive, update the same links in the website for old releases.</p><p>Upload the release page of ServiceComb Website.</p><p>Send the announcement mails to <a href=mailto:dev@servicecomb.apache.org>dev@servicecomb.apache.org</a>, <a href=mailto:announce@apache.org>announce@apache.org</a></p></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/asf/>ASF</a></span>
+</span></span><span style=display:flex><span>On the behalf of ServiceComb Team
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Thanks all for your participation in this vote.
+</span></span></code></pre></div><h4 id=公告>公告</h4><ol><li><p>使用 Apache LDAP 账号登录 <code>https://repository.apache.org/</code> 选择 Staging Repositories 之前的筹备库，点击 Release 按钮，等待 24 小时候将同步到 Maven 中央库。</p></li><li><p>上传发布包到 Apache 仓库</p></li></ol><p>将 <a href=https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/>https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/</a> 下的内容放到 <a href=https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.7.0>https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.7.0</a></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mkdir -p ~/apache-release-workspace/release
+</span></span><span style=display:flex><span>cd ~/apache-release-workspace/release
+</span></span><span style=display:flex><span>svn co https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack
+</span></span><span style=display:flex><span>mkdir -p ~/apache-release-workspace/release/servicecomb-pack/0.7.0
+</span></span><span style=display:flex><span>cp ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1/* ~/apache-release-workspace/release/servicecomb-pack/0.7.0
+</span></span><span style=display:flex><span>cd ~/apache-release-workspace/release/servicecomb-pack
+</span></span><span style=display:flex><span>svn add 0.7.0
+</span></span><span style=display:flex><span>svn commit -m <span style=color:#e6db74>&#39;Upload Servicecomb Pack 0.7.0 Release&#39;</span>
+</span></span></code></pre></div><ol start=3><li>删除之前的 RC 版本</li></ol><p>删除 <a href=https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0>https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0</a></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/dist/servicecomb-pack
+</span></span><span style=display:flex><span>rm -rf 0.7.0
+</span></span><span style=display:flex><span>svn delete 0.7.0
+</span></span><span style=display:flex><span>svn commit -m <span style=color:#e6db74>&#39;Remove Servicecomb Pack 0.7.0 RC&#39;</span>
+</span></span></code></pre></div><ol start=4><li>删除之前的 0.6.0 Release 版本</li></ol><p>删除 <a href=https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.6.0/>https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.6.0/</a></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>cd ~/apache-release-workspace/release/servicecomb-pack
+</span></span><span style=display:flex><span>rm -rf 0.6.0
+</span></span><span style=display:flex><span>svn delete 0.6.0
+</span></span><span style=display:flex><span>svn commit -m <span style=color:#e6db74>&#39;Remove Servicecomb Pack 0.6.0 Release&#39;</span>
+</span></span></code></pre></div><ol start=5><li>在 Github 上创建 0.7.0 Tag 的 Release</li></ol><p>打开 <code>https://github.com/apache/servicecomb-pack/releases/tag/0.7.0</code> 点击 <code>Create release from tag</code> 按钮。发布内容填写来自 Jira 的 <a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12321626&version=12348307">Release Notes</a></p><ol start=6><li>更新 <a href=https://github.com/apache/servicecomb-website>ServiceComb Website</a></li></ol><ul><li>[http://servicecomb.apache.org/release/pack-downloads</li><li><a href=http://servicecomb.apache.org/release/pack-release-notes/>http://servicecomb.apache.org/release/pack-release-notes/</a></li></ul><ol start=7><li>发送 <code>[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released</code> 邮件到 <a href=mailto:dev@servicecomb.apache.org>dev@servicecomb.apache.org</a>, <a href=mailto:announce@apache.org>announce@apache.org</a></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span>Hello All,
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Apache ServiceComb Team is glad to announce the release of Apache
+</span></span><span style=display:flex><span>ServiceComb Pack 0.7.0
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Apache ServiceComb Pack(https://github.com/apache/servicecomb-pack) is an
+</span></span><span style=display:flex><span>eventually data consistency solution for micro-service applications.
+</span></span><span style=display:flex><span>ServiceComb Pack currently have TCC and Saga distributed transaction
+</span></span><span style=display:flex><span>co-ordination protocol. ServiceComb Pack is composed of Alpha which plays
+</span></span><span style=display:flex><span>as a co-ordinator for the management of transactions and Omega which plays
+</span></span><span style=display:flex><span>as an agent and is integral part of micro-services intercepting the
+</span></span><span style=display:flex><span>outgoing/incoming requests and reports transaction events to Alpha.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Download Links : http://servicecomb.apache.org/release/pack-downloads/
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Release Notes : http://servicecomb.apache.org/release/pack-release-notes/
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Know more about ServiceComb: http://servicecomb.apache.org/
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ServiceComb Usefull Links :
+</span></span><span style=display:flex><span>- JIRA : https://issues.apache.org/jira/browse/SCB
+</span></span><span style=display:flex><span>- Mailing lists: dev@servicecomb.apache.org
+</span></span><span style=display:flex><span>- Gitter : https://gitter.im/ServiceCombUsers/Saga
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>On the behalf of ServiceComb Team
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Lei Zhang
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/asf/>ASF</a></span>
 <span class=separator><a class=tag href=/tags/release/>release</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.f38354b14e726daea2b656ccc32c944fa1e10a974998cb85bbb50c0f836878b4.js integrity="sha256-84NUsU5yba6itlbMwyyUT6HhCpdJmMuFu7UMD4NoeLQ=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
