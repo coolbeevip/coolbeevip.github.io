@@ -1,5 +1,5 @@
 ---
-title: "备份 SSH KEY"
+title: "Backup SSH KEY"
 date: 2022-05-17T13:24:14+08:00
 tags: [ssh]
 categories: [my]
