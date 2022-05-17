@@ -154,10 +154,18 @@ gpg -a -o public-file.key --export <密钥ID>
 gpg -a -o private-file.key --export-secret-keys <密钥ID>
 ```
 
-8. 将公钥追加到 https://dist.apache.org/repos/dist/dev/servicecomb/KEYS 文件中
+8. 将公钥追加到以下两个文件中
+
+* https://dist.apache.org/repos/dist/dev/servicecomb/KEYS
+* https://dist.apache.org/repos/dist/release/servicecomb/KEYS
 
 ```shell
 svn co --depth=empty https://dist.apache.org/repos/dist/dev/servicecomb
+svn up KEYS
+cat public-file.key >> KEYS
+svn commit -m 'add zhanglei@apache.org gpg public key'
+
+svn co --depth=empty https://dist.apache.org/repos/dist/release/servicecomb
 svn up KEYS
 cat public-file.key >> KEYS
 svn commit -m 'add zhanglei@apache.org gpg public key'
