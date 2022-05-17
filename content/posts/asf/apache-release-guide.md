@@ -554,22 +554,22 @@ ServiceComb Pack 0.7.0
 
 Apache ServiceComb Pack(https://github.com/apache/servicecomb-pack) is an
 eventually data consistency solution for micro-service applications.
-ServiceComb Pack currently have TCC and Saga distributed transaction
-co-ordination protocol. ServiceComb Pack is composed of Alpha which plays
-as a co-ordinator for the management of transactions and Omega which plays
-as an agent and is integral part of micro-services intercepting the
+ServiceComb Pack currently has TCC and Saga distributed transaction
+coordination protocol. ServiceComb Pack is composed of Alpha which plays
+as a coordinator for the management of transactions and Omega which plays
+as an agent and is an integral part of micro-services intercepting the
 outgoing/incoming requests and reports transaction events to Alpha.
 
-Download Links : http://servicecomb.apache.org/release/pack-downloads/
+Download Links: http://servicecomb.apache.org/release/pack-downloads/
 
-Release Notes : http://servicecomb.apache.org/release/pack-release-notes/
+Release Notes: http://servicecomb.apache.org/release/pack-release-notes/
 
 Know more about ServiceComb: http://servicecomb.apache.org/
 
-ServiceComb Usefull Links :
+ServiceComb Useful Links :
 - JIRA : https://issues.apache.org/jira/browse/SCB
 - Mailing lists: dev@servicecomb.apache.org
-- Gitter : https://gitter.im/ServiceCombUsers/Saga
+- Gitter: https://gitter.im/ServiceCombUsers/Saga
 
 On the behalf of ServiceComb Team
 
