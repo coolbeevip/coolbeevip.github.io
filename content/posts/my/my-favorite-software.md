@@ -63,7 +63,6 @@ draft: false
 
 ## 画图
 ---
-* [Draw.io](https://drawio-app.com) 支持多种图形，多种格式导出
 * [PlantUML](https://plantuml.com/zh/) 用代码画图
 * [OmniGraffle](https://www.omnigroup.com/omnigraffle) 很贵
 
