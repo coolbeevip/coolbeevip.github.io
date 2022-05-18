@@ -10,14 +10,12 @@ draft: false
 ---
 * [IntelliJ IDEA](https://www.jetbrains.com/idea/) Java 开发集成环境
 * [WebStorm](http://www.jetbrains.com/webstorm/) Web 开发集成环境
-* [PyCharm](https://www.jetbrains.com/pycharm/) Python 开发集成环境
 * [Atom](https://atom.io/) GitHub 推出的开源编辑器
+* [VS Code](https://code.visualstudio.com/)
 * [DataGrip](https://www.jetbrains.com.cn/datagrip/) 数据库客户端工具
 * [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) JVM 性能分析工具 (收费)
 * [VisualVM](https://visualvm.github.io/) JVM 性能分析工具
 * [Dash](https://kapeli.com/dash) 离线 API 文档软件
-* [Go2Shell](http://zipzapmac.com/Go2Shell) 从 Finder 打开命令行
-* [Wireshark](https://www.wireshark.org/) 网络分析工具
 
 ## 命令行
 ---
@@ -49,10 +47,7 @@ draft: false
 ---
 * [微信](http://weixin.qq.com/cgi-bin/readtemplate?t=mac&platform=wx&lang=zh_CN)
 * [腾讯会议](https://meeting.tencent.com/)
-* [Skype](https://www.skype.com/)
 * [Zoom](https://zoom.us/)
-* [Gitter](https://gitter.im/)
-* [Slack](https://slack.com/intl/zh-cn/)
 
 ## 邮件
 ---
@@ -70,6 +65,7 @@ draft: false
 ---
 * [Draw.io](https://drawio-app.com) 支持多种图形，多种格式导出
 * [PlantUML](https://plantuml.com/zh/) 用代码画图
+* [OmniGraffle](https://www.omnigroup.com/omnigraffle) 很贵
 
 ## 截图
 ---
@@ -86,7 +82,6 @@ draft: false
 ## 下载
 ---
 * [Transmission](https://transmissionbt.com/) BitTorrent 客户端
-* [aria2](https://aria2.github.io/) 一款支持多种协议的轻量级命令行下载工具
 
 ## VPN
 ---
@@ -94,5 +89,4 @@ draft: false
 
 ## 虚拟机
 ---
-* [VirtualBox](https://www.virtualbox.org/)  
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
