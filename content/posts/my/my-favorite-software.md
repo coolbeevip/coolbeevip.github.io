@@ -16,6 +16,7 @@ draft: false
 * [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) JVM 性能分析工具 (收费)
 * [VisualVM](https://visualvm.github.io/) JVM 性能分析工具
 * [Dash](https://kapeli.com/dash) 离线 API 文档软件
+* [Sublime Text 4](https://www.sublimetext.com/blog/articles/sublime-text-4)
 
 ## 命令行
 ---
@@ -33,6 +34,7 @@ draft: false
 ---
 * [The Unarchiver](https://theunarchiver.com/) 解压许多不同种类的归档压缩文件
 * [Android File Transfer](https://www.android.com/filetransfer/) Android 文件传输工具
+* [Cyberduck](https://cyberduck.io/) 存储客户端，支持 FTP, SFTP, WebDAV, Amazon S3, OpenStack Swift, Backblaze B2, Microsoft Azure & OneDrive, Google Drive and Dropbox
 
 ## 密码
 ---
@@ -60,7 +62,7 @@ draft: false
 ## 笔记
 ---
 * [Github Pages](https://pages.github.com/)
-* [Typora] Mackdown 编辑器
+* [Typora](https://typora.io/) Mackdown 编辑器 1.0 之前的版本是免费的
 
 ## 画图
 ---
