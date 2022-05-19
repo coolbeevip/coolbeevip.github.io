@@ -60,6 +60,7 @@ draft: false
 ## 笔记
 ---
 * [Github Pages](https://pages.github.com/)
+* [Typora] Mackdown 编辑器
 
 ## 画图
 ---
