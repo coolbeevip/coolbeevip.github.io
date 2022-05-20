@@ -26,30 +26,26 @@ draft: false
 ---
 * [Google Chrome](https://www.google.com/chrome/)
 
-## 网盘
----
-* [百度网盘](http://pan.baidu.com/download?from=header#pan)
 
 ## 工具
 ---
 * [The Unarchiver](https://theunarchiver.com/) 解压许多不同种类的归档压缩文件
 * [Android File Transfer](https://www.android.com/filetransfer/) Android 文件传输工具
-* [Cyberduck](https://cyberduck.io/) 存储客户端，支持 FTP, SFTP, WebDAV, Amazon S3, OpenStack Swift, Backblaze B2, Microsoft Azure & OneDrive, Google Drive and Dropbox
+
 
 ## 密码
 ---
 * [LastPass](https://www.lastpass.com/) 多终端密码管理
+* [GPG Suite](https://gpgtools.org/) GPG 加密工具
 
 ## 语言
 ---
 * [Grammarly](https://app.grammarly.com/) 语法修正
-* [有道词典](http://cidian.youdao.com/multi.html) 英汉词典
 
 ## 通信
 ---
 * [微信](http://weixin.qq.com/cgi-bin/readtemplate?t=mac&platform=wx&lang=zh_CN)
 * [腾讯会议](https://meeting.tencent.com/)
-* [Zoom](https://zoom.us/)
 
 ## 邮件
 ---
@@ -84,11 +80,12 @@ draft: false
 ## 下载
 ---
 * [Transmission](https://transmissionbt.com/) BitTorrent 客户端
+* [Cyberduck](https://cyberduck.io/) 支持 FTP, SFTP, WebDAV, Amazon S3, OpenStack Swift, Backblaze B2, Microsoft Azure & OneDrive, Google Drive and Dropbox
 
 ## VPN
 ---
 * [V2RayU](https://github.com/yanue/V2rayU) 原生支持 Socks、HTTP、Shadowsocks、VMess 等协议
 
-## 虚拟机
+## 虚拟化
 ---
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
