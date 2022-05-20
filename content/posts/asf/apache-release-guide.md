@@ -235,15 +235,15 @@ $ mvn --encrypt-password <密钥密码>
 2. 下载代码
 
 ```shell
-mkdir ~/apache-release-workspace
-cd ~/apache-release-workspace
+mkdir ~/Work/apache-release-workspace
+cd ~/Work/apache-release-workspace
 git clone https://github.com/apache/servicecomb-pack.git
 ```
 
 3. 执行 Maven 部署命令
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 ```
 
@@ -257,7 +257,7 @@ mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 1. 删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 ```
 
@@ -288,7 +288,7 @@ mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 3. 执行验收测试
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 mvn clean verify -B -f demo -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
 mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
 ```
@@ -296,7 +296,7 @@ mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstage
 4. 执行验收测试成功后删除本地仓库中的组件
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 ```
 
@@ -305,7 +305,7 @@ mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
 创建并推送 `0.7.x` 分支
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 git checkout master
 git checkout -b 0.7.x
 mvn versions:set-property -Dproperty=revision -DnewVersion=0.7.0
@@ -317,7 +317,7 @@ git push origin 0.7.x
 在 0.7.x 分支上创建并推送 `0.7.0` TAG
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 git tag -a 0.7.0 -m "ServiceComb Pack 0.7.0 Release"
 git push origin 0.7.0
 ```
@@ -325,7 +325,7 @@ git push origin 0.7.0
 切换到主版本，修改版本号为 `0.8.0-SNAPSHOT` 并推送
 
 ```shell
-cd ~/apache-release-workspace/servicecomb-pack
+cd ~/Work/apache-release-workspace/servicecomb-pack
 git checkout master
 mvn versions:set-property -Dproperty=revision -DnewVersion=0.8.0-SNAPSHOT
 git add pom.xml
@@ -338,8 +338,8 @@ git push origin master
 1. 拉取 SVN 仓库到本地
 
 ```shell
-mkdir ~/apache-release-workspace/dist
-cd ~/apache-release-workspace/dist
+mkdir ~/Work/apache-release-workspace/dist
+cd ~/Work/apache-release-workspace/dist
 svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
 ```
 
@@ -348,23 +348,23 @@ svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --use
 如果你是第 1 次发布 0.7.0 版本，那么创建 `0.7.0/rc1` 目录，例如：
 
 ```shell
-mkdir -p ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
+mkdir -p ~/Work/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
 ```
 
 3. 复制发布包到发布目录
 
 ```shell
-cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
-cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
-cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
-cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
-cp ~/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
+cd ~/Work/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
+cp ~/Work/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip .
+cp ~/Work/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc .
+cp ~/Work/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip .
+cp ~/Work/apache-release-workspace/servicecomb-pack/distribution/target/apache-servicecomb-pack-distribution-0.7.0-src.zip.asc .
 ```
 
 4. 生成 SHA512 签名
 
 ```shell
-cd ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
+cd ~/Work/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-bin.zip >> apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-src.zip >> apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
@@ -372,7 +372,7 @@ shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-src.zip >> apache-servi
 5. 提交 Aapache SVN
 
 ```shell
-cd ~/apache-release-workspace/dist/servicecomb-pack
+cd ~/Work/apache-release-workspace/dist/servicecomb-pack
 svn add 0.7.0
 svn commit -m 'prepare for 0.7.0 RC1'  --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
 ```
@@ -382,8 +382,8 @@ svn commit -m 'prepare for 0.7.0 RC1'  --username=<Apache LDAP 用户名> --pass
 从 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/ 下载发布包检查 GPG 签名和 SHA512 哈希
 
 ```shell
-mkdir ~/apache-release-workspace/verify
-cd ~/apache-release-workspace/verify
+mkdir ~/Work/apache-release-workspace/verify
+cd ~/Work/apache-release-workspace/verify
 curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-bin.zip
 curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc
 curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
@@ -395,7 +395,7 @@ curl -O https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.
 检查 SHA512 哈希
 
 ```shell
-cd ~/apache-release-workspace/verify
+cd ~/Work/apache-release-workspace/verify
 shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
@@ -410,7 +410,7 @@ $ gpg --import KEYS
 检查 GPG 签名
 
 ```shell
-cd ~/apache-release-workspace/verify
+cd ~/Work/apache-release-workspace/verify
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-bin.zip.asc apache-servicecomb-pack-distribution-0.7.0-bin.zip
 gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servicecomb-pack-distribution-0.7.0-src.zip
 ```
@@ -495,12 +495,12 @@ Thanks all for your participation in this vote.
 将 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下的内容放到 https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.7.0
 
 ```shell
-mkdir -p ~/apache-release-workspace/release
-cd ~/apache-release-workspace/release
+mkdir -p ~/Work/apache-release-workspace/release
+cd ~/Work/apache-release-workspace/release
 svn co https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack
-mkdir -p ~/apache-release-workspace/release/servicecomb-pack/0.7.0
-cp ~/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1/* ~/apache-release-workspace/release/servicecomb-pack/0.7.0
-cd ~/apache-release-workspace/release/servicecomb-pack
+mkdir -p ~/Work/apache-release-workspace/release/servicecomb-pack/0.7.0
+cp ~/Work/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1/* ~/Work/apache-release-workspace/release/servicecomb-pack/0.7.0
+cd ~/Work/apache-release-workspace/release/servicecomb-pack
 svn add 0.7.0
 svn commit -m 'Upload Servicecomb Pack 0.7.0 Release'
 ```
@@ -510,7 +510,7 @@ svn commit -m 'Upload Servicecomb Pack 0.7.0 Release'
 删除 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0
 
 ```shell
-cd ~/apache-release-workspace/dist/servicecomb-pack
+cd ~/Work/apache-release-workspace/dist/servicecomb-pack
 rm -rf 0.7.0
 svn delete 0.7.0
 svn commit -m 'Remove Servicecomb Pack 0.7.0 RC'
@@ -521,7 +521,7 @@ svn commit -m 'Remove Servicecomb Pack 0.7.0 RC'
 删除 https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.6.0/
 
 ```shell
-cd ~/apache-release-workspace/release/servicecomb-pack
+cd ~/Work/apache-release-workspace/release/servicecomb-pack
 rm -rf 0.6.0
 svn delete 0.6.0
 svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
