@@ -80,7 +80,7 @@ draft: false
 ## 下载
 ---
 * [Transmission](https://transmissionbt.com/) BitTorrent 客户端
-* [Cyberduck](https://cyberduck.io/) 支持 FTP, SFTP, WebDAV, Amazon S3, OpenStack Swift, Backblaze B2, Microsoft Azure & OneDrive, Google Drive and Dropbox
+* [Big Data Tools](https://plugins.jetbrains.com/plugin/12494-big-data-tools) 支持 FTP, SFTP, HDFS, AWS S3, Minio
 
 ## VPN
 ---
