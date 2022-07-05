@@ -1,6 +1,6 @@
 ---
 title: "在 Maven 多模块项目中使用 JaCoCo"
-date: 2018-11-23T13:24:14+08:00
+date: 2022-07-03T13:24:14+08:00
 tags: [java, jacoco]
 categories: [maven]
 draft: false
@@ -102,7 +102,7 @@ draft: false
 </project>
 ```
 
-增加 `module-coverage` 模块，此模块的作用就是搜集所有子模块的覆盖率报告并汇聚到本模块的 `target/site/jacoco-aggregate/jacoco.xml` 文件中
+增加 `module-coverage` 模块，此模块的作用就是搜集所有子模块的覆盖率报告并汇聚到本模块的 `target/site/jacoco-aggregate/jacoco.xml` 文件中，注意需要将要统计的模块增加到这个模块中
 
 
 ```xml
