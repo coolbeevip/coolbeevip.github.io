@@ -214,3 +214,16 @@ draft: false
 
 ![image-apisix-dashboard](/images/posts/jacoco-in-maven-multi-module/sonar-overall-code.png)
 
+## 排除
+
+如果你想避免一些模块或者类参与到覆盖率统计中，你可以在根 pom.xml 使用 `<sonar.coverage.exclusions>` 要排除一些模块，例如
+
+
+```xml
+<properties>
+  <sonar.coverage.exclusions>
+    **/module-foo/**
+  </sonar.coverage.exclusions>
+</properties>
+```	
+
