@@ -13,4 +13,6 @@ Hello All, Since from last ServiceComb pack &amp;lt;old-version&amp;gt; release 
 默认在当前仓库根目录下执行 mvn clean package，如果你需要特殊的方式，可以修改脚本中的 check_source_before_release 函数
 计算版本号分支名
 根据 pom 中的版本定义，自动计算下一版本号，默认采 maven 的3段式版号方式 major.minor.patch，并以此为基准滚动 minor 版本号，如果你需要特殊的方式，可以修改脚本中的 next_version 函数
-输出发布计划</description></item></channel></rss>
+输出发布计划
+发布计划中会显示你要发布的仓库地址，当前版本号、维护用 X 分支、TAG 名称、下一个版本号等信息
+Release Plan: ==================================================================== OS: Darwin GIT_REPO_URL: git@github.com:coolbeevip/license-maven-plugin.git RELEASE WORK DIR: /var/folders/fd/gqdh88px2fj66tmtcy6ffr580000gn/T/release-license-maven-plugin.</description></item></channel></rss>

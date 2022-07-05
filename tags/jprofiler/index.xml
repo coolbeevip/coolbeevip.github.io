@@ -10,4 +10,4 @@ https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_12_0_2.sh
 使用 -v /opt/jprofiler12:/opt/jprofiler12 将 jprofiler 路径映射到容器内部
 增加 -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 JVM 参数，设置监听端口为 9899
 增加 -p 9899:9899 容器端口映射
-docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS=&amp;#34;-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.</description></item></channel></rss>
+docker run -d \ -e NEXUS_CONTEXT=nexus \ -e INSTALL4J_ADD_VM_PARAMS=&amp;#34;-Xms10g -Xmx10g \ -agentpath:/opt/jprofiler12/bin/linux-x64/libjprofilerti.so=port=9899 \ -XX:MaxDirectMemorySize=15530M \ -XX:ActiveProcessorCount=16 \ -XX:+UseParNewGC \ -XX:ParallelGCThreads=12 \ -XX:MaxTenuringThreshold=6 \ -XX:SurvivorRatio=5 \ -XX:+UseConcMarkSweepGC \ -XX:-CMSParallelRemarkEnabled \ -XX:CMSInitiatingOccupancyFraction=65 \ -XX:+UseCMSInitiatingOccupancyOnly \ -XX:+UseCMSCompactAtFullCollection \ -XX:+CMSClassUnloadingEnabled \ -XX:+DisableExplicitGC \ -XX:+PrintGCDetails \ -Xloggc:/nexus-data/vgc/nexus-$(date +%s).</description></item></channel></rss>

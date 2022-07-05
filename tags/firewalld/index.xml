@@ -6,4 +6,6 @@ Docker-CE 19.03.12 CentOS Linux release 7.8.2003 Firewall 0.6.3 本文例子:
 配置 192.168.51.245 可以访问 Nginx Docker
 其他机器无法访问 Nginx Docker
 重要的事情说三遍
-如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER</description></item></channel></rss>
+如果你在 Docker 运行时重启 firewalld，那么 firewalld 将删除 DOCKER-USER
+不要在 Docker 运行时重启 firewalld
+不要在 Docker 运行时重启 firewalld</description></item></channel></rss>

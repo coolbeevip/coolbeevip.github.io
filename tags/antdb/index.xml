@@ -2,4 +2,4 @@
 MGR 集群的管理 GTM 全局事务管理 Coordinator 协调员管理用户会话 Data Node 数据节点 安装计划 服务器规划
 IP SSH 端口 SSH 用户名 SSH 密码 ROOT 密码 OS 10.1.207.180 22022 antdb 123456 root123 CentOS Linux release 7.9.2009 10.1.207.181 22022 antdb 123456 root123 CentOS Linux release 7.9.2009 10.1.207.182 22022 antdb 123456 root123 CentOS Linux release 7.9.2009 提示： 可以参考批量自动化创建用户
 集群节点规划
-IP MGR GTM Coordinator DataNode 10.</description></item></channel></rss>
+IP MGR GTM Coordinator DataNode 10.1.207.180 Master Master DataNode_Master_1, DataNode_Slave_3 10.1.207.181 Slave_1 Coordinator_1 DataNode_Master_2, DataNode_Slave_1 10.1.207.182 Slave_1 Coordinator_2 DataNode_Master_3, DataNode_Slave_2 节点安装路径</description></item></channel></rss>

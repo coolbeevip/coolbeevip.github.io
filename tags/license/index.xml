@@ -5,4 +5,4 @@ CSV 格式的报告 NOTICE.CSV NOTICE-LICENSE.CSV TXT 格式的报告 NOTICE.TXT
 导出 CSV
 mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv 导出 TXT
 mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=txt 提示： 导出的报告位置在 ./target/distribute 目录下
-导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.</description></item></channel></rss>
+导出报告(忽略部分依赖) mvn io.github.coolbeevip:license-maven-plugin:1.5.0:dependency-license-export -Dformat=csv -DignoreGroupIds=org.apache.servicecomb,com.github.seanyinx 导出报告(分析LICENSE) 此功能使用 selenium 从 Maven Central Repository 分析依赖的 License 信息</description></item></channel></rss>
