@@ -257,8 +257,7 @@ mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 1. 删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）
 
 ```shell
-cd ~/.m2/repository/org/apache/servicecomb/pack
-find . -name "0.7.0" | xargs rm -rf
+find ~/.m2/repository/org/apache/servicecomb/pack -name "0.7.0" | xargs rm -rf
 ```
 
 2. 增加临时存储库配置
@@ -289,15 +288,14 @@ find . -name "0.7.0" | xargs rm -rf
 
 ```shell
 cd ~/Work/apache-release-workspace/servicecomb-pack
-mvn clean verify -B -f demo -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
-mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
+mvn clean verify -f demo -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases -U
+mvn clean verify -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
 ```
 
 4. 执行验收测试成功后删除本地仓库中的组件
 
 ```shell
-cd ~/.m2/repository/org/apache/servicecomb/pack
-find . -name "0.7.0" | xargs rm -rf
+find ~/.m2/repository/org/apache/servicecomb/pack -name "0.7.0" | xargs rm -rf
 ```
 
 5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG，修改主干版本号为 `0.8.0-SNAPSHOT`
@@ -451,7 +449,7 @@ at-least 72 hours, Request all PMC members to give their vote.
 
 [ ] +1 Release this package as 0.7.0
 [ ] +0 No Opinion
-[ ] -1 Do not release this package because....
+[ ] -1 Do not release this package because...
 
 On behalf of the ServiceComb Team
 
