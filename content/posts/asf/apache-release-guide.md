@@ -296,8 +296,8 @@ mvn clean verify -B -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstage
 4. 执行验收测试成功后删除本地仓库中的组件
 
 ```shell
-cd ~/Work/apache-release-workspace/servicecomb-pack
-mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
+cd ~/.m2/repository/org/apache/servicecomb/pack
+find . -name "0.7.0" | xargs rm -rf
 ```
 
 5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG，修改主干版本号为 `0.8.0-SNAPSHOT`
