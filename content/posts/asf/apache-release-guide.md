@@ -257,8 +257,8 @@ mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 1. 删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）
 
 ```shell
-cd ~/Work/apache-release-workspace/servicecomb-pack
-mvn dependency:purge-local-repository -Drevision=0.7.0 -DreResolve=false
+cd ~/.m2/repository/org/apache/servicecomb/pack
+find . -name "0.7.0" | xargs rm -rf
 ```
 
 2. 增加临时存储库配置
