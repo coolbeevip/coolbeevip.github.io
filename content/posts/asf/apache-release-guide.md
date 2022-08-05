@@ -257,7 +257,7 @@ mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 1. 删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）
 
 ```shell
-find ~/.m2/repository/org/apache/servicecomb/pack -name "0.7.0" | xargs rm -rf
+rm -rf ~/.m2/repository/org/apache/servicecomb/pack
 ```
 
 2. 增加临时存储库配置
@@ -295,7 +295,7 @@ mvn clean verify -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-r
 4. 执行验收测试成功后删除本地仓库中的组件
 
 ```shell
-find ~/.m2/repository/org/apache/servicecomb/pack -name "0.7.0" | xargs rm -rf
+rm -rf ~/.m2/repository/org/apache/servicecomb/pack
 ```
 
 5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG，修改主干版本号为 `0.8.0-SNAPSHOT`
