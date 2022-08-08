@@ -485,7 +485,7 @@ Regards
 
 #### 公告
 
-1. 使用 ASF LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的 Artifacts，点击 Release 按钮。需要一段时间后会自动同步到 [Maven Central Repository](https://mvnrepository.com/repos/central) 中央库。
+1. 使用 ASF LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的 Artifacts，点击 Release 按钮。需要一段时间（大约 2 小时）后会自动同步到 [Maven Central Repository](https://mvnrepository.com/repos/central)
 
 2. 上传发布包到 ASF 仓库
 
