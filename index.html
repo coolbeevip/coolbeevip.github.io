@@ -14,9 +14,10 @@
 chmod 600 ~/.ssh/*</p></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Tue, May 17, 2022</span>
 <span class=separator><a class=category href=/categories/my/>my</a></span>
-<span class=separator><a class=tag href=/tags/ssh/>ssh</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/asf/apache-release-guide/>Apache Servicecomb Pack Release Guide</a></h3></div><div class=post-content><div class=p_part><p>注意: 本文档基于 0.7.0 正式版发布过程编写，实际操作时请替换文档中的版本号 0.7.0-SNAPSHOT， 0.7.0 和 0.8.0-SNAPSHOT 为实际的版本号。
-注意： 开始发布前，请提前一周通过 dev@servicecomb.apache.org 预告即将开始发布，确认代码是否已经准备就绪。
-Hello All, Since from last ServiceComb pack &lt;old-version> release we have done significant changes so now is the time to release the new version &lt;version>. I will be cutting a new release tomorrow morning from the branch https://github.com/apache/servicecomb-pack/tree/&lt;x version> . @PMC/@Committers please let me know if there is any important patch we need to merge before this release.</p><a href=/posts/asf/apache-release-guide/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
+<span class=separator><a class=tag href=/tags/ssh/>ssh</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/asf/apache-release-guide/>Apache Servicecomb Pack Release Guide</a></h3></div><div class=post-content><div class=p_part><p>发布环境准备 生成签名密钥 安装 GPG 在GnuPG官网下载 2.X 安装包. 安装完毕后可以使用如下命令查看版本
+$ gpg --version gpg (GnuPG/MacGPG2) 2.2.20 libgcrypt 1.8.5 Copyright (C) 2020 Free Software Foundation, Inc. 配置 GPG 安装完毕后你可以找到 $HOME/.gnupg/gpg.conf 文件，并增加如下推荐配置
+personal-digest-preferences SHA512 cert-digest-algo SHA512 default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed 用 GPG 生成密钥 根据提示使用 ASF 邮箱生成 GPG 的密钥，更多详细说明请参考 Generate Key with GPG
+$ gpg --full-gen-key gpg (GnuPG/MacGPG2) 2.2.34; Copyright (C) 2022 g10 Code GmbH This is free software: you are free to change and redistribute it.</p><a href=/posts/asf/apache-release-guide/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Sun, May 8, 2022</span>
 <span class=separator><a class=category href=/categories/asf/>ASF</a></span>
 <span class=separator><a class=tag href=/tags/release/>release</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/git/git-awesome-aliases/>Awesome Git Aliases</a></h3></div><div class=post-content><div class=p_part><p>我们可以通过别名定义简化命令输出，创造自己的命令
