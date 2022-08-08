@@ -6,24 +6,6 @@ categories: [ASF]
 draft: false
 ---
 
-**注意:** 本文档基于 `0.7.0` 正式版发布过程编写，实际操作时请替换文档中的版本号 `0.7.0-SNAPSHOT`， `0.7.0` 和 `0.8.0-SNAPSHOT` 为实际的版本号。
-
-**注意：** 开始发布前，请提前一周通过 `dev@servicecomb.apache.org` 预告即将开始发布，确认代码是否已经准备就绪。
-
-```html
-Hello All,
-
-Since from last ServiceComb pack <old-version> release we have done significant changes so now is the time to release the new version <version>.
-
-I will be cutting a new release tomorrow morning from the branch https://github.com/apache/servicecomb-pack/tree/<x version> .
-
-@PMC/@Committers please let me know if there is any important patch we need to merge before this release.
-
-Regards
-```
-
-**注意:** 发布流程中的 **PMC投票** 环节通常需要 3 天，在没有任何 PMC 投 -1 票后才能正式发布，因此请提前计划发布活动。
-
 ## 发布环境准备
 
 #### 生成签名密钥
@@ -51,107 +33,107 @@ default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB
 
 3. 用 GPG 生成密钥
 
-根据提示使用 Apache 邮箱生成 GPG 的密钥，更多详细说明请参考 [Generaate Key with OPENGPG](https://infra.apache.org/openpgp.html#generate-key)
+根据提示使用 ASF 邮箱生成 GPG 的密钥，更多详细说明请参考 [Generate Key with GPG](https://infra.apache.org/openpgp.html#generate-key)
 
 ```shell
 $ gpg --full-gen-key
-gpg (GnuPG/MacGPG2) 2.2.20; Copyright (C) 2020 Free Software Foundation, Inc.
+gpg (GnuPG/MacGPG2) 2.2.34; Copyright (C) 2022 g10 Code GmbH
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-请选择您要使用的密钥类型：
-   (1) RSA 和 RSA （默认）
-   (2) DSA 和 Elgamal
-   (3) DSA（仅用于签名）
-   (4) RSA（仅用于签名）
+Please select what kind of key you want:
+   (1) RSA and RSA (default)
+   (2) DSA and Elgamal
+   (3) DSA (sign only)
+   (4) RSA (sign only)
   (14) Existing key from card
-您的选择是？ 1
-RSA 密钥的长度应在 1024 位与 4096 位之间。
-您想要使用的密钥长度？(2048) 4096
-请求的密钥长度是 4096 位
-请设定这个密钥的有效期限。
-         0 = 密钥永不过期
-      <n>  = 密钥在 n 天后过期
-      <n>w = 密钥在 n 周后过期
-      <n>m = 密钥在 n 月后过期
-      <n>y = 密钥在 n 年后过期
-密钥的有效期限是？(0)
-密钥永远不会过期
-这些内容正确吗？ (y/N) y
+Your selection? 1
+RSA keys may be between 1024 and 4096 bits long.
+What keysize do you want? (3072) 4096
+Requested keysize is 4096 bits
+Please specify how long the key should be valid.
+         0 = key does not expire
+      <n>  = key expires in n days
+      <n>w = key expires in n weeks
+      <n>m = key expires in n months
+      <n>y = key expires in n years
+Key is valid for? (0)
+Key does not expire at all
+Is this correct? (y/N) y
 
-GnuPG 需要构建用户标识以辨认您的密钥。
+GnuPG needs to construct a user ID to identify your key.
 
-真实姓名： Lei Zhang
-电子邮件地址： zhanglei@apache.org
-注释： CODE SIGNING KEY
-您选定了此用户标识：
-    “Lei Zhang (CODE SIGNING KEY) zhanglei@apache.org”
+Real name: [你的 ASF 账号]
+Email address: [你的 ASF 邮箱]
+Comment: CODE SIGNING KEY
+You selected this USER-ID:
+    "[你的 ASF 账号] (CODE SIGNING KEY) <[你的 ASF 邮箱]>"
 
-更改姓名（N）、注释（C）、电子邮件地址（E）或确定（O）/退出（Q）？ O
+Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
 ```
 
-输入 `O` 确定，并根据提示输入 **【密钥密码】** 后完成操作。请保存这个密钥密码，以后会经常使用。
+生成密钥的过程中会提示你输入一个**[密钥密码]**用来保护你的密钥，请记住这个密钥密码
 
-4. 查看密钥 ID
+4. 查看 GPG 公钥ID
 
-你可以使用如下命令查看生成的密钥，请保存 **【密钥ID】**。
+你可以使用如下命令查看生成的密钥，请保存 **[公钥ID]**。
 
 ```shell
 $ gpg --list-keys
 pub   rsa4096 2022-05-05 [SC]
-      <密钥ID>
-uid           [ 绝对 ] Lei Zhang (CODE SIGNING KEY) zhanglei@apache.org
+      [公钥ID]
+uid           [ unknown] [你的 ASF 账号] (CODE SIGNING KEY) <[你的 ASF 邮箱]>
 sub   rsa4096 2022-05-05 [E]
 ```
 
 5. 发布公钥到密钥服务器
 
-使用 **【密钥ID】** 将公钥发布到 `pgpkeys.mit.edu`，发布后稍等一会就会自动同步到其他密钥服务器
+使用 **[公钥ID]** 将公钥发布到 `pgpkeys.mit.edu`，发布后稍等一会就会自动同步到其他密钥服务器
 
 ```shell
-gpg --keyserver pgpkeys.mit.edu --send-key <密钥ID>
+gpg --keyserver pgpkeys.mit.edu --send-key [公钥ID]
 ```
 
 使用如下命令验证公钥是否发布成功（因为发布后后台需要同步，所以可能需等待一会）
 
 ```shell
-gpg --keyserver hkp://pgpkeys.mit.edu --recv-keys <密钥ID>
+gpg --keyserver hkp://pgpkeys.mit.edu --recv-keys [公钥ID]
 ```
 
 如果你看到如下信息，说明已经发布成功
 
 ```shell
-gpg: <密钥ID>：“Lei Zhang (CODE SIGNING KEY) <zhanglei@apache.org>” 未改变
-gpg: 处理的总数：1
-gpg:              未改变：1
+gpg: key [公钥ID]: "[你的 ASF 账号] (CODE SIGNING KEY) <[你的 ASF 邮箱]>" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
 ```
 
-6. 发布公钥指纹到 Apache 用户信息中（不是发布流程的必须环节）
+6. 发布公钥指纹到 ASF 用户信息中
 
-使用以下命令生成公钥匙指纹，登录 https://id.apache.org, 将下面指纹(CA24 2F7D E725 DFB5 A8E4  4649 2B33 8CEB 8A38 1CFF) 粘贴到自己的用户信息中 OpenPGP Public Key Primary Fingerprint 中。
+使用以下命令生成公钥指纹，登录 https://id.apache.org, 将下面**公钥指纹**粘贴到自己的用户信息中 OpenPGP Public Key Primary Fingerprint 中。
 
 ```shell
 $ gpg --fingerprint Lei Zhang
 pub   rsa4096 2022-05-05 [SC]
-      CA24 2F7D E725 DFB5 A8E4  4649 2B33 8CEB 8A38 1CFF
-uid           [ 绝对 ] Lei Zhang (CODE SIGNING KEY) <zhanglei@apache.org>
+      [公钥指纹]
+uid           [ unknown] [你的 ASF 账号] (CODE SIGNING KEY) <[你的 ASF 邮箱]>
 sub   rsa4096 2022-05-05 [E]
 ```
 
 7. 备份公钥和私钥（不是发布流程的必须环节）
 
-你可以使用以下方式备份密钥，以便在其他机器上恢复
+你可以使用以下方式备份密钥
 
 导出公钥
 
 ```shell
-gpg -a -o public-file.key --export <密钥ID>
+gpg -a -o public-file.key --export [公钥ID]
 ```
 
 导出私钥(需要生成密钥时的密码)
 
 ```shell
-gpg -a -o private-file.key --export-secret-keys <密钥ID>
+gpg -a -o private-file.key --export-secret-keys [公钥ID]
 ```
 
 8. 将公钥追加到以下两个文件中
@@ -163,12 +145,12 @@ gpg -a -o private-file.key --export-secret-keys <密钥ID>
 svn co --depth=empty https://dist.apache.org/repos/dist/dev/servicecomb
 svn up KEYS
 cat public-file.key >> KEYS
-svn commit -m 'add zhanglei@apache.org gpg public key'
+svn commit -m 'add [你的 ASF 邮箱] gpg public key'
 
 svn co --depth=empty https://dist.apache.org/repos/dist/release/servicecomb
 svn up KEYS
 cat public-file.key >> KEYS
-svn commit -m 'add zhanglei@apache.org gpg public key'
+svn commit -m 'add [你的 ASF 邮箱] gpg public key'
 ```
 
 #### Apache Maven 认证配置
@@ -177,30 +159,30 @@ svn commit -m 'add zhanglei@apache.org gpg public key'
 
 1. 创建一个主密码
 
-使用如下命令创建一个 **【主密码】**
+使用如下命令创建一个 **[主密码]**，并生成 **[加密后的主密码]**
 
 ```shell
-$ mvn --encrypt-master-password <主密码>
+$ mvn --encrypt-master-password [主密码]
 ```
 
-在 ~/.m2/settings-security.xml 文件中存储主密码
+将[加密后的主密码]配置在 ~/.m2/settings-security.xml 文件中
 
 ```xml
 <settingsSecurity>
-  <master><!-- 主密码 --></master>
+  <master>[加密后的主密码]</master>
 </settingsSecurity>
 ```
 
-2. 加密你的 Apache LDAP 密码
+2. 加密你的 ASF LDAP 密码
 
 ```shell
-$ mvn --encrypt-password <Apache LDAP 密码>
+$ mvn --encrypt-password [你的 ASF LDAP 密码]
 ```
 
-3. 加密你的密钥密码
+3. 加密你生成 GPG 密钥时输入的 [密钥密码]
 
 ```shell
-$ mvn --encrypt-password <密钥密码>
+$ mvn --encrypt-password [密钥密码]
 ```
 
 4. 在 `~/.m2/settings.xml` 文件中配置发布服务器地址和加密后的密码
@@ -210,27 +192,44 @@ $ mvn --encrypt-password <密钥密码>
   <servers>
     <server>
       <id>apache.snapshots.https</id>
-      <username>zhanglei</username>
-      <password><!-- 加密后的 Apache LDAP 密码 --></password>
+      <username>[你的 ASF 账号]</username>
+      <password>[加密后的 ASF LDAP 密码]</password>
     </server>
     <server>
       <id>apache.releases.https</id>
-      <username>zhanglei</username>
-      <password><!-- 加密后的 Apache LDAP 密码 --></password>
+      <username>[你的 ASF 账号]</username>
+      <password>[加密后的 ASF LDAP 密码]</password>
     </server>
      <server>
       <id>gpg.passphrase</id>
-      <passphrase><!-- 加密后的密钥密码 --></passphrase>
+      <passphrase>[加密后的密钥密码]</passphrase>
     </server>
   </servers>
 </settings>
 ```
 
-## Servicecomb Pack 发布
+## ServiceComb Pack 发布
 
-#### 发布到临时筹备库（Staging Repositorie）
+本文档基于 `0.7.0` 正式版发布过程编写。在正式开始发布之前请提前一周通过 `dev@servicecomb.apache.org` 预告即将开始发布，确认代码是否已经准备就绪。
 
-1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 清除 Staging Repositories 中与 Pack 相关的多余版本
+```html
+Hello All,
+
+Since from last ServiceComb pack [Previous version] release, we have made significant changes, so now is the time to release the new version [Release version].
+
+I will cut a new release tomorrow morning from the branch https://github.com/apache/servicecomb-pack/tree/[Branch name].
+
+@PMC/@Committers please let me know if there is any important patch we need to merge before this release.
+
+Regards
+[Your name]
+```
+
+**注意:** 发布流程中的 **PMC投票** 环节通常需要 3 天，在没有任何 PMC 投 -1 票后才能正式发布，因此请提前计划发布活动。
+
+#### 发布到临时筹备库（Staging Repositories）
+
+1. 使用 ASF LDAP 账号登录 `https://repository.apache.org/` 清除 Staging Repositories 中与 Pack 相关的多余版本
 
 2. 下载代码
 
@@ -240,29 +239,26 @@ cd ~/Work/apache-release-workspace
 git clone https://github.com/apache/servicecomb-pack.git
 ```
 
-3. 执行 Maven 部署命令
+3. 执行 Maven 部署命令，**注意：使用 `-Drevision=0.7.0` 设置要发布的版本号**
 
 ```shell
 cd ~/Work/apache-release-workspace/servicecomb-pack
 mvn deploy -DskipTests -Prelease -Drevision=0.7.0
 ```
 
-4. 使用 Apache LDAP 账号登录 `https://repository.apache.org/`，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close 后完成临时发布。
+4. 使用 ASF LDAP 账号登录 `https://repository.apache.org/`，在 Staging Repositories 中选择刚刚发布的 repository，点击 Close 后完成临时发布。
 
 #### 测试临时筹备库中的 Artifacts
 
-在发起投票前，我们需要使用测试 Staging Repositories 中刚刚发布的 Artifacts ，我们需要配置一些参数，让验收测试从 Staging Repositories 中拉取依 Artifacts，更多详细说明可以参考 [Guide to Testing Staged Releases](https://maven.apache.org/guides/development/guide-testing-releases.html)
+在发起投票前，我们需要测试 Staging Repositories 中刚刚发布的 Artifacts ，我们需要配置一些参数，让验收测试从 Staging Repositories 中拉取依 Artifacts，更多详细说明可以参考 [Guide to Testing Staged Releases](https://maven.apache.org/guides/development/guide-testing-releases.html)
 
-
-1. 删除本地仓库中组件（删除后，执行测试才会从 Staging Repositories 拉取刚发布的 Artifacts）
+1. 删除本地仓库中 Artifacts
 
 ```shell
 rm -rf ~/.m2/repository/org/apache/servicecomb/pack
 ```
 
-2. 增加临时存储库配置
-
-在 `~/.m2/settings.xml` 中增加如下配置
+2. 在 `~/.m2/settings.xml` 中增加如下配置
 
 ```xml
 <profiles>
@@ -284,7 +280,7 @@ rm -rf ~/.m2/repository/org/apache/servicecomb/pack
 </profiles>
 ```
 
-3. 执行验收测试
+3. 执行验收测试，**注意：使用 `-Drevision=0.7.0` 设置要发布的版本号**
 
 ```shell
 cd ~/Work/apache-release-workspace/servicecomb-pack
@@ -292,13 +288,13 @@ mvn clean verify -f demo -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases -U
 mvn clean verify -f acceptance-tests -Pdemo -Pdocker -Drevision=0.7.0 -Pstaged-releases
 ```
 
-4. 执行验收测试成功后删除本地仓库中的组件
+4. 检查本地 Artifacts 中是否还存未替换的 SNAPSHOT 版本 
 
 ```shell
-rm -rf ~/.m2/repository/org/apache/servicecomb/pack
+find ~/.m2/repository/org/apache/servicecomb/pack -name "*-0.7.0.pom" | xargs grep "SNAPSHOT"
 ```
 
-5. 如果一切正常，我们将创建 `0.7.x` 分支，创建 `0.7.0` TAG，修改主干版本号为 `0.8.0-SNAPSHOT`
+5. 如果一切正常，我们将创建 `0.7.x` 分支， `0.7.0` TAG，修改主干版本号为 `0.8.0-SNAPSHOT`
 
 创建并推送 `0.7.x` 分支
 
@@ -331,14 +327,14 @@ git commit -m 'Update Release Number to 0.8.0-SNAPSHOT'
 git push origin master
 ```
 
-#### 签署版本 & 上传到 Apache SVN
+#### 签署版本 & 上传到 ASF SVN 仓库
 
 1. 拉取 SVN 仓库到本地
 
 ```shell
 mkdir ~/Work/apache-release-workspace/dist
 cd ~/Work/apache-release-workspace/dist
-svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
+svn co https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack --username=[你的 ASF LDAP 用户名] --password=[你的 ASF LDAP 密码]
 ```
 
 2. 创建发布包目录
@@ -367,17 +363,17 @@ shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-bin.zip >> apache-servi
 shasum -a 512 apache-servicecomb-pack-distribution-0.7.0-src.zip >> apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
 
-5. 提交 Aapache SVN
+5. 上传到 ASF SVN 仓库
 
 ```shell
 cd ~/Work/apache-release-workspace/dist/servicecomb-pack
 svn add 0.7.0
-svn commit -m 'prepare for 0.7.0 RC1'  --username=<Apache LDAP 用户名> --password=<Apache LDAP 密码>
+svn commit -m 'prepare for 0.7.0 RC1'  --username=[你的 ASF LDAP 用户名] --password=[你的 ASF LDAP 密码]
 ```
 
-6. 验证发布候选版本
+6. 验证候选版本
 
-从 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/ 下载发布包检查 GPG 签名和 SHA512 哈希
+从 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc1/ 下载发布包检查 GPG 签名和 SHA512
 
 ```shell
 mkdir ~/Work/apache-release-workspace/verify
@@ -398,7 +394,7 @@ shasum -c apache-servicecomb-pack-distribution-0.7.0-bin.zip.sha512
 shasum -c apache-servicecomb-pack-distribution-0.7.0-src.zip.sha512
 ```
 
-导入公钥（首次导入即可）
+导入公钥
 
 ```shell
 curl https://dist.apache.org/repos/dist/dev/servicecomb/KEYS >> KEYS
@@ -415,11 +411,11 @@ gpg --verify apache-servicecomb-pack-distribution-0.7.0-src.zip.asc apache-servi
 
 #### 整理发布说明
 
-https://confluence.atlassian.com/adminjiraserver/creating-release-notes-938847219.html
+你需要检查 Jira 上的 ISSUE 是否都已更新，然后参考 [Creating release notes](https://confluence.atlassian.com/adminjiraserver/creating-release-notes-938847219.html) 生成发布说明
 
 #### PMC 发布投票
 
-发送投票邮件 `[VOTE] Release Apache ServiceComb Pack version 0.7.0` 到 `dev@servicecomb.apache.org`
+发送投票邮件 `[VOTE] Release Apache ServiceComb Pack version 0.7.0` 到 `dev@servicecomb.apache.org`，你可以参考如下邮件模版：
 
 ```html
 Hi all,
@@ -444,7 +440,7 @@ https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12321626&versio
 Keys to verify the Release Candidate:
 https://dist.apache.org/repos/dist/dev/servicecomb/KEYS
 
-Voting will start now (Thursday, 12st May 2022) and will remain open for
+Voting will start now (Thursday, 12th May 2022) and will remain open for
 at-least 72 hours, Request all PMC members to give their vote.
 
 [ ] +1 Release this package as 0.7.0
@@ -453,44 +449,47 @@ at-least 72 hours, Request all PMC members to give their vote.
 
 On behalf of the ServiceComb Team
 
-Lei Zhang
+Regards
+[Your name]
 ```
 
-等待 72 小时后，你需要将投票结果发送到 `dev@servicecomb.apache.org`。如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续后续的步骤。否则请解决问题并从 **Servicecomb Pack 发布** 重新开始。
-
-投票结束
+等待 72 小时后，你可以通过 `dev@servicecomb.apache.org` 发送投票截止通知。
 
 ```html
 Hi All,
 
-Thanks all for voting on this release, the vote has been closed now and we will announce the results shortly.
+Thanks all for voting on this release, the vote has been closed now, and we will announce the results shortly.
 
 Regards
+[Your name]
 ```
 
-投票结果
+你可以通过 `dev@servicecomb.apache.org` 发布投票结果，如果您获得了至少三个 binding +1 投票，并且没有任何一个 binding -1 的投票，那么你可以继续发布。否则请解决问题并从 **ServiceComb Pack 发布** 重新开始。
 
 ```html
 Hello All,
 
 We are glad to announce that ServiceComb community has approved the Apache ServiceComb Pack 0.7.0 release with the following results:
 
-+1 binding: 3 (Liu Bao, Zheng Feng, Willem Jiang)
++1 binding: 3 ([PMC Name],[PMC Name],[PMC Name],...)
 
 We will be publishing the release binaries soon.
 
-On the behalf of ServiceComb Team
+On behalf of ServiceComb Team
 
 Thanks all for your participation in this vote.
+
+Regards
+[Your name]
 ```
 
 #### 公告
 
-1. 使用 Apache LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的筹备库，点击 Release 按钮。需要一段时间后会自动同步到 [Maven Central Repository](https://mvnrepository.com/repos/central) 中央库。
+1. 使用 ASF LDAP 账号登录 `https://repository.apache.org/` 选择 Staging Repositories 之前的 Artifacts，点击 Release 按钮。需要一段时间后会自动同步到 [Maven Central Repository](https://mvnrepository.com/repos/central) 中央库。
 
-2. 上传发布包到 Apache 仓库
+2. 上传发布包到 ASF 仓库
 
-将 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下的内容放到 https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.7.0
+将 https://dist.apache.org/repos/dist/dev/servicecomb/servicecomb-pack/0.7.0/rc01/ 下的内容上传到 https://dist.apache.org/repos/dist/release/servicecomb/servicecomb-pack/0.7.0
 
 ```shell
 mkdir -p ~/Work/apache-release-workspace/release
@@ -500,7 +499,7 @@ mkdir -p ~/Work/apache-release-workspace/release/servicecomb-pack/0.7.0
 cp ~/Work/apache-release-workspace/dist/servicecomb-pack/0.7.0/rc1/* ~/Work/apache-release-workspace/release/servicecomb-pack/0.7.0
 cd ~/Work/apache-release-workspace/release/servicecomb-pack
 svn add 0.7.0
-svn commit -m 'Upload Servicecomb Pack 0.7.0 Release'
+svn commit -m 'Upload ServiceComb Pack 0.7.0 Release'
 ```
 
 3. 删除之前的 RC 版本
@@ -511,7 +510,7 @@ svn commit -m 'Upload Servicecomb Pack 0.7.0 Release'
 cd ~/Work/apache-release-workspace/dist/servicecomb-pack
 rm -rf 0.7.0
 svn delete 0.7.0
-svn commit -m 'Remove Servicecomb Pack 0.7.0 RC'
+svn commit -m 'Remove ServiceComb Pack 0.7.0 RC'
 ```
 
 4. 删除之前的 0.6.0 Release 版本
@@ -522,7 +521,7 @@ svn commit -m 'Remove Servicecomb Pack 0.7.0 RC'
 cd ~/Work/apache-release-workspace/release/servicecomb-pack
 rm -rf 0.6.0
 svn delete 0.6.0
-svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
+svn commit -m 'Remove ServiceComb Pack 0.6.0 Release'
 ```
 
 5. 等待 [Maven Central Repository](https://mvnrepository.com/repos/central) 中央库已经同步完毕
@@ -542,7 +541,7 @@ svn commit -m 'Remove Servicecomb Pack 0.6.0 Release'
 * https://github.com/apache/servicecomb-website/blob/master/_pages/cn/home.md
 * https://github.com/apache/servicecomb-website/blob/master/_pages/home.md
 
-8. 发送 `[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released` 邮件到 dev@servicecomb.apache.org, announce@apache.org
+8. 发送 `[ANNOUNCE] Apache ServiceComb Pack version 0.7.0 Released` 邮件到 `dev@servicecomb.apache.org` 和 `announce@apache.org`
 
 ```html
 Hello All,
@@ -558,18 +557,19 @@ as a coordinator for the management of transactions and Omega which plays
 as an agent and is an integral part of micro-services intercepting the
 outgoing/incoming requests and reports transaction events to Alpha.
 
-Download Links: http://servicecomb.apache.org/release/pack-downloads/
+Download Links: https://servicecomb.apache.org/release/pack-downloads/
 
-Release Notes: http://servicecomb.apache.org/release/pack-release-notes/
+Release Notes: https://servicecomb.apache.org/release/pack-release-notes/
 
-Know more about ServiceComb: http://servicecomb.apache.org/
+Know more about ServiceComb: https://servicecomb.apache.org/
 
 ServiceComb Useful Links :
-- JIRA : https://issues.apache.org/jira/browse/SCB
+- JIRA: https://issues.apache.org/jira/browse/SCB
 - Mailing lists: dev@servicecomb.apache.org
 - Gitter: https://gitter.im/ServiceCombUsers/Saga
 
-On the behalf of ServiceComb Team
+On behalf of ServiceComb Team
 
-Lei Zhang
+Regards
+[Your name]
 ```
