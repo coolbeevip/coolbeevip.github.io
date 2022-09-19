@@ -29,7 +29,7 @@ draft: false
   </properties>
 
   <modules>
-  	<module>module-dependencies</module>
+    <module>module-dependencies</module>
     <module>module-bar</module>
     <module>module-foo</module>   
   </modules>
@@ -60,7 +60,7 @@ draft: false
   </properties>
 
   <modules>
-  	<module>module-dependencies</module>
+    <module>module-dependencies</module>
     <module>module-bar</module>
     <module>module-foo</module>   
     <module>module-coverage</module>
