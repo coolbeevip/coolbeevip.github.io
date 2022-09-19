@@ -1,5 +1,5 @@
 ---
-title: "在 Maven 多模块项目中使用 JaCoCo"
+title: "在 Maven 多模块项目中使用 JaCoCo 检查测试覆盖率"
 date: 2022-07-03T13:24:14+08:00
 tags: [java, jacoco]
 categories: [maven]
