@@ -1,5 +1,5 @@
 ---
-title: "使用 Checkstyle Plugin 检查 Java 代码质量"
+title: "使用 Checkstyle Plugin 检查 Java 代码（风格）质量"
 date: 2022-09-18T13:24:14+08:00
 tags: [java, checkstyle]
 categories: [maven]
