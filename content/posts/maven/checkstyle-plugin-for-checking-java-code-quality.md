@@ -38,7 +38,7 @@ draft: false
 
 ## 在根项目 pom.xml 中增加 `maven-checkstyle-plugin` 插件
 
-增加 maven-checkstyle-plugin插件
+增加 maven-checkstyle-plugin 插件
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -53,7 +53,8 @@ draft: false
   <packaging>pom</packaging>
 
   <properties>
-    <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
+    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+    <com.puppycrawl.tools.version>9.3</com.puppycrawl.tools.version>
   </properties>
 
   <modules>
@@ -61,11 +62,6 @@ draft: false
     <module>module-bar</module>
     <module>module-foo</module>   
   </modules>
-
-  <properties>
-    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-    <com.puppycrawl.tools.version>9.3</com.puppycrawl.tools.version>
-  </properties>
 
   <build>
     <pluginManagement>
@@ -406,7 +402,7 @@ draft: false
 你可以在 PR 的合并请求时使用以下命令，已确保代码合并前符合规则
 
 ```shell
-./mvnw clean validate -DskipTests checkstyle:check
+mvn clean validate -DskipTests checkstyle:check
 ```
 
 ## IDE 工具
