@@ -32,6 +32,7 @@ docker rmi -f $(docker images -a | grep "<none>" | awk '{print $3}')
 
 ```shell
 docker save -o postgres_9.6.tar postgres:9.6
+docker save postgres:9.6 | gzip > postgres_9.6.tar
 ```
 
 #### 导入镜像
