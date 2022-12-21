@@ -121,6 +121,13 @@ docker network rm $(docker network ls | awk '{print $1}')
 docker network create nc-network
 ```
 
+#### 断开容器与网络的连接
+
+```shell
+docker network inspect {network}
+docker network disconnect -f {network} {endpoint-name}
+```
+
 #### 显示所有容器 IP 地址
 
 ```shell
