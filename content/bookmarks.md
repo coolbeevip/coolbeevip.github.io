@@ -59,6 +59,8 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [JMH Visualizer](https://jmh.morethan.io/) JMH json files Visualizer.
 
+[Java Thread Dump Analyzer](https://fastthread.io/) Troubleshoot JVM crashes, slowdowns, memory leaks, freezes, CPU Spikes
+
 ## Resources
 
 [Icônes](https://icones.netlify.app/) Iconify Explorer with Instant searching
