@@ -67,14 +67,19 @@ TIME	CPU%	MEM%
 ```shell
 #!/usr/bin/bash
 
+interval=3
+if [ ! -n $1 ]; then
+  interval=$1
+fi 
+  
 echo -e TIME\\tCPU\\tMEM\\tDISK
 while true
   do
-    MEMORY=$(free -m | awk 'NR==2{printf "%.2f%%\t\t", $3*100/$2 }')
+    MEMORY=$(free -m | awk 'NR==2{printf "%.2f\t\t", $3*100/$2 }')
     DISK=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}')
-    CPU=$(top -bn1 | grep load | awk '{printf "%.2f%%\t\t\n", $(NF-2)}')
+    CPU=$(top -bn1 | grep %Cpu | awk '{printf "%.2f\t\t", $2}')
     echo -e $(date '+%Y/%m/%d %H:%M:%S')\\t$CPU\\t$MEMORY\\t$DISK    
-  sleep $1
+  sleep $interval
 done
 ```
 
