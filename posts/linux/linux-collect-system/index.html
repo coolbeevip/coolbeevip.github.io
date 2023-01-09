@@ -36,14 +36,19 @@ sh user_usage.sh 3 TIME	CPU%	MEM% 2023/01/06 17:26:56	64.80	82.10 2023/01/06 17:
 </span></span><span style=display:flex><span>2023/01/06 17:29:33	13.40	23.70
 </span></span></code></pre></div><h2 id=定时收集常用系统指标>定时收集常用系统指标</h2><p>创建如下 <code>system_usage.sh</code></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e>#!/usr/bin/bash
 </span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span>interval<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> ! -n $1 <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>  interval<span style=color:#f92672>=</span>$1
+</span></span><span style=display:flex><span><span style=color:#66d9ef>fi</span> 
+</span></span><span style=display:flex><span>  
 </span></span><span style=display:flex><span>echo -e TIME<span style=color:#ae81ff>\\</span>tCPU<span style=color:#ae81ff>\\</span>tMEM<span style=color:#ae81ff>\\</span>tDISK
 </span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> true
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>do</span>
-</span></span><span style=display:flex><span>    MEMORY<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>free -m | awk <span style=color:#e6db74>&#39;NR==2{printf &#34;%.2f%%\t\t&#34;, $3*100/$2 }&#39;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>    MEMORY<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>free -m | awk <span style=color:#e6db74>&#39;NR==2{printf &#34;%.2f\t\t&#34;, $3*100/$2 }&#39;</span><span style=color:#66d9ef>)</span>
 </span></span><span style=display:flex><span>    DISK<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>df -h | awk <span style=color:#e6db74>&#39;$NF==&#34;/&#34;{printf &#34;%s\t\t&#34;, $5}&#39;</span><span style=color:#66d9ef>)</span>
-</span></span><span style=display:flex><span>    CPU<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>top -bn1 | grep load | awk <span style=color:#e6db74>&#39;{printf &#34;%.2f%%\t\t\n&#34;, $(NF-2)}&#39;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>    CPU<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>top -bn1 | grep %Cpu | awk <span style=color:#e6db74>&#39;{printf &#34;%.2f\t\t&#34;, $2}&#39;</span><span style=color:#66d9ef>)</span>
 </span></span><span style=display:flex><span>    echo -e <span style=color:#66d9ef>$(</span>date <span style=color:#e6db74>&#39;+%Y/%m/%d %H:%M:%S&#39;</span><span style=color:#66d9ef>)</span><span style=color:#ae81ff>\\</span>t$CPU<span style=color:#ae81ff>\\</span>t$MEMORY<span style=color:#ae81ff>\\</span>t$DISK    
-</span></span><span style=display:flex><span>  sleep $1
+</span></span><span style=display:flex><span>  sleep $interval
 </span></span><span style=display:flex><span><span style=color:#66d9ef>done</span>
 </span></span></code></pre></div><p>每 5 秒采集一次</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ sh system_usage.sh <span style=color:#ae81ff>5</span>
 </span></span><span style=display:flex><span>TIME	CPU	MEM	DISK
