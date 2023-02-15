@@ -35,4 +35,5 @@ draft: false
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   type = cat-file -t
   dump = cat-file -p
+  sync-up = !git fetch upstream && git checkout $1 && git rebase upstream/$1 && git push origin $1 && :
 ```
