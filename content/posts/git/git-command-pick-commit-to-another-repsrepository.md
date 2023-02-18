@@ -1,6 +1,6 @@
 ---
 title: "Git Pick Commits to Another Reps"
-date: 2023-02-18T13:24:14+08:00
+date: 2023-02-18T09:24:14+08:00
 tags: [git]
 categories: [git]
 draft: false
