@@ -71,7 +71,7 @@ Date:   Mon Aug 20 20:19:19 2018 +0100
 1. 获取 commit 清单
 
 ```shell
-git --git-dir=/Users/zhanglei/Work/github/git-commits-replay/.git log --pretty=format:"%H,%an,%ae,%ad,%s" --date=format:'%Y-%m-%d %H:%M:%S' --reverse
+git --git-dir=/work/git-commits-replay/.git log --pretty=format:"%H,%an,%ae,%ad,%s" --date=format:'%Y-%m-%d %H:%M:%S' --reverse
 
 52d099240f6da63193ba309106dad77d060836a7,Lei Zhang,zhanglei@apache.org,2023-02-18 10:49:43,Create A.md
 516e406615c0020919939bafe59b35359a03c33b,Lei Zhang,zhanglei@apache.org,2023-02-18 10:50:09,Create B.md
@@ -83,7 +83,7 @@ git --git-dir=/Users/zhanglei/Work/github/git-commits-replay/.git log --pretty=f
 2. 获取 commit-id 的文件清单
 
 ```shell
-git --git-dir=/Users/zhanglei/Work/github/git-commits-replay/.git show --pretty=format:"%H,%an,%ae,%ad,%s" --no-commit-id --name-status 52d099240f6da63193ba309106dad77d060836a7
+git --git-dir=/work/git-commits-replay/.git show --pretty=format:"%H,%an,%ae,%ad,%s" --no-commit-id --name-status 52d099240f6da63193ba309106dad77d060836a7
 
 A       A.md
 52d099240f6da63193ba309106dad77d060836a7,Lei Zhang,zhanglei@apache.org,Sat Feb 18 10:49:43 2023 +0800,Create A.md
