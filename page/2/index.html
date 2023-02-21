@@ -7,7 +7,7 @@
 打开 ~/.gitconfig 文件您可以看到如下片段，在这个片段中我们可以为已有命令定义别名
 [alias] 例如我们创建分支是需要使用 git branch -b xxx 命令，那么我们可以将 branch 简化为 br。我们只需要增加如下配置
 [alias] br = branch 这是我自己常用的配置
-[alias] ci = commit -a co = checkout cl = clone st = status br = branch mr = merge cp = cherry-pick hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short type = cat-file -t dump = cat-file -p sync-up = !git fetch upstream && git checkout $1 && git rebase upstream/$1 && git push origin $1 && :</p></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
+[alias] ci = commit -a co = checkout cob = checkout -b cl = clone st = status br = branch mr = merge cp = cherry-pick hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short type = cat-file -t dump = cat-file -p sync-up = !git fetch upstream && git checkout $1 && git rebase upstream/$1 && git push origin $1 && :</p></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Sat, Apr 2, 2022</span>
 <span class=separator><a class=category href=/categories/git/>git</a></span>
 <span class=separator><a class=tag href=/tags/git/>git</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/git/git-awesome-hook/>Awesome Git Hooks</a></h3></div><div class=post-content><div class=p_part><p>commit-msg 检查提交描述
