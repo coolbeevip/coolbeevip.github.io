@@ -27,6 +27,7 @@ draft: false
 [alias]
   ci = commit -a
   co = checkout
+  cob = checkout -b
   cl = clone
   st = status
   br = branch
