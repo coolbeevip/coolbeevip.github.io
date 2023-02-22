@@ -82,3 +82,7 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 ## Typesetting mathematics
 
 [Katex](https://katex.org/docs/supported.html)
+
+## English
+
+[Abbreviation to define](https://www.acronymfinder.com/)
