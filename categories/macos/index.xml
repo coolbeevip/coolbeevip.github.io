@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>macOS on</title><link>https://coolbeevip.github.io/categories/macos/</link><description>Recent content in macOS on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 04 Mar 2023 10:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/macos/index.xml" rel="self" type="application/rss+xml"/><item><title>Use brew install python2 and python3 on macOS</title><link>https://coolbeevip.github.io/posts/python/install_both_python2_python3_on_mac/</link><pubDate>Sat, 04 Mar 2023 10:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/python/install_both_python2_python3_on_mac/</guid><description>使用 pyenv 可以很灵活的配置版本环境
+环境说明 我的 macbook 上默认已经安装了 python3，但是我还需要一个 python2 环境编译一些老的项目
+python3 --version Python 3.11.2 安装 安装 pyenv
+$ brew install pyenv 允许在 bash 中启用 pyenv
+$ eval &amp;#34;$(pyenv init -)&amp;#34; 使用 一旦你安装了pyenv并激活了它，你可以安装不同版本的python并选择你可以使用的版本。
+$ pyenv install 2.7.18 你可以用以下命令检查安装的版本
+$ pyenv versions 你可以使用如下命令切换全局版本
+$ pyenv global 3.3.1 你可以使用如下命令在当前目录设置版本
+$ pyenv local 3.5.2 你能够运行以下命令检查版本
+$ python --version Python 2.7.18</description></item></channel></rss>
