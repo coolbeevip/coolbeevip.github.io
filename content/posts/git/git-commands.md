@@ -112,6 +112,12 @@ git push origin <新标签名> :<老标签名>
 git commit --amend
 ```
 
+修改最后一次 commit 作者
+
+```shell
+git commit --amend --author="New Author Name <author@name.com>" --no-edit
+```
+
 合并 commit
 
 ```shell
