@@ -1,9 +1,9 @@
 ---
 title: "How to Publish Your Artifacts to Maven Central"
-date: 2022-07-03T13:24:14+08:00
-tags: [maven, release]
+date: 2023-03-24T13:24:14+08:00
+tags: [maven, release, publish]
 categories: [maven]
-draft: false
+draft: true
 ---
 
 ## Sign up for a Sonatype Jira account.
@@ -13,15 +13,15 @@ https://issues.sonatype.org/
 Create a Jira issue for new project hosting，[Click here](https://issues.sonatype.org/browse/OSSRH-68657) for a sample
 request.
 
+## Creating a GPG key pair
+
+https://infra.apache.org/openpgp.html#generate-key
+
 ## GitHub Actions secrets
 
 * OSSRH_USERNAME: Jira username
 * OSSRH_TOKEN: Jira password
-* MAVEN_GPG_PASSPHRASE: Encrypted your GPG key master password
-
-  ```
-  mvn --encrypt-password [密钥密码]
-  ```
+* MAVEN_GPG_PASSPHRASE: Your GPG key password
 
 * GPG_SIGNING_KEY: Your GPG key as Base64
 
