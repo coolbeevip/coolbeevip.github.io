@@ -137,3 +137,15 @@ jobs:
 ```
 
 ## Push Tag & Create a new release
+
+Creating tags from the command line
+
+```shell
+git tag -a v1.0.0 -m 'Release v1.0.0'
+git push origin v1.0.0
+```
+
+
+[Creating a release GitHub's web interface](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) or `mvn package deploy -Psonatype-oss-release` on local
+
+
