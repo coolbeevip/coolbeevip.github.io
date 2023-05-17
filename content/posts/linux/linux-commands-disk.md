@@ -57,6 +57,12 @@ $ du -h --max-depth=1
 9.0G
 ```
 
+排序查看子目录下每个文件夹占用空间
+
+```shell
+$ du -h --max-depth=1 | sort -h
+```
+
 查看当前文件夹占用空间
 
 ```shell
