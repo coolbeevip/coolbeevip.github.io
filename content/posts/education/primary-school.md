@@ -2,7 +2,7 @@
 title: "小升初"
 date: 2022-03-06T13:24:14+08:00
 tags: []
-categories: []
+categories: [education]
 draft: false
 ---
 
