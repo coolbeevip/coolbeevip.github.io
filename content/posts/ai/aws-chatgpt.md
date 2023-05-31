@@ -6,7 +6,7 @@ categories: [chatgpt]
 draft: false
 ---
 
-AWS Lightsail 配合 Cloudflare WARP 和 Gost 路由转发，使 [griseo](https://github.com/korandoru/griseo) 在远程主机通过命令行使用 ChatGPT
+AWS Lightsail 配合 Cloudflare WARP，使 [Griseo](https://github.com/korandoru/griseo) 在远程主机通过命令行使用 ChatGPT
 
 ## 背景
 
