@@ -110,3 +110,5 @@ curl -x "socks5://127.0.0.1:40000" ipinfo.ioo
 
 参考官方网站即可 https://github.com/korandoru/griseo
 
+![griseo](/images/posts/ai/griseo.png)
+
