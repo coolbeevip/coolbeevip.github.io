@@ -1,0 +1,112 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | 在 AWS 搭建 VPN</title><meta charset=utf-8><meta name=generator content="Hugo 0.113.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.3fa691134fafa8351e9d193939a352647c1ae886828bdefa3f5a272653dbf7e4.css integrity="sha256-P6aRE0+vqDUenRk5OaNSZHwa6IaCi976P1onJlPb9+Q=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/ai/aws-openvpn/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="在 AWS 搭建 VPN"><meta name=twitter:description content="下载安装程序脚本 curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh chmod +x openvpn-install.sh 执行安装 执行安装脚本，端口建议改为 443（你所在的局域网客户端通常不会阻止 443 出口）
+$ ./openvpn-install.sh Welcome to the OpenVPN installer! The git repository is available at: https://github.com/angristan/openvpn-install I need to ask you a few questions before starting the setup. You can leave the default options and just press enter if you are ok with them. I need to know the IPv4 address of the network interface you want OpenVPN listening to. Unless your server is behind NAT, it should be your public IPv4 address."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&amp;style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2023</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>在 AWS 搭建 VPN</h3></div><h2 id=下载安装程序脚本>下载安装程序脚本</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
+</span></span><span style=display:flex><span>chmod +x openvpn-install.sh
+</span></span></code></pre></div><h2 id=执行安装>执行安装</h2><p>执行安装脚本，端口建议改为 443（你所在的局域网客户端通常不会阻止 443 出口）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ ./openvpn-install.sh
+</span></span><span style=display:flex><span>Welcome to the OpenVPN installer!
+</span></span><span style=display:flex><span>The git repository is available at: https://github.com/angristan/openvpn-install
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>I need to ask you a few questions before starting the setup.
+</span></span><span style=display:flex><span>You can leave the default options and just press enter <span style=color:#66d9ef>if</span> you are ok with them.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>I need to know the IPv4 address of the network interface you want OpenVPN listening to.
+</span></span><span style=display:flex><span>Unless your server is behind NAT, it should be your public IPv4 address.
+</span></span><span style=display:flex><span>IP address: x.x.x.x &lt;-- 此处输入公网 IP 地址
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Checking <span style=color:#66d9ef>for</span> IPv6 connectivity...
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Your host appears to have IPv6 connectivity.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Do you want to enable IPv6 support <span style=color:#f92672>(</span>NAT<span style=color:#f92672>)</span>? <span style=color:#f92672>[</span>y/n<span style=color:#f92672>]</span>: y &lt;-- 此处支持 IPv6
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>What port <span style=color:#66d9ef>do</span> you want OpenVPN to listen to?
+</span></span><span style=display:flex><span>   1<span style=color:#f92672>)</span> Default: <span style=color:#ae81ff>1194</span>
+</span></span><span style=display:flex><span>   2<span style=color:#f92672>)</span> Custom
+</span></span><span style=display:flex><span>   3<span style=color:#f92672>)</span> Random <span style=color:#f92672>[</span>49152-65535<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>Port choice <span style=color:#f92672>[</span>1-3<span style=color:#f92672>]</span>: <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>Custom port <span style=color:#f92672>[</span>1-65535<span style=color:#f92672>]</span>: <span style=color:#ae81ff>443</span> 
+</span></span></code></pre></div><p>协议选择 TCP（UDP 443 有可能在限制比较多的局域网中被阻止）</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>What protocol <span style=color:#66d9ef>do</span> you want OpenVPN to use?
+</span></span><span style=display:flex><span>UDP is faster. Unless it is not available, you shouldn<span style=color:#960050;background-color:#1e0010>&#39;</span>t use TCP.
+</span></span><span style=display:flex><span>   1<span style=color:#f92672>)</span> UDP
+</span></span><span style=display:flex><span>   2<span style=color:#f92672>)</span> TCP
+</span></span><span style=display:flex><span>Protocol <span style=color:#f92672>[</span>1-2<span style=color:#f92672>]</span>: <span style=color:#ae81ff>2</span>
+</span></span></code></pre></div><p>选择一个 DNS</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>What DNS resolvers <span style=color:#66d9ef>do</span> you want to use with the VPN?
+</span></span><span style=display:flex><span>   1<span style=color:#f92672>)</span> Current system resolvers <span style=color:#f92672>(</span>from /etc/resolv.conf<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   2<span style=color:#f92672>)</span> Self-hosted DNS Resolver <span style=color:#f92672>(</span>Unbound<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   3<span style=color:#f92672>)</span> Cloudflare <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   4<span style=color:#f92672>)</span> Quad9 <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   5<span style=color:#f92672>)</span> Quad9 uncensored <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   6<span style=color:#f92672>)</span> FDN <span style=color:#f92672>(</span>France<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   7<span style=color:#f92672>)</span> DNS.WATCH <span style=color:#f92672>(</span>Germany<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   8<span style=color:#f92672>)</span> OpenDNS <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   9<span style=color:#f92672>)</span> Google <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   10<span style=color:#f92672>)</span> Yandex Basic <span style=color:#f92672>(</span>Russia<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   11<span style=color:#f92672>)</span> AdGuard DNS <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   12<span style=color:#f92672>)</span> NextDNS <span style=color:#f92672>(</span>Anycast: worldwide<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   13<span style=color:#f92672>)</span> Custom
+</span></span><span style=display:flex><span>DNS <span style=color:#f92672>[</span>1-12<span style=color:#f92672>]</span>: <span style=color:#ae81ff>11</span>
+</span></span></code></pre></div><p>选择不压缩</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Do you want to use compression? It is not recommended since the VORACLE attack makes use of it.
+</span></span><span style=display:flex><span>Enable compression? <span style=color:#f92672>[</span>y/n<span style=color:#f92672>]</span>: n
+</span></span></code></pre></div><p>选择不设置加密策略</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Do you want to customize encryption settings?
+</span></span><span style=display:flex><span>Unless you know what you<span style=color:#e6db74>&#39;re doing, you should stick with the default parameters provided by the script.
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>Note that whatever you choose, all the choices presented in the script are safe. (Unlike OpenVPN&#39;</span>s defaults<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>See https://github.com/angristan/openvpn-install#security-and-encryption to learn more.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Customize encryption settings? <span style=color:#f92672>[</span>y/n<span style=color:#f92672>]</span>: n 
+</span></span></code></pre></div><p>看到如下提示后，按任意键后继续安装</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Okay, that was all I needed. We are ready to setup your OpenVPN server now.
+</span></span><span style=display:flex><span>You will be able to generate a client at the end of the installation.
+</span></span><span style=display:flex><span>Press any key to <span style=color:#66d9ef>continue</span>...
+</span></span></code></pre></div><p>添加一个新客户端</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>Tell me a name <span style=color:#66d9ef>for</span> the client.
+</span></span><span style=display:flex><span>The name must consist of alphanumeric character. It may also include an underscore or a dash.
+</span></span><span style=display:flex><span>Client name: coolbeevip
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Do you want to protect the configuration file with a password?
+</span></span><span style=display:flex><span><span style=color:#f92672>(</span>e.g. encrypt the private key with a password<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   1<span style=color:#f92672>)</span> Add a passwordless client
+</span></span><span style=display:flex><span>   2<span style=color:#f92672>)</span> Use a password <span style=color:#66d9ef>for</span> the client
+</span></span><span style=display:flex><span>Select an option <span style=color:#f92672>[</span>1-2<span style=color:#f92672>]</span>: <span style=color:#ae81ff>1</span>
+</span></span></code></pre></div><p>安装完成后，你将看到如下提示。下载 /home/admin/coolbeevip.ovpn 文件到你的客户端，倒入 OpenVPN Client 后就可以使用了。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>* Using SSL: openssl OpenSSL 1.1.1n  <span style=color:#ae81ff>15</span> Mar <span style=color:#ae81ff>2022</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>* Using Easy-RSA configuration: /etc/openvpn/easy-rsa/vars
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>* The preferred location <span style=color:#66d9ef>for</span> <span style=color:#e6db74>&#39;vars&#39;</span> is within the PKI folder.
+</span></span><span style=display:flex><span>  To silence this message move your <span style=color:#e6db74>&#39;vars&#39;</span> file to your PKI
+</span></span><span style=display:flex><span>  or declare your <span style=color:#e6db74>&#39;vars&#39;</span> file with option: --vars<span style=color:#f92672>=</span>&lt;FILE&gt;
+</span></span><span style=display:flex><span>Generating an EC private key
+</span></span><span style=display:flex><span>writing new private key to <span style=color:#e6db74>&#39;/etc/openvpn/easy-rsa/pki/806f7e5f/temp.cab3ff4c&#39;</span>
+</span></span><span style=display:flex><span>-----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Notice
+</span></span><span style=display:flex><span>------
+</span></span><span style=display:flex><span>Keypair and certificate request completed. Your files are:
+</span></span><span style=display:flex><span>req: /etc/openvpn/easy-rsa/pki/reqs/coolbeevip.req
+</span></span><span style=display:flex><span>key: /etc/openvpn/easy-rsa/pki/private/coolbeevip.key
+</span></span><span style=display:flex><span>Using configuration from /etc/openvpn/easy-rsa/pki/806f7e5f/temp.6d51dbc3
+</span></span><span style=display:flex><span>Check that the request matches the signature
+</span></span><span style=display:flex><span>Signature ok
+</span></span><span style=display:flex><span>The Subject<span style=color:#e6db74>&#39;s Distinguished Name is as follows
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>commonName            :ASN.1 12:&#39;</span>coolbeevip<span style=color:#960050;background-color:#1e0010>&#39;</span>
+</span></span><span style=display:flex><span>Certificate is to be certified <span style=color:#66d9ef>until</span> Sep  <span style=color:#ae81ff>7</span> 10:13:42 <span style=color:#ae81ff>2025</span> GMT <span style=color:#f92672>(</span><span style=color:#ae81ff>825</span> days<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Write out database with <span style=color:#ae81ff>1</span> new entries
+</span></span><span style=display:flex><span>Data Base Updated
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Notice
+</span></span><span style=display:flex><span>------
+</span></span><span style=display:flex><span>Certificate created at:
+</span></span><span style=display:flex><span>* /etc/openvpn/easy-rsa/pki/issued/coolbeevip.crt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Notice
+</span></span><span style=display:flex><span>------
+</span></span><span style=display:flex><span>Inline file created:
+</span></span><span style=display:flex><span>* /etc/openvpn/easy-rsa/pki/inline/coolbeevip.inline
+</span></span><span style=display:flex><span>Client coolbeevip added.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>The configuration file has been written to /home/admin/coolbeevip.ovpn.
+</span></span><span style=display:flex><span>Download the .ovpn file and import it in your OpenVPN client.
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/vpn/>vpn</a></span>
+<span class=separator><a class=tag href=/tags/openvpn/>openvpn</a><a class=tag href=/tags/aws/>aws</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.e1c6918cbaa90022a5612f0bd71c7bf3be6d036614c5729cebfe14f7b91fa4bc.js integrity="sha256-4caRjLqpACKlYS8L1xx7875tA2YUxXKc6/4U97kfpLw=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
