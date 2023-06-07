@@ -158,4 +158,96 @@ The configuration file has been written to /home/admin/coolbeevip.ovpn.
 Download the .ovpn file and import it in your OpenVPN client.
 ```
 
+## 服务器外网 I P变化，需要重新生成客户端文件
+
+修改 `/etc/openvpn/client-template.txt` 中的 `remote` 为服务器 IP 和端口
+
+```shell
+client
+proto tcp-client
+remote 13.115.82.114 443
+dev tun
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+verify-x509-name server_wQHD0shhJlBH8gGS name
+auth SHA256
+auth-nocache
+cipher AES-128-GCM
+tls-client
+tls-version-min 1.2
+tls-cipher TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256
+ignore-unknown-option block-outside-dns
+setenv opt block-outside-dns # Prevent Windows 10 DNS leak
+verb 3
+```
+
+使用 `openvpn-install.sh` 工具增加客户端证书
+
+```shell
+./openvpn-install.sh
+Welcome to OpenVPN-install!
+The git repository is available at: https://github.com/angristan/openvpn-install
+
+It looks like OpenVPN is already installed.
+
+What do you want to do?
+   1) Add a new user
+   2) Revoke existing user
+   3) Remove OpenVPN
+   4) Exit
+Select an option [1-4]: 1
+
+Tell me a name for the client.
+The name must consist of alphanumeric character. It may also include an underscore or a dash.
+Client name: coolbeevip-20230607
+
+Do you want to protect the configuration file with a password?
+(e.g. encrypt the private key with a password)
+   1) Add a passwordless client
+   2) Use a password for the client
+Select an option [1-2]: 1
+
+* Using SSL: openssl OpenSSL 1.1.1n  15 Mar 2022
+
+* Using Easy-RSA configuration: /etc/openvpn/easy-rsa/vars
+
+* The preferred location for 'vars' is within the PKI folder.
+  To silence this message move your 'vars' file to your PKI
+  or declare your 'vars' file with option: --vars=<FILE>
+Generating an EC private key
+writing new private key to '/etc/openvpn/easy-rsa/pki/e60ef05f/temp.f0888a0e'
+-----
+
+Notice
+------
+Keypair and certificate request completed. Your files are:
+req: /etc/openvpn/easy-rsa/pki/reqs/coolbeevip-20230607.req
+key: /etc/openvpn/easy-rsa/pki/private/coolbeevip-20230607.key
+Using configuration from /etc/openvpn/easy-rsa/pki/e60ef05f/temp.4673be92
+Check that the request matches the signature
+Signature ok
+The Subject's Distinguished Name is as follows
+commonName            :ASN.1 12:'coolbeevip-20230607'
+Certificate is to be certified until Sep  9 04:51:46 2025 GMT (825 days)
+
+Write out database with 1 new entries
+Data Base Updated
+
+Notice
+------
+Certificate created at:
+* /etc/openvpn/easy-rsa/pki/issued/coolbeevip-20230607.crt
+
+Notice
+------
+Inline file created:
+* /etc/openvpn/easy-rsa/pki/inline/coolbeevip-20230607.inline
+Client coolbeevip-20230607 added.
+
+The configuration file has been written to /home/admin/coolbeevip-20230607.ovpn.
+Download the .ovpn file and import it in your OpenVPN client.
+```
 
