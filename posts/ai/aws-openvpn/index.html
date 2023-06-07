@@ -108,5 +108,86 @@ $ ./openvpn-install.sh Welcome to the OpenVPN installer! The git repository is a
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>The configuration file has been written to /home/admin/coolbeevip.ovpn.
 </span></span><span style=display:flex><span>Download the .ovpn file and import it in your OpenVPN client.
+</span></span></code></pre></div><h2 id=服务器外网-i-p变化需要重新生成客户端文件>服务器外网 I P变化，需要重新生成客户端文件</h2><p>修改 <code>/etc/openvpn/client-template.txt</code> 中的 <code>remote</code> 为服务器 IP 和端口</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>client
+</span></span><span style=display:flex><span>proto tcp-client
+</span></span><span style=display:flex><span>remote 13.115.82.114 <span style=color:#ae81ff>443</span>
+</span></span><span style=display:flex><span>dev tun
+</span></span><span style=display:flex><span>resolv-retry infinite
+</span></span><span style=display:flex><span>nobind
+</span></span><span style=display:flex><span>persist-key
+</span></span><span style=display:flex><span>persist-tun
+</span></span><span style=display:flex><span>remote-cert-tls server
+</span></span><span style=display:flex><span>verify-x509-name server_wQHD0shhJlBH8gGS name
+</span></span><span style=display:flex><span>auth SHA256
+</span></span><span style=display:flex><span>auth-nocache
+</span></span><span style=display:flex><span>cipher AES-128-GCM
+</span></span><span style=display:flex><span>tls-client
+</span></span><span style=display:flex><span>tls-version-min 1.2
+</span></span><span style=display:flex><span>tls-cipher TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256
+</span></span><span style=display:flex><span>ignore-unknown-option block-outside-dns
+</span></span><span style=display:flex><span>setenv opt block-outside-dns <span style=color:#75715e># Prevent Windows 10 DNS leak</span>
+</span></span><span style=display:flex><span>verb <span style=color:#ae81ff>3</span>
+</span></span></code></pre></div><p>使用 <code>openvpn-install.sh</code> 工具增加客户端证书</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>./openvpn-install.sh
+</span></span><span style=display:flex><span>Welcome to OpenVPN-install!
+</span></span><span style=display:flex><span>The git repository is available at: https://github.com/angristan/openvpn-install
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>It looks like OpenVPN is already installed.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>What <span style=color:#66d9ef>do</span> you want to <span style=color:#66d9ef>do</span>?
+</span></span><span style=display:flex><span>   1<span style=color:#f92672>)</span> Add a new user
+</span></span><span style=display:flex><span>   2<span style=color:#f92672>)</span> Revoke existing user
+</span></span><span style=display:flex><span>   3<span style=color:#f92672>)</span> Remove OpenVPN
+</span></span><span style=display:flex><span>   4<span style=color:#f92672>)</span> Exit
+</span></span><span style=display:flex><span>Select an option <span style=color:#f92672>[</span>1-4<span style=color:#f92672>]</span>: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Tell me a name <span style=color:#66d9ef>for</span> the client.
+</span></span><span style=display:flex><span>The name must consist of alphanumeric character. It may also include an underscore or a dash.
+</span></span><span style=display:flex><span>Client name: coolbeevip-20230607
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Do you want to protect the configuration file with a password?
+</span></span><span style=display:flex><span><span style=color:#f92672>(</span>e.g. encrypt the private key with a password<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>   1<span style=color:#f92672>)</span> Add a passwordless client
+</span></span><span style=display:flex><span>   2<span style=color:#f92672>)</span> Use a password <span style=color:#66d9ef>for</span> the client
+</span></span><span style=display:flex><span>Select an option <span style=color:#f92672>[</span>1-2<span style=color:#f92672>]</span>: <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>* Using SSL: openssl OpenSSL 1.1.1n  <span style=color:#ae81ff>15</span> Mar <span style=color:#ae81ff>2022</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>* Using Easy-RSA configuration: /etc/openvpn/easy-rsa/vars
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>* The preferred location <span style=color:#66d9ef>for</span> <span style=color:#e6db74>&#39;vars&#39;</span> is within the PKI folder.
+</span></span><span style=display:flex><span>  To silence this message move your <span style=color:#e6db74>&#39;vars&#39;</span> file to your PKI
+</span></span><span style=display:flex><span>  or declare your <span style=color:#e6db74>&#39;vars&#39;</span> file with option: --vars<span style=color:#f92672>=</span>&lt;FILE&gt;
+</span></span><span style=display:flex><span>Generating an EC private key
+</span></span><span style=display:flex><span>writing new private key to <span style=color:#e6db74>&#39;/etc/openvpn/easy-rsa/pki/e60ef05f/temp.f0888a0e&#39;</span>
+</span></span><span style=display:flex><span>-----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Notice
+</span></span><span style=display:flex><span>------
+</span></span><span style=display:flex><span>Keypair and certificate request completed. Your files are:
+</span></span><span style=display:flex><span>req: /etc/openvpn/easy-rsa/pki/reqs/coolbeevip-20230607.req
+</span></span><span style=display:flex><span>key: /etc/openvpn/easy-rsa/pki/private/coolbeevip-20230607.key
+</span></span><span style=display:flex><span>Using configuration from /etc/openvpn/easy-rsa/pki/e60ef05f/temp.4673be92
+</span></span><span style=display:flex><span>Check that the request matches the signature
+</span></span><span style=display:flex><span>Signature ok
+</span></span><span style=display:flex><span>The Subject<span style=color:#e6db74>&#39;s Distinguished Name is as follows
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>commonName            :ASN.1 12:&#39;</span>coolbeevip-20230607<span style=color:#960050;background-color:#1e0010>&#39;</span>
+</span></span><span style=display:flex><span>Certificate is to be certified <span style=color:#66d9ef>until</span> Sep  <span style=color:#ae81ff>9</span> 04:51:46 <span style=color:#ae81ff>2025</span> GMT <span style=color:#f92672>(</span><span style=color:#ae81ff>825</span> days<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Write out database with <span style=color:#ae81ff>1</span> new entries
+</span></span><span style=display:flex><span>Data Base Updated
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Notice
+</span></span><span style=display:flex><span>------
+</span></span><span style=display:flex><span>Certificate created at:
+</span></span><span style=display:flex><span>* /etc/openvpn/easy-rsa/pki/issued/coolbeevip-20230607.crt
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Notice
+</span></span><span style=display:flex><span>------
+</span></span><span style=display:flex><span>Inline file created:
+</span></span><span style=display:flex><span>* /etc/openvpn/easy-rsa/pki/inline/coolbeevip-20230607.inline
+</span></span><span style=display:flex><span>Client coolbeevip-20230607 added.
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>The configuration file has been written to /home/admin/coolbeevip-20230607.ovpn.
+</span></span><span style=display:flex><span>Download the .ovpn file and import it in your OpenVPN client.
 </span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/vpn/>vpn</a></span>
 <span class=separator><a class=tag href=/tags/openvpn/>openvpn</a><a class=tag href=/tags/aws/>aws</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.e1c6918cbaa90022a5612f0bd71c7bf3be6d036614c5729cebfe14f7b91fa4bc.js integrity="sha256-4caRjLqpACKlYS8L1xx7875tA2YUxXKc6/4U97kfpLw=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
