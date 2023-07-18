@@ -7,4 +7,4 @@ $ pyenv install 2.7.18 你可以用以下命令检查安装的版本
 $ pyenv versions 你可以使用如下命令切换全局版本
 $ pyenv global 3.3.1 你可以使用如下命令在当前目录设置版本
 $ pyenv local 3.5.2 你能够运行以下命令检查版本
-$ python --version Python 2.7.18</description></item></channel></rss>
+$ python --version Python 2.7.18</description></item><item><title>Using gitlab-ci to cache python</title><link>https://coolbeevip.github.io/posts/gitlab/using-gitlab-ci-to-cache-python/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/gitlab/using-gitlab-ci-to-cache-python/</guid><description># 缓存位置环境变量 variables: PIP_CACHE_DIR: &amp;#34;$CI_PROJECT_DIR/.cache/pip&amp;#34; # virtualenv 和 pip 缓存目录 cache: paths: - .cache/pip - venv/ # 预运行脚本 before_script: - python -V - pip install virtualenv - virtualenv venv - source venv/bin/activate stages: - build merge_job: image: python:3.9-buster stage: build only: refs: - merge_requests script: - pip install .</description></item></channel></rss>
