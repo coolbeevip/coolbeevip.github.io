@@ -134,3 +134,26 @@
 | amazed          | 吃惊的      | excited                 | 激动的      | recipe                  | 食谱      |
 | surprised       | 吃惊的      | glad                    | 高兴的      | chef                    | 厨师      |
 | as usual        | 像平常一样    | include                 | 包括       | conversation            | 会话      |
+
+## 练习
+
+1. How much milk is there in the bottle? (瓶子里有多少牛奶?)
+2. How many pupils are there in your class? (你们班有多少学生?)
+3. I’ve got a few postcards. (我有一些明信片)
+4. She has few friends here, she feels lonely. (她在这里几乎没有朋友，她感到孤独)
+5. Quite a few people went to the beach at the weekend. (周末有相当多的人去海滩)
+6. There is a little coffee in the cup. (杯子里有一点咖啡)
+7. There is little ink in the bottle, can you give me a little? (瓶子里几乎没有墨水了，你能给我一点吗?)
+8. We’ve got a lot of hard work ahead. (我们还有很多艰苦的工作要做。)
+9. There are a lot of people in the sports center. (体育中心有很多人。)
+10. There is no water to drink. (这没有水喝。)
+11. There are no fruits in the fridge. (冰箱里没有水果了)
+12. How many books do you have? (你有多少本书?)
+13. How much money do you have? (你有多少钱?)
+14. I have a few apples. (我有几个苹果)
+15. I have little time to finish the project. (我几乎没有时间完成这个项目)
+16. Can you give me a little help? (你能给我一点帮助吗?)
+17. We have a lot of work to do. (我们有很多工作要做)
+18. There is a lot of food on the table. (桌子上有很多食物)
+19. There are no chairs in the room. (房间里没有椅子)
+20. How many pens do you need? (你需要多少支笔?)

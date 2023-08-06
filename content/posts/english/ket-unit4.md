@@ -28,15 +28,9 @@
 **3. 以重读闭音节结尾的动词，且末尾只有一个辅音字母时，双写辅音字母，再加-ing：**
 - hit-hitting
 - run-running
-- swim-swimming 
-- 但有一些例外，如 put-putting
+- swim-swimming
 
-**4. 以辅音字母+y结尾的动词，把y变为i，再加-ing：**
-- study-studying
-- fly-flying
-- carry-carrying
-
-**5. 也有一些动词的现在分词形式是不规律的**
+**4. 也有一些动词的现在分词形式是不规律的**
 - go-going
 - be-being
 
