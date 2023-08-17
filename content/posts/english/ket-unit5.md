@@ -4,11 +4,11 @@
 
 完成练习册 P20-21 阅读、语法部分
 
-## 2. 课文
+## 2. Passages
 
 熟读学生用书 P37 短文-Joanna Middleton-a young gymnast. 课文抄写两遍
 
-## 4. 对话练习
+## 3. Conversation
 
 > I ... because ... or I think ... because ...
 
@@ -49,7 +49,7 @@ Q: Who usually scores the most points in a basketball game?
 A1: The team's top scorer usually scores the most points in a basketball game because of their excellent shooting skills.
 A2:  In a basketball game, the team's best player who has exceptional shooting skills tends to score the most points.
 
-## 5. Vocabulary
+## 4. Vocabulary
 
 | 英文单词              | 中文意思 | 英文单词                  | 中文意思   | 
 |-------------------|------|-----------------------|--------|
