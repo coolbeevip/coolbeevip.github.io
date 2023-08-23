@@ -6,7 +6,9 @@
 
 ## 2. Passages
 
-熟读学生用书 P37 短文-Joanna Middleton-a young gymnast. 课文抄写两遍
+1. 熟读学生用书 P37 短文-Joanna Middleton-a young gymnast. 课文抄写两遍(w1)
+2. 熟读学生用书P40语法部分文章- Yusra Mardini，课文抄写两遍。(w2)
+3. 学生用书P39 Listening Part4, 5个题目做精听练习。听一句重复一句，听力文本在P159左侧，抄写一遍。(w2)
 
 ## 3. Conversation
 
@@ -69,4 +71,21 @@ A2:  In a basketball game, the team's best player who has exceptional shooting s
 | Gymnastics        | 体操   | Superlative adjective | 最高级形容词 |
 | Go swimming       | 游泳   | Understand            | 理解     |
 | Score             | 分数   |                       |        |
-
+| Germany           | 德国   | German                | 德国人    |
+| Syria             | 叙利亚  | Syrian                | 叙利亚人   |
+| Australia         | 澳大利亚 | Australian            | 澳大利亚人  |
+| India             | 印度   | Indian                | 印度人    |
+| Mexico            | 墨西哥  | Mexican               | 墨西哥人   |
+| China             | 中国   | Chinese               | 中国人    |
+| Japan             | 日本   | Japanese              | 日本人    |
+| Portugal          | 葡萄牙  | Portuguese            | 葡萄牙人   |
+| Britain           | 英国   | British               | 英国人    |
+| Ireland           | 爱尔兰  | Irish                 | 爱尔兰人   |
+| Spain             | 西班牙  | Spanish               | 西班牙人   |
+| Sweden            | 瑞典   | Swedish               | 瑞典人    |
+| France            | 法国   | French                | 法国人    |
+| Greece            | 希腊   | Greek                 | 希腊人    |
+| Brazil            | 巴西   | Brazilian             | 巴西人    |
+| Argentina         | 阿根廷  | Argentine             | 阿根廷人   |
+| USA               | 美国   | American              | 美国人    |
+| Norway            | 挪威   | Norwegian             | 挪威人    |
