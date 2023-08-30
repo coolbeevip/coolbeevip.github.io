@@ -89,3 +89,9 @@ A2:  In a basketball game, the team's best player who has exceptional shooting s
 | Argentina         | 阿根廷  | Argentine             | 阿根廷人   |
 | USA               | 美国   | American              | 美国人    |
 | Norway            | 挪威   | Norwegian             | 挪威人    |
+| Germany           | 德国   | German                | 德国人    |
+| Syria             | 叙利亚  | Syrian                | 叙利亚人   |
+| Australia         | 澳大利亚 | Australian            | 澳大利亚人  |
+| India             | 印度   | Indian                | 印度人    |
+| Italy             | 意大利  | Italian               | 意大利人   |
+| Mexico            | 墨西哥  | Mexican               | 墨西哥人   |
