@@ -11,22 +11,22 @@
 * Do/Does you have to do sth. (某人必须做某事吗?)
 > Do you have to clean bedroom at weekend?
 
-关键语法点：
+Key grammar points:
 
-* to 后面一定要接动词原形
-* 当主语是第三人称单数时，要用 has to do sth
-* 当主语是第三人称单数时，疑问句是 do/does 的变换，不是 have/has 的变化
+* "To" must be followed by the base form of a verb.
+* When the subject is in the third-person singular, "has to do" should be used.
+* Question sentences in the third-person singular should use the transformation of "do/does," not "have/has."
 
-称代词的主格、宾格形式:
+Subject pronouns and object pronouns:
 
-| 人称     | 主格        | 宾格         |
-|--------|-----------|------------|
-| 第一人称单数 | I         | me         |
-| 第二人称单数 | you       | you        |
-| 第三人称单数 | he/she/it | him/her/it |
-| 第一人称复数 | we        | us         |
-| 第二人称复数 | you       | you        |
-| 第三人称复数 | they      | them       |
+| Pronoun                | Subject Pronoun | Object Pronoun |
+|------------------------|-----------------|----------------|
+| First person singular  | I               | me             |
+| Second person singular | you             | you            |
+| Third person singular  | he/she/it       | him/her/it     |
+| First person plural    | we              | us             |
+| Second person plural   | you             | you            |
+| Third person plural    | they            | them           |
 
 ## 2. Passages
 
@@ -83,6 +83,43 @@
 * Yes, she does.  
 * No, she doesn’t.
 
-预习学生用书P44-45，P48-49, 题目提前做好。
+#### wash car on Saturdays
+* You have to wash car on Saturdays.
+* You don’t have to wash car on Saturdays.
+* Do you have to wash car on Saturdays?
+* Yes, I do.
+* No, I don’t.
+
+#### do laundry on Sundays
+* You have to do laundry on Sundays.
+* You don’t have to do laundry on Sundays.
+* Do you have to do laundry on Sundays?
+* Yes, I do.
+* No, I don’t.
+
+#### mow the lawn every week
+* You have to mow the lawn every week.
+* You don’t have to mow the lawn every week.
+* Do you have to mow the lawn every week?
+* Yes, I do.
+* No, I don’t.
+
+#### water the plants daily
+* You have to water the plants daily.
+* You don’t have to water the plants daily.
+* Do you have to water the plants daily?
+* Yes, I do.
+* No, I don’t.
+
+#### feed the pets twice a day
+* You have to feed the pets twice a day.
+* You don’t have to feed the pets twice a day.
+* Do you have to feed the pets twice a day?
+* Yes, I do.
+* No, I don’t.
 
 ## 4. Vocabulary
+
+## 5. Preview lessons
+
+预习学生用书P44-45，P48-49, 题目提前做好。
