@@ -8,7 +8,7 @@
 * Somebody don’t/doesn't have/has to do sth. (某人不必做某事)
 > You don’t have to clean bedroom at weekend.
 
-* Do/Does you have to do sth. (某人必须做某事吗?)
+* Do/Does somebody have to do sth. (某人必须做某事吗?)
 > Do you have to clean bedroom at weekend?
 
 Key grammar points:
