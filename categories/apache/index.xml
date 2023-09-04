@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>apache on</title><link>https://coolbeevip.github.io/categories/apache/</link><description>Recent content in apache on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 02 Sep 2023 00:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/apache/index.xml" rel="self" type="application/rss+xml"/><item><title>Apache NiFi Schema</title><link>https://coolbeevip.github.io/posts/apache_nifi/apache_nifi_schema/</link><pubDate>Sat, 02 Sep 2023 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/apache_nifi/apache_nifi_schema/</guid><description>Apache NiFi Schema Apache NiFi是一个易于使用、功能强大且可靠的数据处理和分发系统。它采用基于组件的方式设计数据流。
+在NiFi终端界面，用户通过界面拖动组件建立和维护数据流。
+术语 Processor 处理器是NiFi的基本组件，负责创建、发送、接收、转换、过滤、分割和处理数据。NiFi的数据流是由处理器连接起来的。处理器有一组属性，可以根据需要进行配置。
+Name: Processor 的名称，用于在数据流图中识别 Processor。
+Scheduling Strategy: 确定 Processor 是应根据时间间隔（Timer Driven）运行，还是应根据事件触发（Event Driven）运行。
+Concurrent tasks: 这是可以同时执行的任务数。这允许并行处理，可以提高处理效能。
+Comments: 可以在此处添加任何有关 Processor 的额外信息或注释。
+Yield Duration: 当 Processor 无法进行处理时（例如，输出连接的队列已满），它将“退避（Yield）”，过一段时间再试。该属性定义了退避的持续时间。
+Penalization Duration: 如果 Processor出现错误，将对其进行“惩罚”，使其在一段时间内无法处理任何FlowFile。这项属性决定了这段时间的长度。
+Connection 在 Apache NiFi 中，connection 是流程图中两个处理器或者一个处理器与一个转换器之间传递数据的关键部分。以下是 connection 的一些典型属性（schema）：
+Name: 连接的名称，便于在数据流图中明确识别连接。 Source: 连接的源处理器。连接从此处开始，将源处理器的输出数据传递到目标处理器。 Destination: 连接的目标处理器，它接收源处理器的输出数据。 Back Pressure Object Threshold: 这是队列中元素的数量，一旦超过该数量，源处理器将停止生产数据。 Back Pressure Data Size Threshold: 这是队列容量，一旦超过这个容量，源处理器将停止生产数据。 Prioritizers: 如果队列中包含多个元素，优先级器确定应首先处理哪一项。 Expiration: FlowFile在队列中能存活的最长时间。 FlowFile Apache NiFi 中的 FlowFile 是一个数据记录或对象，它包含两部分，数据内容和属性。以下是一些 FlowFile 相关的重要概念和可能的 Schema ：</description></item></channel></rss>

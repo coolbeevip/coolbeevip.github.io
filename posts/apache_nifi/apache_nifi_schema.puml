@@ -1,0 +1,14 @@
+@startuml
+start
+:GenerateFlowFile;
+:ReverseGeoLookup;
+switch(condition)
+case (failure)
+    stop
+case (unmatched)
+    stop
+case (matched)
+    :LogAttribute;
+    stop
+endswitch
+@enduml
