@@ -19,15 +19,10 @@ Apache NiFi是一个易于使用、功能强大且可靠的数据处理和分发
 处理器是NiFi的基本组件，负责创建、发送、接收、转换、过滤、分割和处理数据。NiFi的数据流是由处理器连接起来的。处理器有一组属性，可以根据需要进行配置。
 
 1. **Name**: Processor 的名称，用于在数据流图中识别 Processor。
-
 2. **Scheduling Strategy**: 确定 Processor 是应根据时间间隔（Timer Driven）运行，还是应根据事件触发（Event Driven）运行。
-
 3. **Concurrent tasks**: 这是可以同时执行的任务数。这允许并行处理，可以提高处理效能。
-
 4. **Comments**: 可以在此处添加任何有关 Processor 的额外信息或注释。
-
 5. **Yield Duration**: 当 Processor 无法进行处理时（例如，输出连接的队列已满），它将“退避（Yield）”，过一段时间再试。该属性定义了退避的持续时间。
-
 6. **Penalization Duration**: 如果 Processor出现错误，将对其进行“惩罚”，使其在一段时间内无法处理任何FlowFile。这项属性决定了这段时间的长度。
 
 #### Connection
@@ -81,13 +76,9 @@ Apache NiFi的`Process Group`是用来组织和管理流程的容器。每个Pro
 在 Apache NiFi 中，Controller Service 是一种共享服务，可以被流程中的多个处理器使用。Controller Service 的 schema 或属性因其类型（例如，数据库连接池，SSL上下文服务，Hadoop配置资源等等）而不同，以下是一些通常可配置的基本属性：
 
 1. **Name**: Controller Service 的名称，用于在 NiFi 配置界面上区分各种服务。
-
 2. **Comments**: 可以在此字段中添加对 Controller Service 的描述或其他信息。
-
 3. **State**: Controller Service 的运行状态，可以是"启用"或"禁用"。
-
 4. **Properties**: 这些是与 Controller Service 的特定类型相关的一系列配置选项。例如，如果 Controller Service 是一个数据库连接池，可能需要配置 JDBC 驱动位置，用户名，密码，连接URL等参数。
-
 5. **Validation errors/warnings**: 如果 NiFi 检测到 Controller Service 配置有问题，或者存在某种潜在问题，可能会在此处显示错误或警告信息。
 
 需要注意的是，Controller Service 创建和配置后，需要先启用，才能被 NiFi 流程中的处理器使用。并且在流程中引用了特定 Controller Service 的处理器无法自定义该 Controller Service，它们将共享同一个服务配置。
