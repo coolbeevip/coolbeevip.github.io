@@ -120,6 +120,27 @@ Subject pronouns and object pronouns:
 
 ## 4. Vocabulary
 
+| English                    | 中文        | English       | 中文      |
+|----------------------------|-----------|---------------|---------|
+| subject                    | 学科        | portrait      | 肖像画     |
+| Art                        | 美术课       | painting      | 绘画      |
+| Biology                    | 生物课       | living things | 生物      |
+| Chemistry                  | 化学课       | substances    | 物质      |
+| under different conditions | 在不同条件下    | English       | 英语课     |
+| dictionary                 | 字典        | History       | 历史课     |
+| Egypt-Egyptian             | 埃及-埃及人    | Geography     | 地理课     |
+| nature                     | 自然        | climate       | 气候      |
+| Physics                    | 物理课       | energy        | 能量      |
+| interaction                | 相互作用;相互影响 | Maths         | 数学课     |
+| Music                      | 音乐课       | instrument    | 乐器      |
+| uniform                    | 制服；校服     | famous        | 著名的     |
+| modern                     | 现代化的；超前的  | funny         | 有趣的；滑稽的 |
+| kind                       | 慈祥的；友善的   | strict        | 严格的     |
+| fashionable                | 流行的；时髦的   | traditional   | 传统的     |
+| clothing                   | 服装        | explain       | 解释 .    |
+
 ## 5. Preview lessons
 
 预习学生用书P44-45，P48-49, 题目提前做好。
+学生用书P43 Listening Part3, 做精听练习，听一句复述一句，听力文本抄写两遍 (学生用书P160左侧)。
+预习学生用书P45-49，题目提前做好。
