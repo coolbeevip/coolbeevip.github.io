@@ -120,27 +120,44 @@ Subject pronouns and object pronouns:
 
 ## 4. Vocabulary
 
-| English                    | 中文        | English       | 中文      |
-|----------------------------|-----------|---------------|---------|
-| subject                    | 学科        | portrait      | 肖像画     |
-| Art                        | 美术课       | painting      | 绘画      |
-| Biology                    | 生物课       | living things | 生物      |
-| Chemistry                  | 化学课       | substances    | 物质      |
-| under different conditions | 在不同条件下    | English       | 英语课     |
-| dictionary                 | 字典        | History       | 历史课     |
-| Egypt-Egyptian             | 埃及-埃及人    | Geography     | 地理课     |
-| nature                     | 自然        | climate       | 气候      |
-| Physics                    | 物理课       | energy        | 能量      |
-| interaction                | 相互作用;相互影响 | Maths         | 数学课     |
-| Music                      | 音乐课       | instrument    | 乐器      |
-| uniform                    | 制服；校服     | famous        | 著名的     |
-| modern                     | 现代化的；超前的  | funny         | 有趣的；滑稽的 |
-| kind                       | 慈祥的；友善的   | strict        | 严格的     |
-| fashionable                | 流行的；时髦的   | traditional   | 传统的     |
-| clothing                   | 服装        | explain       | 解释 .    |
+| English                    | 中文                | English           | 中文           |
+|----------------------------|-------------------|-------------------|--------------|
+| subject                    | 学科                | portrait          | 肖像画          |
+| Art                        | 美术课               | painting          | 绘画           |
+| Biology                    | 生物课               | living things     | 生物           |
+| Chemistry                  | 化学课               | substances        | 物质           |
+| under different conditions | 在不同条件下            | English           | 英语课          |
+| dictionary                 | 字典                | History           | 历史课          |
+| Egypt-Egyptian             | 埃及-埃及人            | Geography         | 地理课          |
+| nature                     | 自然                | climate           | 气候           |
+| Physics                    | 物理课               | energy            | 能量           |
+| interaction                | 相互作用;相互影响         | Maths             | 数学课          |
+| Music                      | 音乐课               | instrument        | 乐器           |
+| uniform                    | 制服；校服             | famous            | 著名的          |
+| modern                     | 现代化的；超前的          | funny             | 有趣的；滑稽的      |
+| kind                       | 慈祥的；友善的           | strict            | 严格的          |
+| fashionable                | 流行的；时髦的           | traditional       | 传统的          |
+| clothing                   | 服装                | explain           | 解释 .         |
+| drama lesson               | 戏剧课               | different country | 不同国家         |
+| sports competition         | 运动比赛              | take an exam      | 参加考试         |
+| normal                     | 正常的；典型的           | at weekend        | 在周末          |
+| on weekday                 | 工作日（周一到周五的任何一天    | decide to do…     | 决定做某事        |
+| choose                     | 选择                | far away          | 远方的          |
+| science                    | 科学                | project           | 项目；专题研究      |
+| prizes                     | 奖品；奖金             | subject pronoun   | 人称代词主格       |
+| object pronoun             | 人称代词宾格            | examiner          | 考官；主考人       |
+| dormitory                  | 学生宿舍              | home schooling    | 在家接受教育       |
+| education                  | 教育                | learn             | 学习（侧重学习某种技能） |
+| study                      | 学习（侧重深入钻研某个学科或考试） |                   |              |
+| fail                       | 失败；考试不及格          | pass              | 通过考试         |
+| university                 | 综合性大学             | college           | 技术学校         |
+
 
 ## 5. Preview lessons
 
 预习学生用书P44-45，P48-49, 题目提前做好。
 学生用书P43 Listening Part3, 做精听练习，听一句复述一句，听力文本抄写两遍 (学生用书P160左侧)。
 预习学生用书P45-49，题目提前做好。
+
+2. 熟读学生用书P45-Student Life, 抄写两遍。P47 Reading part5, 第三部分的完形填空，熟读并抄写两遍。
+3. 完成第六单元练习册。听力部分课堂上做，在家不用做。
