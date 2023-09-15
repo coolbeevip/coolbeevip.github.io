@@ -161,3 +161,10 @@ Subject pronouns and object pronouns:
 
 2. 熟读学生用书P45-Student Life, 抄写两遍。P47 Reading part5, 第三部分的完形填空，熟读并抄写两遍。
 3. 完成第六单元练习册。听力部分课堂上做，在家不用做。
+
+
+## Text
+
+Children lived in a dormitory in a far-away university and learned various subjects like science on weekdays. On weekends, they enjoyed drama lessons and sports competitions rather than normal home-schooling education. Before taking an exam, they played games using subject pronouns and object pronouns which helped them learn and study. Whether they fail or pass, they always learn something new.
+
+One day, the kids were allowed to choose between a drama lesson or a sports competition for their weekend activity. Prizes were given by the examiner in both activities, making the whole college excited. This story reminds us that education can be fun and engaging at any age or place.
