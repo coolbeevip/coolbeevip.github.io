@@ -1,8 +1,6 @@
 # KET UNIT9
 
-## 1. 语法
-
-形容词、介词、动词后面再衔接动词时，搭配不同的动词形式
+## 1. 语法（形容词、介词、动词后面再衔接动词时，搭配不同的动词形式）
 
 * 形容词 + 动词不定式 I’m happy `to see` the film
 * 动词 + 动词不定式 We choose `to go` by train
@@ -45,9 +43,43 @@
 * I would like `to go` home by bus.（我想坐公交车回家）
 * She would like `to join` the swimming club.(她想要加入游泳俱乐部)
 
+## 2. 语法（将来时）
+
+* will/won't + 动词原形: 表示对将来的预测和承诺，觉得将要发生，但不一定发生的事情。
+* sb `be going to do` sth: 表示计划和打算，像是你正在走向（going to）一个动作或事件。
+* sb `be doing` sth: "be doing" 表示正在进行或者确定要发生的事情
+* 一般现在时有时也可以用来表示将来的动作或情况。这种用法通常出现在描述日程安排、时间表或计划的场合
+
+#### 2.1 will/won’t+动词原形
+
+* I don’t think Tom will go to the party tonight.（我不认为汤姆今晚会去参加晚会/我认为汤姆今晚不会去参加晚会）
+* Maybe they will be late for class.（也许他们上课要迟到了）
+* It’s too hot, I will have a shower later.（天气太热了，我待会再洗个澡）
+
+#### 2.2 Sb `be going to do` sth
+
+* It’s going to rain tomorrow.(明天会下雨)
+* My sister is going to have a baby next month.(我妹妹下个月要生孩子了)
+* I’m going to travel to Shanghai if I have time.(如果我有时间，我打算去上海旅游)
+
+#### 2.3 Sb `be doing` sth
+   
+* I’m picking you up at six o’clock, don’t forget.(我六点钟来接你，别忘了)
+
+#### 2.4 一般现在时有时也可以用来表示将来的动作或情况。这种用法通常出现在描述日程安排、时间表或计划的场合。
+
+* Our train leaves at 6pm. （我们的火车是晚上6点发车）
+* School starts next week. （学校下周开学）
+* The meeting begins at 10am tomorrow. （会议明天上午10点开始）
+* The shop closes at nine o’clock, we’d better hurry up.(商店九点钟关门，我们最好快点）
+
 ## 2. 家庭作业
 
 > 2023/11/22
 
 1. 根据学生用书P121的语法总结表，结合上面我给出的例句，练习造句。
 2. 完成第八单元练习册。
+
+> 2023/12/6 
+
+1. 将来时造句
