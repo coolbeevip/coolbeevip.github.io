@@ -33,6 +33,22 @@
 29. They _________ (be) very happy to see you.
 30. She _________ (finish) writing the book by the end of the year.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 造句
 
 1. 你计划明天做什么？
