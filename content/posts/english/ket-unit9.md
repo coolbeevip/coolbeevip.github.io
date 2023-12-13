@@ -73,7 +73,26 @@
 * The meeting begins at 10am tomorrow. （会议明天上午10点开始）
 * The shop closes at nine o’clock, we’d better hurry up.(商店九点钟关门，我们最好快点）
 
-## 2. 家庭作业
+## 3. 单词
+
+| 中文        | 英文          | 中文         | 英文                |
+|-----------|-------------|------------|-------------------|
+| 指南        | guide       | 娱乐活动       | entertainment     |
+| 导游        | tour guide  | 展览         | exhibition        |
+| 向导        | guide       | 摄影师        | photographer      |
+| 照相术；摄影    | photography | 比赛         | competition       |
+| 奖品；奖金     | prize       | 全国总决赛      | national final    |
+| 机会        | chance      | 专辑         | album             |
+| 电影        | movie       | 最优秀的；第一流的  | classic           |
+| 古典的；传统的   | classical   | 炫耀；卖弄；表现自己 | show off          |
+| 技巧；技艺     | skill       | 终场演出       | final performance |
+| 精彩的；使人愉快的 | wonderful   | 令人惊叹的      | amazing           |
+| 乐队        | bands       | 男演员        | actor             |
+| 女演员       | actress     | 冒险         | adventure         |
+| 建议        | suggest     | 接受         | accept            |
+| 拒绝        | refuse      |            |                   |
+
+## 4. 家庭作业
 
 > 2023/11/22
 
@@ -82,4 +101,12 @@
 
 > 2023/12/6 
 
-1. 将来时造句
+1. 一般将来时的不同句型，每种句型造N个句子。
+
+> 2023/12/12
+
+1. 背单词
+2. 熟读学生用书P65 Paddington Bear, 抄写两遍。
+3. 预习学生用书P66-69, 听力部分不用预习。
+4. 完成练习册第九单元语法部分
+5. 复习学生用书P123-124题目，巩固错题
