@@ -1,6 +1,6 @@
 ---
 title: "Get the latest release information of the repos from GitHub"
-date: 2023-12-012T13:24:14+08:00
+date: 2023-12-12T13:24:14+08:00
 tags: [github]
 categories: [latest]
 draft: false
