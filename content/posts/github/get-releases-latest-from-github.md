@@ -6,12 +6,12 @@ categories: [latest]
 draft: false
 ---
 
-## Requirements
+#### 1. Requirements
 
 * python >= 3.9
 * pip install beautifulsoup4
 
-## Create a python script to get the latest release information of the repos from GitHub
+#### 2. Create a python script to get the latest release information of the repos from GitHub
 
 get_latest_info_from_github_repos.py
 
@@ -46,7 +46,7 @@ for url in urls:
     print(f'{url} {version} {datetime[0:10]}')
 ```
 
-## Run the script
+#### 3. Run the script
 
 ```shell
 python python get_latest_info_from_github_repos.py
