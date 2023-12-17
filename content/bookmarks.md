@@ -75,6 +75,8 @@ Some of my favorite websites/tools with excellent design and UX that I highly re
 
 [Open UI](https://open-ui.org/) - Comparison between different component frameworks
 
+[Android Asset Studio](https://romannurik.github.io/AndroidAssetStudio/index.html) A collection of tools to easily generate assets such as launcher icons for your Android app.
+
 ## Diagram
 
 [Isoflow](https://isoflow.io/)
