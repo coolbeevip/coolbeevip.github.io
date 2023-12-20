@@ -75,24 +75,64 @@
 
 ## 3. 单词
 
-| 中文        | 英文          | 中文         | 英文                |
-|-----------|-------------|------------|-------------------|
-| 指南        | guide       | 娱乐活动       | entertainment     |
-| 导游        | tour guide  | 展览         | exhibition        |
-| 向导        | guide       | 摄影师        | photographer      |
-| 照相术；摄影    | photography | 比赛         | competition       |
-| 奖品；奖金     | prize       | 全国总决赛      | national final    |
-| 机会        | chance      | 专辑         | album             |
-| 电影        | movie       | 最优秀的；第一流的  | classic           |
-| 古典的；传统的   | classical   | 炫耀；卖弄；表现自己 | show off          |
-| 技巧；技艺     | skill       | 终场演出       | final performance |
-| 精彩的；使人愉快的 | wonderful   | 令人惊叹的      | amazing           |
-| 乐队        | bands       | 男演员        | actor             |
-| 女演员       | actress     | 冒险         | adventure         |
-| 建议        | suggest     | 接受         | accept            |
-| 拒绝        | refuse      |            |                   |
+| 中文          | 英文                | 中文         | 英文                |
+|-------------|-------------------|------------|-------------------|
+| 指南          | guide             | 娱乐活动       | entertainment     |
+| 导游          | tour guide        | 展览         | exhibition        |
+| 向导          | guide             | 摄影师        | photographer      |
+| 照相术；摄影      | photography       | 比赛         | competition       |
+| 奖品；奖金       | prize             | 全国总决赛      | national final    |
+| 机会          | chance            | 专辑         | album             |
+| 电影          | movie             | 最优秀的；第一流的  | classic           |
+| 古典的；传统的     | classical         | 炫耀；卖弄；表现自己 | show off          |
+| 技巧；技艺       | skill             | 终场演出       | final performance |
+| 精彩的；使人愉快的   | wonderful         | 令人惊叹的      | amazing           |
+| 乐队          | bands             | 男演员        | actor             |
+| 女演员         | actress           | 冒险         | adventure         |
+| 建议          | suggest           | 接受         | accept            |
+| 拒绝          | refuse            | 票；券        | ticket            |
+| 报告；汇报；回顾    | reviews           | 学校网站       | school website    |
+| 很好的；令人惊叹的   | awesome           | 坏的；讨厌的     | awful             |
+| 令人惊喜的/惊叹的   | amazing           | 有趣的；有吸引力的  | interesting       |
+| 无趣的；令人厌倦的   | boring            | 令人恐惧的；可怕的  | horrible          |
+| 可怕的；讨厌的；严重的 | terrible          | 戏装；服装      | costume           |
+| 省钱          | save money        | 运动；练习；习题   | exercise          |
+| 决定          | decide            | 决定做某事      | decide to + 动词不定式 |
+| 芭蕾          | ballet            | 摇滚乐队       | rock band         |
+| 古典音乐会       | classical concert |            |                   |
 
-## 4. 家庭作业
+## 4. 句型练习（建议、表明接受或拒绝的立场）
+
+表示提出建议的句型：
+
+| 中文翻译            | English                                  |
+|-----------------|------------------------------------------|
+| 为什么我们不吃午餐订意大利菜？ | Why don’t we eat Italian food for lunch? |
+| 我们去看电影怎么样？      | How about going to see a film?           |
+| 我们这个周六去游泳怎么样？   | Shall we go swimming this Saturday?      |
+| 你愿意和我一起去游泳吗？    | Would you like to go swimming with me?   |
+| 为什么不在乡下野餐呢？     | Why not have a picnic in the country?    |
+
+
+表示接受提议的句型：
+
+| 中文          | 英文                            |
+|-------------|-------------------------------|
+| 好主意，我很愿意去做。 | Good idea. I'd love to do it. |
+| 是的，当然。      | Yes, sure.                    |
+| 太好了！我喜欢做……  | Great! I love doing...        |
+| 我同意你的观点。    | I agree with you.             |
+
+表示拒绝提议的句型：
+
+| 中文     | 英文                                   |
+|--------|--------------------------------------|
+| 不，谢谢。  | No, thanks.                          |
+| 我不愿意。  | I’d rather not.                      |
+| 我认为不会。 | I don’t think so.                    |
+| 恐怕我不能。 | I'm afraid I can't go to see a film. |
+
+## 5. 家庭作业
 
 > 2023/11/22
 
@@ -110,3 +150,10 @@
 3. 预习学生用书P66-69, 听力部分不用预习。
 4. 完成练习册第九单元语法部分
 5. 复习学生用书P123-124题目，巩固错题
+
+> 2023/12/20
+
+1. 复习第九单元语法点：参考我之前发的语法总结及视频，复习一般将来时的不同表达（will/won’t+动词原形, Sb be doing/be going to do, 一般现在时表将来), 练习造句。 
+2. 学生用书P67听力部分，听一句、复述一句练习精听，文本在学生用书P166，抄写两遍。
+3. 复习单词：拼读测试
+4. 复习学生用书P67词汇部分Part3, 使用正确的句型来提建议、表明接受或拒绝的立场。
