@@ -5,7 +5,6 @@ tags: [stress,test,qps]
 categories: [stress]
 draft: false
 katex: true
-markup: "mmark"
 ---
 
 通过单个服务器压测的 QPS 估算需要的服务器数量 
