@@ -35,13 +35,13 @@ draft: false
 
    编辑你的全局 Git 配置文件 (通常位于 `~/.gitconfig` 或 `~/.config/git/config`):
    ```ini
-   [includeIf "gitdir/i:~/work/"]
+   [includeIf "gitdir:~/work/"]
        path = ~/gitconfig_work
-   [includeIf "gitdir/i:~/home/"]
+   [includeIf "gitdir:~/home/"]
        path = ~/gitconfig_home
    ```
 
-   这里的 `gitdir/i` 基于仓库的位置来决定使用哪个配置。例如，任何在 `~/work/` 目录下的 Git 仓库自动使用 `gitcontext_work` 中的配置。
+   这里的 `gitdir` 基于仓库的位置来决定使用哪个配置。例如，任何在 `~/work/` 目录下的 Git 仓库自动使用 `gitconfig_work` 中的配置。
 
 ### 使用场景与注意事项
 
