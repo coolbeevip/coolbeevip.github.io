@@ -53,3 +53,7 @@ Git Assistant 插件是一个强大的 IntelliJ IDEA 插件，你可以通过配
 开启 Truncate excessive length 和 Relegate excess to body 选项后，如果生成的提交信息长度超过限制，会自动截断并将多余的信息放到 body 中。
 
 ![screenshot-maximum-turncate.png](/images/posts/git-assistant-intellij-plugin/screenshot-maximum-turncate.png)
+
+### 最后
+
+你可以在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/14896-git-assistant) 上查看 Git Assistant 插件的详细信息并留下你的宝贵建议。
