@@ -60,6 +60,6 @@ Git Assistant 插件是一个强大的 IntelliJ IDEA 插件，你可以通过配
 
 ![screenshot-gitconfig.png](/images/posts/git-assistant-intellij-plugin/screenshot-gitconfig.png)
 
-### 最后
+### 结束语
 
 你可以在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/14896-git-assistant) 上查看 Git Assistant 插件的详细信息并留下你的宝贵建议。

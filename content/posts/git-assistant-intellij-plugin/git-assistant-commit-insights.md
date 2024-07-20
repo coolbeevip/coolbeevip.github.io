@@ -40,6 +40,6 @@ Git Assistant Insights 窗口为用户提供了一系列强大的分析工具。
 
 ![screenshot-commits-projectview.png](/images/posts/git-assistant-intellij-plugin/screenshot-commits-projectview.png)
 
-### 最后
+### 结束语
 
 你可以在 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/14896-git-assistant) 上查看 Git Assistant 插件的详细信息并留下你的宝贵建议。
