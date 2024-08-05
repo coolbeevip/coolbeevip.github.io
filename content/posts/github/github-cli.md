@@ -17,7 +17,7 @@ Before we begin, ensure that you meet the following requirements:
     - On macOS: `brew install jq`
     - On Ubuntu: `sudo apt-get install jq`
 3. **Generate a GitHub Personal Access Token**: You'll need a GitHub Personal Access Token with the appropriate permissions. Visit the [GitHub Settings](https://github.com/settings/tokens) page to generate one, ensuring that you select the `repo` scope.
-4. **Set the Environment Variable**: To keep things secure, we will store the access token in the environment variable `GITHUB_TOKEN`.
+4. **Set the Environment Variable**: To keep things secure, we will store the access token in the environment variable `GPA_TOKEN`.
 
 ## Script Implementation
 
