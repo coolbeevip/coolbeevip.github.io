@@ -6,7 +6,7 @@ categories: [llm]
 draft: false
 ---
 
-> LLM多智能体框架 [Camel-AI](https://www.camel-ai.org/) 
+> LLM多智能体框架 [Camel-AI](https://www.camel-ai.org/) 图片使用 DALL·E 模型生成
 
 ## 角色
 
