@@ -59,7 +59,7 @@ log_level = "debug"
 
 [[runners]]
   name = "10.19.32.51-runner-01"
-  url = "http://git.oss.asiainfo.com:8081/"
+  url = "http://git.server.com:8081/"
   token = "LrVrtzxwNamXUCyHE2Nx"
   executor = "docker"
   [runners.custom_build_dir]
