@@ -88,3 +88,11 @@ mvn versions:commit
 ```shell
 mvn versions:revert
 ```
+
+### 其他
+
+递归清理项目目录的构建过程文件
+
+```shell
+find /path/to/your/projects -name "pom.xml" -execdir mvn clean \;  
+```
