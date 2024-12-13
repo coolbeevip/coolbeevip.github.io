@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Plugin on</title><link>https://coolbeevip.github.io/categories/plugin/</link><description>Recent content in Plugin on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 17 Jul 2024 20:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/plugin/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Git Assistant IntelliJ Commits 可视化洞察</title><link>https://coolbeevip.github.io/posts/git-assistant-intellij-plugin/git-assistant-commit-insights/</link><pubDate>Wed, 17 Jul 2024 20:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git-assistant-intellij-plugin/git-assistant-commit-insights/</guid><description>Git Assistant 插件是一个功能强大的 IntelliJ IDEA 插件，自 1.4.0 版本以来，新增了 Commits 可视化洞察功能。通过右侧工具窗口中的 Git Assistant Insights 窗口为用户提供了一系列强大的分析工具。
-Hour/Weekday/Month 功能能够根据小时、周、月来分析团队活动的时间分布情况，从而优化工作安排和任务分配。 Timezone 功能可以可视化展示代码贡献的时区分布情况，使全球团队的协作变得可见可感。 在左侧的项目树中还提供了热点文件和热点目录的分析功能，帮助开发者更好地了解项目最近哪些文件和目录发生了较多的变更。 安装 Git Assistant 插件 首先，你需要在 IntelliJ IDEA 中安装 Git Assistant 插件。你可以通过 IntelliJ IDEA 的插件市场搜索 Git Assistant 并安装它。安装完毕后在右侧的 Git Assistant Insights 窗口中可以看到可视化统计信息
-提交信息可视化洞察 在 Overview 面板可以展示代码库中贡献最多的开发者，有助于发现和表彰优秀贡献者，提升团队的协作和竞争力。
-在 Hour/Weekday/Month 面板可以展示团队活动的时间分布情况，从而优化工作安排和任务分配。
-在 Timezone 面板可以展示代码贡献的时区分布情况，使全球团队的协作变得可见可感。
-在 Project View 面板可以展示热点文件和热点目录的分析功能，帮助开发者更好地了解项目最近哪些文件和目录发生了较多的变更。
+Hour/Weekday/Month 功能能够根据小时、周、月来分析团队活动的时间分布情况，从而优化工作安排和任务分配。 Timezone 功能可以可视化展示代码贡献的时区分布情况，使全球团队的协作变得可见可感。 Project Top(N) 功能可以了解到最新的变化热点和关键开发者。 安装 Git Assistant 插件 首先，你需要在 IntelliJ IDEA 中安装 Git Assistant 插件。你可以通过 IntelliJ IDEA 的插件市场搜索 Git Assistant 并安装它。安装完毕后在右侧的 Git Assistant Insights 窗口中可以看到可视化统计信息
+提交信息可视化洞察 贡献者排名： 查看谁在您的仓库排行榜上名列前茅。它既有趣又有竞争力，信息量丰富！
+提交时间分析： 发现您的团队最活跃的时间——按小时、周、月或年。您是夜猫子还是早起的人？
+时区分布： 可视化您的提交来自世界哪个地方。全球团队合作变得清晰可见！使用对数尺改善视觉呈现
+热点信息： 看看最近哪个模块修改频繁，谁是最重要的人
 结束语 你可以在 JetBrains Marketplace 上查看 Git Assistant 插件的详细信息并留下你的宝贵建议。</description></item><item><title>使用 Git Assistant IntelliJ 插件中的 AI 功能来生成提交信息</title><link>https://coolbeevip.github.io/posts/git-assistant-intellij-plugin/git-assistant-ai-commit-message/</link><pubDate>Wed, 17 Jul 2024 20:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git-assistant-intellij-plugin/git-assistant-ai-commit-message/</guid><description>Git Assistant 插件是一个强大的 IntelliJ IDEA 插件，你可以通过配置自己的 OpenAI key 来使用其中的 AI 功能。在这篇文章中，我们将介绍如何使用 Git Assistant 插件中的 AI 功能来生成提交信息。
 安装 Git Assistant 插件 首先，你需要在 IntelliJ IDEA 中安装 Git Assistant 插件。你可以通过 IntelliJ IDEA 的插件市场搜索 Git Assistant 并安装它。
 配置 Git Assistant 插件 在安装完 Git Assistant 插件后，打开 Settings -&amp;gt; Plugins -&amp;gt; Tools -&amp;gt; Git Assistant 后可以看到如下配置界面。
