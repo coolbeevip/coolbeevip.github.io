@@ -6,8 +6,7 @@ categories: [ git, intellij, plugin ]
 draft: false
 ---
 
-Git Assistant 插件是一个功能强大的 IntelliJ IDEA 插件，自 1.4.0 版本以来，新增了 Commits 可视化洞察功能。通过右侧工具窗口中的
-Git Assistant Insights 窗口为用户提供了一系列强大的分析工具。
+Git Assistant 插件是一个功能强大的 IntelliJ IDEA 插件，基于 Git 日志提供了丰富的可视化洞察能力。
 
 - Hour/Weekday/Month 功能能够根据小时、周、月来分析团队活动的时间分布情况，从而优化工作安排和任务分配。
 - Timezone 功能可以可视化展示代码贡献的时区分布情况，使全球团队的协作变得可见可感。
