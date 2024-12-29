@@ -2,10 +2,12 @@
 
 .sidebar {
   width: 30%;
+  padding-left: 0;
 }
 
 .content {
   width: 70%;
+  padding-right: 0;
 }
 
 .page-top {
