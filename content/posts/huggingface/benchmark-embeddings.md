@@ -8,40 +8,6 @@ draft: false
 
 在同一个服务器上测试 CPU / GPU 性能差异
 
-## 测试代码
-
-```shell
-import time
-
-import sentence_transformers
-import torch
-
-if __name__ == "__main__":
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    embedding = sentence_transformers.SentenceTransformer(
-        model_name_or_path="/Volumes/SD/huggingface-models/bge-m3",
-        cache_folder="/Volumes/SD/huggingface-models",
-        device=device
-    )
-    total = 10000
-    batch_size = 100
-    start_time = time.time()
-    sentences = ["I am AnCopilot, nice to meet you!"]
-    for i in range(total // batch_size):
-        embedding.encode(sentences * batch_size, normalize_embeddings=True)
-        print(f"{i + 1} / {total // batch_size}")
-    end_time = time.time()
-    total_time = end_time - start_time
-    average_time = total_time / total
-    throughput = total / total_time
-    print(f"Device {device}")
-    print(f"Total {total} sentences")
-    print(f"Batch size: {batch_size}")
-    print(f"Total time: {total_time:.4f} seconds")
-    print(f"Average time per iteration: {average_time:.4f} seconds")
-    print(f"Throughput: {throughput:.2f} iterations per second")
-```
-
 ## 设备信息
 
 GPU 设备信息
@@ -98,7 +64,41 @@ CPU 信息
 | **Mem**          |  2.0T   |   302G     |  37G   | 8.1G  |  1.6T   | 1.7T  |
 | **Swap**         |   0B    |    0B      |  0B    |  -    |    -    |   -   |
 
-## 对比结果
+## 测试方案-代码直接调用
+
+测试代码
+
+```shell
+import time
+
+import sentence_transformers
+import torch
+
+if __name__ == "__main__":
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    embedding = sentence_transformers.SentenceTransformer(
+        model_name_or_path="/Volumes/SD/huggingface-models/bge-m3",
+        cache_folder="/Volumes/SD/huggingface-models",
+        device=device
+    )
+    total = 10000
+    batch_size = 100
+    start_time = time.time()
+    sentences = ["I am AnCopilot, nice to meet you!"]
+    for i in range(total // batch_size):
+        embedding.encode(sentences * batch_size, normalize_embeddings=True)
+        print(f"{i + 1} / {total // batch_size}")
+    end_time = time.time()
+    total_time = end_time - start_time
+    average_time = total_time / total
+    throughput = total / total_time
+    print(f"Device {device}")
+    print(f"Total {total} sentences")
+    print(f"Batch size: {batch_size}")
+    print(f"Total time: {total_time:.4f} seconds")
+    print(f"Average time per iteration: {average_time:.4f} seconds")
+    print(f"Throughput: {throughput:.2f} iterations per second")
+```
 
 以下是基准测试结果的对比表格：
 
@@ -109,6 +109,27 @@ CPU 信息
 | CPU      | 100        | 10000           | 77.3202              | 0.0077                               | 129.33                             |
 | CPU      | 200        | 10000           | 72.6335              | 0.0073                               | 137.68                             |
 
+
+## 测试方案-FastAPI封装
+
+测试代码
+
+```shell
+# 数据中写入 100 个文本
+echo '{"inputs":["I am AnCopilot, nice to meet you!","I am AnCopilot, nice to meet you!",...],"model":"bge-m3"}' > data.json
+# 发送 100 次（总计发送 10000 条），10 并发
+ab -n 100 -c 10 -p data.json -T application/json http://10.1.251.228:58123/v1/embeddings/bulk
+```
+
+以下是基准测试结果的对比表格：
+
+| Device | Batch Size | Total Sentences | Concurrency | Total Time (seconds) | Average Time per Iteration (ms) | Throughput (iterations per second) |
+|--------|------------|-----------------|-------------|----------------------|---------------------------------|------------------------------------|
+| CPU    | 100        | 10000           | 10          | 182.555              | 1825.549                        | 55                                 |
+| CPU    | 100        | 10000           | 50          | 超时失败                 |                                 |                                    |
+| CUDA   | 100        | 10000           | 10          | 23.903               | 239.031                         | 418                                |
+| CUDA   | 100        | 10000           | 50          | 23.345               | 233.448                         | 428                                |
+| CUDA   | 100        | 10000           | 100         | 21.885               | 218.850                         | 457                                |
 
 ## 总结
 
@@ -121,8 +142,5 @@ CPU 信息
     - **增加批量大小对CUDA设备有利**：在CUDA上，从100的批量大小提升到200，虽然总时间略有减少（从13.6438秒降至12.1587秒），每次迭代的时间也减少了（从0.0014秒降至0.0012秒），同时吞吐量提升了（从732.93迭代/秒增至822.46迭代/秒）。
     - **在CPU设备上，增加批量大小同样有利**：在CPU上，从批量大小100提高到200，虽然总时间也有所减少（从77.3202秒降至72.6335秒），每次迭代的时间也有小幅下降（从0.0077秒下降至0.0073秒），吞吐量由129.33迭代/秒提升至137.68迭代/秒。
 
-3. **总体吞吐量**：
-    - CUDA设备的吞吐量显著高于CPU设备，200批量的CUDA吞吐量达到822.46迭代/秒，而CPU则只有137.68迭代/秒，这表明在处理大量数据时，CUDA设备能够提供更高的效率。
-
-4. **总结**：
-    - 在执行密集型任务（如处理大量句子）时，使用CUDA（GPU）设备会显著提高性能，减少计算时间。尽管CPU设备可通过增加批量大小来提高效率，但其性能仍无法与GPU设备相较。对于大量数据的处理，特别是需要实时反馈或低延迟的场景，选择CUDA设备将是更优的选择。
+3. **FastAPI封装**：
+    - 封装后性能下降 50% 
