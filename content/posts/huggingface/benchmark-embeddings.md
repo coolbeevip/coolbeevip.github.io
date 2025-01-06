@@ -1,12 +1,12 @@
 ---
 title: "Benchmark for BAAI/bge-3m on an Nvidia A800/CPU/Mac M1"
-date: 2025-01-06T13:24:14+08:00
+date: 2025-01-05T13:24:14+08:00
 tags: [huggingface,embedding]
 categories: [embedding,bge-3m,benchmark]
 draft: false
 ---
 
-在同一个服务器上测试 CPU/GPU 性能差异
+在同一个服务器上测试 CPU / GPU 性能差异
 
 ## 测试代码
 
