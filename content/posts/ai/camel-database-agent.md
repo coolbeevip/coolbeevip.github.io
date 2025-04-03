@@ -1,6 +1,6 @@
 ---
 title: "CAMEL DatabaseAgent: 将复杂数据查询转化为自然对话的开源解决方案"
-date: 2025-04-03T20:24:14+08:00
+date: 2024-05-03T20:24:14+08:00
 tags: [text2sql,ai]
 categories: [ai]
 draft: false
@@ -77,13 +77,13 @@ CAMEL DatabaseAgent建立在[CAMEL-AI框架](https://github.com/camel-ai/camel)�
 
 ## 突破语言障碍：多语言支持
 
-在全球化团队环境中，语言障碍常常是数据协作的瓶颈。CAMEL DatabaseAgent支持多语言交互，让来自不同语言背景的团队成员都能使用自己的母语进行数据查询。
+在全球化团队环境中，语言障碍常常是数据协作的瓶颈。CAMEL DatabaseAgent支持多语言交互，让来自不同语言背景的团队成员都能使用自己的母语训练知识并进行数据查询。
 
 ![中文查询示例](/images/posts/ai/camel-database-agent/screenshot-question-chinese.png)
-*使用中文提问并获得中文回答*
+*使用中文训练知识并提问*
 
 ![韩文查询示例](/images/posts/ai/camel-database-agent/screenshot-question-korean.png)
-*系统同样支持韩文等其他语言*
+*系统同样支持韩文等其他语言，而你要做的只是在连接数据库的时候指定语言*
 
 ## 入门指南：5分钟上手
 
