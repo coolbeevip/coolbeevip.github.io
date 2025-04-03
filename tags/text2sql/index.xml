@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Text2sql on</title><link>https://coolbeevip.github.io/tags/text2sql/</link><description>Recent content in Text2sql on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 03 Apr 2025 20:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/text2sql/index.xml" rel="self" type="application/rss+xml"/><item><title>CAMEL DatabaseAgent: 将复杂数据查询转化为自然对话的开源解决方案</title><link>https://coolbeevip.github.io/posts/ai/camel-database-agent/</link><pubDate>Thu, 03 Apr 2025 20:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/camel-database-agent/</guid><description>数据分析的痛点与解决方案 在当今数据驱动的企业环境中，一个常见场景是：业务分析师急需某项数据分析，但必须等待懂SQL的技术团队成员提供支持。根据McKinsey的一项研究，分析师平均花费30-40%的时间仅用于数据准备和查询构建。这种依赖不仅延迟决策过程，还增加了技术团队的工作负担。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Text2sql on</title><link>https://coolbeevip.github.io/tags/text2sql/</link><description>Recent content in Text2sql on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 03 May 2024 20:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/text2sql/index.xml" rel="self" type="application/rss+xml"/><item><title>CAMEL DatabaseAgent: 将复杂数据查询转化为自然对话的开源解决方案</title><link>https://coolbeevip.github.io/posts/ai/camel-database-agent/</link><pubDate>Fri, 03 May 2024 20:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/camel-database-agent/</guid><description>数据分析的痛点与解决方案 在当今数据驱动的企业环境中，一个常见场景是：业务分析师急需某项数据分析，但必须等待懂SQL的技术团队成员提供支持。根据McKinsey的一项研究，分析师平均花费30-40%的时间仅用于数据准备和查询构建。这种依赖不仅延迟决策过程，还增加了技术团队的工作负担。
 这就是为什么我开发了CAMEL DatabaseAgent — 一个革命性的开源工具，它能够让任何人通过自然语言与数据库对话，就像与同事交流一样简单。无需编写一行SQL代码，分析师可以直接获取他们需要的数据洞察。
 CAMEL DatabaseAgent的核心优势 相比市场上其他文本到SQL工具，CAMEL DatabaseAgent具有以下显著优势：
 完全开源：透明的代码和社区驱动的开发确保了持续改进和定制灵活性 多语言支持：能够理解和响应包括中文、英文、韩文在内的多种语言查询 自动数据库理解：分析数据库结构并生成适当的少样本学习示例 只读模式：默认安全操作，保护数据库不被意外修改 简单集成：易于与现有系统和工作流程集成 技术架构：它是如何工作的 CAMEL DatabaseAgent建立在CAMEL-AI框架之上，由三个核心组件构成：
@@ -16,8 +16,8 @@ SQLite MySQL PostgreSQL 所有操作默认在只读模式下进行，确保数�
 场景四: 条件筛选和计数 系统能够使用子查询和复杂条件
 场景五: 百分比计算 系统能够执行数学计算和条件计数
 场景六: 复杂关联分析 系统能处理左连接和空值情况
-突破语言障碍：多语言支持 在全球化团队环境中，语言障碍常常是数据协作的瓶颈。CAMEL DatabaseAgent支持多语言交互，让来自不同语言背景的团队成员都能使用自己的母语进行数据查询。
-使用中文提问并获得中文回答
-系统同样支持韩文等其他语言
+突破语言障碍：多语言支持 在全球化团队环境中，语言障碍常常是数据协作的瓶颈。CAMEL DatabaseAgent支持多语言交互，让来自不同语言背景的团队成员都能使用自己的母语训练知识并进行数据查询。
+使用中文训练知识并提问
+系统同样支持韩文等其他语言，而你要做的只是在连接数据库的时候指定语言
 入门指南：5分钟上手 想要尝试CAMEL DatabaseAgent？只需几个简单步骤：
 # 1. 克隆仓库 git clone git@github.com:coolbeevip/camel-database-agent.git cd camel-database-agent # 2. 设置环境 pip install uv ruff mypy uv venv .</description></item></channel></rss>
