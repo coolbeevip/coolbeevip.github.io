@@ -1,6 +1,6 @@
 ---
 title: "Awesome Text to Image Prompts"
-date: 2023-05-30T00:24:14+08:00
+date: 2025-04-03T00:24:14+08:00
 tags: [text2image,ai]
 categories: [ai]
 draft: false
