@@ -24,7 +24,7 @@ draft: false
 
 ## 技术架构：它是如何工作的
 
-CAMEL DatabaseAgent建立在[CAMEL-AI框架](https://github.com/camel-ai/camel)之上，由三个核心组件构成：
+CAMEL DatabaseAgent建立在[CAMEL-AI](https://github.com/camel-ai/camel)之上，由三个核心组件构成：
 
 1. **DataQueryInferencePipeline**：这个智能组件分析你的数据库结构并自动生成训练示例，包括问题和对应的SQL查询。它使用了先进的推理技术来理解表之间的关系和数据的语义。
 
