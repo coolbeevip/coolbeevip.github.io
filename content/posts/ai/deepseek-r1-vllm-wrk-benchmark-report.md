@@ -18,6 +18,17 @@ draft: false
 
 ## 测试方法
 
+创建一个请求文件
+
+```shell
+cat > post.lua << 'EOF'
+wrk.method = "POST"
+wrk.body = '{"model":"deepseek-14b","messages":[{"role":"user","content":"写一个50字的短文"}],"max_tokens":50}'
+wrk.headers["Content-Type"] = "application/json"
+wrk.headers["Authorization"] = "Bearer your-api-key"
+EOF
+```
+
 10 线程 20 并发持续测试一分钟
 
 ```shell
