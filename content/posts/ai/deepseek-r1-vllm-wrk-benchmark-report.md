@@ -14,6 +14,7 @@ draft: false
 - NVIDIA-SMI 560.35.03              
 - Driver Version: 560.35.03      
 - CUDA Version: 12.6
+- [wrk](https://github.com/wg/wrk)
 
 ## 测试方法
 
