@@ -2,7 +2,7 @@
 title: "DeepSeek-R1 vLLM性能基准测试：wrk压力测试详细报告"
 date: 2025-05-30T00:24:14+08:00
 tags: [vllm]
-categories: [vllm, benchmark, wrk]
+categories: [vllm, deepseek, wrk]
 draft: false
 ---
 
