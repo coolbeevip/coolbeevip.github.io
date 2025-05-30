@@ -17,7 +17,7 @@ draft: false
 
 ## 测试方法
 
-使用 wrk 命令持续测试 60 秒
+10 线程 20 并发持续测试一分钟
 
 ```shell
 [root@myserver wrk-4.2.0]# ./wrk --timeout 30s -t10 -c20 -d60s -s post.lua http://10.1.2.100:8080/v1/chat/completions
@@ -29,6 +29,11 @@ Running 1m test @ http://10.1.2.100:8080/v1/chat/completions
   381 requests in 1.00m, 285.10KB read
 Requests/sec:      6.34
 Transfer/sec:      4.74KB
+```
+
+10 线程 100 并发持续测试一分钟
+
+```shell
 [root@myserver wrk-4.2.0]# ./wrk --timeout 30s -t10 -c100 -d60s -s post.lua http://10.1.2.100:8080/v1/chat/completions
 Running 1m test @ http://10.1.2.100:8080/v1/chat/completions
   10 threads and 100 connections
@@ -38,6 +43,11 @@ Running 1m test @ http://10.1.2.100:8080/v1/chat/completions
   1601 requests in 1.00m, 1.17MB read
 Requests/sec:     26.64
 Transfer/sec:     19.97KB
+```
+
+100 线程 100 并发持续测试一分钟
+
+```shell
 [root@myserver wrk-4.2.0]# ./wrk --timeout 30s -t100 -c100 -d60s -s post.lua http://10.1.2.100:8080/v1/chat/completions
 Running 1m test @ http://10.1.2.100:8080/v1/chat/completions
   100 threads and 100 connections
@@ -47,6 +57,11 @@ Running 1m test @ http://10.1.2.100:8080/v1/chat/completions
   1603 requests in 1.00m, 1.17MB read
 Requests/sec:     26.67
 Transfer/sec:     19.99KB
+```
+
+100 线程 200 并发持续测试一分钟
+
+```shell
 [root@myserver wrk-4.2.0]# ./wrk --timeout 30s -t100 -c200 -d60s -s post.lua http://10.1.2.100:8080/v1/chat/completions
 Running 1m test @ http://10.1.2.100:8080/v1/chat/completions
   100 threads and 200 connections
