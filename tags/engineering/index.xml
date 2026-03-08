@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Engineering on</title><link>https://coolbeevip.github.io/tags/engineering/</link><description>Recent content in Engineering on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 08 Mar 2026 00:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/engineering/index.xml" rel="self" type="application/rss+xml"/><item><title>智能体软件工程：AI在软件开发中的应用与挑战</title><link>https://coolbeevip.github.io/posts/ai/ai-software-engineering/</link><pubDate>Sun, 08 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/ai-software-engineering/</guid><description>导读 本信息搜集整理自网络，内容仅供参考。
+智能体软件工程 #1｜智能体原生工作估算 《智能体软件工程》可能是一系列文章，记录我从传统软件工程向智能体软件工程的迁移过程。
+一个老程序员的顿悟 我写了近二十年代码了。估算工期这件事，早已刻进肌肉记忆——拆任务、排优先级、乘以经验系数、加上联调和 buffer（冗余量），最后给出一个&amp;quot;两到三周&amp;quot;。这套方法论伴随我度过了瀑布、敏捷、DevOps 的每一次范式迁移，从未失灵。
+直到 AI 编程到来。
+我最近用 AI Agent 做一个 CLI 工具。脑子里的第一反应是这个工具的实现过程：解析参数、核心转换、校验逻辑、错误处理、测试，一整套下来，按古法编程怎么也得两三天。结果 Agent 从动手到交付，连半小时都没用完。
+效率提升了吗？表面上看，当然。
+但更深层的问题随之浮现：我甚至无法正确预判 AI 需要多久。
+我的整个估算框架是锚定在&amp;quot;人类开发者&amp;quot;这个基座上的。多少行代码、多少次 debug、多少轮 code review。当执行者从人变成智能体，这套尺子就彻底失灵了。
+更讽刺的是，AI Agent 自己也犯同样的错。你问 Claude 或 GPT：&amp;ldquo;做这个功能要多久？&amp;ldquo;它会一本正经地告诉你&amp;quot;大约 2-3 天&amp;rdquo;。因为它的训练数据里，Stack Overflow 和技术博客就是这么写的。Agent 在用人类的经验估人类的时间，然后自己十分钟干完。
+我开始意识到，当软件工程迈向智能体软件工程（Agentic Software Engineering）的过程中，第一个需要变化的，就是这种&amp;quot;拿人的尺子量 AI 的活&amp;quot;的心态。
+所以我写了一个 Skill，agent-estimation，专门解决这个问题。
+问题的根源：人类时间锚定 我把这个现象叫做 Human-Time Anchoring（人类时间锚定）。
+它的运作机制是这样的：
+AI Agent 在生成估算时，会不自觉地调用训练数据中的&amp;quot;集体经验&amp;rdquo;。一个 REST API 项目？论坛上说要一周。一个带实时图表的全栈 Dashboard？技术负责人在 Sprint Planning 里估了三个迭代。这些数字是人类开发者在人类的认知带宽、上下文切换成本、沟通损耗下产出的经验值。它们对人类成立，但对一个可以每 3 分钟完成一轮&amp;quot;思考→写码→执行→验证→修复&amp;quot;循环的 Agent 来说，完全不适用。
+这导致了一个系统性偏差：AI 几乎总是高估自己的工期。
+而我们这些老程序员，反过来也在犯同样的错：我们拿自己过去的经验去预期 AI 的产出速度，然后在&amp;quot;哇，这么快？&amp;ldquo;和&amp;quot;等等，它真能做到吗？&amp;ldquo;之间反复横跳。</description></item></channel></rss>
