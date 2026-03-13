@@ -1,0 +1,311 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | 使用 mitmprox 抓取 codex 数据包 </title><meta charset=utf-8><meta name=generator content="Hugo 0.123.3"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.d03676fac5605f1e95639c8b2239ea77daf8804fe13da2208bb83b252959846c.css integrity="sha256-0DZ2+sVgXx6VY5yLIjnqd9r4gE/hPaIgi7g7JSlZhGw=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/ai/mitmprox-codex-packets/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="使用 mitmprox 抓取 codex 数据包"><meta name=twitter:description content='标题里写的是 mitmprox，实际使用的工具名是 mitmproxy。
+这篇文章只做一件事：在 macOS 上用 mitmproxy 抓一次 Codex 发送 hello 的请求，并把请求体导出成文本文件。
+Step 1. 安装 mitmproxy brew install mitmproxy 确认安装成功：
+mitmdump --version Step 2. 启动抓包代理 打开第一个终端，执行：
+mitmdump --listen-host 127.0.0.1 --listen-port 8080 -w codex-hello.mitm 这一步会：
+在本机启动代理 127.0.0.1:8080 把抓到的流量保存到 codex-hello.mitm 这个终端先不要关。
+Step 3. 安装 mitmproxy 根证书 第一次启动 mitmproxy 后，会在本机生成证书：
+open ~/.mitmproxy 在 macOS 中操作：
+双击 mitmproxy-ca-cert.pem 导入到“登录”钥匙串 打开“钥匙串访问” 找到 mitmproxy 证书 双击证书，展开“信任” 把“使用此证书时”改成“始终信任” 关闭窗口并输入密码保存 Step 4. 让 Codex 走本地代理 打开第二个终端，执行：
+export HTTP_PROXY="http://127.'></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&amp;style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2026</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>使用 mitmprox 抓取 codex 数据包</h3></div><blockquote><p>标题里写的是 <code>mitmprox</code>，实际使用的工具名是 <code>mitmproxy</code>。</p></blockquote><p>这篇文章只做一件事：<strong>在 macOS 上用 <code>mitmproxy</code> 抓一次 Codex 发送 <code>hello</code> 的请求，并把请求体导出成文本文件。</strong></p><h2 id=step-1-安装-mitmproxy>Step 1. 安装 mitmproxy</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>brew install mitmproxy
+</span></span></code></pre></div><p>确认安装成功：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>mitmdump --version
+</span></span></code></pre></div><h2 id=step-2-启动抓包代理>Step 2. 启动抓包代理</h2><p>打开第一个终端，执行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>mitmdump --listen-host 127.0.0.1 --listen-port <span style=color:#ae81ff>8080</span> -w codex-hello.mitm
+</span></span></code></pre></div><p>这一步会：</p><ul><li>在本机启动代理 <code>127.0.0.1:8080</code></li><li>把抓到的流量保存到 <code>codex-hello.mitm</code></li></ul><p>这个终端先不要关。</p><h2 id=step-3-安装-mitmproxy-根证书>Step 3. 安装 mitmproxy 根证书</h2><p>第一次启动 <code>mitmproxy</code> 后，会在本机生成证书：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>open ~/.mitmproxy
+</span></span></code></pre></div><p>在 macOS 中操作：</p><ol><li>双击 <code>mitmproxy-ca-cert.pem</code></li><li>导入到“登录”钥匙串</li><li>打开“钥匙串访问”</li><li>找到 <code>mitmproxy</code> 证书</li><li>双击证书，展开“信任”</li><li>把“使用此证书时”改成“始终信任”</li><li>关闭窗口并输入密码保存</li></ol><h2 id=step-4-让-codex-走本地代理>Step 4. 让 Codex 走本地代理</h2><p>打开第二个终端，执行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>export HTTP_PROXY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;http://127.0.0.1:8080&#34;</span>
+</span></span><span style=display:flex><span>export HTTPS_PROXY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;http://127.0.0.1:8080&#34;</span>
+</span></span><span style=display:flex><span>export ALL_PROXY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;http://127.0.0.1:8080&#34;</span>
+</span></span><span style=display:flex><span>export SSL_CERT_FILE<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$HOME<span style=color:#e6db74>/.mitmproxy/mitmproxy-ca-cert.pem&#34;</span>
+</span></span><span style=display:flex><span>export NODE_EXTRA_CA_CERTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$HOME<span style=color:#e6db74>/.mitmproxy/mitmproxy-ca-cert.pem&#34;</span>
+</span></span></code></pre></div><h2 id=step-5-启动-codex-并发送-hello>Step 5. 启动 Codex 并发送 <code>hello</code></h2><p>还是在第二个终端里执行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>codex
+</span></span></code></pre></div><p>进入交互界面后，输入：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>hello
+</span></span></code></pre></div><p>发送后，回到第一个终端，你应该能看到 <code>mitmdump</code> 打印出新的请求记录。</p><h2 id=step-6-停止抓包并确认文件>Step 6. 停止抓包并确认文件</h2><p>在第一个终端按 <code>Ctrl+C</code> 停止抓包。</p><p>然后检查文件是否存在：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>ls -lh codex-hello.mitm
+</span></span></code></pre></div><p>如果文件存在，说明抓包成功。</p><h2 id=step-7-回放抓包文件>Step 7. 回放抓包文件</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>mitmproxy -nr codex-hello.mitm
+</span></span></code></pre></div><p>你可以在这里看到请求和响应。</p><h2 id=step-8-把请求体导出成文本文件>Step 8. 把请求体导出成文本文件</h2><p>新建一个脚本 <code>save_request_body.py</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> pathlib <span style=color:#f92672>import</span> Path
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> mitmproxy <span style=color:#f92672>import</span> http
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>saved <span style=color:#f92672>=</span> <span style=color:#66d9ef>False</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>request</span>(flow: http<span style=color:#f92672>.</span>HTTPFlow) <span style=color:#f92672>-&gt;</span> <span style=color:#66d9ef>None</span>:
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>global</span> saved
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> saved:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>    body <span style=color:#f92672>=</span> flow<span style=color:#f92672>.</span>request<span style=color:#f92672>.</span>get_text(strict<span style=color:#f92672>=</span><span style=color:#66d9ef>False</span>)
+</span></span><span style=display:flex><span>    Path(<span style=color:#e6db74>&#34;codex-hello-request.json&#34;</span>)<span style=color:#f92672>.</span>write_text(body, encoding<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;utf-8&#34;</span>)
+</span></span><span style=display:flex><span>    saved <span style=color:#f92672>=</span> <span style=color:#66d9ef>True</span>
+</span></span></code></pre></div><p>然后执行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>mitmdump -nr codex-hello.mitm -s save_request_body.py
+</span></span></code></pre></div><p>执行完成后，当前目录会多出一个文件：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>codex-hello-request.json
+</span></span></code></pre></div><p>这个文件就是抓到的请求体文本。</p><h2 id=step-9-请求体完整长什么样>Step 9. 请求体完整长什么样</h2><p>Codex 发送的请求体通常不是单独一个 <code>hello</code>，而是一整个 JSON 包，里面会带上模型、系统提示词、工具定义、推理配置和当前输入。</p><p>下面这个例子保留了<strong>完整请求体结构</strong>，但把长文本、路径、缓存键和其他敏感值做了脱敏。这样既能看清楚请求体完整长什么样，也适合公开展示。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;response.create&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;gpt-5.4&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;instructions&#34;</span>: <span style=color:#e6db74>&#34;&lt;full system instructions redacted&gt;&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;previous_response_id&#34;</span>: <span style=color:#66d9ef>null</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;input&#34;</span>: [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;message&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;developer&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;content&#34;</span>: [
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;input_text&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;text&#34;</span>: <span style=color:#e6db74>&#34;&lt;permissions instructions redacted&gt;&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      ]
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;message&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;user&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;content&#34;</span>: [
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;input_text&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;text&#34;</span>: <span style=color:#e6db74>&#34;# AGENTS.md instructions for &lt;workspace path redacted&gt;\n\n&lt;INSTRUCTIONS&gt;...redacted...&lt;/INSTRUCTIONS&gt;&#34;</span>
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;input_text&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;text&#34;</span>: <span style=color:#e6db74>&#34;&lt;environment_context&gt;\n  &lt;cwd&gt;&lt;workspace path redacted&gt;&lt;/cwd&gt;\n  &lt;shell&gt;zsh&lt;/shell&gt;\n  &lt;current_date&gt;2026-03-09&lt;/current_date&gt;\n  &lt;timezone&gt;Asia/Shanghai&lt;/timezone&gt;\n&lt;/environment_context&gt;&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      ]
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;message&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;developer&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;content&#34;</span>: [
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;input_text&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;text&#34;</span>: <span style=color:#e6db74>&#34;&lt;collaboration_mode&gt;# Collaboration Mode: Default ... redacted ...&lt;/collaboration_mode&gt;&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      ]
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;message&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;user&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;content&#34;</span>: [
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;input_text&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;text&#34;</span>: <span style=color:#e6db74>&#34;hello&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      ]
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;tools&#34;</span>: [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;function&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;exec_command&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Runs a command in a PTY, returning output or a session ID for ongoing interaction.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;strict&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;parameters&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;cmd&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Shell command to execute.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;justification&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;&lt;redacted&gt;&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;login&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;boolean&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Whether to run the shell with -l/-i semantics. Defaults to true.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;max_output_tokens&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;number&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Maximum number of tokens to return. Excess output will be truncated.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;prefix_rule&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;array&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;items&#34;</span>: {
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>            },
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;&lt;redacted&gt;&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;sandbox_permissions&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Sandbox permissions for the command. Set to \&#34;require_escalated\&#34; to request running without sandbox restrictions; defaults to \&#34;use_default\&#34;.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;shell&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Shell binary to launch. Defaults to the user&#39;s default shell.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;tty&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;boolean&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Whether to allocate a TTY for the command.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;workdir&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Optional working directory to run the command in.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;yield_time_ms&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;number&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;How long to wait (in milliseconds) for output before yielding.&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;cmd&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;function&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;write_stdin&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Writes characters to an existing unified exec session and returns recent output.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;strict&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;parameters&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;chars&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Bytes to write to stdin (may be empty to poll).&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;max_output_tokens&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;number&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Maximum number of tokens to return. Excess output will be truncated.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;session_id&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;number&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Identifier of the running unified exec session.&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;yield_time_ms&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;number&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;How long to wait (in milliseconds) for output before yielding.&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;session_id&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;function&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;update_plan&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Updates the task plan.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;strict&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;parameters&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;explanation&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;plan&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;array&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;items&#34;</span>: {
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>                <span style=color:#f92672>&#34;status&#34;</span>: {
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;One of: pending, in_progress, completed&#34;</span>
+</span></span><span style=display:flex><span>                },
+</span></span><span style=display:flex><span>                <span style=color:#f92672>&#34;step&#34;</span>: {
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                }
+</span></span><span style=display:flex><span>              },
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;step&#34;</span>, <span style=color:#e6db74>&#34;status&#34;</span>],
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;plan&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;function&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;request_user_input&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Request user input for one to three short questions and wait for the response.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;strict&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;parameters&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;questions&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;array&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;items&#34;</span>: {
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>                <span style=color:#f92672>&#34;header&#34;</span>: {
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                },
+</span></span><span style=display:flex><span>                <span style=color:#f92672>&#34;id&#34;</span>: {
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                },
+</span></span><span style=display:flex><span>                <span style=color:#f92672>&#34;options&#34;</span>: {
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;array&#34;</span>,
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;items&#34;</span>: {
+</span></span><span style=display:flex><span>                    <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>                    <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>                      <span style=color:#f92672>&#34;description&#34;</span>: {
+</span></span><span style=display:flex><span>                        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                      },
+</span></span><span style=display:flex><span>                      <span style=color:#f92672>&#34;label&#34;</span>: {
+</span></span><span style=display:flex><span>                        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                      }
+</span></span><span style=display:flex><span>                    },
+</span></span><span style=display:flex><span>                    <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;label&#34;</span>, <span style=color:#e6db74>&#34;description&#34;</span>],
+</span></span><span style=display:flex><span>                    <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>                  }
+</span></span><span style=display:flex><span>                },
+</span></span><span style=display:flex><span>                <span style=color:#f92672>&#34;question&#34;</span>: {
+</span></span><span style=display:flex><span>                  <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                }
+</span></span><span style=display:flex><span>              },
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;id&#34;</span>, <span style=color:#e6db74>&#34;header&#34;</span>, <span style=color:#e6db74>&#34;question&#34;</span>, <span style=color:#e6db74>&#34;options&#34;</span>],
+</span></span><span style=display:flex><span>              <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;questions&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;custom&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;apply_patch&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Use the `apply_patch` tool to edit files.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;format&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;grammar&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;syntax&#34;</span>: <span style=color:#e6db74>&#34;lark&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;definition&#34;</span>: <span style=color:#e6db74>&#34;&lt;lark grammar redacted&gt;&#34;</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;web_search&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;external_web_access&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;search_content_types&#34;</span>: [<span style=color:#e6db74>&#34;text&#34;</span>, <span style=color:#e6db74>&#34;image&#34;</span>]
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;function&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;view_image&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;View a local image from the filesystem.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;strict&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;parameters&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;path&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Local filesystem path to an image file&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;path&#34;</span>],
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;additionalProperties&#34;</span>: <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;tool_choice&#34;</span>: <span style=color:#e6db74>&#34;auto&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;parallel_tool_calls&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;reasoning&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;effort&#34;</span>: <span style=color:#e6db74>&#34;high&#34;</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;store&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;stream&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;include&#34;</span>: [<span style=color:#e6db74>&#34;reasoning.encrypted_content&#34;</span>],
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;prompt_cache_key&#34;</span>: <span style=color:#e6db74>&#34;&lt;redacted&gt;&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;text&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;verbosity&#34;</span>: <span style=color:#e6db74>&#34;low&#34;</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;generate&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;client_metadata&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;x-codex-turn-metadata&#34;</span>: <span style=color:#e6db74>&#34;{\&#34;turn_id\&#34;:\&#34;&lt;redacted&gt;\&#34;,\&#34;sandbox\&#34;:\&#34;seatbelt\&#34;}&#34;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>从这个例子可以看出来，<code>hello</code> 只是 <code>input</code> 里的最后一条用户消息，而不是整个请求体本身。真正发出去的是一个完整的代理请求包。</p><h2 id=注意>注意</h2><p>不要把真实抓包里的 token、缓存键、本地路径、完整系统提示词或者完整会话内容直接发到博客、工单或公开仓库。要展示完整结构时，建议像上面这样保留字段、脱敏字段值。</p></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/ai/>ai</a></span>
+<span class=separator><a class=tag href=/tags/codex/>codex</a><a class=tag href=/tags/mitmproxy/>mitmproxy</a><a class=tag href=/tags/proxy/>proxy</a><a class=tag href=/tags/debug/>debug</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.e1c6918cbaa90022a5612f0bd71c7bf3be6d036614c5729cebfe14f7b91fa4bc.js integrity="sha256-4caRjLqpACKlYS8L1xx7875tA2YUxXKc6/4U97kfpLw=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
