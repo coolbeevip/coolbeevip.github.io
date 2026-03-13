@@ -118,7 +118,7 @@ services:
       HOSTED_VLLM_API_BASE: http://10.1.251.228:18080/v1
       HOSTED_VLLM_API_KEY: xxx
       GITLAB__URL: http://10.1.207.194:8081
-      GITLAB__PERSONAL_ACCESS_TOKEN: glpat-xxxx
+      GITLAB__PERSONAL_ACCESS_TOKEN: glpat-_nUBhby1zrXih2aYt51r
       GITLAB__SHARED_SECRET: 5ac610e5e7cacf37a2167a96cb7f3bea3fe500d8
       GITLAB__AUTH_TYPE: oauth_token
       GITLAB__PR_COMMANDS: '["/describe", "/review"]'
