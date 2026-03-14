@@ -6,8 +6,6 @@ categories: [ai]
 draft: false
 ---
 
-> 标题里写的是 `mitmprox`，实际使用的工具名是 `mitmproxy`。
-
 这篇文章只做一件事：**在 macOS 上用 `mitmproxy` 抓一次 Codex 发送 `hello` 的请求，并把请求体导出成文本文件。**
 
 ## Step 1. 安装 mitmproxy
@@ -98,49 +96,14 @@ ls -lh codex-hello.mitm
 ## Step 7. 回放抓包文件
 
 ```bash
-mitmproxy -nr codex-hello.mitm
+mitmweb -nr codex-hello.mitm
 ```
 
-你可以在这里看到请求和响应。
+你可以在浏览器里看到请求和响应。
 
-## Step 8. 把请求体导出成文本文件
+## Step 8. 请求体完整长什么样
 
-新建一个脚本 `save_request_body.py`：
-
-```python
-from pathlib import Path
-from mitmproxy import http
-
-saved = False
-
-def request(flow: http.HTTPFlow) -> None:
-    global saved
-    if saved:
-        return
-    body = flow.request.get_text(strict=False)
-    Path("codex-hello-request.json").write_text(body, encoding="utf-8")
-    saved = True
-```
-
-然后执行：
-
-```bash
-mitmdump -nr codex-hello.mitm -s save_request_body.py
-```
-
-执行完成后，当前目录会多出一个文件：
-
-```text
-codex-hello-request.json
-```
-
-这个文件就是抓到的请求体文本。
-
-## Step 9. 请求体完整长什么样
-
-Codex 发送的请求体通常不是单独一个 `hello`，而是一整个 JSON 包，里面会带上模型、系统提示词、工具定义、推理配置和当前输入。
-
-下面这个例子保留了**完整请求体结构**，但把长文本、路径、缓存键和其他敏感值做了脱敏。这样既能看清楚请求体完整长什么样，也适合公开展示。
+Codex 发送的请求体通常不是单独一个 `hello`，而是一整个 JSON 包，里面会带上模型、系统提示词、工具定义、推理配置和当前输入。 下面这个例子保留了**完整请求体结构**，但把长文本、路径、缓存键和其他敏感值做了脱敏。
 
 ```json
 {
@@ -412,9 +375,3 @@ Codex 发送的请求体通常不是单独一个 `hello`，而是一整个 JSON 
   }
 }
 ```
-
-从这个例子可以看出来，`hello` 只是 `input` 里的最后一条用户消息，而不是整个请求体本身。真正发出去的是一个完整的代理请求包。
-
-## 注意
-
-不要把真实抓包里的 token、缓存键、本地路径、完整系统提示词或者完整会话内容直接发到博客、工单或公开仓库。要展示完整结构时，建议像上面这样保留字段、脱敏字段值。
