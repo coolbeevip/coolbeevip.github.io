@@ -6,7 +6,7 @@ categories: [ai]
 draft: false
 ---
 
-这篇文章只做一件事：**在 macOS 上用 `mitmproxy` 抓一次 Codex 发送 `hello` 的请求，并把请求体导出成文本文件。**
+这篇文章只做一件事：**在 macOS 上用 `mitmproxy` 抓一次 Codex 发送 `hello` 的请求。**
 
 ## Step 1. 安装 mitmproxy
 
