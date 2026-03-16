@@ -26,7 +26,7 @@ export HTTP_PROXY=&amp;#34;http://127.0.0.1:8080&amp;#34; export HTTPS_PROXY=&am
 它的运作机制是这样的：
 AI Agent 在生成估算时，会不自觉地调用训练数据中的&amp;quot;集体经验&amp;rdquo;。一个 REST API 项目？论坛上说要一周。一个带实时图表的全栈 Dashboard？技术负责人在 Sprint Planning 里估了三个迭代。这些数字是人类开发者在人类的认知带宽、上下文切换成本、沟通损耗下产出的经验值。它们对人类成立，但对一个可以每 3 分钟完成一轮&amp;quot;思考→写码→执行→验证→修复&amp;quot;循环的 Agent 来说，完全不适用。
 这导致了一个系统性偏差：AI 几乎总是高估自己的工期。
-而我们这些老程序员，反过来也在犯同样的错：我们拿自己过去的经验去预期 AI 的产出速度，然后在&amp;quot;哇，这么快？&amp;ldquo;和&amp;quot;等等，它真能做到吗？&amp;ldquo;之间反复横跳。</description></item><item><title>LeRobot 数据采集和训练</title><link>https://coolbeevip.github.io/posts/lerobot/lerobot-train/</link><pubDate>Wed, 04 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/lerobot/lerobot-train/</guid><description>通过操作 LeRobot 机械臂执行指定任务来采集数据，数据会被保存到本地并可以选择上传到 Hugging Face Hub 进行管理和分享。
+而我们这些老程序员，反过来也在犯同样的错：我们拿自己过去的经验去预期 AI 的产出速度，然后在&amp;quot;哇，这么快？&amp;ldquo;和&amp;quot;等等，它真能做到吗？&amp;ldquo;之间反复横跳。</description></item><item><title>LeRobot 数据采集</title><link>https://coolbeevip.github.io/posts/lerobot/lerobot-acquisition/</link><pubDate>Wed, 04 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/lerobot/lerobot-acquisition/</guid><description>通过操作 LeRobot 机械臂执行指定任务来采集数据，数据会被保存到本地并可以选择上传到 Hugging Face Hub 进行管理和分享。
 切换到 LeRobot 虚拟环境
 source ~/miniconda3/bin/activate conda activate lerobot 执行以下命令跟随语音提示完成 3 轮摇操作数据采集，每轮采集在 60 秒内完成抓取香蕉放到苹果旁，然后再在。30 秒内将香蕉摆放回原来的位置后再等待下一轮的语音指令，直到完成 3轮数据采集后命令会自动结束。
 dataset.repo_id 配置数据集的存储目录名，最终数据会存储到 ~/.cache/huggingface/lerobot/{repo-id} 目录下，注意 repo-id 的格式必须为 {xxx}/{xxx}。
