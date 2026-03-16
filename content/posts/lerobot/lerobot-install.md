@@ -217,3 +217,8 @@ lerobot-teleoperate \
 ```
 
 ![image](/images/posts/lerobot/camera.png)
+
+## 参考资料
+
+- https://huggingface.co/docs/lerobot
+- https://wiki.seeedstudio.com/cn/lerobot_so100m/
