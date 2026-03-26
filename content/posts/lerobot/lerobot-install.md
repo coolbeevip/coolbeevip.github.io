@@ -3,7 +3,7 @@ title: "LeRobot 驱动安装和遥空操作"
 date: 2026-03-04T00:24:14+08:00
 tags: [robot]
 categories: [lerobot]
-draft: false
+draft: true
 ---
 
 ## 安装 Miniconda

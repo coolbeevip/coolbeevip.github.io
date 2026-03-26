@@ -3,7 +3,7 @@ title: "LeRobot 数据采集"
 date: 2026-03-04T00:24:14+08:00
 tags: [robot]
 categories: [LeRobot]
-draft: false
+draft: true
 ---
 
 通过操作 LeRobot 机械臂执行指定任务来采集数据，数据会被保存到本地并可以选择上传到 Hugging Face Hub 进行管理和分享。
