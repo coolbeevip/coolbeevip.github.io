@@ -6,7 +6,7 @@ categories: [ai]
 draft: false
 ---
 
-这篇文章只做一件事：**在 macOS 上用 `mitmproxy` 抓一次 Codex 发送 `hello` 的请求。**
+这篇文章只做一件事：**在 macOS 上用 `mitmproxy` 抓 Codex 发送请求包，逆向分析上下文工程。**
 
 ## Step 1. 安装 mitmproxy
 
