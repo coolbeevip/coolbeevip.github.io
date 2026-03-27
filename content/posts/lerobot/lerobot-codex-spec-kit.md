@@ -3,7 +3,7 @@ title: "使用 Codex + Spec-Kit 做出这个 LeRobot Agent PoC"
 date: 2026-03-04T00:24:14+08:00
 tags: [robot, spec-kit, codex]
 categories: [lerobot]
-draft: false
+draft: true
 ---
 
 > “现在问题解决了，但请你重新 Review 一下今天的几轮修改，看看是不是补丁叠补丁式的修改，如果是的话，重构成最优解”，这是我在这个项目里对 AI 说得最多的一句话。
