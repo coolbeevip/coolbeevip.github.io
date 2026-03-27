@@ -3,7 +3,7 @@ title: "ABB 机械臂 3C 组装实施流程：传统交付、Omniverse/Isaac 协
 date: 2026-03-22T13:24:14+08:00
 tags: [ai,robot,arm,automation,lerobot]
 categories: [embodied-ai]
-draft: false
+draft: true
 ---
 
 本文面向刚进入自动化、机器人、Omniverse/Isaac 与智能体研发协同场景的从业者，目标不是介绍“机器人能做什么”，而是给出一套接近真实工业现场的 ABB 机械臂 3C 组装实施与协同指南。
