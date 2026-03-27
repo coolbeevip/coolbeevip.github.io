@@ -1,5 +1,5 @@
 ---
-title: "使用 mitmprox 抓取 openclaw 数据包"
+title: "使用 mitmproxy 抓取 openclaw 数据包"
 date: 2026-03-16T22:10:00+08:00
 tags: [openclaw,mitmproxy,proxy,debug]
 categories: [ai]
@@ -1622,3 +1622,43 @@ draft: false
     "tools": [...]
 }
 ```
+
+## Tools
+
+> 工具是一组“受权限控制、强类型定义、可审计且支持状态交互的执行 API”，用于让 Agent 安全地在真实环境中做事。
+
+* **文件与工作区操作类**
+
+    * `read`：读取文件内容，支持文本与图片路径输入，可用于代码分析、配置读取或图像理解前的数据加载。
+    * `edit`：基于精确文本匹配进行文件修改（oldText → newText），适合小范围、可控的代码变更。
+    * `write`：写入或覆盖文件内容，用于生成新文件或整体重写文件。
+
+* **命令执行与进程控制类**
+
+    * `exec`：执行 shell 命令，支持后台运行、PTY、超时控制、环境变量设置等，可用于构建、运行、测试等任务。
+    * `process`：管理 exec 启动的进程会话，支持 list / poll / log / write / kill / paste，实现持续交互式终端控制。
+
+* **定时调度与自动化类**
+
+    * `cron`：任务调度器，支持一次性执行（at）、周期执行（every）和 cron 表达式；可触发 systemEvent 或 agentTurn，实现定时唤醒 Agent 或自动执行任务。
+
+* **会话管理与多智能体编排类**
+
+    * `sessions_list`：列出当前所有会话。
+    * `sessions_history`：获取指定会话的历史消息。
+    * `sessions_send`：向其他会话发送输入，实现跨会话通信。
+    * `sessions_yield`：当前会话主动让出执行权，等待子任务或其他会话结果。
+    * `sessions_spawn`：创建新会话或子 Agent，支持 subagent / ACP runtime、线程隔离、上下文恢复、附件注入等。
+    * `subagents`：对子 Agent 进行管理（list / kill / steer）。
+    * `session_status`：查询会话状态，包括模型使用、token、成本等。
+
+* **联网与多模态感知类**
+
+    * `web_search`：执行网页搜索，支持国家、语言、时间范围等过滤，用于信息检索。
+    * `web_fetch`：抓取指定 URL 内容并提取正文，用于深入阅读网页。
+    * `image`：对图片进行理解与分析，支持单图或多图输入，结合 prompt 进行视觉推理。
+
+* **长期记忆与上下文检索类**
+
+    * `memory_search`：在 MEMORY.md 或 memory/*.md 中进行语义检索，用于查找历史决策、偏好、任务记录等。
+    * `memory_get`：根据路径读取具体记忆内容，用于精确恢复上下文信息。
