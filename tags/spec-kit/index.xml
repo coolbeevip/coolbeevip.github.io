@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spec-Kit on</title><link>https://coolbeevip.github.io/tags/spec-kit/</link><description>Recent content in Spec-Kit on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 04 Mar 2026 00:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/spec-kit/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Codex + Spec-Kit 做出这个 LeRobot Agent PoC</title><link>https://coolbeevip.github.io/posts/lerobot/lerobot-codex-spec-kit/</link><pubDate>Wed, 04 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/lerobot/lerobot-codex-spec-kit/</guid><description>“现在问题解决了，但请你重新 Review 一下今天的几轮修改，看看是不是补丁叠补丁式的修改，如果是的话，重构成最优解”，这是我在这个项目里对 AI 说得最多的一句话。
+你也可以说 “review the code, think from greenfield” 或者 “/samplify”，但不管怎么说，这句话的核心意思是：当 AI 在一个已经快速迭代过的代码库里继续修改时，它很容易陷入“补丁叠补丁”的陷阱，而不是停下来重新思考最优解。
+更准确地说，这个项目并不是我一个人独立完成的。我主要搭起了大约 70% 的骨架和核心功能，包括命令行入口、配置体系、API 分层、Web 服务、调试面板（dashboard），以及大部分基础测试。到了后期，团队里的同事也逐步参与进来，补上了模型推理、训练以及一些更贴近业务场景的能力。
+过去一周时间，我参与做了一个基于 LeRobot 的 SO-101 机械臂 PoC。它最初只是一个“能跑起来”的遥操作脚本，后来逐步长成了一个具备配置驱动、基础测试、服务接口和调试界面的 MVP。
+现在这个项目大致长这样：
+命令行入口：teleoperate、record、replay、serve Python API 分层：src/api FastAPI 服务：src/webapi React 调试面板：dashboard/ 单元测试：tests/unit 配置文件：config/agent.toml 如果只用一句话概括这个项目是怎么做起来的，那就是：
+我用 GitHub Spec-Kit 管“要做什么”，用 Codex 管“怎么更快做出来”。
+但这不是一个“AI 加上 Spec-Kit 就一路顺风”的故事。中间有很多反复、修正和取舍。Spec-Kit 确实帮了我不少，也确实带来过混乱；Codex 让我省了很多重复劳动，也把我在前端、协作和问题表达上的短板照得很清楚。
+这篇文章想讲的，就是这些真实经验。
+一、为什么我一开始没有直接写代码 这个项目表面上看像是一个典型的“硬件 + Python”工具，但真正做起来后，我很快意识到它不是一个单点脚本问题，而是一整条链路的问题：
+读取 SO-101 的 follower、leader、camera 配置。 跑通 teleoperate（遥操作）。 支持 record（数据采集）和 replay（回放）。 把能力暴露成 HTTP / WebSocket 服务，方便外部系统调用。 做一个调试面板，把串口、相机、控制状态、任务状态都可视化。 后续继续接入推理和 LLM，而不是推翻重来。 如果直接写代码，很容易在第 3 步以后失控。因为你会开始把这些东西揉在一起：</description></item></channel></rss>
