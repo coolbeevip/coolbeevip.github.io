@@ -1,5 +1,5 @@
 ---
-title: "使用 mitmprox 抓取 codex 数据包"
+title: "使用 mitmproxy 抓取 codex 数据包"
 date: 2026-03-09T22:10:00+08:00
 tags: [codex,mitmproxy,proxy,debug]
 categories: [ai]
