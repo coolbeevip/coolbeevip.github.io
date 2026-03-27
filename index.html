@@ -19,7 +19,7 @@ Step 1. 系统启动后主动给大模型发送消息 Sender (untrusted metadata
 第一步：在 GitLab 中准备机器人账号 先在 GitLab 中创建一个专用用户，例如 pr-agent-bot，然后把它加入需要接管 Review 的项目或组。</p><a href=/posts/gitlab/install-qodo-pr-agent-for-local-gitlab/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Thu, Mar 12, 2026
 </span><span class=separator><a class=category href=/categories/gitlab/>gitlab</a></span>
-<span class=separator><a class=tag href=/tags/gitlab/>gitlab</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/qodo/>qodo</a><a class=tag href=/tags/pr-agent/>pr-agent</a><a class=tag href=/tags/review/>review</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/ai/mitmprox-codex-packets/>使用 mitmprox 抓取 codex 数据包</a></h3></div><div class=post-content><div class=p_part><p>这篇文章只做一件事：在 macOS 上用 mitmproxy 抓 Codex 发送请求包，逆向分析上下文工程。
+<span class=separator><a class=tag href=/tags/gitlab/>gitlab</a><a class=tag href=/tags/docker/>docker</a><a class=tag href=/tags/qodo/>qodo</a><a class=tag href=/tags/pr-agent/>pr-agent</a><a class=tag href=/tags/review/>review</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/ai/mitmprox-codex-packets/>使用 mitmproxy 抓取 codex 数据包</a></h3></div><div class=post-content><div class=p_part><p>这篇文章只做一件事：在 macOS 上用 mitmproxy 抓 Codex 发送请求包，逆向分析上下文工程。
 Step 1. 安装 mitmproxy brew install mitmproxy 确认安装成功：
 mitmdump --version Step 2. 启动抓包代理 打开第一个终端，执行：
 mitmdump --listen-host 127.0.0.1 --listen-port 8080 -w codex-hello.mitm 这一步会：
