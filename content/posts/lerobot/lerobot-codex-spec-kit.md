@@ -421,10 +421,10 @@ Spec-Kit 让我先把功能定义清楚，Codex 让我更快把它做出来。
 
 ## 参考链接
 
-[LeRobot]: https://huggingface.co/docs/lerobot
-[SO-101]: https://huggingface.co/docs/lerobot/so101
-[codex]: https://openai.com/codex/
-[spec-kit-repo]: https://github.com/github/spec-kit
-[spec-kit-readme]: https://github.com/github/spec-kit/blob/main/README.md
-[spec-kit-spec-driven]: https://github.com/github/spec-kit/blob/main/spec-driven.md
-[xy-problem]: https://en.wikipedia.org/wiki/XY_problem
+LeRobot: https://huggingface.co/docs/lerobot
+SO-101: https://huggingface.co/docs/lerobot/so101
+Codex: https://openai.com/codex/
+Spec-kit-repo: https://github.com/github/spec-kit
+Spec-kit-readme: https://github.com/github/spec-kit/blob/main/README.md
+Spec-kit-spec-driven: https://github.com/github/spec-kit/blob/main/spec-driven.md
+XY-Problem: https://en.wikipedia.org/wiki/XY_problem
