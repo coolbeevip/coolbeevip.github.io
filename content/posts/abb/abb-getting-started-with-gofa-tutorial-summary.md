@@ -6,9 +6,9 @@ categories: [abb]
 draft: false
 ---
 
-![机械臂本体](/images/posts/abb/abb-getting-started-with-gofa-tutorial-summary/img.png)
+本文内容总结自 ABB 官方培训教程《Getting started with GoFa™ Tutorial》
 
-> 本文内容总结自 ABB 官方培训教程《Getting started with GoFa™ Tutorial》
+![机械臂本体](/images/posts/abb/abb-getting-started-with-gofa-tutorial-summary/img.png)
 
 ## 1. 引言
 
