@@ -7,18 +7,7 @@
 1. 引言 如果从一般产品介绍的角度描述机械臂，常见写法通常会集中在负载、速度、臂展和应用行业上。但从软件工程师和系统集成工程师的视角来看，这样的介绍远远不够。因为在实际项目里，机械臂并不是一个孤立设备，而是一个需要接入控制系统、配置安全策略、定义工具模型、完成示教调试、接入上位系统并持续维护的工程对象。
 机械臂的价值，不只在于它是一台协作机器人，更在于它围绕“机器人如何真正进入生产系统”提供了一整套较完整的工程链路。官方教程材料已经覆盖了这一链路的关键环节：从开箱、接线、控制器接口，到安全配置、手动引导、可视化编程，再到虚拟仿真和后续支持。把这些材料重新组织后，可以更清楚地看出机械臂在工程实施中的真实定位。
 本文将不再沿用传统“产品亮点罗列”的方式，而是按照软件工程更熟悉的分析框架来介绍机械臂：先明确系统边界，再分析组成结构、接口与安全，再看开发方式、交互机制以及它在完整自动化系统中的职责分工。
-2. GoFa 的本质：一套机器人执行系统 GoFa 是一种协作型机械臂，主要设计用于与人类并肩工作，无需物理围栏保护。其核心特点包括智能安全特性、高重复定位精度和易于编程（如“拖拽教学”），适用于快速搬运、码垛、机器上下料及包装等应用
-从工程视角看，GoFa 不应被理解为一根“会动的机械臂”，而应理解为一套以机械臂为执行端、以控制器为运行时核心、以示教器和仿真工具为开发入口的机器人执行系统。
-这套系统至少包含四个基本组成部分：
-机械臂本体（CRB 15000）：负责六轴运动、轨迹执行和末端工具姿态调整。 OmniCore 控制器：负责程序执行、运动控制、安全联锁、I/O 与网络集成。 FlexPendant 示教器：负责配置、示教、点动、状态监控和现场编程。 线缆与末端工具：负责供电、通信和工艺能力接入。 普通设备接入通常关注“设备能否通信”，而机器人接入必须同时关注：
-它如何执行动作 它如何被配置 它如何被安全约束 它如何被现场人员调试 它如何接入工位和上位系统 因此，GoFa 更像一个专用的机电一体化运行平台，而不是传统意义上的单体设备。
-3. 产品定位：它适合什么，不适合什么 GoFa 属于 ABB 协作机器人系列，覆盖 5 kg、10 kg、12 kg 负载版本。它面向“首次使用机器人”的用户和中小规模自动化场景，这一定位如果换成工程语言，可以理解为：它适合那些动作模式相对明确、工位边界相对清晰、但又要求部署成本和学习门槛不能太高的项目。
-典型应用包括：
-装配 抓取与搬运 上下料 包装 质量检测 这些任务有一个共同工程特征：动作逻辑通常是结构化的、可重复的、可示教的。真正复杂的部分往往不在机械臂本身，而在于业务调度、工件变化、节拍协调和异常处理。因此，GoFa 的合理角色通常是“高可靠动作执行节点”，而不是承担全部业务智能的中心系统。
-4. 为什么软件工程师应该先关注系统边界 机器人项目最容易失控的地方，通常不是“机器人会不会动”，而是“职责划分是不是一开始就错了”。如果没有系统边界意识，团队很容易陷入以下问题：
-把过多业务逻辑写进机器人程序 把现场示教当作长期维护手段 把安全配置当成联调末期补丁 让上位系统只保留一个“启动/停止”级别的粗粒度接口 为了避免这些问题，可以把 GoFa 在项目中的职责拆成三层：
-4.1 执行层 这一层由机械臂本体和末端工具组成，负责空间运动、姿态调整和工艺动作执行。它关心的是位置、速度、路径、工具姿态和接触响应。
-4.2 控制层 这一层由 OmniCore 控制器主导，负责运动控制、程序执行、安全配置生效、I/O 管理和本地状态机运行。对软件工程师来说，这一层最接近“运行时”。</p><a href=/posts/abb/abb-getting-started-with-gofa-tutorial-summary/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
+产品 GoFa SWIFTI YuMi（单臂） Dual-arm YuMi（双臂） 型号代表 ABB GoFa CRB 15000 ABB SWIFTI CRB 1300 ABB YuMi IRB 14050 ABB YuMi IRB 14000 定位 通用协作机器人 高速工业协作机器人 小型精密单臂协作机器人 双臂精密协作机器人 轴数 6 轴 6 轴 7 轴 14 轴（每臂 7 轴） 最大负载 5–12 kg 7–11 kg 0.5 kg 0.5 kg/臂 最大臂展 0.95–1.62 m 0.9–1.4 m 559 mm 559 mm/臂 重复定位精度 ±0.</p><a href=/posts/abb/abb-getting-started-with-gofa-tutorial-summary/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Mon, Mar 30, 2026
 </span><span class=separator><a class=category href=/categories/abb/>abb</a></span>
 <span class=separator><a class=tag href=/tags/abb/>abb</a><a class=tag href=/tags/robot/>robot</a><a class=tag href=/tags/gofa/>gofa</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/ai/mitmproxy-openclaw-packets/>使用 mitmproxy 抓取 openclaw 数据包</a></h3></div><div class=post-content><div class=p_part><p>以下是在 macOS 上使用 mitmproxy 抓取 OpenClaw onboard 引导流程中发送的请求体的步骤和结果。
