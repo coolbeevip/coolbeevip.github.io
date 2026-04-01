@@ -8,7 +8,7 @@ draft: false
 
 以下是在 macOS 上使用 `mitmproxy` 抓取 OpenClaw onboard 引导流程中发送的请求体的步骤和结果。
 
-装包工具的使用可以参考 [使用 mitmprox 抓取 codex 数据包](/posts/ai/mitmprox-codex-packets)，这里不赘述。
+装包工具的使用可以参考 [使用 mitmproxy 抓取 codex 数据包](/posts/ai/mitmproxy-codex-packets)，这里不赘述。
 
 因为每一步的 tools 内容都一样，所以除 Step 1 以外的步骤我就剩略了这部分。
 
