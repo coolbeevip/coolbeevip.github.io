@@ -3,7 +3,7 @@
 机械臂的价值，不只在于它是一台协作机器人，更在于它围绕“机器人如何真正进入生产系统”提供了一整套较完整的工程链路。官方教程材料已经覆盖了这一链路的关键环节：从开箱、接线、控制器接口，到安全配置、手动引导、可视化编程，再到虚拟仿真和后续支持。把这些材料重新组织后，可以更清楚地看出机械臂在工程实施中的真实定位。
 本文将不再沿用传统“产品亮点罗列”的方式，而是按照软件工程更熟悉的分析框架来介绍机械臂：先明确系统边界，再分析组成结构、接口与安全，再看开发方式、交互机制以及它在完整自动化系统中的职责分工。
 产品 GoFa SWIFTI YuMi（单臂） Dual-arm YuMi（双臂） 型号代表 ABB GoFa CRB 15000 ABB SWIFTI CRB 1300 ABB YuMi IRB 14050 ABB YuMi IRB 14000 定位 通用协作机器人 高速工业协作机器人 小型精密单臂协作机器人 双臂精密协作机器人 轴数 6 轴 6 轴 7 轴 14 轴（每臂 7 轴） 最大负载 5–12 kg 7–11 kg 0.5 kg 0.5 kg/臂 最大臂展 0.95–1.62 m 0.9–1.4 m 559 mm 559 mm/臂 重复定位精度 ±0.</description></item><item><title>使用 mitmproxy 抓取 openclaw 数据包</title><link>https://coolbeevip.github.io/posts/ai/mitmproxy-openclaw-packets/</link><pubDate>Mon, 16 Mar 2026 22:10:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/mitmproxy-openclaw-packets/</guid><description>以下是在 macOS 上使用 mitmproxy 抓取 OpenClaw onboard 引导流程中发送的请求体的步骤和结果。
-装包工具的使用可以参考 使用 mitmprox 抓取 codex 数据包，这里不赘述。
+装包工具的使用可以参考 使用 mitmproxy 抓取 codex 数据包，这里不赘述。
 因为每一步的 tools 内容都一样，所以除 Step 1 以外的步骤我就剩略了这部分。
 可以看到整个引导过程完全通过提示工程驱动工具完成。
 Step 1. 系统启动后主动给大模型发送消息 Sender (untrusted metadata):\njson\n{\n \&amp;quot;label\&amp;quot;: \&amp;quot;openclaw-tui (gateway-client)\&amp;quot;,\n \&amp;quot;id\&amp;quot;: \&amp;quot;gateway-client\&amp;quot;,\n \&amp;quot;name\&amp;quot;: \&amp;quot;openclaw-tui\&amp;quot;,\n \&amp;quot;username\&amp;quot;: \&amp;quot;openclaw-tui\&amp;quot;\n}\n\n\n[Mon 2026-03-16 22:15 GMT+8] Wake up, my friend!

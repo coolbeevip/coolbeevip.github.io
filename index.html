@@ -11,7 +11,7 @@
 <span class=date>Mon, Mar 30, 2026
 </span><span class=separator><a class=category href=/categories/abb/>abb</a></span>
 <span class=separator><a class=tag href=/tags/abb/>abb</a><a class=tag href=/tags/robot/>robot</a><a class=tag href=/tags/gofa/>gofa</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/ai/mitmproxy-openclaw-packets/>使用 mitmproxy 抓取 openclaw 数据包</a></h3></div><div class=post-content><div class=p_part><p>以下是在 macOS 上使用 mitmproxy 抓取 OpenClaw onboard 引导流程中发送的请求体的步骤和结果。
-装包工具的使用可以参考 使用 mitmprox 抓取 codex 数据包，这里不赘述。
+装包工具的使用可以参考 使用 mitmproxy 抓取 codex 数据包，这里不赘述。
 因为每一步的 tools 内容都一样，所以除 Step 1 以外的步骤我就剩略了这部分。
 可以看到整个引导过程完全通过提示工程驱动工具完成。
 Step 1. 系统启动后主动给大模型发送消息 Sender (untrusted metadata):\njson\n{\n \"label\": \"openclaw-tui (gateway-client)\",\n \"id\": \"gateway-client\",\n \"name\": \"openclaw-tui\",\n \"username\": \"openclaw-tui\"\n}\n\n\n[Mon 2026-03-16 22:15 GMT+8] Wake up, my friend!
