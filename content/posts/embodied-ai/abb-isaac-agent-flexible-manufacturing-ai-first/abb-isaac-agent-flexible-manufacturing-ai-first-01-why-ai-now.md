@@ -76,102 +76,107 @@ draft: true
 只要产品变化不大、工艺窗口稳定、换型频率不高，这套逻辑就能成立。
 
 
-```mermaid
-sequenceDiagram
-    title 手机装配单站，负责协调摄像头模组、固定支架、散热垫等配件的安装流程（PLC总控）
-    autonumber
+```plantuml
+@startuml
+title 手机装配单站，负责协调摄像头模组、固定支架、散热垫等配件的安装流程（PLC总控）
 
-    participant MES as MES/上层工单系统
-    participant PLC as 工位PLC
-    participant Safety as 安全PLC/安全门/急停回路
-    participant Robot as ABB机器人控制器(IRC5/OmniCore)
-    participant Vision as 视觉检测系统
-    participant Press as 压装设备
-    participant Operator as 现场操作员
+autonumber
 
-    MES->>PLC: 下发工单\n开始安装手机配件
+participant "MES/上层工单系统" as MES
+participant "工位PLC" as PLC
+participant "安全PLC/安全门/急停回路" as Safety
+participant "ABB机器人控制器(IRC5/OmniCore)" as Robot
+participant "视觉检测系统" as Vision
+participant "压装设备" as Press
+participant "现场操作员" as Operator
 
-    PLC->>Safety: 查询安全状态
-    Safety-->>PLC: 安全允许
+MES -> PLC: 下发工单\n开始安装手机配件
 
-    alt 安全条件不满足
-        PLC->>Operator: 报警：安全门打开/急停
-        PLC-->>MES: 工单暂停
-    else 安全条件满足
+PLC -> Safety: 查询安全状态
+Safety --> PLC: 安全允许
 
-        PLC->>PLC: 判断工位条件\n治具到位、来料到位、自动模式
+alt 安全条件不满足
+    PLC -> Operator: 报警：安全门打开/急停
+    PLC --> MES: 工单暂停
+else 安全条件满足
 
-        alt 工位未就绪
-            PLC->>Operator: 等待来料或人工确认
-            PLC-->>MES: 工单暂停
-        else 工位已就绪
+    PLC -> PLC: 判断工位条件\n治具到位、来料到位、自动模式
 
-            Note over PLC,Robot: PLC 按固定流程调用机器人程序
+    alt 工位未就绪
+        PLC -> Operator: 等待来料或人工确认
+        PLC --> MES: 工单暂停
+    else 工位已就绪
 
-            PLC->>Robot: 启动程序 Pick_Camera_Module
-            Robot-->>PLC: 程序完成
+        note over PLC, Robot
+          PLC 按固定流程调用机器人程序
+        end note
 
-            PLC->>Vision: 请求检测抓取结果
-            Vision-->>PLC: 抓取成功
+        PLC -> Robot: 启动程序 Pick_Camera_Module
+        Robot --> PLC: 程序完成
 
-            alt 抓取失败
-                PLC->>Robot: 启动程序 Retry_Pick_Camera
-                Robot-->>PLC: 程序完成
+        PLC -> Vision: 请求检测抓取结果
+        Vision --> PLC: 抓取成功
 
-                PLC->>Vision: 再次检测
-                Vision-->>PLC: 仍然失败
+        alt 抓取失败
+            PLC -> Robot: 启动程序 Retry_Pick_Camera
+            Robot --> PLC: 程序完成
 
-                PLC->>Operator: 报警并等待人工处理
-                PLC-->>MES: 工单失败
-            else 抓取成功
+            PLC -> Vision: 再次检测
+            Vision --> PLC: 仍然失败
 
-                PLC->>Robot: 启动程序 Install_Camera_Module
-                Robot-->>PLC: 程序完成
+            PLC -> Operator: 报警并等待人工处理
+            PLC --> MES: 工单失败
+        else 抓取成功
 
-                PLC->>Vision: 检测安装精度
-                Vision-->>PLC: 安装合格
+            PLC -> Robot: 启动程序 Install_Camera_Module
+            Robot --> PLC: 程序完成
 
-                alt 安装超差
-                    PLC->>Robot: 启动程序 Reposition_Camera_Module
-                    Robot-->>PLC: 程序完成
+            PLC -> Vision: 检测安装精度
+            Vision --> PLC: 安装合格
 
-                    PLC->>Vision: 再次检测
-                    Vision-->>PLC: 仍然超差
+            alt 安装超差
+                PLC -> Robot: 启动程序 Reposition_Camera_Module
+                Robot --> PLC: 程序完成
 
-                    PLC->>Operator: 人工返修
-                    PLC-->>MES: 工单失败
-                else 安装合格
+                PLC -> Vision: 再次检测
+                Vision --> PLC: 仍然超差
 
-                    PLC->>Robot: 启动程序 Place_Bracket
-                    Robot-->>PLC: 支架已放置
+                PLC -> Operator: 人工返修
+                PLC --> MES: 工单失败
+            else 安装合格
 
-                    PLC->>Press: 启动压装
-                    Press-->>PLC: 压装完成
+                PLC -> Robot: 启动程序 Place_Bracket
+                Robot --> PLC: 支架已放置
 
-                    PLC->>Vision: 检测压装结果
-                    Vision-->>PLC: 压装合格
+                PLC -> Press: 启动压装
+                Press --> PLC: 压装完成
 
-                    alt 压装失败
-                        PLC->>Operator: 请求人工确认是否重压
-                        Operator-->>PLC: 确认/拒绝
-                    end
+                PLC -> Vision: 检测压装结果
+                Vision --> PLC: 压装合格
 
-                    PLC->>Robot: 启动程序 Install_Thermal_Pad
-                    Robot-->>PLC: 散热垫贴附完成
+                alt 压装失败
+                    PLC -> Operator: 请求人工确认是否重压
+                    Operator --> PLC: 确认/拒绝
+                end
 
-                    PLC->>Vision: 检测贴附质量
-                    Vision-->>PLC: 贴附合格
+                PLC -> Robot: 启动程序 Install_Thermal_Pad
+                Robot --> PLC: 散热垫贴附完成
 
-                    alt 连续贴附失败
-                        PLC->>Operator: 锁站并等待人工处理
-                        PLC-->>MES: 工单失败
-                    else 全部步骤完成
-                        PLC-->>MES: 工单完成
-                    end
+                PLC -> Vision: 检测贴附质量
+                Vision --> PLC: 贴附合格
+
+                alt 连续贴附失败
+                    PLC -> Operator: 锁站并等待人工处理
+                    PLC --> MES: 工单失败
+                else 全部步骤完成
+                    PLC --> MES: 工单完成
                 end
             end
         end
     end
+end
+
+@enduml
 ```
 
 ### 1.2 2026 年的核心问题开始变成“变化如何被吸收”
