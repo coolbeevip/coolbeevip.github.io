@@ -13,7 +13,7 @@ draft: false
 
 ## 阅读顺序
 
-1. [第 1 章：为什么 2026 年柔性制造的主角正在从自动化转向 AI](./abb-isaac-agent-flexible-manufacturing-ai-first-01-why-ai-now.md)
+1. [第 1 章：为什么 2026 年柔性制造的核心命题正在从自动化转向 AI 能力](./abb-isaac-agent-flexible-manufacturing-ai-first-01-why-ai-now.md)
 2. [第 2 章：传统 AI 智能体开发团队为什么有机会切入具身智能](./abb-isaac-agent-flexible-manufacturing-ai-first-02-why-ai-teams-can-enter.md)
 3. [第 3 章：柔性制造里的 AI 主能力到底是什么](./abb-isaac-agent-flexible-manufacturing-ai-first-03-what-ai-capabilities-matter.md)
 4. [第 4 章：ABB、PLC、工艺、安全分别构成什么约束层](./abb-isaac-agent-flexible-manufacturing-ai-first-04-industrial-constraint-layer.md)
