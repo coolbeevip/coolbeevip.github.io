@@ -273,6 +273,8 @@ draft: true
 
 ```plantuml
 @startuml
+skinparam ParticipantPadding 30
+skinparam BoxPadding 20
 actor Operator as OP
 
 box "实验室工控机 / 工作站"
