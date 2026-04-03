@@ -1,5 +1,5 @@
 @startuml
-title 第 6 章场景图：允许策略选择的工艺节点
+title 第 6 章场景图：3C 小型精密装配的固定工位，允许策略选择的工艺节点
 left to right direction
 skinparam shadowing false
 skinparam packageStyle rectangle

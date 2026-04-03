@@ -1,5 +1,5 @@
 @startuml
-title 第 6 章场景图：传统换型准备逻辑与 Agentic AI 增强
+title 第 6 章场景图：3C 小型精密装配的固定工位，传统换型准备逻辑与 Agentic AI 增强
 left to right direction
 skinparam shadowing false
 skinparam packageStyle rectangle

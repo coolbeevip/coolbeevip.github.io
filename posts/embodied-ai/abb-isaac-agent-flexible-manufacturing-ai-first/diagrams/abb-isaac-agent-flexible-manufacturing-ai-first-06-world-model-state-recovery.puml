@@ -1,5 +1,5 @@
 @startuml
-title 第 6 章场景图：世界模型参与的动作后果推演与恢复路径
+title 第 6 章场景图：3C 小型精密装配的固定工位，世界模型参与的动作后果推演与恢复路径
 left to right direction
 skinparam shadowing false
 skinparam packageStyle rectangle

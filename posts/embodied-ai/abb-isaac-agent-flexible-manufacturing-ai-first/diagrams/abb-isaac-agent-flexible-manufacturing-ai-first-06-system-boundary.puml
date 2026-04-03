@@ -39,14 +39,23 @@ LOOP --> CTRL : 4. 下发站控请求 / 机器人请求
 CTRL --> PHY : 5. 执行动作 / 安全互锁
 PHY --> LOOP : 6. 返回 IO / 位姿 / 检测结果
 
-LOOP -[#D98C00]down-> APP : 7. 同步结构化状态\n异常事件\n历史片段
+LOOP -[#D98C00]-> APP
+note on link #FFF2CC
+7. 同步结构化状态
+异常事件
+历史片段
+end note
 APP -[#D98C00]-> LLM : 8. 组织任务上下文
 APP -[#D98C00]-> WM : 9. 判断当前状态\n和恢复路径
 APP -[#D98C00]-> SI : 10. 判断位姿 / 接触\n是否仍可补偿
 LOOP --> LOG : 11. 写入结构化事件\n状态变化\n执行结果
 APP -[#D98C00]-> LOG : 12. 读取历史\n写入建议结果
 
-APP -[#D98C00]up-> LOOP : 13. 返回换型增强结果\n恢复建议 / 受限技能候选
+APP -[#D98C00]left-> LOOP
+note on link #FFF2CC
+13. 返回换型增强结果
+恢复建议 / 受限技能候选
+end note
 APP -[#D98C00]-> HMI : 14a. 提供人工确认建议
 APP -[#D98C00]-> OPS : 14b. 提供解释 / 回放 / 运维视图
 
@@ -65,28 +74,28 @@ note top of OPS
 作为建议查看、回放和知识维护入口
 end note
 
-note right of APP
+note left of APP
 默认在主生产回路外侧，
 只做观察、建议和受限影响
 end note
 
-note top of WM
+note right of WM
 世界模型在产品内部，
 不是物理世界本身
 end note
 
-note top of SI
+note right of SI
 空间智能也是产品能力，
 不是相机或机械臂本体
 end note
 
-note bottom of LOG
+note right of LOG
 这是共享资产，
 既服务主生产回路追溯，
 也服务旁路智能评估和案例沉淀
 end note
 
-note bottom of CTRL
+note right of CTRL
 ABB 控制器硬件在这里，
 属于主生产回路的一部分
 end note
