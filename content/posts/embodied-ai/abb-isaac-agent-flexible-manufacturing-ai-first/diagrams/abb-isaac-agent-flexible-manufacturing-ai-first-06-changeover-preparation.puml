@@ -1,0 +1,49 @@
+@startuml
+title 第 6 章场景图：传统换型准备逻辑与 Agentic AI 增强
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+
+rectangle "MES / 配方系统\n\n例如手机配件安装单站\n切换到新机种工单" as MES
+rectangle "换型触发判断\n\n比较新工单和当前工位状态\n例如料号不一致、配方版本不一致\n夹具未切换、相机参数未切换\n当前工位不在 ready 状态" as DETECT #FFD79A
+rectangle "传统换型准备逻辑\n\n工单解析\n配方匹配\n参数核对\n风险分层放行条件" as FLOW
+rectangle "Agentic AI\n\n差异分析\n风险排序\n智能补充检查项\n换型建议\n\n例如提示末端工具 / 吸嘴配置、相机曝光、\n抓取点偏移和首件风险需要复核" as APP #FFD79A
+rectangle "HMI / 人工确认\n\n仅在高风险换型、首件验证\n或规则要求时介入\n例如确认夹具型号、末端工具 / 吸嘴配置\n视觉参数配方和首件结果" as HMI
+rectangle "主协调单元\n\nPLC 或站控" as LOOP
+
+MES -[#D98C00]-> DETECT : 1. 下发换型相关指令\n例如版本、工艺、批次和配方单
+DETECT -[#D98C00]-> FLOW : 2. 若检测到料号不一致\n配方版本不一致、夹具未切换\n或工位未 ready，进入换型准备
+FLOW -[#D98C00]-> APP : 3. 发送换型上下文\n例如新旧机种差异、物料信息\n当前夹具 / 相机 / 吸嘴状态和历史异常
+APP -[#D98C00]-> FLOW : 4. 返回结构化建议\n例如风险等级、高风险项排序\n补充检查项和首件关注点
+FLOW -[#D98C00]-> HMI : 5. 若判定为高风险或规则要求\n才展示检查项和确认项
+HMI --> FLOW : 6. 仅在需要人工确认时\n返回确认结果或退回修改
+FLOW --> LOOP : 7. 低风险自动放行\n高风险确认后放行
+
+note bottom of FLOW
+这套准备逻辑本来就存在，
+只是 Agentic AI 在旁路做增强，
+不属于单拍节拍闭环
+end note
+
+note bottom of DETECT
+“自动知道要换型”通常不是靠大模型猜，
+而是靠规则比较：
+料号、配方版本、夹具状态、
+相机参数和工位 ready 状态是否一致
+end note
+
+note right of APP
+这里更像换型助手。
+它基于差异和历史数据增强传统准备逻辑，
+不直接改 PLC 程序或机器人轨迹
+end note
+
+note bottom of HMI
+人工确认不应成为每次换型的默认路径。
+更常见的做法是：
+低风险自动放行，
+高风险或首件验证时再介入
+end note
+@enduml
