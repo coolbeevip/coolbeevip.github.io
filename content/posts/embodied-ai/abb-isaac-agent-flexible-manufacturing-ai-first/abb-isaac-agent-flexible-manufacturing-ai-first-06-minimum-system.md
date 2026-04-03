@@ -82,6 +82,7 @@ draft: true
 * 非关键工步的策略选择链路：[abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml)
 * 世界模型参与的动作后果推演与恢复路径：[abb-isaac-agent-flexible-manufacturing-ai-first-06-world-model-state-recovery.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-world-model-state-recovery.puml)
 * 空间智能参与的位姿判断与补偿决策：[abb-isaac-agent-flexible-manufacturing-ai-first-06-spatial-intelligence-compensation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-spatial-intelligence-compensation.puml)
+* 半结构化工厂里的跨工位移动操作：[abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml)
 
 这些图最关键的不是“画了多少层”，而是把主生产回路和旁路智能层的关系讲清楚：
 
@@ -168,6 +169,10 @@ draft: true
 * 任务切换和路径级恢复
 
 它依然需要 `ROS 2`、`PLC`、控制器接入和日志回放，但产品重心会从“站内任务理解”进一步扩展到“场景理解和跨位置执行”。
+
+如果要把这一类场景具体化，可以参考这张图：
+
+* 半结构化工厂里的跨工位移动操作：[abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml)
 
 ### 2.3 两类场景的共同点和差异
 
