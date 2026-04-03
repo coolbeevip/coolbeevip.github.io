@@ -1,0 +1,94 @@
+@startuml
+title 第 6 章场景图：世界模型参与的动作后果推演与恢复路径
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+
+rectangle "主协调单元\n\nPLC 或站控上位机\n\n裁决与放行目标：10ms - 30ms" as LOOP
+rectangle "视觉服务\n\n输出当前观测\n\n例如抓取结果、姿态稳定性\n偏差量、检测结果" as VISION
+rectangle "工步状态快照\n\n例如抓取失败、已抓取但姿态不稳\n已到对位位、扣合未到位\n连续失败两次\n\n状态汇总目标：10ms - 30ms" as STATE
+rectangle "Agentic AI\n\n任务理解\n候选恢复动作组织\n\n建议生成目标：50ms - 150ms" as APP #FFD79A
+rectangle "世界模型\n\n状态演化预测\n动作后果推演\n恢复路径评估\n\n状态判断目标：30ms - 100ms" as WM #FFD79A
+rectangle "共享日志 / 历史案例" as LOG
+rectangle "HMI / 人工确认" as HMI
+rectangle "ABB 控制器与现场设备\n\n例如机械臂、相机、夹具和工艺设备" as EXEC
+
+LOOP --> VISION : 1. 在抓取完成但准备进入对位前\n触发视觉 / 感知结果汇总
+VISION --> STATE : 2. 返回当前观测\n例如抓取成功、姿态不稳、连续失败 1 次
+STATE -[#D98C00]-> APP : 3. 发送状态快照\n和当前上下文
+APP -[#D98C00]-> WM : 4. 输入样例：当前工步=抓取后对位前\n候选动作=直接扣合 / 回安全位后重抓 / 重拍后再判
+WM -[#D98C00]-> APP : 5. 对候选动作做后果推演\n例如直接扣合失败风险高\n回安全位后重抓成功率更高
+APP -[#D98C00]-> LOOP : 6a. 返回处理建议包\n例如禁止直接扣合、允许自动恢复\n建议先回安全位后重抓
+APP -[#D98C00]-> HMI : 6b. 提供状态解释\n例如当前仍可自动恢复\n但不建议直接进入扣合
+HMI --> LOOP : 7. 若规则要求人工确认\n返回确认结果
+LOOP --> LOOP : 8. 主协调单元裁决\n采纳建议或转人工处理
+LOOP --> EXEC : 9. 执行已放行的恢复动作\n例如回安全位后重抓
+
+note right of WM
+这里的世界模型，具体承担的是候选动作后果推演和恢复路径评估
+end note
+
+note right of LOG
+必要时可用历史案例
+做推演校准，
+但历史案例不是世界模型本体
+end note
+
+note left of VISION
+视觉服务回答的是：
+现在看到了什么、
+当前姿态和检测结果是什么
+它不负责推演下一步动作后果
+end note
+
+note bottom of WM
+输入样例：
+当前工步=抓取后对位前
+抓取结果=成功
+姿态稳定=false
+连续失败次数=1
+候选动作=[直接扣合, 回安全位后重抓, 重拍后再判]
+
+输出样例：
+动作后果推演：
+直接扣合=失败风险高
+回安全位后重抓=成功率更高
+重拍后再判=可作为备选
+推荐路径=回安全位后重抓
+end note
+
+note left of STATE
+这是传统自动化的真实痛点之一：
+很多现场会把不同异常都压成少数几个报警码，
+再靠固定重试次数或人工经验处理
+end note
+
+note top of STATE
+这一步不是每个毫秒周期都触发。
+更常见的触发时机是：
+工步失败、连续重试后、
+或到达需要判断是否继续恢复的关键节点
+end note
+
+note bottom of EXEC
+世界模型的价值是：
+不要把不同异常都压成同一种失败，
+而是对不同候选动作的后果做推演，
+判断当前是否仍可恢复，
+以及下一步最合理的恢复路径
+end note
+
+note top of APP
+在线介入单站节拍时，
+这一整路总预算通常应控制在
+150ms - 300ms，
+尽量不要超过 500ms
+end note
+
+note bottom of STATE
+这里的重点不是单帧图像，
+而是工步状态如何演进
+end note
+@enduml
