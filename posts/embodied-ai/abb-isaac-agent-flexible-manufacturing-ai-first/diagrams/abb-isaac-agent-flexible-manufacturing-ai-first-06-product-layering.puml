@@ -1,0 +1,43 @@
+@startuml
+title 第 6 章产品分层图：生产可落地的最小产品形态
+top to bottom direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 240
+
+rectangle "产品入口层\n\nHMI\nMES / 工单 / 配方\nSOP / 工艺规则\n人工确认与运维入口\n\n例如手机配件安装单站的\n工单、料号和作业规则" as L1
+
+rectangle "Agentic AI 能力层\n\nLLM\n世界模型\n空间智能\n知识与案例检索\n\n例如整理异常上下文、判断恢复路径、\n比较重拍和重抓哪条更合适" as L2 #FFD79A
+
+rectangle "编排与约束层\n\n任务状态机\n资格裁决\n节拍约束\n安全与工艺边界\n人工确认点\n\n例如补偿量超限时不放行\n要求先回安全位" as L3
+
+rectangle "工业运行时层\n\nROS 2 节点层\nPLC / OPC UA\nABB PC SDK / Robot Web Services\n视觉 / 力控 / 工艺设备接口\n\n例如把受限请求映射成\n已验证动作流程" as L4
+
+rectangle "执行场景层\n\n固定工位 3C 组装 / 分拣\n可移动机械臂智能\n\n例如排线抓取、贴附、扣合、分拣" as L5
+
+database "日志 / 回放 / 评估\n\n例如记录哪种恢复策略\n在什么料号上成功率更高" as LOG
+
+L1 --> L2 : 1. 输入工单、配方和现场上下文
+L2 --> L3 : 2. 形成建议、候选策略和状态判断
+L3 --> L4 : 3. 转成受限、可放行的工业请求
+L4 --> L5 : 4. 落到真实工位或移动执行场景
+
+L1 --> LOG : 5. 记录输入背景
+L2 --> LOG : 6. 记录建议和推理结果
+L3 --> LOG : 7. 记录放行与裁决结果
+L4 --> LOG : 8. 记录执行回执
+L5 --> LOG : 9. 记录最终产出和现场结果
+
+note right of L2
+产品核心不是单一模型，
+而是 LLM、世界模型、
+空间智能的组合
+end note
+
+note right of L3
+这一层决定建议
+能不能进入工业执行
+也决定节拍边界
+end note
+@enduml

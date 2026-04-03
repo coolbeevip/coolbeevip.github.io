@@ -12,7 +12,7 @@ rectangle "Agentic AI\n\n策略比较\n补偿建议\n\n建议生成目标：50ms
 rectangle "空间智能\n\n位姿关系判断\n补偿范围判断\n接触约束判断\n\n空间判断目标：30ms - 100ms" as SI #FFD79A
 rectangle "已验证技能集合\n\n继续补偿\n重拍\n回安全位\n转人工复位" as SKILL
 rectangle "HMI / 人工确认" as HMI
-rectangle "ABB 控制器与现场执行侧\n\n例如机械臂、相机、夹具和工艺设备" as EXEC
+rectangle "ABB 控制器与现场设备\n\n例如机械臂、相机、夹具和工艺设备" as EXEC
 
 LOOP --> SENSOR : 1. 汇总视觉和传感器结果
 SENSOR -[#D98C00]-> APP : 2. 发送偏差量、位姿和接触信息
