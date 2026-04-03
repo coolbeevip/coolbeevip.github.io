@@ -6,11 +6,11 @@ skinparam packageStyle rectangle
 skinparam defaultTextAlignment center
 skinparam wrapWidth 220
 
-rectangle "主协调单元\n\nPLC 或站控" as LOOP
-rectangle "共享日志 / 历史库" as LOG
-rectangle "Agentic AI\n\n异常理解\n恢复建议\n分流建议\n\n例如判断是重拍、重抓\n还是转人工复位" as APP #FFD79A
+rectangle "主协调单元\n\nPLC 或站控\n\n裁决与放行目标：10ms - 30ms" as LOOP
+rectangle "共享日志 / 历史库\n\n历史读取目标：10ms - 30ms" as LOG
+rectangle "Agentic AI\n\n异常理解\n恢复建议\n分流建议\n\n规则 / 缓存 / 小模型优先\n必要时再调用大语言模型\n\n在线建议目标：50ms - 150ms" as APP #FFD79A
 rectangle "HMI / 人工确认\n\n例如班组长确认\n是否允许再试一次" as HMI
-rectangle "ABB 控制器与执行侧\n\n例如排线抓取、对位、扣合单站" as EXEC
+rectangle "ABB 控制器与现场执行侧\n\n例如排线抓取、对位、扣合单站" as EXEC
 
 LOOP --> EXEC : 1. 正常执行\n例如抓取排线并移动到对位位
 EXEC --> LOOP : 2. 返回异常事件\n状态快照
@@ -26,6 +26,21 @@ LOOP --> EXEC : 9. 执行已放行的恢复动作\n例如先重拍一张\n或低
 note bottom of APP
 这里处理的是异常分流和恢复建议，
 不是毫秒级控制
+end note
+
+note top of APP
+在线介入单站节拍时，
+这一整路总预算通常应控制在
+150ms - 300ms，
+尽量不要超过 500ms
+end note
+
+note right of APP
+如果每次都走远程大语言模型，
+这个预算通常很难成立。
+更常见的做法是：
+规则、缓存和本地小模型优先，
+复杂情况再升级到大语言模型
 end note
 
 note bottom of LOG

@@ -9,7 +9,7 @@ skinparam wrapWidth 220
 rectangle "主协调单元\n\nPLC 或站控上位机" as LOOP
 rectangle "Agentic AI\n\n候选路径选择\n策略比较\n\n例如比较重拍、低速重抓、\n回安全位后三选一" as APP #FFD79A
 rectangle "已验证技能集合\n\n重拍\n低速重抓\n回安全位\n再次对位" as SKILL
-rectangle "ABB 控制器与执行侧\n\n例如手机配件安装单站" as EXEC
+rectangle "ABB 控制器与现场执行侧\n\n例如手机配件安装单站" as EXEC
 rectangle "HMI / 人工确认\n\n例如补偿量接近上限时\n请求人工确认" as HMI
 
 LOOP -[#D98C00]-> APP : 1. 在允许策略选择的工艺节点\n通过 REST / gRPC 发送状态快照和约束\n若底层是 PLC，通常先经 OPC UA / 网关汇总

@@ -1,0 +1,46 @@
+@startuml
+title 第 6 章场景图：空间智能参与的位姿判断与补偿决策
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+
+rectangle "主协调单元\n\nPLC 或站控上位机\n\n裁决与放行目标：10ms - 30ms" as LOOP
+rectangle "视觉 / 传感器输入\n\n例如偏差量、位姿结果、接触状态\n\n状态汇总目标：10ms - 30ms" as SENSOR
+rectangle "Agentic AI\n\n策略比较\n补偿建议\n\n建议生成目标：50ms - 150ms" as APP #FFD79A
+rectangle "空间智能\n\n位姿关系判断\n补偿范围判断\n接触约束判断\n\n空间判断目标：30ms - 100ms" as SI #FFD79A
+rectangle "已验证技能集合\n\n继续补偿\n重拍\n回安全位\n转人工复位" as SKILL
+rectangle "HMI / 人工确认" as HMI
+rectangle "ABB 控制器与现场执行侧\n\n例如机械臂、相机、夹具和工艺设备" as EXEC
+
+LOOP --> SENSOR : 1. 汇总视觉和传感器结果
+SENSOR -[#D98C00]-> APP : 2. 发送偏差量、位姿和接触信息
+APP -[#D98C00]-> SI : 3. 判断当前是否仍在允许补偿范围内
+SI -[#D98C00]-> SKILL : 4. 约束可选技能范围\n例如只能重拍或回安全位
+SKILL -[#D98C00]-> APP : 5. 返回已验证候选
+APP -[#D98C00]-> LOOP : 6a. 返回补偿建议和受限参数\n例如继续补偿并给出 x / y / yaw 补偿量\n或建议重拍、回安全位
+APP -[#D98C00]-> HMI : 6b. 提供解释\n例如偏差已接近上限\n建议不要继续自动补偿
+HMI --> LOOP : 7. 若需要人工确认\n返回结果
+LOOP --> LOOP : 8. 主协调单元裁决\n采纳建议或转人工处理
+LOOP --> EXEC : 9. 下发已放行动作
+
+note right of SI
+空间智能不是相机本体，
+而是把位姿、偏差和接触关系
+转成可执行的补偿判断
+end note
+
+note top of APP
+在线介入单站节拍时，
+这一路总预算通常应控制在
+150ms - 300ms，
+尽量不要超过 500ms
+end note
+
+note bottom of EXEC
+典型场景包括：
+排线对位、扣合前姿态检查、
+补偿量是否超限
+end note
+@enduml
