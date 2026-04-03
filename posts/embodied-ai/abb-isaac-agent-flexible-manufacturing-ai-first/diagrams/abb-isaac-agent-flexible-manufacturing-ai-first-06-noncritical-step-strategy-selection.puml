@@ -1,0 +1,46 @@
+@startuml
+title 第 6 章场景图：允许策略选择的工艺节点
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+
+rectangle "主协调单元\n\nPLC 或站控上位机" as LOOP
+rectangle "Agentic AI\n\n候选路径选择\n策略比较\n\n例如比较重拍、低速重抓、\n回安全位后三选一" as APP #FFD79A
+rectangle "已验证技能集合\n\n重拍\n低速重抓\n回安全位\n再次对位" as SKILL
+rectangle "ABB 控制器与执行侧\n\n例如手机配件安装单站" as EXEC
+rectangle "HMI / 人工确认\n\n例如补偿量接近上限时\n请求人工确认" as HMI
+
+LOOP -[#D98C00]-> APP : 1. 在允许策略选择的工艺节点\n通过 REST / gRPC 发送状态快照和约束\n若底层是 PLC，通常先经 OPC UA / 网关汇总
+APP -[#D98C00]-> SKILL : 2. 选择候选技能路径
+SKILL -[#D98C00]-> APP : 3. 返回已验证候选
+APP -[#D98C00]-> LOOP : 4. 返回受限技能候选\n例如重拍 / 低速重抓 / 回安全位
+LOOP --> HMI : 5. 需要时请求确认
+HMI --> LOOP : 6. 确认执行
+LOOP --> EXEC : 7. 下发最终执行请求\n例如先回安全位再重拍
+
+note bottom of LOOP
+主协调单元始终保留放行权，
+不会把底层控制权交给 Agentic AI
+end note
+
+note left of LOOP
+工程上更常见的做法不是 PLC 直接调 Agentic AI，
+而是站控上位机读取 PLC / OPC UA 状态后，
+再通过 REST 或 gRPC 调用旁路智能服务
+end note
+
+note right of APP
+这里说的策略选择，
+是在多个已验证处理路径之间做选择，
+不是在线生成新的底层控制程序
+end note
+
+note bottom of EXEC
+这里允许 Agentic AI 介入，
+是因为它不是毫秒级控制点，
+不是安全互锁点，
+也不是必须无条件立即执行的底层动作点
+end note
+@enduml
