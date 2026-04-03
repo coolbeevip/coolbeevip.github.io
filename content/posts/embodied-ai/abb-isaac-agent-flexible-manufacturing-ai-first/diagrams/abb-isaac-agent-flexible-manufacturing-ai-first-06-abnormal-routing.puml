@@ -1,5 +1,5 @@
 @startuml
-title 第 6 章场景图：异常分流与恢复建议
+title 第 6 章场景图：3C 小型精密装配的固定工位，异常分流与恢复建议
 left to right direction
 skinparam shadowing false
 skinparam packageStyle rectangle

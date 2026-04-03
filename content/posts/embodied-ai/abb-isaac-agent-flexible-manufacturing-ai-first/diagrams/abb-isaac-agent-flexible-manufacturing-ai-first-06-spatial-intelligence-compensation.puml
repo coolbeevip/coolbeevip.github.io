@@ -1,5 +1,5 @@
 @startuml
-title 第 6 章场景图：空间智能参与的位姿判断与补偿决策
+title 第 6 章场景图：3C 小型精密装配的固定工位，空间智能参与的位姿判断与补偿决策
 left to right direction
 skinparam shadowing false
 skinparam packageStyle rectangle
