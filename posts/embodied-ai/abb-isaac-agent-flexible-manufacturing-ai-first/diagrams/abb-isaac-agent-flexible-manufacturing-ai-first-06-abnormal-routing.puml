@@ -1,0 +1,35 @@
+@startuml
+title 第 6 章场景图：异常分流与恢复建议
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+
+rectangle "主协调单元\n\nPLC 或站控" as LOOP
+rectangle "共享日志 / 历史库" as LOG
+rectangle "Agentic AI\n\n异常理解\n恢复建议\n分流建议\n\n例如判断是重拍、重抓\n还是转人工复位" as APP #FFD79A
+rectangle "HMI / 人工确认\n\n例如班组长确认\n是否允许再试一次" as HMI
+rectangle "ABB 控制器与执行侧\n\n例如排线抓取、对位、扣合单站" as EXEC
+
+LOOP --> EXEC : 1. 正常执行\n例如抓取排线并移动到对位位
+EXEC --> LOOP : 2. 返回异常事件\n状态快照
+LOOP --> LOG : 3. 写入异常事件\n执行结果
+LOOP -[#D98C00]-> APP : 4. 发送结构化状态\n例如视觉偏差超限\n真空吸附失败
+APP -[#D98C00]-> LOG : 5. 读取历史案例\n例如相同料号过去如何恢复
+APP -[#D98C00]-> LOOP : 6a. 返回处理建议\n例如建议重拍、低速重抓\n或直接转人工复位
+APP -[#D98C00]-> HMI : 6b. 给出解释\n人工确认建议
+HMI --> LOOP : 7. 若需要人工确认\n返回确认结果
+LOOP --> LOOP : 8. 主协调单元裁决\n采纳建议或转人工处理
+LOOP --> EXEC : 9. 执行已放行的恢复动作\n例如先重拍一张\n或低速重抓一次
+
+note bottom of APP
+这里处理的是异常分流和恢复建议，
+不是毫秒级控制
+end note
+
+note bottom of LOG
+历史库里沉淀的不是原始大杂烩日志，
+而是工步结果、报警、恢复动作和最终结果
+end note
+@enduml
