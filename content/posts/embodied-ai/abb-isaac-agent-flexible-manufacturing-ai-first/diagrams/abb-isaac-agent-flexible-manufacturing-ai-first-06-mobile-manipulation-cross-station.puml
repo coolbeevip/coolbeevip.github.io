@@ -18,7 +18,8 @@ package "2. 调度层\nFleet Manager / Dispatcher" #F3FBF3 {
 }
 
 package "3. 任务层\nFSM / Behavior Tree / Skill 编排" #FFF6E8 {
-  rectangle "任务编排引擎\n\n工业现场最常见：\n有限状态机 / 行为树 / Skill Graph\n\n导航 -> 到位 -> 视觉定位 -> 抓取\n-> 搬运 -> 放置\n失败 -> 重试 / 回退 / 人工介入" as TASK
+  rectangle "行为树 / 状态机执行器\n\n工业现场最常见：\n有限状态机 / 行为树 / Skill Graph\n\n负责执行已验证技能、条件判断\n和异常恢复分支" as TASK
+  rectangle "任务树示意\n\nRoot\n├─ Sequence 主任务流\n└─ Fallback 恢复分支\n\n任务内容通常类似：\n导航 -> 到位确认 -> 视觉定位 -> 抓取 -> 搬运 -> 放置" as TREE
   rectangle "Agentic AI / 大模型\n\n通常只在这一层附近参与：\n异常解释\n恢复模板选择\n人工处理建议\n从历史案例推荐下一步" as AI #FFD79A
 }
 
@@ -34,6 +35,7 @@ package "5. 实时控制与安全层\nPLC、机器人控制器、安全 PLC" #F5
 
 FLEET -[hidden]-> DISPATCH
 TASK -[hidden]-> AI
+TASK -[hidden]-> TREE
 PERCEPTION -[hidden]-> PLANNING
 CONTROL -[hidden]-> SAFETY
 
@@ -51,6 +53,8 @@ FLEET --> BUSINESS : 9. 回传工单进度、机器人占用、异常状态
 TASK -[#D98C00]-> AI : A. 仅在异常或非硬实时决策点\n请求解释、恢复建议、模板选择
 AI -[#D98C00]-> TASK : B. 返回受限建议\n不直接控制下层
 
+TASK --> TREE : 任务模板实例化并执行
+
 note top of BUSINESS
 生产现场通常不是
 "一个 Agent 统一理解、规划、控制、执行"，
@@ -65,7 +69,8 @@ note right of FLEET
 end note
 
 note right of TASK
-工业里最常见的是 FSM / 行为树，
+工业里最常见的是 FSM / 行为树执行器，
+它运行一棵任务树并在失败时走恢复分支，
 不是每一步都由 LLM 在线生成动作。
 你之前研究的 Plan -> Act -> Observe -> Reflect -> Replan，
 更接近这里的高级任务编排与异常恢复
