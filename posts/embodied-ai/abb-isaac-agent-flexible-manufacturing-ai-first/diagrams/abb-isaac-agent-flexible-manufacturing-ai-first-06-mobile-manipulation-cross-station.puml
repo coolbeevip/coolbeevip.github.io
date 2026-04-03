@@ -1,0 +1,88 @@
+@startuml
+title 第 6 章现状图：跨工位移动机器人在生产现场通常是强分层架构，而不是单一 Agent 统一控制
+top to bottom direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 240
+skinparam BoxPadding 18
+skinparam ParticipantPadding 18
+
+package "1. 工厂业务层\nMES / WMS / ERP / 工单系统" #EAF4FF {
+  database "业务系统输入\n\n决定做什么：\n去 A 工位取料\n送到 B 工位\n当前型号是 iPhone 18 Pro\n当前工单优先级最高" as BUSINESS
+}
+
+package "2. 调度层\nFleet Manager / Dispatcher" #F3FBF3 {
+  rectangle "车队调度器\n\nABB Fleet / MiR Fleet / OpenRMF / 自研调度" as FLEET
+  rectangle "调度职责\n\n决定谁去做、先做哪个\n考虑距离、电量、拥堵、路径冲突\n时间窗口、异常工位优先级" as DISPATCH
+}
+
+package "3. 任务层\nFSM / Behavior Tree / Skill 编排" #FFF6E8 {
+  rectangle "任务编排引擎\n\n工业现场最常见：\n有限状态机 / 行为树 / Skill Graph\n\n导航 -> 到位 -> 视觉定位 -> 抓取\n-> 搬运 -> 放置\n失败 -> 重试 / 回退 / 人工介入" as TASK
+  rectangle "Agentic AI / 大模型\n\n通常只在这一层附近参与：\n异常解释\n恢复模板选择\n人工处理建议\n从历史案例推荐下一步" as AI #FFD79A
+}
+
+package "4. 感知与规划层\n视觉、定位、路径规划、抓取规划" #F8F8F8 {
+  rectangle "感知与定位\n\n视觉检测 / 6D 位姿\nAMR 定位 / 地图 / 工位识别" as PERCEPTION
+  rectangle "运动与操作规划\n\n全局 / 局部路径规划\n避障\n抓取规划\n机械臂运动规划" as PLANNING
+}
+
+package "5. 实时控制与安全层\nPLC、机器人控制器、安全 PLC" #F5F5F5 {
+  rectangle "实时执行控制\n\nABB 控制器\nAMR 控制器\nPLC / 现场 IO\n\n真正驱动移动底盘、机械臂、门禁、电梯、工位设备" as CONTROL
+  rectangle "安全与互锁裁决\n\n安全 PLC\n急停 / 区域限速 / 门禁互锁\n设备资格、工艺边界、节拍边界" as SAFETY
+}
+
+FLEET -[hidden]-> DISPATCH
+TASK -[hidden]-> AI
+PERCEPTION -[hidden]-> PLANNING
+CONTROL -[hidden]-> SAFETY
+
+BUSINESS --> FLEET : 1. 下发工单 / 物料任务 / 优先级\n决定做什么
+FLEET --> TASK : 2. 指定哪台机器人执行\n先去哪、何时做、目标工位是什么
+TASK --> PERCEPTION : 3. 按任务阶段调用已验证技能\n请求定位、识别、路径和抓取规划
+PERCEPTION --> PLANNING : 4. 计算位姿、路径、抓取与轨迹
+PLANNING --> CONTROL : 5. 下发具体可执行目标 / 轨迹 / 控制请求
+SAFETY --> CONTROL : 6. 所有执行都必须经过安全链路裁决
+
+CONTROL --> TASK : 7. 回传执行状态、报警、完成 / 失败
+TASK --> FLEET : 8. 回传任务阶段、异常、完成结果
+FLEET --> BUSINESS : 9. 回传工单进度、机器人占用、异常状态
+
+TASK -[#D98C00]-> AI : A. 仅在异常或非硬实时决策点\n请求解释、恢复建议、模板选择
+AI -[#D98C00]-> TASK : B. 返回受限建议\n不直接控制下层
+
+note top of BUSINESS
+生产现场通常不是
+"一个 Agent 统一理解、规划、控制、执行"，
+而是职责清晰的强分层架构
+end note
+
+note right of FLEET
+现实里最核心的一层之一。
+哪台 AMR 去执行、先去 A 还是先去 B，
+通常由规则、优先级和调度算法决定，
+而不是由大模型直接决定
+end note
+
+note right of TASK
+工业里最常见的是 FSM / 行为树，
+不是每一步都由 LLM 在线生成动作。
+你之前研究的 Plan -> Act -> Observe -> Reflect -> Replan，
+更接近这里的高级任务编排与异常恢复
+end note
+
+note right of AI
+大模型更适合做任务层附近的旁路增强：
+解释异常、
+选择哪个恢复模板、
+给人工处理建议、
+从历史案例推荐下一步
+end note
+
+note bottom of SAFETY
+越往下越确定性、越强约束，
+也越不能被 AI 直接干预。
+AI 不能绕过 Fleet Manager，
+也不能直接下发底盘控制、关节控制或安全互锁
+end note
+@enduml
