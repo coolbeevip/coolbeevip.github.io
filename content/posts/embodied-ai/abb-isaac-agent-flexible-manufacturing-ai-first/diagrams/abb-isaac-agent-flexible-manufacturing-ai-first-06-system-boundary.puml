@@ -1,0 +1,93 @@
+@startuml
+title 第 6 章系统边界图：主生产回路与 Agentic AI 旁路智能层
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+skinparam BoxPadding 18
+skinparam ParticipantPadding 24
+
+package "企业与产品入口" #EAF4FF {
+  rectangle "企业与规则入口\n\nMES 工单\nWMS 物料\nQMS 质量规则\nSOP / 配方" as ENTRY
+  rectangle "现场 HMI / 人工确认\n\n启停\n复位\n人工确认\n\n例如高风险换型确认\n异常恢复确认" as HMI
+  rectangle "产品运维 / 回放入口\n\n查看建议\n查看回放\n知识维护\n\n例如查看换型建议\n查看异常解释" as OPS
+}
+
+package "主生产回路\n节拍优先，保持确定性" #F5F5F5 {
+  rectangle "主协调单元\n\n通常是 PLC 硬件 + PLC 程序\n或站控工控机 + 站控软件" as LOOP
+  rectangle "ABB 控制器与执行接口\n\nABB 控制器\n远程 IO\n安全回路" as CTRL
+  rectangle "执行侧\n\nROS 2 确定性节点\n机械臂\n相机\n夹具\n工艺设备\n工件\n\n例如排线抓取、对位、扣合、分拣" as PHY
+}
+
+package "Agentic AI 旁路智能层\n默认不进入主节拍闭环" #FFF6E8 {
+  rectangle "Agentic AI 应用\n\n任务理解 / 上下文组织\n换型增强\n恢复建议\n受限技能选择\n人工确认建议\n\n例如建议重拍、低速重抓、\n回安全位或转人工复位" as APP #FFD79A
+  rectangle "LLM" as LLM
+  rectangle "世界模型\n\n状态阶段\n动作后果\n恢复路径\n\n例如知道当前是抓取失败\n还是扣合未到位" as WM
+  rectangle "空间智能\n\n位姿理解\n空间约束\n接触判断\n\n例如判断偏差量\n是否还在允许补偿范围内" as SI
+}
+
+package "共享数据与回放资产" #F3FBF3 {
+  database "共享日志 / 回放 / 案例库\n\n例如记录料号、报警、恢复动作\n和最终是否成功" as LOG
+}
+
+ENTRY --> LOOP : 1. 提供工单 / 配方 / 物料 / 质量规则\n例如新料号、过站规则、检测阈值
+HMI --> LOOP : 2. 启停 / 复位 / 人工确认
+OPS -[#D98C00]-> APP : 3. 查看建议 / 查看回放 / 运维输入
+
+LOOP --> CTRL : 4. 下发站控请求 / 机器人请求
+CTRL --> PHY : 5. 执行动作 / 安全互锁
+PHY --> LOOP : 6. 返回 IO / 位姿 / 检测结果
+
+LOOP -[#D98C00]down-> APP : 7. 同步结构化状态\n异常事件\n历史片段
+APP -[#D98C00]-> LLM : 8. 组织任务上下文
+APP -[#D98C00]-> WM : 9. 判断当前状态\n和恢复路径
+APP -[#D98C00]-> SI : 10. 判断位姿 / 接触\n是否仍可补偿
+LOOP --> LOG : 11. 写入结构化事件\n状态变化\n执行结果
+APP -[#D98C00]-> LOG : 12. 读取历史\n写入建议结果
+
+APP -[#D98C00]up-> LOOP : 13. 返回换型增强结果\n恢复建议 / 受限技能候选
+APP -[#D98C00]-> HMI : 14a. 提供人工确认建议
+APP -[#D98C00]-> OPS : 14b. 提供解释 / 回放 / 运维视图
+
+note top of ENTRY
+通常对接企业现有系统，
+不是产品团队从零重建
+end note
+
+note top of HMI
+现场 HMI / 人工确认属于现场入口，
+是否采纳建议仍由主协调单元裁决
+end note
+
+note top of OPS
+这块通常由产品团队自研，
+作为建议查看、回放和知识维护入口
+end note
+
+note right of APP
+默认在主生产回路外侧，
+只做观察、建议和受限影响
+end note
+
+note top of WM
+世界模型在产品内部，
+不是物理世界本身
+end note
+
+note top of SI
+空间智能也是产品能力，
+不是相机或机械臂本体
+end note
+
+note bottom of LOG
+这是共享资产，
+既服务主生产回路追溯，
+也服务旁路智能评估和案例沉淀
+end note
+
+note bottom of CTRL
+ABB 控制器硬件在这里，
+属于主生产回路的一部分
+end note
+@enduml

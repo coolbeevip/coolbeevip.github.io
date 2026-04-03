@@ -10,7 +10,7 @@ rectangle "主协调单元\n\nPLC 或站控\n\n裁决与放行目标：10ms - 30
 rectangle "共享日志 / 历史库\n\n历史读取目标：10ms - 30ms" as LOG
 rectangle "Agentic AI\n\n异常理解\n恢复建议\n分流建议\n\n规则 / 缓存 / 小模型优先\n必要时再调用大语言模型\n\n在线建议目标：50ms - 150ms" as APP #FFD79A
 rectangle "HMI / 人工确认\n\n例如班组长确认\n是否允许再试一次" as HMI
-rectangle "ABB 控制器与现场执行侧\n\n例如排线抓取、对位、扣合单站" as EXEC
+rectangle "ABB 控制器与现场设备\n\n例如排线抓取、对位、扣合单站" as EXEC
 
 LOOP --> EXEC : 1. 正常执行\n例如抓取排线并移动到对位位
 EXEC --> LOOP : 2. 返回异常事件\n状态快照

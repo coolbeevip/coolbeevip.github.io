@@ -444,5 +444,5 @@ AI 团队天然容易从模型出发思考：
 ## 继续阅读
 
 * 返回索引：[AI-first 文章索引](./abb-isaac-agent-flexible-manufacturing-ai-first-index.md)
-* 上一章：[第 6 章：AI-first 的最小研究系统架构](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
+* 上一章：[第 6 章：Agentic AI 在 3C 柔性制造中的产品位置与最小形态](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
 * 下一章：[第 8 章：未来 6 到 12 个月如何把单点试点变成能力体系](./abb-isaac-agent-flexible-manufacturing-ai-first-08-roadmap.md)

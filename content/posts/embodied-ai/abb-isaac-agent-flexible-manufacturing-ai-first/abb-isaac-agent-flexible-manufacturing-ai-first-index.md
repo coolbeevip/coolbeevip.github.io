@@ -18,7 +18,7 @@ draft: false
 3. [第 3 章：柔性制造里的 AI 主能力到底是什么](./abb-isaac-agent-flexible-manufacturing-ai-first-03-what-ai-capabilities-matter.md)
 4. [第 4 章：ABB、PLC、工艺、安全分别构成什么约束层](./abb-isaac-agent-flexible-manufacturing-ai-first-04-industrial-constraint-layer.md)
 5. [第 5 章：AI-first 的首个试点应该怎么定义](./abb-isaac-agent-flexible-manufacturing-ai-first-05-first-pilot.md)
-6. [第 6 章：AI-first 的最小研究系统架构](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
+6. [第 6 章：Agentic AI 在 3C 柔性制造中的产品位置与最小形态](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
 7. [第 7 章：从仿真、数据、世界模型到受限真机](./abb-isaac-agent-flexible-manufacturing-ai-first-07-sim-data-worldmodel-to-real.md)
 8. [第 8 章：未来 6 到 12 个月如何把单点试点变成能力体系](./abb-isaac-agent-flexible-manufacturing-ai-first-08-roadmap.md)
 
@@ -33,7 +33,7 @@ draft: false
 | 第 3 章 | 真正值得优先建设的 AI 主能力是什么 |
 | 第 4 章 | 工业约束层到底在哪里 |
 | 第 5 章 | 首个试点应该怎么收缩和定义 |
-| 第 6 章 | 最小研究系统应该怎么搭 |
+| 第 6 章 | Agentic AI 产品在 3C 柔性制造中的位置和最小形态是什么 |
 | 第 7 章 | 怎么从仿真和数据走到受限真机 |
 | 第 8 章 | 怎么把单点试点变成能力体系 |
 
