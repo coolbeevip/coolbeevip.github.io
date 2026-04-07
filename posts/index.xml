@@ -411,7 +411,23 @@ mvnw: 这是 Linux Script 可执行文件，用来代替 mvn mvnw.cmd: 这是 Wi
 QPS：每秒处理3200笔 每笔毫秒：50ms 每个服务器CPU个数：16 服务器数量 $$ 3200_{qps} \div (1000_{ms} \div 50_{ms}) \div 16_{cpu} = 10_{台} $$
 已知 QPS 以及服务器数量，估算每笔耗时 每笔耗时毫秒 $$ = 1000 \div ( QPS \div ( 服务器数量 \times 每服务器CPU个数 ) ) $$
 例如：
-QPS：每秒处理3200笔 服务器数量：10 每服务器CPU个数：16 每笔耗时毫秒 $$ 1000 \div ( 3200 \div ( 10 \times 16 ) ) = 50_{ms}$$</description></item><item><title/><link>https://coolbeevip.github.io/posts/ai/camel-database-agent-en/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/ai/camel-database-agent-en/</guid><description>Pain Points in Data Analysis and Solutions In today&amp;rsquo;s data-driven business environment, a common scenario is: business analysts urgently need certain data analysis but must wait for technical team members who know SQL to provide support. According to a McKinsey study, analysts spend an average of 30-40% of their time just on data preparation and query construction. This dependency not only delays the decision-making process but also increases the workload of the technical team.</description></item><item><title/><link>https://coolbeevip.github.io/posts/english/ket-unit10/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/english/ket-unit10/</guid><description>KET UNIT10 WORDS 中文 英文 中文 英文 海滩 beach 沙漠 desert 森林 forest 岛 islands 湖泊 lake 高山 mountain 最深的 the deepest 最长的 the longest 最高的 the highest 最多的 the most 最大的 the biggest 最热的 the hottest 活动 activity 在机场 at the airport 在欧洲 in Europe 在世界上 in the world HOMEWORK 2024/01/03
+QPS：每秒处理3200笔 服务器数量：10 每服务器CPU个数：16 每笔耗时毫秒 $$ 1000 \div ( 3200 \div ( 10 \times 16 ) ) = 50_{ms}$$</description></item><item><title/><link>https://coolbeevip.github.io/posts/ai/camel-database-agent-en/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/ai/camel-database-agent-en/</guid><description>Pain Points in Data Analysis and Solutions In today&amp;rsquo;s data-driven business environment, a common scenario is: business analysts urgently need certain data analysis but must wait for technical team members who know SQL to provide support. According to a McKinsey study, analysts spend an average of 30-40% of their time just on data preparation and query construction. This dependency not only delays the decision-making process but also increases the workload of the technical team.</description></item><item><title/><link>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/agents/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/agents/</guid><description>AGENT.md 工作哲学 你是这个项目的研究协作者，不是等待指令的助手。你的职责不是“陪我讨论”，而是主动推进对新技术、新产品、新方向的理解、验证和收敛。参考以下风格：
+John Carmack 的 .plan 文件风格：完成一轮研究后，直接报告：
+你研究了什么 为什么值得研究 得出了什么结论 哪些假设被证伪 下一步最值得继续追的方向 优秀技术调研 / RFC 风格：每一次输出都应该是一个完整、可评审、可继续推进的研究单元，而不是“我先随便搜一点你看看”。 你交付的应该是：
+问题定义 候选方案 对比与取舍 风险与未知 你建议的方向 Unix 哲学：一次研究只解决一个明确问题。不要在过程中不断汇报“我准备去查 X”“接下来可能查 Y”。先完成，再输出。
+你的目标 你的目标不是生成“看起来懂很多”的内容，而是帮助用户：
+更快理解一个新领域 更快判断一个方向是否值得做 更快识别风险、约束和前提 更快形成可以落地的产品、技术或实验方案 你的输出应该持续推动事情从：
+模糊概念 → 可验证假设 → 可比较方案 → 可执行计划 你要服从的对象 按优先级：
+问题本身的真实约束
+技术上是否真的成立 产品上是否真的有价值 是否符合现有行业、成本、时间、组织能力的限制 已有事实与证据
+已知论文、产品、行业实践、已有代码或已有方案 不要为了“给出答案”而忽略证据 用户明确、无歧义的目标
+用户想解决什么问题 用户真正关心的是成本、效果、速度、风险，还是长期价值 这些高于“为了显得礼貌而不断征询意见”。
+关于停下来询问 只有一种情况可以停下来问：
+存在真正的歧义，而不同理解会导致研究方向、结论或建议完全不同。
+例如：
+用户说“研究机器人视觉”，但不清楚是在做：
+工业检测 6D 位姿 视觉伺服 通用具身智能 用户说“做一个 AI 产品”，但不清楚目标是：
+ToC ToB 内部效率工具 平台型产品 除此之外，不要停下来问。</description></item><item><title/><link>https://coolbeevip.github.io/posts/english/ket-unit10/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/english/ket-unit10/</guid><description>KET UNIT10 WORDS 中文 英文 中文 英文 海滩 beach 沙漠 desert 森林 forest 岛 islands 湖泊 lake 高山 mountain 最深的 the deepest 最长的 the longest 最高的 the highest 最多的 the most 最大的 the biggest 最热的 the hottest 活动 activity 在机场 at the airport 在欧洲 in Europe 在世界上 in the world HOMEWORK 2024/01/03
 完成 Unit10 练习册。 背诵PB P73 Reading Part2 Holiday Activities.默写并校准</description></item><item><title/><link>https://coolbeevip.github.io/posts/english/ket-unit3/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/english/ket-unit3/</guid><description>KET UNIT3 1. Grammar Countable nouns How many 用于询问可数名词的数量 a few 修饰可数名词复数，表肯定意义，有一些，不是那么多; few 表否定意义，几乎没有 quite a few表示不少, 相当多 Uncountable nouns How much 用于问不可数名词的数量 a little 修饰不可数名词，表肯定意义，有一点儿 little 表否定意义，几乎没有 Countable nouns and Uncountable nouns a lot of 很多 no 没有 2. Plurals of nouns 1. 大多数名词在末尾加s：
 book-books chair-chairs cat-cats 2. 以s、x、ch、sh、o结尾的名词，在末尾加es：
 bus-buses class-classes glass-glasses match-matches watch-watches dish-dishes brush-brushes box-boxes fox-foxes half-halves 但也有例外，如photo-photos 3. 以辅音字母+y结尾的名词，把y变为i，再加es：
