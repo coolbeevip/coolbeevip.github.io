@@ -74,15 +74,15 @@ draft: true
 
 前面讲“位置”和“能力底座”还不够，读者还需要知道这套产品和主生产回路到底是什么关系。对有节拍要求的 3C 组装场景，最重要的不是把边界画得多细，而是先把主生产回路和旁路智能层分开。
 
-这里不再把所有关系都塞进一个图里，而是拆成多个独立的 `PlantUML` 文件，分别看边界、典型旁路场景，以及世界模型和空间智能在现场里的介入方式：
+这里不再把所有关系都塞进一个图里，而是拆成系统边界图和多个独立场景文档，分别看边界、典型旁路场景，以及世界模型和空间智能在现场里的介入方式：
 
 * 系统边界图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-system-boundary.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-system-boundary.puml)
-* 换型准备链路：[abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml)
-* 异常分流链路：[abb-isaac-agent-flexible-manufacturing-ai-first-06-abnormal-routing.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-abnormal-routing.puml)
-* 非关键工步的策略选择链路：[abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml)
-* 世界模型参与的动作后果推演与恢复路径：[abb-isaac-agent-flexible-manufacturing-ai-first-06-world-model-state-recovery.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-world-model-state-recovery.puml)
-* 空间智能参与的位姿判断与补偿决策：[abb-isaac-agent-flexible-manufacturing-ai-first-06-spatial-intelligence-compensation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-spatial-intelligence-compensation.puml)
-* 半结构化工厂里的跨工位移动操作：[abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml)
+* 换型准备链路：说明文档 [abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-changeover-preparation.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-changeover-preparation.md)，配图 [abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml)
+* 异常分流链路：说明文档 [abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-abnormal-routing.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-abnormal-routing.md)，配图 [abb-isaac-agent-flexible-manufacturing-ai-first-06-abnormal-routing.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-abnormal-routing.puml)
+* 非关键工步的策略选择链路：说明文档 [abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-noncritical-step-strategy-selection.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-noncritical-step-strategy-selection.md)，配图 [abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml)
+* 世界模型参与的动作后果推演与恢复路径：说明文档 [abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-world-model-state-recovery.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-world-model-state-recovery.md)，配图 [abb-isaac-agent-flexible-manufacturing-ai-first-06-world-model-state-recovery.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-world-model-state-recovery.puml)
+* 空间智能参与的位姿判断与补偿决策：说明文档 [abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-spatial-intelligence-compensation.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-spatial-intelligence-compensation.md)，配图 [abb-isaac-agent-flexible-manufacturing-ai-first-06-spatial-intelligence-compensation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-spatial-intelligence-compensation.puml)
+* 半结构化工厂里的跨工位移动操作：说明文档 [abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-mobile-manipulation-cross-station.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-scene-mobile-manipulation-cross-station.md)，配图 [abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml)
 
 这些图最关键的不是“画了多少层”，而是把主生产回路和旁路智能层的关系讲清楚：
 
