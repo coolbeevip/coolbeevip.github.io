@@ -11,6 +11,10 @@ draft: true
 
 摘要：这里讨论的不是在线动作控制，而是产线本来就有的换型准备流程。`Agentic AI` 不替代 `MES`、`PLC` 或站控放行。它主要用来把新旧配置差异、风险点和补充检查项整理清楚，减少现场对个人经验的依赖。
 
+## 先看这张图
+
+* 场景图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml)
+
 ## 场景定义
 
 在 3C 小型精密装配的固定工位里，换型通常由新工单、新料号、新配方或新夹具触发。真正决定能否放行的，仍然是传统工业链路里的换型准备逻辑：
@@ -432,8 +436,3 @@ draft: true
 * `Agentic AI` 不替代 `MES`、配方系统或站控放行逻辑
 * “是否需要换型”主要依赖结构化规则比较，不依赖大模型猜测
 * 人工确认只在高风险和规则要求时介入，不应默认常开
-
-## 参考图
-
-* 场景图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-changeover-preparation.puml)
-* 返回章节：[abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
