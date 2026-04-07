@@ -11,6 +11,10 @@ draft: true
 
 摘要：这里讨论的是那些允许做策略选择的工艺节点，不是把底层控制权交给 `Agentic AI`。前提也很明确：现场已经有一组跑通过、验过的技能，主协调单元只是在少数非关键节点上，允许旁路智能帮忙判断这次更适合走哪条已知路径。
 
+## 先看这张图
+
+* 场景图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml)
+
 ## 场景定义
 
 在固定工位里，不是每个动作点都适合让 `Agentic AI` 介入。通常只有下面这类节点才合适：
@@ -29,6 +33,15 @@ draft: true
 
 到这一步，`Agentic AI` 才算真的有介入空间。
 
+这里最好先把边界说清。这条链路讨论的不是“已经出了异常以后怎么恢复”，而是还没进入明确异常状态，或者还没被系统判定为必须转异常分流时，在多个已验证路径之间做受限选择。
+
+同样是抓取后姿态不稳，工程上可能会有两种处理方式：
+
+* 如果系统把它判定成异常，后面走的是异常分流链路，重点是判断还能不能恢复、是否转人工
+* 如果系统把它视为一个仍可自动处理的工艺节点，后面走的是策略选择链路，重点是比较重拍、重抓、回安全位这几条已知路径哪条更合适
+
+这两类问题看起来相邻，但介入时机并不一样。策略选择更靠前，它处理的是“怎么选”；异常分流更靠后，它处理的是“已经出问题了，接下来怎么收”。
+
 如果没有这层受限策略选择，现场更常见的做法通常是把每一种情况都提前写死：
 
 * 某个条件满足就固定走重拍
@@ -43,6 +56,17 @@ draft: true
 * 一旦现场状态变化稍复杂，工程师就容易继续往规则里堆 `if-else`
 
 所以这里真正缺的不是新技能，而是在多个已知技能之间做更稳妥选择的能力。
+
+## 为什么工程上要和异常分流区分开
+
+工程上最好还是把这两类问题分开，哪怕最后共用一套状态、日志和裁决框架。原因很现实：
+
+* 输入不一样。策略选择看的是工步上下文、候选技能和当前约束；异常分流看的是报警、失败次数和恢复资格。
+* 目标不一样。策略选择是在几个已知路径里做比较；异常分流是在失败之后判断还能不能恢复。
+* 风险边界不一样。策略选择通常发生在仍允许自动处理的节点；异常分流更接近人工接管边界。
+* 验收标准也不一样。策略选择看的是路径选择是否更优；异常分流看的是恢复成功率、人工转入率和停机损失。
+
+如果不区分，系统很容易把正常决策点都写成“异常恢复”，最后变成一堆越来越厚的补丁分支。反过来，如果把真正异常也当成普通策略选择，人工接管点和风险边界又会开始变模糊。
 
 ## 链路拆解
 
@@ -73,6 +97,16 @@ draft: true
 
 这个边界很重要。守住了，它是产品能力增强；守不住，就容易变成把底层控制权往外挪。
 
+## 这个场景里 Agentic AI 的真实位置
+
+这个场景里，`Agentic AI` 更像一层候选路径比较器。它不去生成新技能，也不去碰底层控制，而是做三件事：
+
+* 把当前状态和约束整理清楚
+* 在已验证技能集合里比较哪条路径更合适
+* 把建议结果和需要人工确认的条件返回给主协调单元
+
+它真正参与的是“怎么选”，不是“怎么控”。
+
 ## 这个场景为什么适合作为首版能力
 
 和“直接控制动作”相比，这个场景更适合第一版产品，原因很现实：
@@ -84,25 +118,209 @@ draft: true
 
 对产品团队来说，这是一条风险更低，也更容易把闭环做出来的切入口。
 
-## 典型输入与输出
+## 首版系统最值得做的增强点
 
-这个场景下，常见输入包括：
+这一类场景如果只做第一版，通常先补三层东西：
 
-* 当前工步阶段
+* 把可选技能收成清晰的技能目录，定义前置条件、失败回执和适用范围
+* 把站控输入收成固定状态快照，而不是临时拼出来的条件判断
+* 把建议结果收成结构化输出，明确推荐技能、备选技能、原因和是否需要人工确认
+
+先把这些基础层定住，后面再谈更复杂的策略比较才有意义。
+
+## 这一节如果真的要做，通常怎么落地
+
+真要落地，这条链路通常会长成这样：
+
+* 站控先判断当前节点是否允许策略选择
+* 如果允许，再把当前工步、约束条件、可选技能和现场状态整理成一包输入
+* `Agentic AI` 在这组已知候选里做比较，输出推荐技能和备选路径
+* 主协调单元再按规则决定是直接执行，还是转人工确认
+
+这里最关键的一条边界是：候选集必须先由工程系统定义好。模型只能在这个集合里选，不能临场发明一个新动作。
+
+### 1. 什么情况下值得进入这条链路
+
+不是每个工步都值得走策略选择。更常见的做法是先由站控做一层筛选：
+
+* 当前节点明确允许做路径比较
+* 当前状态还没进入明确异常分流
+* 候选技能集合已经定义清楚
+* 当前工位和安全条件都满足基本执行资格
+
+如果这些前提都不成立，就不该进入这条链路。
+
+### 2. 一个更实用的状态输入通常长什么样
+
+送进模型的输入，最好不是零散条件，而是一份整理过的状态快照。一个更实用的输入通常会包含：
+
+* 当前工位和工步阶段
+* 当前状态和工艺约束
+* 可选技能集合
 * 当前配方或产品版本
-* 当前视觉、力控或传感器状态
-* 允许调用的技能集合
-* 当前人工模式和自动模式状态
+* 最近一次相关执行结果
 
-更合适的输出包括：
+可以长成这样：
 
-* 推荐技能
-* 备选技能
-* 前置条件
-* 风险说明
-* 是否需要人工确认
+```json
+{
+  "station": {
+    "station_id": "3c_cell_01",
+    "station_type": "排线对位装配",
+    "task_stage": "抓取后姿态复核"
+  },
+  "process_context": {
+    "product_version": "排线_v3",
+    "operator_mode": "自动",
+    "station_ready": true
+  },
+  "current_snapshot": {
+    "pose_stable": false,
+    "vision_offset_mm": 0.28,
+    "vacuum_ok": true,
+    "contact_risk": "中"
+  },
+  "allowed_skills": [
+    "重拍",
+    "低速重抓",
+    "回安全位后再次对位"
+  ],
+  "skill_constraints": {
+    "max_retry": 2,
+    "manual_confirm_if": [
+      "补偿量接近上限",
+      "连续两次策略切换仍未收敛"
+    ]
+  },
+  "recent_execution": {
+    "last_skill": "标准抓取",
+    "last_result": "抓取成功但姿态不稳"
+  }
+}
+```
 
-这样主协调单元后面才好做审计、回退和结果比较。
+字段说明：
+
+| 字段 | 中文说明 |
+| --- | --- |
+| `station.station_id` | 当前工位编号。 |
+| `station.station_type` | 当前工位类型，用来匹配适用的技能和约束。 |
+| `station.task_stage` | 当前工步阶段，决定现在是在抓取后、对位前还是其他允许选择的节点。 |
+| `process_context.product_version` | 当前产品或配方版本。 |
+| `process_context.operator_mode` | 当前运行模式，例如自动或人工。 |
+| `process_context.station_ready` | 当前工位是否满足继续执行的基本条件。 |
+| `current_snapshot.pose_stable` | 当前姿态是否稳定。 |
+| `current_snapshot.vision_offset_mm` | 当前视觉偏差量。 |
+| `current_snapshot.vacuum_ok` | 当前吸附状态是否正常。 |
+| `current_snapshot.contact_risk` | 当前接触风险等级。 |
+| `allowed_skills` | 当前节点允许调用的已验证技能集合。 |
+| `skill_constraints.max_retry` | 当前策略选择允许的最大重试次数。 |
+| `skill_constraints.manual_confirm_if` | 哪些情况出现时必须人工确认。 |
+| `recent_execution.last_skill` | 上一次实际执行的技能。 |
+| `recent_execution.last_result` | 上一次执行后的结果。 |
+
+### 3. 系统提示词
+
+这一类提示词通常也会写成约束式，只允许模型在给定候选里做比较。例如：
+
+```text
+你是 3C 固定工位的策略选择助手。
+
+你的任务是根据当前工步阶段、现场状态、工艺约束和允许调用的技能集合，
+输出结构化的技能选择建议。
+
+你不是主协调单元，不负责最终执行，也不负责生成新的底层动作。
+
+请遵守以下约束：
+1. 只能从 allowed_skills 中选择推荐技能和备选技能。
+2. 不要生成新的技能名称，不要修改 PLC、机器人轨迹或工艺参数。
+3. 输出必须是 JSON，不要输出解释性散文。
+4. 如果规则要求人工确认，不要建议直接自动执行。
+5. 如果信息不足，必须明确标记 insufficient_information=true。
+6. 风险等级只能使用 低、中、高。
+```
+
+### 4. 用户提示词
+
+用户提示词直接说明要产出什么，再把状态快照放进去就够了。例如：
+
+```text
+请基于下面的工步状态输入，输出一个结构化策略选择建议包，字段必须包含：
+- decision_type
+- risk_level
+- recommended_skill
+- backup_skills
+- requires_human_confirm
+- reasons
+- insufficient_information
+
+工步状态输入如下：
+{这里放上一步组装好的 JSON}
+```
+
+### 5. 最终输出最好长什么样
+
+模型输出最好也是固定结构，方便站控直接裁决。一个更适合接到站控或 `HMI` 的结果，可以长这样：
+
+```json
+{
+  "decision_type": "策略选择",
+  "risk_level": "中",
+  "recommended_skill": "回安全位后再次对位",
+  "backup_skills": [
+    "重拍",
+    "低速重抓"
+  ],
+  "requires_human_confirm": false,
+  "reasons": [
+    "当前姿态不稳定，但尚未进入明确异常分流",
+    "视觉偏差仍在允许范围内",
+    "回安全位后再次对位对当前状态更稳妥"
+  ],
+  "insufficient_information": false
+}
+```
+
+字段说明：
+
+| 字段 | 中文说明 |
+| --- | --- |
+| `decision_type` | 当前建议属于哪类决策，这里应明确为策略选择。 |
+| `risk_level` | 当前路径选择的总体风险等级。 |
+| `recommended_skill` | 当前最推荐执行的技能。 |
+| `backup_skills` | 当前可作为备选的技能集合。 |
+| `requires_human_confirm` | 是否建议先转人工确认。 |
+| `reasons` | 推荐当前路径的主要依据。 |
+| `insufficient_information` | 当前输入是否不足以支撑可靠选择。 |
+
+### 6. 站控侧通常怎么接
+
+站控侧最终还是要把建议收成固定动作。用伪代码表达，大致会像这样：
+
+```python
+def handle_strategy_selection(context):
+    if not context["process_context"]["station_ready"]:
+        return reject("station_not_ready")
+
+    decision = call_agentic_ai(context)
+
+    if decision["insufficient_information"]:
+        return transfer_to_manual("insufficient_information")
+
+    if decision["requires_human_confirm"]:
+        return push_hmi_confirm(decision)
+
+    if decision["recommended_skill"] not in context["allowed_skills"]:
+        return reject("skill_not_allowed")
+
+    return execute_skill(decision["recommended_skill"])
+```
+
+这段伪代码表达的重点是：
+
+* 先检查当前节点是否具备策略选择资格
+* 再让模型在受限技能集合里做比较
+* 最后仍由站控决定是执行、转人工，还是拒绝当前建议
 
 ## 边界与限制
 
@@ -112,8 +330,3 @@ draft: true
 * `Agentic AI` 返回的是受限候选，不是直接执行命令
 * `PLC`、控制器和互锁层仍保留确定性与安全边界
 * 如果一个节点本身是关键控制点，就不该把策略选择开放给旁路智能
-
-## 参考图
-
-* 场景图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-noncritical-step-strategy-selection.puml)
-* 返回章节：[abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
