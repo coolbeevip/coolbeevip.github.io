@@ -11,6 +11,10 @@ draft: true
 
 摘要：跨工位移动操作和固定工位最大的差异，不在于多了一个移动底盘，而在于环境更开放、位置关系更动态、任务切换也更频繁。所以这种场景天然更依赖强分层架构，而不是让一个 `Agent` 从头包办理解、规划、控制和执行。
 
+## 先看这张图
+
+* 场景图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml)
+
 ## 场景定义
 
 这一类场景通常包括：
@@ -117,7 +121,7 @@ draft: true
 
 这一层决定了 `AI` 的建议只能通过受限接口进来，不能直接下发底盘控制或关节控制。
 
-## Agentic AI 在这个场景里的合理位置
+## 这个场景里 Agentic AI 的真实位置
 
 对跨工位移动操作来说，`Agentic AI` 更合理的位置通常在这里：
 
@@ -128,6 +132,29 @@ draft: true
 * 人工处理建议
 
 它不是 `Fleet Manager`，也不是导航控制器，更不是安全控制器。
+
+## 首版系统最值得做的增强点
+
+如果这一类场景要做第一版，通常先做的不是“一个大模型统一管全场”，而是几块更稳的增强：
+
+* 先把任务层和调度层的边界分清
+* 先把异常解释、恢复模板选择和人工建议接进任务层
+* 先把跨工位任务状态、失败原因和恢复结果记成结构化日志
+* 先把导航、抓取和放置这些核心技能的输入输出接口定清
+
+这些基础层不稳，后面再谈更复杂的智能决策，系统也很难放到现场。
+
+## 这一节如果真的要做，通常怎么落地
+
+真正落地时，这一类系统通常还是按分层架构往下接：
+
+* 业务层下发工单或搬运目标
+* 调度层分配机器人和目标工位
+* 任务层把目标展开成有限状态机、行为树或技能图
+* `Agentic AI` 在任务层附近提供异常解释、恢复模板选择和人工建议
+* 感知、规划、实时控制和安全层继续各管各的边界
+
+如果一开始就试图让一个模型统一接管调度、任务、规划和控制，最先出问题的通常不是智能不足，而是系统根本难以验证。
 
 ## 和固定工位场景的关键差异
 
@@ -148,8 +175,3 @@ draft: true
 * `AI` 不能绕过实时控制与安全链路
 * 任务层应以已验证任务树和技能为主，不适合每一步都在线生成动作
 * 这类场景比固定工位更依赖世界模型、空间智能和场景状态维护
-
-## 参考图
-
-* 场景图：[abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml](./diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-06-mobile-manipulation-cross-station.puml)
-* 返回章节：[abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
