@@ -1,0 +1,70 @@
+@startuml
+title 第 7 章组件图：具身智能里的 Agentic AI 能力与系统组成
+top to bottom direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+skinparam BoxPadding 18
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 90
+
+package "1. 产品入口层" #EAF4FF {
+  rectangle "任务与交互入口\n\nHMI\n工单\n人工确认\n配置入口" as ENTRY
+}
+
+package "2. Agentic AI 能力层" #FFF6E8 {
+  rectangle "任务理解\n\n理解当前要做什么\n组织任务上下文" as TASK
+  rectangle "状态判断\n\n判断当前处于什么阶段\n识别异常与人工接管点" as STATE #FFD79A
+  rectangle "建议生成\n\n输出技能建议\n恢复建议\n人工确认建议" as DECISION #FFD79A
+}
+
+package "3. 状态与记忆层" #F3FBF3 {
+  database "状态快照\n\n工步\n产品版本\n设备资格\n异常阶段" as SNAPSHOT
+  database "历史案例与回放\n\n建议记录\n执行结果\n失败标签\n回放数据" as MEMORY
+}
+
+package "4. 技能与编排层" #FFF6E8 {
+  rectangle "技能目录\n\n抓取\n对位\n重拍\n回安全位\n转人工确认" as SKILL
+  rectangle "任务状态机 / 编排\n\n受限技能调用\n前置条件检查\n超时 / 回执 / 失败分类" as ORCH
+}
+
+package "5. 感知与推理层" #F8F8F8 {
+  rectangle "视觉与传感器\n\n位姿\n偏差量\n接触状态\n环境观测" as PERCEPTION
+  rectangle "空间智能\n\n位姿关系\n可达性\n补偿范围\n接触约束" as SPATIAL #FFD79A
+  rectangle "世界模型\n\n状态演化\n动作后果\n恢复路径评估" as WORLD #FFD79A
+}
+
+package "6. 工业运行时层" #F5F5F5 {
+  rectangle "工业运行时\n\nROS 2\n站控\nPLC / OPC UA\n控制器适配" as RUNTIME
+  rectangle "约束与裁决层\n\n工艺边界\n安全边界\n节拍边界\n设备资格\n人工确认条件" as GATE
+}
+
+package "7. 执行层" #F5F5F5 {
+  rectangle "机器人与现场设备\n\n机械臂\n夹具\n相机\n工艺设备\n工件" as EXEC
+}
+
+ENTRY --> TASK : 任务目标 / 工单 / 人工请求
+ENTRY --> SNAPSHOT : 人工状态 / 当前模式
+
+TASK --> STATE : 组织当前任务语义
+SNAPSHOT --> STATE : 提供结构化状态
+MEMORY --> DECISION : 提供历史案例 / 回放
+STATE --> DECISION : 提供当前阶段判断
+
+PERCEPTION --> SPATIAL : 提供观测结果
+STATE --> WORLD : 提供状态阶段
+DECISION -right-> WORLD : 提供候选动作
+SPATIAL --> DECISION : 返回空间约束
+WORLD -left-> DECISION : 返回动作后果推演
+
+DECISION --> ORCH : 输出建议包
+SKILL --> ORCH : 提供受限技能集合
+ORCH --> GATE : 请求执行资格裁决
+GATE --> RUNTIME : 放行受限请求
+RUNTIME --> EXEC : 执行技能 / 读取状态
+EXEC --> PERCEPTION : 返回视觉 / 传感器结果
+RUNTIME --> SNAPSHOT : 写入状态变化
+ORCH --> MEMORY : 写入建议 / 执行结果
+@enduml
