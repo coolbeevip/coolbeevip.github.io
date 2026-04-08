@@ -1,5 +1,5 @@
 ---
-title: "AI-first 柔性制造探索，第 8 章：未来 6 到 12 个月如何把单点试点变成能力体系"
+title: "AI-first 柔性制造探索，第 9 章：未来 6 到 12 个月如何把单点试点变成能力体系"
 date: 2026-03-31T16:20:11+08:00
 summary: "围绕消费电子装配切入、共性资产沉淀和相邻边界扩展，说明未来 6 到 12 个月如何把单点试点推进成可复用的能力体系。"
 tags: [ai, robot, abb, isaac, agent, manufacturing]
@@ -7,7 +7,7 @@ categories: [embodied-ai]
 draft: true
 ---
 
-# 第 8 章：未来 6 到 12 个月如何把单点试点变成能力体系
+# 第 9 章：未来 6 到 12 个月如何把单点试点变成能力体系
 
 摘要：这一章不是泛路线图，而是收束单点试点之后该先沉淀什么、扩什么、暂时不扩什么，并把路线压到消费电子和小型精密电子装配的现实进入路径上。
 
@@ -471,4 +471,4 @@ Agent、VLA、世界模型、多模态规划、合成数据引擎，这些方向
 ## 继续阅读
 
 * 返回索引：[AI-first 文章索引](./abb-isaac-agent-flexible-manufacturing-ai-first-index.md)
-* 上一章：[第 7 章：从仿真、数据、世界模型到受限真机](./abb-isaac-agent-flexible-manufacturing-ai-first-07-sim-data-worldmodel-to-real.md)
+* 上一章：[第 8 章：从仿真、数据、世界模型到受限真机](./abb-isaac-agent-flexible-manufacturing-ai-first-08-sim-data-worldmodel-to-real.md)

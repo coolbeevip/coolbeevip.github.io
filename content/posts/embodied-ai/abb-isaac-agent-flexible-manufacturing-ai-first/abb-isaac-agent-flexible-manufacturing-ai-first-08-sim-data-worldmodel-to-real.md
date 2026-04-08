@@ -1,5 +1,5 @@
 ---
-title: "AI-first 柔性制造探索，第 7 章：从仿真、数据、世界模型到受限真机"
+title: "AI-first 柔性制造探索，第 8 章：从仿真、数据、世界模型到受限真机"
 date: 2026-03-31T16:20:11+08:00
 summary: "把真实数据、仿真环境、合成数据、世界模型和受限真机放回一条验证链，强调先建闭环，再扩规模。"
 tags: [ai, robot, abb, isaac, agent, manufacturing]
@@ -7,7 +7,7 @@ categories: [embodied-ai]
 draft: true
 ---
 
-# 第 7 章：从仿真、数据、世界模型到受限真机
+# 第 8 章：从仿真、数据、世界模型到受限真机
 
 摘要：这一章讨论的不是工具名词堆叠，而是验证链设计，说明系统应如何从真实问题出发走到受限真机。
 
@@ -444,5 +444,5 @@ AI 团队天然容易从模型出发思考：
 ## 继续阅读
 
 * 返回索引：[AI-first 文章索引](./abb-isaac-agent-flexible-manufacturing-ai-first-index.md)
-* 上一章：[第 6 章：Agentic AI 在 3C 柔性制造中的产品位置与最小形态](./abb-isaac-agent-flexible-manufacturing-ai-first-06-minimum-system.md)
-* 下一章：[第 8 章：未来 6 到 12 个月如何把单点试点变成能力体系](./abb-isaac-agent-flexible-manufacturing-ai-first-08-roadmap.md)
+* 上一章：[第 7 章：具身智能里的 Agentic AI 能力与组成](./abb-isaac-agent-flexible-manufacturing-ai-first-07-agentic-ai-capabilities-and-architecture.md)
+* 下一章：[第 9 章：未来 6 到 12 个月如何把单点试点变成能力体系](./abb-isaac-agent-flexible-manufacturing-ai-first-09-roadmap.md)
