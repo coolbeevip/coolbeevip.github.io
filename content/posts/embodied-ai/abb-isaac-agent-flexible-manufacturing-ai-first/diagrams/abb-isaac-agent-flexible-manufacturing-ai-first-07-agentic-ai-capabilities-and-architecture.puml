@@ -1,70 +1,149 @@
 @startuml
-title 第 7 章组件图：具身智能里的 Agentic AI 能力与系统组成
+title 第 7 章功能架构图：具身智能里的 Agentic AI 能力与组成
 top to bottom direction
 skinparam shadowing false
-skinparam packageStyle rectangle
-skinparam defaultTextAlignment center
-skinparam wrapWidth 220
-skinparam BoxPadding 18
 skinparam linetype ortho
-skinparam nodesep 80
-skinparam ranksep 90
-
-package "1. 产品入口层" #EAF4FF {
-  rectangle "任务与交互入口\n\nHMI\n工单\n人工确认\n配置入口" as ENTRY
+skinparam defaultTextAlignment center
+skinparam dpi 180
+skinparam nodesep 26
+skinparam ranksep 28
+skinparam BackgroundColor #FFFFFF
+skinparam packageStyle rectangle
+skinparam package {
+  BorderColor #A6A6A6
+  BackgroundColor #D3D3D3
+  FontColor #111111
+  FontSize 18
+  RoundCorner 10
+}
+skinparam package<<whitebox>> {
+  BorderColor #A6A6A6
+  BackgroundColor #FFFFFF
+  FontColor #111111
+  FontSize 16
+  RoundCorner 8
+}
+skinparam rectangle {
+  BorderColor #8E8E8E
+  BackgroundColor #FFFFFF
+  FontColor #111111
+  FontSize 15
+  RoundCorner 8
 }
 
-package "2. Agentic AI 能力层" #FFF6E8 {
-  rectangle "任务理解\n\n理解当前要做什么\n组织任务上下文" as TASK
-  rectangle "状态判断\n\n判断当前处于什么阶段\n识别异常与人工接管点" as STATE #FFD79A
-  rectangle "建议生成\n\n输出技能建议\n恢复建议\n人工确认建议" as DECISION #FFD79A
+package "HMI / 工单" as HMI {
+  rectangle "调度" as HMI_SCHED
+  rectangle "工单" as HMI_WORK
+  rectangle "API" as HMI_API
+  rectangle "Voice" as HMI_VOICE
+
+  HMI_SCHED -[hidden]right-> HMI_WORK
+  HMI_WORK -[hidden]right-> HMI_API
+  HMI_API -[hidden]right-> HMI_VOICE
 }
 
-package "3. 状态与记忆层" #F3FBF3 {
-  database "状态快照\n\n工步\n产品版本\n设备资格\n异常阶段" as SNAPSHOT
-  database "历史案例与回放\n\n建议记录\n执行结果\n失败标签\n回放数据" as MEMORY
+package "领域技能" as DOMAIN {
+  rectangle "领域定义" as DOMAIN_DEF
+  rectangle "领域技能" as DOMAIN_SKILL
+
+  DOMAIN_DEF -[hidden]down-> DOMAIN_SKILL
 }
 
-package "4. 技能与编排层" #FFF6E8 {
-  rectangle "技能目录\n\n抓取\n对位\n重拍\n回安全位\n转人工确认" as SKILL
-  rectangle "任务状态机 / 编排\n\n受限技能调用\n前置条件检查\n超时 / 回执 / 失败分类" as ORCH
+package "智能体核心" as AGENT {
+  rectangle "任务理解" as AGENT_TASK
+  rectangle "长程规划" as AGENT_PLAN
+  rectangle "状态判断" as AGENT_STATE
+  rectangle "后续决策" as AGENT_DECIDE
+
+  AGENT_TASK -[hidden]right-> AGENT_PLAN
+  AGENT_PLAN -[hidden]right-> AGENT_STATE
+  AGENT_STATE -[hidden]right-> AGENT_DECIDE
 }
 
-package "5. 感知与推理层" #F8F8F8 {
-  rectangle "视觉与传感器\n\n位姿\n偏差量\n接触状态\n环境观测" as PERCEPTION
-  rectangle "空间智能\n\n位姿关系\n可达性\n补偿范围\n接触约束" as SPATIAL #FFD79A
-  rectangle "世界模型\n\n状态演化\n动作后果\n恢复路径评估" as WORLD #FFD79A
+package "状态/记忆/知识" as MEMORY {
+  rectangle "状态快照" as MEM_SNAPSHOT
+  rectangle "历史案例" as MEM_CASE
+  rectangle "日志回放" as MEM_REPLAY
+  rectangle "工艺配方" as MEM_RECIPE
+  rectangle "产品配置" as MEM_PRODUCT
+
+  MEM_SNAPSHOT -[hidden]down-> MEM_CASE
+  MEM_CASE -[hidden]down-> MEM_REPLAY
+  MEM_REPLAY -[hidden]down-> MEM_RECIPE
+  MEM_RECIPE -[hidden]down-> MEM_PRODUCT
 }
 
-package "6. 工业运行时层" #F5F5F5 {
-  rectangle "工业运行时\n\nROS 2\n站控\nPLC / OPC UA\n控制器适配" as RUNTIME
-  rectangle "约束与裁决层\n\n工艺边界\n安全边界\n节拍边界\n设备资格\n人工确认条件" as GATE
+package "技能智能编排" as ORCH {
+  rectangle "技能选择" as ORCH_SELECT
+  rectangle "参数补全" as ORCH_PARAM
+  rectangle "行为规划" as ORCH_PLAN
+  rectangle "约束检查" as ORCH_GUARD
+
+  ORCH_SELECT -[hidden]right-> ORCH_PARAM
+  ORCH_PARAM -[hidden]right-> ORCH_PLAN
+  ORCH_PLAN -[hidden]right-> ORCH_GUARD
 }
 
-package "7. 执行层" #F5F5F5 {
-  rectangle "机器人与现场设备\n\n机械臂\n夹具\n相机\n工艺设备\n工件" as EXEC
+package "感知/推理" as REASON {
+  rectangle "世界模型" as REASON_WORLD
+  rectangle "空间智能" as REASON_SPATIAL
+  rectangle "视觉模型" as REASON_VISION
+
+  REASON_WORLD -[hidden]down-> REASON_SPATIAL
+  REASON_SPATIAL -[hidden]down-> REASON_VISION
 }
 
-ENTRY --> TASK : 任务目标 / 工单 / 人工请求
-ENTRY --> SNAPSHOT : 人工状态 / 当前模式
+package "技能运行时" as RUNTIME {
+  rectangle "技能映射" as RUN_MAP
+  rectangle "参数绑定" as RUN_BIND
+  rectangle "约束检查" as RUN_CHECK
+  rectangle "执行调度" as RUN_SCHEDULE
 
-TASK --> STATE : 组织当前任务语义
-SNAPSHOT --> STATE : 提供结构化状态
-MEMORY --> DECISION : 提供历史案例 / 回放
-STATE --> DECISION : 提供当前阶段判断
+  package "Robot Adapter" <<whitebox>> as ADAPTER {
+    rectangle "ABB" as ADAPTER_ABB
+    rectangle "ROS2" as ADAPTER_ROS2
+    rectangle "Vision" as ADAPTER_VISION
+    rectangle "PLC" as ADAPTER_PLC
 
-PERCEPTION --> SPATIAL : 提供观测结果
-STATE --> WORLD : 提供状态阶段
-DECISION -right-> WORLD : 提供候选动作
-SPATIAL --> DECISION : 返回空间约束
-WORLD -left-> DECISION : 返回动作后果推演
+    ADAPTER_ABB -[hidden]right-> ADAPTER_ROS2
+    ADAPTER_ROS2 -[hidden]right-> ADAPTER_VISION
+    ADAPTER_VISION -[hidden]right-> ADAPTER_PLC
+  }
 
-DECISION --> ORCH : 输出建议包
-SKILL --> ORCH : 提供受限技能集合
-ORCH --> GATE : 请求执行资格裁决
-GATE --> RUNTIME : 放行受限请求
-RUNTIME --> EXEC : 执行技能 / 读取状态
-EXEC --> PERCEPTION : 返回视觉 / 传感器结果
-RUNTIME --> SNAPSHOT : 写入状态变化
-ORCH --> MEMORY : 写入建议 / 执行结果
+  RUN_MAP -[hidden]right-> RUN_BIND
+  RUN_BIND -[hidden]right-> RUN_CHECK
+  RUN_CHECK -[hidden]right-> RUN_SCHEDULE
+  RUN_MAP -[hidden]down-> ADAPTER
+}
+
+package "控制器" as CTRL {
+  rectangle "ABB Ctrl" as CTRL_ABB
+  rectangle "RAPID" as CTRL_RAPID
+  rectangle "ROS2" as CTRL_ROS2
+
+  CTRL_ABB -[hidden]right-> CTRL_RAPID
+  CTRL_RAPID -[hidden]right-> CTRL_ROS2
+}
+
+package "现场设备" as DEVICE {
+  rectangle "机械臂" as DEV_ARM
+  rectangle "末端工具" as DEV_TOOL
+  rectangle "PLC" as DEV_PLC
+
+  DEV_ARM -[hidden]right-> DEV_TOOL
+  DEV_TOOL -[hidden]right-> DEV_PLC
+}
+
+HMI -[hidden]right-> DOMAIN
+AGENT -[hidden]right-> MEMORY
+ORCH -[hidden]right-> REASON
+CTRL -[hidden]right-> DEVICE
+
+HMI -[hidden]down-> AGENT
+DOMAIN -[hidden]down-> MEMORY
+AGENT -[hidden]down-> ORCH
+MEMORY -[hidden]down-> REASON
+ORCH -[hidden]down-> RUNTIME
+RUNTIME -[hidden]down-> CTRL
+REASON -[hidden]down-> DEVICE
 @enduml
