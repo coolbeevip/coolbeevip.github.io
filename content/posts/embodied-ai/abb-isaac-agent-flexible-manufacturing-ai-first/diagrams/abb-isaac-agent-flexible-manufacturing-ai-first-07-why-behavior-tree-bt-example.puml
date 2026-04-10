@@ -1,5 +1,5 @@
 @startuml
-title 第 7 章示意图：FPC 精密插装失败后的行为树版本
+title 第 7 章示意图：跨站补料与空箱回收的行为树版本
 top to bottom direction
 skinparam shadowing false
 skinparam packageStyle rectangle
@@ -7,41 +7,69 @@ skinparam defaultTextAlignment center
 skinparam wrapWidth 220
 skinparam linetype ortho
 
-rectangle "Root\n\n任务：完成 FPC 插装恢复" as ROOT #EAF4FF
+rectangle "Root\n\n任务：完成跨站补料与空箱回收" as ROOT #EAF4FF
 
-rectangle "Fallback\n\n主恢复路径失败后\n切到回退或人工分支" as FB #FFF2CC
+rectangle "Fallback\n\n自动闭环失败后\n转人工调度" as FB #FFF2CC
+rectangle "Sequence A\n\n自动执行主路径" as SEQ_A #F3FBF3
+rectangle "人工调度" as HUMAN #FDE9E7
 
-rectangle "Sequence A\n\n自动恢复主路径" as SEQ_A #F3FBF3
-rectangle "Sequence B\n\n回安全位后结束自动恢复" as SEQ_B #F8F8F8
-rectangle "人工确认" as HUMAN #FDE9E7
+rectangle "条件\n料箱已装载" as C1
+rectangle "Fallback\n\n优先直接交付\n不满足则走恢复路径" as FB_ROUTE #FFF9E6
 
-rectangle "条件\n夹具已锁紧" as C1
-rectangle "条件\n视觉可用" as C2
-rectangle "动作\n低速重拍" as A1
-rectangle "条件\n偏移仍可补偿" as C3
-rectangle "动作\n二次对准" as A2
-rectangle "动作\n再插一次" as A3
-rectangle "条件\n插入成功" as C4
+rectangle "Sequence B1\n\n直接交付路径" as SEQ_B1 #F8F8F8
+rectangle "条件\n3 号站可对接" as C2
+rectangle "条件\n电量足够直接完成任务" as C3
+rectangle "动作\n去 3 号站" as A1
+rectangle "动作\n交付料箱" as A2
+rectangle "动作\n回收空箱" as A3
 
-rectangle "动作\n回安全位" as B1
-rectangle "动作\n记录恢复失败" as B2
+rectangle "Sequence B2\n\n缓存、补能与重规划路径" as SEQ_B2 #F8F8F8
+rectangle "动作\n去临时缓存位" as A4
+rectangle "Fallback\n\n先判断是否需要补能" as FB_ENERGY #FFF9E6
+rectangle "Sequence C1\n\n补能子路径" as SEQ_C1 #F8F8F8
+rectangle "条件\n电量低于阈值" as C4
+rectangle "动作\n去充电点补能" as A5
+rectangle "条件\n电量恢复可继续任务" as C5
+rectangle "条件\n当前电量已足够" as C6
+rectangle "动作\n重新规划路线" as A6
+rectangle "条件\n3 号站已可对接" as C7
+rectangle "动作\n再次去 3 号站" as A7
+rectangle "动作\n交付料箱" as A8
+rectangle "动作\n回收空箱" as A9
 
 ROOT --> FB
 
-FB --> SEQ_A : 优先尝试
-FB --> SEQ_B : 主路径失败后回退
-FB --> HUMAN : 仍不满足则转人工
+FB --> SEQ_A : 优先尝试自动闭环
+FB --> HUMAN : 超边界时转人工
 
 SEQ_A --> C1
-C1 --> C2
-C2 --> A1
-A1 --> C3
-C3 --> A2
-A2 --> A3
-A3 --> C4
+C1 --> FB_ROUTE
 
-SEQ_B --> B1
-B1 --> B2
+FB_ROUTE --> SEQ_B1 : 优先直接交付
+FB_ROUTE --> SEQ_B2 : 不满足则走恢复路径
+
+SEQ_B1 --> C2
+C2 --> C3
+C3 --> A1
+A1 --> A2
+A2 --> A3
+
+SEQ_B2 --> A4
+A4 --> FB_ENERGY
+
+FB_ENERGY --> SEQ_C1 : 电量不足先补能
+FB_ENERGY --> C6 : 否则直接继续
+
+SEQ_C1 --> C4
+C4 --> A5
+A5 --> C5
+
+C6 --> A6
+C5 --> A6
+A6 --> C7
+C7 --> A7
+A7 --> A8
+A8 --> A9
 
 note right of FB
 Fallback 节点不是普通分支框。
@@ -60,21 +88,23 @@ Sequence 节点也有明确执行语义：
 - 任一节点 running，整条树保持 running
 end note
 
-note left of C3
+note left of FB_ROUTE
 这里最关键的不是
-"画出一个判断框"，
-而是把判断做成
-可重复 tick 的条件节点。
+"画出一条异常分支"，
+而是把直接交付、
+缓存等待、补能和重规划
+拆成可复用子树。
 end note
 
-note right of A1
+note right of A4
 叶子节点可以直接映射成
 已验证技能：
 
-- 重拍
-- 对准
-- 插入
-- 回安全位
+- 去缓存位
+- 去充电点
+- 重新规划
+- 到站交付
+- 回收空箱
 end note
 
 note bottom of ROOT
@@ -90,10 +120,10 @@ end note
 note bottom of HUMAN
 一旦继续叠加：
 
-- 第二次重试
-- 视觉超时
-- 配方切换
-- 不同工位复用
+- 多个站点
+- 不同电量阈值
+- 路线禁行
+- 多条恢复策略
 
 行为树通常只是在已有子树上扩展。
 如果继续用流程图或大状态机，
