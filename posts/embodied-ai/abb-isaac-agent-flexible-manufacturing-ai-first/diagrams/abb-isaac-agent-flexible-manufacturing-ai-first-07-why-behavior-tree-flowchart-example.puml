@@ -1,0 +1,74 @@
+@startuml
+title 第 7 章示意图：FPC 精密插装失败后的恢复流程图版本
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+
+start
+
+:进入 FPC 插装工步;
+:执行第一次插入;
+
+if (插入成功?) then (是)
+  :记录成功;
+  stop
+else (否)
+  :读取当前状态快照;
+  :检查是否允许自动恢复;
+
+  if (允许自动恢复?) then (是)
+    :低速重拍;
+    :更新视觉结果;
+
+    if (偏移仍在可补偿范围内?) then (是)
+      :二次对准;
+      :再插一次;
+
+      if (第二次插入成功?) then (是)
+        :记录恢复成功;
+        stop
+      else (否)
+        :记录自动恢复失败;
+
+        if (规则要求先回安全位?) then (是)
+          :回安全位;
+        endif
+
+        :转人工确认;
+        stop
+      endif
+
+    else (否)
+      :记录超出补偿范围;
+
+      if (规则要求先回安全位?) then (是)
+        :回安全位;
+      endif
+
+      :转人工确认;
+      stop
+    endif
+
+  else (否)
+    :直接转人工确认;
+    stop
+  endif
+endif
+
+note right
+这张图适合说明流程，
+但一旦继续叠加下面这些维度，
+图会迅速变长：
+
+- 多次重试
+- 视觉超时
+- PLC 互锁变化
+- 不同产品配方
+- 多条恢复分支复用
+
+这正是后面更适合
+换成行为树表达的原因。
+end note
+
+@enduml

@@ -1,0 +1,103 @@
+@startuml
+title 第 7 章示意图：FPC 精密插装失败后的行为树版本
+top to bottom direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+skinparam wrapWidth 220
+skinparam linetype ortho
+
+rectangle "Root\n\n任务：完成 FPC 插装恢复" as ROOT #EAF4FF
+
+rectangle "Fallback\n\n主恢复路径失败后\n切到回退或人工分支" as FB #FFF2CC
+
+rectangle "Sequence A\n\n自动恢复主路径" as SEQ_A #F3FBF3
+rectangle "Sequence B\n\n回安全位后结束自动恢复" as SEQ_B #F8F8F8
+rectangle "人工确认" as HUMAN #FDE9E7
+
+rectangle "条件\n夹具已锁紧" as C1
+rectangle "条件\n视觉可用" as C2
+rectangle "动作\n低速重拍" as A1
+rectangle "条件\n偏移仍可补偿" as C3
+rectangle "动作\n二次对准" as A2
+rectangle "动作\n再插一次" as A3
+rectangle "条件\n插入成功" as C4
+
+rectangle "动作\n回安全位" as B1
+rectangle "动作\n记录恢复失败" as B2
+
+ROOT --> FB
+
+FB --> SEQ_A : 优先尝试
+FB --> SEQ_B : 主路径失败后回退
+FB --> HUMAN : 仍不满足则转人工
+
+SEQ_A --> C1
+C1 --> C2
+C2 --> A1
+A1 --> C3
+C3 --> A2
+A2 --> A3
+A3 --> C4
+
+SEQ_B --> B1
+B1 --> B2
+
+note right of FB
+Fallback 节点不是普通分支框。
+它有明确执行语义：
+
+- 子节点按顺序尝试
+- 某个子树 success 就停止
+- 某个子树 failure 才继续下一个
+end note
+
+note right of SEQ_A
+Sequence 节点也有明确执行语义：
+
+- 子节点按顺序执行
+- 任一节点 failure，整条主路径失败
+- 任一节点 running，整条树保持 running
+end note
+
+note left of C3
+这里最关键的不是
+"画出一个判断框"，
+而是把判断做成
+可重复 tick 的条件节点。
+end note
+
+note right of A1
+叶子节点可以直接映射成
+已验证技能：
+
+- 重拍
+- 对准
+- 插入
+- 回安全位
+end note
+
+note bottom of ROOT
+这张图和流程图的最大区别是：
+它本身就是一棵可执行树。
+
+运行时会持续 tick Root，
+根据节点返回的
+success / failure / running
+推进整棵树，而不是一次走完就结束。
+end note
+
+note bottom of HUMAN
+一旦继续叠加：
+
+- 第二次重试
+- 视觉超时
+- 配方切换
+- 不同工位复用
+
+行为树通常只是在已有子树上扩展。
+如果继续用流程图或大状态机，
+图会更快失控。
+end note
+
+@enduml
