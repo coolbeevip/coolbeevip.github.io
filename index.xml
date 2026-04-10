@@ -441,15 +441,36 @@ John Carmack 的 .plan 文件风格：完成一轮研究后，直接报告：
 例如：
 用户说“研究机器人视觉”，但不清楚是在做：
 工业检测 6D 位姿 视觉伺服 通用具身智能 用户说“做一个 AI 产品”，但不清楚目标是：
-ToC ToB 内部效率工具 平台型产品 除此之外，不要停下来问。</description></item><item><title/><link>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-over-fsm-and-flowchart/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-over-fsm-and-flowchart/</guid><description>为什么这个工业场景更适合用行为树，而不是状态机或流程图 我选的场景 如果只挑一个最能说明问题的工业场景，我会选：
-FPC 排线或连接器的精密插装，在第一次插入失败后，系统进入恢复闭环。
+ToC ToB 内部效率工具 平台型产品 除此之外，不要停下来问。</description></item><item><title/><link>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-compare-guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-compare-guide/</guid><description>怎么读这三张图，以及结论是什么 这三张图讨论的是同一个工业场景：
+跨站补料与空箱回收的移动机器人任务级闭环。
+具体条件也是同一组：
+当前任务：从 A 仓位取一箱连接器，送到 3 号装配站，并回收空箱 执行中异常：去往 3 号站途中发现该站暂时占用，机器人剩余电量降到 18% 系统候选：先去临时缓存位 -&amp;gt; 判断是否需要补能 -&amp;gt; 去充电点补能 -&amp;gt; 重新规划路线 -&amp;gt; 到站交付 -&amp;gt; 回收空箱 若仍无法完成：转人工调度 三张图不是在画三个不同系统，而是在用三种不同的表达方式描述同一件事。只有放在一起看，差别才真正明显。
+先看哪张 最好的阅读顺序是：
+先看流程图 再看状态机 最后看行为树 原因很简单。
+流程图最容易看懂，它先把“这件事大概怎么走”讲清楚。状态机会让你看到，一旦把这件事写成可执行控制逻辑，状态和转移很快就会开始膨胀。行为树则回答最后一个问题：如果我们既想让它可执行，又想让它可复用、可回退、可扩展，应该怎么组织。
+第一张图在回答什么 流程图文件：
+abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-flowchart-example.puml
+这张图回答的问题是：
+这条任务闭环，按步骤大概怎么走。
+它适合说明下面这些事：
+从 A 仓位取料之后，会向 3 号站发起交付任务。 如果目标站占用，系统会先去缓存位。 如果等待期间电量不够，系统会插入补能分支。 站点释放并重新规划成功后，系统会继续交付并回收空箱。 它最适合拿来做：
+文档说明 给非机器人软件背景的人做场景介绍 讨论业务流程和处理顺序 但它不擅长回答：
+哪些判断会被反复检查 哪些子流程可以复用 哪些失败只需要局部插入一个恢复子流程 运行时如何持续推进整个执行结构 所以流程图最像“说明书”，不太像“执行骨架”。
+第二张图在回答什么 状态机文件：
+abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-fsm-example.puml
+这张图回答的问题是：
+如果把这条任务闭环写成可执行状态逻辑，系统会有哪些状态、怎样转移。
+它适合说明下面这些事：
+什么时候进入去缓存位中、等待站点释放中、去充电点中、重新规划中 什么时候能从等待恢复到重新去站点 什么时候必须转人工调度 它最适合拿来做：
+设备级或站级控制逻辑 资格判断明确、转移条件明确的确定性流程 底层导航模块、充电模块、设备联锁层的状态控制 但放到这个场景里，它会开始暴露问题：</description></item><item><title/><link>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-over-fsm-and-flowchart/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/embodied-ai/abb-isaac-agent-flexible-manufacturing-ai-first/diagrams/abb-isaac-agent-flexible-manufacturing-ai-first-07-why-behavior-tree-over-fsm-and-flowchart/</guid><description>为什么这个工业场景更适合用行为树，而不是状态机或流程图 我选的场景 如果只挑一个最能说明问题，而且又适合让 AI 完全主导任务级闭环的工业场景，我会选：
+跨站补料与空箱回收的移动机器人任务。
 一个具体例子是：
-当前任务：插入 FPC 排线 第一次插入失败 视觉发现端头偏移 0.3 mm 系统允许一次自动恢复 恢复候选：低速重拍 -&amp;gt; 二次对准 -&amp;gt; 再插一次 若仍失败：回安全位或转人工确认 我选这个场景，不是因为它最炫，而是因为它最典型。它同时具备下面几件事：
-不是单步动作，而是一串带条件的恢复链。 不是走完就算，而是每一步都要看最新感知结果。 不是只有成功或失败两种结果，还会出现 running、可恢复失败、不可恢复失败、需要人工接管。 不是所有失败都要重来，很多时候只需要局部回退。 同一套恢复骨架会反复出现在不同产品、不同工位和不同料号上。 这正是行为树最擅长的地带。
-这个场景到底难在哪 表面上看，这只是“插入失败后再试一次”。真正落到工业现场，问题没有这么简单。系统通常要同时处理：
-前置条件检查：夹具是否锁紧，视觉是否可用，PLC 互锁是否放开。 感知更新：重拍之后，偏移量有没有回到可补偿范围。 局部重试：只重做对位和插入，不重跑整条任务。 回退分支：如果补偿失败，要不要回安全位。 人工接管：如果超出工艺边界，必须停在可解释、可接管的位置。 这里最关键的一点是，系统不是沿着一条固定路径往下跑，而是在执行过程中不断“看状态，再决定下一步”。
+当前任务：从 A 仓位取一箱连接器，送到 3 号装配站，并回收空箱 执行中异常：去往 3 号站途中发现该站暂时占用，机器人剩余电量降到 18% 系统候选：先去临时缓存位 -&amp;gt; 判断是否需要补能 -&amp;gt; 去充电点补能 -&amp;gt; 重新规划路线 -&amp;gt; 到站交付 -&amp;gt; 回收空箱 若仍无法完成：转人工调度 我选这个场景，不是因为它最复杂，而是因为它刚好落在行为树最有优势的位置：
+它是任务级闭环，不是毫秒级控制闭环。 它既要持续看状态，又要不断改后续动作。 它天然包含等待、回退、补能、重规划和恢复执行。 它的子流程很容易跨站点、跨物料、跨产线复用。 它也最符合“AI 完全主导”的直觉边界，AI 负责任务决策，导航和底层控制仍由确定性控制栈执行。 这正是行为树最擅长的地带。
+这个场景到底难在哪 表面上看，这只是“送一箱料，再把空箱带回来”。真正落到工业现场，系统通常要同时处理：
+前置条件检查：料箱是否已取到，目标站是否可对接，缓存位是否空闲，电量是否足够。 状态持续更新：站点占用会变化，路线可达性会变化，电量也会持续下降。 局部调整：不是整条任务推倒重来，而是先插入一个缓存或补能子流程，再继续原任务。 恢复执行：充完电、站点释放后，系统要从当前上下文继续，而不是重新派一张新工单。 人工接管：缓存位不可用、长时间无路可走、站点持续占用时，必须收束到可解释、可接管的位置。 这里最关键的一点是，系统不是沿着一条静态路径往下跑，而是在执行过程中不断“看条件，再决定下一步”。
 用行为树会长什么样 把这个场景收成行为树，大致会是下面这种结构：
-Fallback ├── Sequence │ ├── 检查夹具已锁紧 │ ├── 检查视觉可用 │ ├── 低速重拍 │ ├── 判断偏移是否可补偿 │ ├── 二次对准 │ ├── 再插一次 │ └── 判断插入是否成功 ├── Sequence │ ├── 回安全位 │ └── 记录恢复失败 └── 人工确认 这个结构有几个工业上很实用的特点：</description></item><item><title/><link>https://coolbeevip.github.io/posts/english/ket-unit10/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/english/ket-unit10/</guid><description>KET UNIT10 WORDS 中文 英文 中文 英文 海滩 beach 沙漠 desert 森林 forest 岛 islands 湖泊 lake 高山 mountain 最深的 the deepest 最长的 the longest 最高的 the highest 最多的 the most 最大的 the biggest 最热的 the hottest 活动 activity 在机场 at the airport 在欧洲 in Europe 在世界上 in the world HOMEWORK 2024/01/03
+Fallback ├── Sequence │ ├── 检查料箱已装载 │ ├── Fallback │ │ ├── Sequence │ │ │ ├── 检查 3 号站可对接 │ │ │ ├── 检查电量足够 │ │ │ ├── 去 3 号站 │ │ │ ├── 交付料箱 │ │ │ └── 回收空箱 │ │ └── Sequence │ │ ├── 去临时缓存位 │ │ ├── 如有需要则去充电点补能 │ │ ├── 重新规划路线 │ │ ├── 再次检查 3 号站可对接 │ │ ├── 去 3 号站 │ │ ├── 交付料箱 │ │ └── 回收空箱 └── 人工调度 这个结构有几个工业上很实用的特点：</description></item><item><title/><link>https://coolbeevip.github.io/posts/english/ket-unit10/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/english/ket-unit10/</guid><description>KET UNIT10 WORDS 中文 英文 中文 英文 海滩 beach 沙漠 desert 森林 forest 岛 islands 湖泊 lake 高山 mountain 最深的 the deepest 最长的 the longest 最高的 the highest 最多的 the most 最大的 the biggest 最热的 the hottest 活动 activity 在机场 at the airport 在欧洲 in Europe 在世界上 in the world HOMEWORK 2024/01/03
 完成 Unit10 练习册。 背诵PB P73 Reading Part2 Holiday Activities.默写并校准</description></item><item><title/><link>https://coolbeevip.github.io/posts/english/ket-unit3/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://coolbeevip.github.io/posts/english/ket-unit3/</guid><description>KET UNIT3 1. Grammar Countable nouns How many 用于询问可数名词的数量 a few 修饰可数名词复数，表肯定意义，有一些，不是那么多; few 表否定意义，几乎没有 quite a few表示不少, 相当多 Uncountable nouns How much 用于问不可数名词的数量 a little 修饰不可数名词，表肯定意义，有一点儿 little 表否定意义，几乎没有 Countable nouns and Uncountable nouns a lot of 很多 no 没有 2. Plurals of nouns 1. 大多数名词在末尾加s：
 book-books chair-chairs cat-cats 2. 以s、x、ch、sh、o结尾的名词，在末尾加es：
 bus-buses class-classes glass-glasses match-matches watch-watches dish-dishes brush-brushes box-boxes fox-foxes half-halves 但也有例外，如photo-photos 3. 以辅音字母+y结尾的名词，把y变为i，再加es：
