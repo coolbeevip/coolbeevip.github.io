@@ -26,7 +26,7 @@ brew install rtk
 rtk --version
 ```
 
-截至 2026-04-12，官方仓库还提供了安装脚本、`cargo install --git` 和预编译二进制等方式。  
+官方仓库还提供了安装脚本、`cargo install --git` 和预编译二进制等方式。  
 如果你不是 macOS，或者想看最新安装说明、初始化 hook 的方法，直接看官方仓库：
 
 <https://github.com/rtk-ai/rtk>
@@ -37,9 +37,7 @@ rtk --version
 
 > A high-performance CLI proxy designed to filter and summarize system outputs before they reach your LLM context.
 
-这句话基本已经把原理说完了。
-
-也就是说，原来是：
+这句话基本已经把原理说完了。 也就是说，原来是：
 
 ```bash
 git diff
@@ -60,45 +58,34 @@ rtk git diff
 rtk gain
 ```
 
-我在 2026-04-12 这次会话里看到的是：
+你会看到类似如下信息：
 
 ```text
 RTK Token Savings (Global Scope)
+════════════════════════════════════════════════════════════
 
-Total commands:    50
-Input tokens:      18.4K
-Output tokens:     14.2K
-Tokens saved:      4.2K (22.7%)
-```
+Total commands:    76
+Input tokens:      26.9K
+Output tokens:     17.5K
+Tokens saved:      9.4K (35.0%)
+Total exec time:   1m53s (avg 1.5s)
+Efficiency meter: ████████░░░░░░░░░░░░░░░░ 35.0%
 
-这组数字的意义很直接：  
-`rtk` 不只是“看起来输出更短”，而是**可以把节省下来的 token 直接统计出来**。
-
-你可以把它理解为两件事：
-
-1. 过滤噪音：去掉进度条、重复日志、边框、无关字段、超长上下文
-2. 保留重点：只保留错误、变化、摘要、结构信息
-
-## 最值得替换的几类命令
-
-这一节只列最常用的高收益命令，更多命令直接参考官方文档：
-
-<https://github.com/rtk-ai/rtk>
-
-```bash
-rtk ls -la content/posts
-rtk tree content/posts/codex
-rtk read -n -m 200 content/posts/gpt/prompt-engineering.md
-rtk git status
-rtk git diff
-rtk diff
-rtk test npm test
-rtk pytest tests/unit
-rtk vitest run
-rtk json response.json
-rtk log app.log
-rtk grep -n "TODO|FIXME" content/posts/codex
-rtk err npm run build
+By Command
+───────────────────────────────────────────────────────────────────────
+  #  Command                   Count  Saved    Avg%    Time  Impact
+───────────────────────────────────────────────────────────────────────
+ 1.  rtk read                      1   2.5K   54.4%   151ms  ██████████
+ 2.  rtk cargo test -p chi...      1   2.4K   94.7%    1.7s  ██████████
+ 3.  rtk git diff                  1    873   18.7%    67ms  ███░░░░░░░
+ 4.  rtk ls -la content/posts      1    588   83.6%    1.2s  ██░░░░░░░░
+ 5.  rtk ls -la .                  2    566   77.9%    17ms  ██░░░░░░░░
+ 6.  rtk git diff src-taur...      2    446   12.9%    22ms  ██░░░░░░░░
+ 7.  rtk cargo test -p chi...      1    446   97.0%   18.0s  ██░░░░░░░░
+ 8.  rtk cargo test -p chi...      1    265   95.0%   18.6s  █░░░░░░░░░
+ 9.  rtk git diff src-taur...      3    185   15.0%    22ms  █░░░░░░░░░
+10.  rtk cargo test -p chi...      1    168   92.3%   17.5s  █░░░░░░░░░
+───────────────────────────────────────────────────────────────────────
 ```
 
 ## 如何与 Codex 集成
@@ -132,69 +119,38 @@ writable_roots = ["/Users/zhanglei/rtk"]
 * 通过 `RTK_DB_PATH` 把 `rtk` 的数据存储路径传入 Codex 沙箱
 * 通过 `writable_roots` 给沙箱内的 `rtk` 写入 `/Users/zhanglei/.chi/rtk` 的权限
 
-这样配完以后，Codex 不只是“会调用 `rtk`”，而且 `rtk` 的统计和历史数据也能正常落盘。
+这样配完以后，Codex 不只是“会调用 `rtk`，而且 `rtk` 的统计和历史数据也能正常落盘。
 
 ## 试一试
 
-`rtk` 自带了一个很实用的命令：
+最简单的方式，就是让 Codex 帮你列出当前目录下的文件。
 
 ```bash
-rtk gain
+codex
+╭──────────────────────────────────────────────╮
+│ >_ OpenAI Codex (v0.120.0)                   │
+│                                              │
+│ model:     gpt-5.4 medium   /model to change │
+│ directory: ~/Work/github/chi                 │
+╰──────────────────────────────────────────────╯
+
+  Tip: Try the Codex App. Run 'codex app' or visit https://chatgpt.com/codex?app-landing-page=true
+
+
+› 列出当前目录下文件
 ```
 
-我在 2026-04-12 这次会话里看到的统计是：
-
-* Total commands: `50`
-* Input tokens: `18.4K`
-* Output tokens: `14.2K`
-* Tokens saved: `4.2K (22.7%)`
-
-这组数字不代表所有场景都一定是 22.7%，但它说明了一件事：  
-**只要你的工作流里有大量目录浏览、diff、测试、日志和文件读取，`rtk` 的节流效果是可以被量化出来的。**
-
-如果你想持续优化自己的习惯，`rtk gain` 应该经常看。
-
-## 如何把“偶尔用 rtk”变成“默认用 rtk”
-
-真正的节省不来自某一条命令，而来自默认习惯。
-
-一个简单原则就够了：
-
-* 原本会产生很多输出的命令，优先写成 `rtk xxx`
-* 原本可能把整份内容灌进上下文的命令，优先找 `rtk` 对应子命令
-* 不确定有没有等价命令时，先试 `rtk rewrite`
-
-例如：
+你可以看到 Codex 输出的命令是 `rtk ls -la`：
 
 ```bash
-rtk rewrite git status
+• 我会直接查看当前工作目录的文件列表，并把结果整理给你。
+
+• Ran rtk ls -la
+  └ .codex/
+    .git/
+    … +32 lines (ctrl + t to view transcript)
+    vitest.config.ts  378B
+    vitest.setup.ts  36B
 ```
 
-`rtk rewrite --help` 里说明得很清楚，它就是把原始命令改写成对应的 `rtk` 形式，适合做 hook 或养成习惯时使用。
-
-## 一个很重要的判断标准
-
-不是“这个命令能不能跑”，而是：
-
-**这个命令的原始输出，有多少内容其实不需要让 Codex 看见。**
-
-只要答案是“很多”，那它就值得先过一层 `rtk`。
-
-所以，`rtk` 节省 token 的本质不是魔法，而是一个很朴素的原则：
-
-> 不把无效上下文喂给 LLM。
-
-对 Codex 来说，这通常意味着：
-
-* 更少的上下文污染
-* 更低的 token 消耗
-* 更快定位重点
-* 更稳定的多轮迭代
-
-如果你平时已经习惯让 Codex 直接跑命令，那最小改动只有一个：
-
-```bash
-把原来的命令前面，加一个 rtk
-```
-
-很多时候，这就是最便宜、也最有效的 token 优化。
+最后你可以通过 `rtk gain` 来查看节省的 token
