@@ -1,0 +1,73 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | 如何使用 rtk 让 Codex 节省 Token </title><meta charset=utf-8><meta name=generator content="Hugo 0.123.3"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.d03676fac5605f1e95639c8b2239ea77daf8804fe13da2208bb83b252959846c.css integrity="sha256-0DZ2+sVgXx6VY5yLIjnqd9r4gE/hPaIgi7g7JSlZhGw=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/codex/use-rtk-to-save-codex-token/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="如何使用 rtk 让 Codex 节省 Token"><meta name=twitter:description content="rtk 的定位很直接：它不是替代命令行，而是把命令行输出先做一层压缩、过滤和摘要，再交给 LLM。
+对 Codex 这类 agent 来说，真正烧 token 的往往不是一句指令，而是后面那一大段命令输出：
+ls -la 把一整个目录细节全喷出来 git diff 带出大量上下文 pytest、pnpm test、cargo test 输出几百上千行日志 cat 一个大文件，直接把无关内容塞进上下文 所以想让 Codex 省 token，最有效的方法之一不是“少问一句”，而是减少无效输出进入上下文窗口。rtk 干的就是这个事情。
+macOS 安装 如果你在 macOS 上，只想先快速用起来，最简单的是直接用 Homebrew：
+brew install rtk rtk --version 官方仓库还提供了安装脚本、cargo install --git 和预编译二进制等方式。
+如果你不是 macOS，或者想看最新安装说明、初始化 hook 的方法，直接看官方仓库：
+https://github.com/rtk-ai/rtk
+rtk 是怎么帮 Codex 省 token 的 从 rtk --help 可以看到，它的描述是：
+A high-performance CLI proxy designed to filter and summarize system outputs before they reach your LLM context."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&amp;style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2026</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>如何使用 rtk 让 Codex 节省 Token</h3></div><p><code>rtk</code> 的定位很直接：<strong>它不是替代命令行，而是把命令行输出先做一层压缩、过滤和摘要，再交给 LLM。</strong></p><p>对 Codex 这类 agent 来说，真正烧 token 的往往不是一句指令，而是后面那一大段命令输出：</p><ul><li><code>ls -la</code> 把一整个目录细节全喷出来</li><li><code>git diff</code> 带出大量上下文</li><li><code>pytest</code>、<code>pnpm test</code>、<code>cargo test</code> 输出几百上千行日志</li><li><code>cat</code> 一个大文件，直接把无关内容塞进上下文</li></ul><p>所以想让 Codex 省 token，最有效的方法之一不是“少问一句”，而是<strong>减少无效输出进入上下文窗口</strong>。<code>rtk</code> 干的就是这个事情。</p><h2 id=macos-安装>macOS 安装</h2><p>如果你在 macOS 上，只想先快速用起来，最简单的是直接用 Homebrew：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>brew install rtk
+</span></span><span style=display:flex><span>rtk --version
+</span></span></code></pre></div><p>官方仓库还提供了安装脚本、<code>cargo install --git</code> 和预编译二进制等方式。<br>如果你不是 macOS，或者想看最新安装说明、初始化 hook 的方法，直接看官方仓库：</p><p><a href=https://github.com/rtk-ai/rtk>https://github.com/rtk-ai/rtk</a></p><h2 id=rtk-是怎么帮-codex-省-token-的>rtk 是怎么帮 Codex 省 token 的</h2><p>从 <code>rtk --help</code> 可以看到，它的描述是：</p><blockquote><p>A high-performance CLI proxy designed to filter and summarize system outputs before they reach your LLM context.</p></blockquote><p>这句话基本已经把原理说完了。 也就是说，原来是：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git diff
+</span></span></code></pre></div><p>现在变成：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>rtk git diff
+</span></span></code></pre></div><p>区别不是命令执行结果变了，而是<strong>输出给 Codex 的内容被压缩过了</strong>。<br>对 agent 来说，输入 token 就是成本，输出越短、越聚焦，后续每一轮对话的上下文压力就越小。</p><p>如果你想先看一个最直观的结果，可以直接执行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>rtk gain
+</span></span></code></pre></div><p>你会看到类似如下信息：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>RTK Token Savings (Global Scope)
+</span></span><span style=display:flex><span>════════════════════════════════════════════════════════════
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Total commands:    76
+</span></span><span style=display:flex><span>Input tokens:      26.9K
+</span></span><span style=display:flex><span>Output tokens:     17.5K
+</span></span><span style=display:flex><span>Tokens saved:      9.4K (35.0%)
+</span></span><span style=display:flex><span>Total exec time:   1m53s (avg 1.5s)
+</span></span><span style=display:flex><span>Efficiency meter: ████████░░░░░░░░░░░░░░░░ 35.0%
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>By Command
+</span></span><span style=display:flex><span>───────────────────────────────────────────────────────────────────────
+</span></span><span style=display:flex><span>  #  Command                   Count  Saved    Avg%    Time  Impact
+</span></span><span style=display:flex><span>───────────────────────────────────────────────────────────────────────
+</span></span><span style=display:flex><span> 1.  rtk read                      1   2.5K   54.4%   151ms  ██████████
+</span></span><span style=display:flex><span> 2.  rtk cargo test -p chi...      1   2.4K   94.7%    1.7s  ██████████
+</span></span><span style=display:flex><span> 3.  rtk git diff                  1    873   18.7%    67ms  ███░░░░░░░
+</span></span><span style=display:flex><span> 4.  rtk ls -la content/posts      1    588   83.6%    1.2s  ██░░░░░░░░
+</span></span><span style=display:flex><span> 5.  rtk ls -la .                  2    566   77.9%    17ms  ██░░░░░░░░
+</span></span><span style=display:flex><span> 6.  rtk git diff src-taur...      2    446   12.9%    22ms  ██░░░░░░░░
+</span></span><span style=display:flex><span> 7.  rtk cargo test -p chi...      1    446   97.0%   18.0s  ██░░░░░░░░
+</span></span><span style=display:flex><span> 8.  rtk cargo test -p chi...      1    265   95.0%   18.6s  █░░░░░░░░░
+</span></span><span style=display:flex><span> 9.  rtk git diff src-taur...      3    185   15.0%    22ms  █░░░░░░░░░
+</span></span><span style=display:flex><span>10.  rtk cargo test -p chi...      1    168   92.3%   17.5s  █░░░░░░░░░
+</span></span><span style=display:flex><span>───────────────────────────────────────────────────────────────────────
+</span></span></code></pre></div><h2 id=如何与-codex-集成>如何与 Codex 集成</h2><p>如果你不想每次都手动提醒 Codex 使用 <code>rtk</code>，最直接的做法是把这件事写进 Codex 的工作约束里。</p><h3 id=第一步修改-codex_homeagentsmd>第一步：修改 <code>$CODEX_HOME/AGENTS.md</code></h3><p>在 <code>$CODEX_HOME/AGENTS.md</code> 中增加下面这条说明：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>ALWAYS execute shell commands through `rtk` by prefixing the original command with `rtk` (for example, run `rtk git status` instead of `git status`).
+</span></span></code></pre></div><p>这样 Codex 在执行 shell 命令时，会优先走 <code>rtk</code> 包装后的命令，而不是直接调用原生命令。</p><h3 id=第二步修改-codex_homeconfigtoml>第二步：修改 <code>$CODEX_HOME/config.toml</code></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>shell_environment_policy</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>inherit</span> = <span style=color:#e6db74>&#34;all&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>set</span> = { <span style=color:#a6e22e>RTK_DB_PATH</span> = <span style=color:#e6db74>&#34;/Users/zhanglei/rtk/history.db&#34;</span> }
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ignore_default_excludes</span> = <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>sandbox_workspace_write</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>writable_roots</span> = [<span style=color:#e6db74>&#34;/Users/zhanglei/rtk&#34;</span>]
+</span></span></code></pre></div><p>这里有两个目的：</p><ul><li>通过 <code>RTK_DB_PATH</code> 把 <code>rtk</code> 的数据存储路径传入 Codex 沙箱</li><li>通过 <code>writable_roots</code> 给沙箱内的 <code>rtk</code> 写入 <code>/Users/zhanglei/.chi/rtk</code> 的权限</li></ul><p>这样配完以后，Codex 不只是“会调用 <code>rtk</code>，而且 <code>rtk</code> 的统计和历史数据也能正常落盘。</p><h2 id=试一试>试一试</h2><p>最简单的方式，就是让 Codex 帮你列出当前目录下的文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>codex
+</span></span><span style=display:flex><span>╭──────────────────────────────────────────────╮
+</span></span><span style=display:flex><span>│ &gt;_ OpenAI Codex <span style=color:#f92672>(</span>v0.120.0<span style=color:#f92672>)</span>                   │
+</span></span><span style=display:flex><span>│                                              │
+</span></span><span style=display:flex><span>│ model:     gpt-5.4 medium   /model to change │
+</span></span><span style=display:flex><span>│ directory: ~/Work/github/chi                 │
+</span></span><span style=display:flex><span>╰──────────────────────────────────────────────╯
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  Tip: Try the Codex App. Run <span style=color:#e6db74>&#39;codex app&#39;</span> or visit https://chatgpt.com/codex?app-landing-page<span style=color:#f92672>=</span>true
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>› 列出当前目录下文件
+</span></span></code></pre></div><p>你可以看到 Codex 输出的命令是 <code>rtk ls -la</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>• 我会直接查看当前工作目录的文件列表，并把结果整理给你。
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>• Ran rtk ls -la
+</span></span><span style=display:flex><span>  └ .codex/
+</span></span><span style=display:flex><span>    .git/
+</span></span><span style=display:flex><span>    … +32 lines <span style=color:#f92672>(</span>ctrl + t to view transcript<span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>    vitest.config.ts  378B
+</span></span><span style=display:flex><span>    vitest.setup.ts  36B
+</span></span></code></pre></div><p>最后你可以通过 <code>rtk gain</code> 来查看节省的 token</p></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/codex/>codex</a></span>
+<span class=separator><a class=tag href=/tags/codex/>codex</a><a class=tag href=/tags/rtk/>rtk</a><a class=tag href=/tags/token/>token</a><a class=tag href=/tags/llm/>llm</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.e1c6918cbaa90022a5612f0bd71c7bf3be6d036614c5729cebfe14f7b91fa4bc.js integrity="sha256-4caRjLqpACKlYS8L1xx7875tA2YUxXKc6/4U97kfpLw=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>

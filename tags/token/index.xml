@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Token on</title><link>https://coolbeevip.github.io/tags/token/</link><description>Recent content in Token on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 12 Apr 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/token/index.xml" rel="self" type="application/rss+xml"/><item><title>如何使用 rtk 让 Codex 节省 Token</title><link>https://coolbeevip.github.io/posts/codex/use-rtk-to-save-codex-token/</link><pubDate>Sun, 12 Apr 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/codex/use-rtk-to-save-codex-token/</guid><description>rtk 的定位很直接：它不是替代命令行，而是把命令行输出先做一层压缩、过滤和摘要，再交给 LLM。
+对 Codex 这类 agent 来说，真正烧 token 的往往不是一句指令，而是后面那一大段命令输出：
+ls -la 把一整个目录细节全喷出来 git diff 带出大量上下文 pytest、pnpm test、cargo test 输出几百上千行日志 cat 一个大文件，直接把无关内容塞进上下文 所以想让 Codex 省 token，最有效的方法之一不是“少问一句”，而是减少无效输出进入上下文窗口。rtk 干的就是这个事情。
+macOS 安装 如果你在 macOS 上，只想先快速用起来，最简单的是直接用 Homebrew：
+brew install rtk rtk --version 官方仓库还提供了安装脚本、cargo install --git 和预编译二进制等方式。
+如果你不是 macOS，或者想看最新安装说明、初始化 hook 的方法，直接看官方仓库：
+https://github.com/rtk-ai/rtk
+rtk 是怎么帮 Codex 省 token 的 从 rtk --help 可以看到，它的描述是：
+A high-performance CLI proxy designed to filter and summarize system outputs before they reach your LLM context.</description></item></channel></rss>
