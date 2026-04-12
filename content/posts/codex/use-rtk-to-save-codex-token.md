@@ -131,7 +131,7 @@ codex
 │ >_ OpenAI Codex (v0.120.0)                   │
 │                                              │
 │ model:     gpt-5.4 medium   /model to change │
-│ directory: ~/Work/xxx                 │
+│ directory: ~/Work/xxx                        │
 ╰──────────────────────────────────────────────╯
 › 列出当前目录下文件
 ```
