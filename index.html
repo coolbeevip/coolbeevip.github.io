@@ -16,8 +16,8 @@ docs/access_policy/&lt;user.name>.md 这样做的好处很直接：人类和 AI 
 docs/access_policy/default.md 默认策略里没有任何 Writable Dirs，也就意味着整个仓库只读。
 这样做把安全模型从“默认信任，出问题再收缩”改成了“默认拒绝，明确授权后再开放”。对 AI 协作者来说，这比单纯依赖提示词稳得多。
 3. 权限按目录白名单定义 每个协作者都有一个独立的权限文件，里面至少定义四部分：
-Identity Writable Dirs Read Only Dirs No Read Dirs Rules 例如：
-# zhanglei36 Access Policy ## Identity - `user.</p><a href=/posts/harness_engineering/ai-collaborator-safe-isolation-with-harness-engineering/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
+Identity Writable Dirs Read Only Dirs No Read Dirs Rules 这意味着协作者拿到的不是整个仓库的写权限，而是自己负责区域的写权限。这样至少能缩小误改和误操作的半径。
+4. 策略文件只能由人维护，AI 不能自行扩权 这套机制里最关键的一条，是“谁有资格改授权”。docs/access_policy/ 被明确设为人类维护区，并在 AGENTS.</p><a href=/posts/harness_engineering/ai-collaborator-safe-isolation-with-harness-engineering/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Wed, Apr 15, 2026
 </span><span class=separator><a class=category href=/categories/ai/>ai</a><a class=category href=/categories/harness-engineering/>harness-engineering</a></span>
 <span class=separator><a class=tag href=/tags/ai/>ai</a><a class=tag href=/tags/harness-engineering/>harness-engineering</a><a class=tag href=/tags/security/>security</a><a class=tag href=/tags/collaboration/>collaboration</a></span></div></div></div></div><div class="post ."><div class=post-title><h3><a href=/posts/codex/use-rtk-to-save-codex-token/>如何使用 rtk 让 Codex 节省 Token</a></h3></div><div class=post-content><div class=p_part><p>rtk 的定位很直接：它不是替代命令行，而是把命令行输出先做一层压缩、过滤和摘要，再交给 LLM。
