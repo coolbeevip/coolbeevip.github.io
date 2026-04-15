@@ -64,38 +64,6 @@ docs/access_policy/default.md
 - `No Read Dirs`
 - `Rules`
 
-例如：
-
-```md
-# zhanglei36 Access Policy
-
-## Identity
-
-- `user.name == "zhanglei36"`
-
-## Writable Dirs
-
-- `backend/src/phys_os/agents/`
-- `backend/src/phys_os/api/`
-- `backend/src/phys_os/common/`
-- `backend/src/phys_os/domain/`
-- `CONTRIBUTING.md`
-- `README.md`
-
-## Read Only Dirs
-
-- `AGENTS.md`
-- `docs/`
-
-## No Read Dirs
-
-- `frontend/`
-
-## Rules
-
-- 未明确列入 `Writable Dirs` 的目录，默认不修改。
-```
-
 这意味着协作者拿到的不是整个仓库的写权限，而是自己负责区域的写权限。这样至少能缩小误改和误操作的半径。
 
 ### 4. 策略文件只能由人维护，AI 不能自行扩权
