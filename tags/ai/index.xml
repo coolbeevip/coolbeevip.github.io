@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ai on</title><link>https://coolbeevip.github.io/tags/ai/</link><description>Recent content in Ai on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 08 Mar 2026 00:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>智能体软件工程：AI在软件开发中的应用与挑战</title><link>https://coolbeevip.github.io/posts/ai/ai-software-engineering/</link><pubDate>Sun, 08 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/ai-software-engineering/</guid><description>导读 本信息搜集整理自网络，内容仅供参考。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ai on</title><link>https://coolbeevip.github.io/tags/ai/</link><description>Recent content in Ai on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 15 Apr 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>Harness Engineering: 实现协作者安全隔离的一次探索</title><link>https://coolbeevip.github.io/posts/harness_engineering/ai-collaborator-safe-isolation-with-harness-engineering/</link><pubDate>Wed, 15 Apr 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/harness_engineering/ai-collaborator-safe-isolation-with-harness-engineering/</guid><description>这篇文章记录一次小范围实践：在 AI 开发时代，如何通过 Harness Engineering 给协作者加上清楚的边界。
+问题并不抽象。代码库里已经出现了新的协作者。它可能是 Codex、Claude Code、Cursor。它能读代码、改文件、跑命令、提 PR。风险也随之变化了。关键不再只是“它会不会答错”，而是“它有没有权力改不该改的东西”。
+只靠提示词约束不够。上下文会漂移，任务会扩张，模型会误判，人也会口头越权。更稳妥的做法，是把边界从提示层压到执行层。
+为什么 AI 协作者更需要隔离 传统团队协作里，权限问题很多时候由人来兜底。一个经验足够的工程师通常知道什么目录不能碰，什么配置不能改，什么操作需要再次确认。AI 协作者没有这种默认判断：
+它行动很快，但不天然理解组织边界。 它能执行很多事，但不天然知道哪些事情不该做。 它在单次任务里看起来“理解了约束”，不代表下一轮仍然稳定遵守。 所以安全隔离的重点，不只是“让模型更听话”，而是让越界本身更难发生。这也是这里对 Harness Engineering 的理解：先把边界做成可读取、可检查、可执行的工程约束。
+这次实践：把仓库变成一个带边界的执行 Harness 这套机制不复杂，重点是先把最小边界立起来。做法大体有四步：识别协作者身份、加载对应权限、按目录最小授权、把扩权能力留在人手里。
+1. 用 Git 身份识别当前协作者 进入仓库后，先读取：
+git config user.name 这里把这个值当作协作者身份入口，而不只是提交记录上的一个名字。后续权限文件直接按这个名字映射，比如：
+docs/access_policy/&amp;lt;user.name&amp;gt;.md 这样做的好处很直接：人类和 AI 可以共用同一套身份入口。
+2. 默认只读，而不是默认可写 如果没有找到与 user.name 对应的权限文件，就回退到：
+docs/access_policy/default.md 默认策略里没有任何 Writable Dirs，也就意味着整个仓库只读。
+这样做把安全模型从“默认信任，出问题再收缩”改成了“默认拒绝，明确授权后再开放”。对 AI 协作者来说，这比单纯依赖提示词稳得多。
+3. 权限按目录白名单定义 每个协作者都有一个独立的权限文件，里面至少定义四部分：
+Identity Writable Dirs Read Only Dirs No Read Dirs Rules 例如：
+# zhanglei36 Access Policy ## Identity - `user.</description></item><item><title>智能体软件工程：AI在软件开发中的应用与挑战</title><link>https://coolbeevip.github.io/posts/ai/ai-software-engineering/</link><pubDate>Sun, 08 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/ai-software-engineering/</guid><description>导读 本信息搜集整理自网络，内容仅供参考。
 智能体软件工程 #1｜智能体原生工作估算 《智能体软件工程》可能是一系列文章，记录我从传统软件工程向智能体软件工程的迁移过程。
 一个老程序员的顿悟 我写了近二十年代码了。估算工期这件事，早已刻进肌肉记忆——拆任务、排优先级、乘以经验系数、加上联调和 buffer（冗余量），最后给出一个&amp;quot;两到三周&amp;quot;。这套方法论伴随我度过了瀑布、敏捷、DevOps 的每一次范式迁移，从未失灵。
 直到 AI 编程到来。

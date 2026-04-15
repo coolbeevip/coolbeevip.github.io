@@ -1,0 +1,95 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Harness Engineering: 实现协作者安全隔离的一次探索 </title><meta charset=utf-8><meta name=generator content="Hugo 0.123.3"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.d03676fac5605f1e95639c8b2239ea77daf8804fe13da2208bb83b252959846c.css integrity="sha256-0DZ2+sVgXx6VY5yLIjnqd9r4gE/hPaIgi7g7JSlZhGw=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/harness_engineering/ai-collaborator-safe-isolation-with-harness-engineering/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Harness Engineering: 实现协作者安全隔离的一次探索"><meta name=twitter:description content="这篇文章记录一次小范围实践：在 AI 开发时代，如何通过 Harness Engineering 给协作者加上清楚的边界。
+问题并不抽象。代码库里已经出现了新的协作者。它可能是 Codex、Claude Code、Cursor。它能读代码、改文件、跑命令、提 PR。风险也随之变化了。关键不再只是“它会不会答错”，而是“它有没有权力改不该改的东西”。
+只靠提示词约束不够。上下文会漂移，任务会扩张，模型会误判，人也会口头越权。更稳妥的做法，是把边界从提示层压到执行层。
+为什么 AI 协作者更需要隔离 传统团队协作里，权限问题很多时候由人来兜底。一个经验足够的工程师通常知道什么目录不能碰，什么配置不能改，什么操作需要再次确认。AI 协作者没有这种默认判断：
+它行动很快，但不天然理解组织边界。 它能执行很多事，但不天然知道哪些事情不该做。 它在单次任务里看起来“理解了约束”，不代表下一轮仍然稳定遵守。 所以安全隔离的重点，不只是“让模型更听话”，而是让越界本身更难发生。这也是这里对 Harness Engineering 的理解：先把边界做成可读取、可检查、可执行的工程约束。
+这次实践：把仓库变成一个带边界的执行 Harness 这套机制不复杂，重点是先把最小边界立起来。做法大体有四步：识别协作者身份、加载对应权限、按目录最小授权、把扩权能力留在人手里。
+1. 用 Git 身份识别当前协作者 进入仓库后，先读取：
+git config user.name 这里把这个值当作协作者身份入口，而不只是提交记录上的一个名字。后续权限文件直接按这个名字映射，比如：
+docs/access_policy/<user.name>.md 这样做的好处很直接：人类和 AI 可以共用同一套身份入口。
+2. 默认只读，而不是默认可写 如果没有找到与 user.name 对应的权限文件，就回退到：
+docs/access_policy/default.md 默认策略里没有任何 Writable Dirs，也就意味着整个仓库只读。
+这样做把安全模型从“默认信任，出问题再收缩”改成了“默认拒绝，明确授权后再开放”。对 AI 协作者来说，这比单纯依赖提示词稳得多。
+3. 权限按目录白名单定义 每个协作者都有一个独立的权限文件，里面至少定义四部分：
+Identity Writable Dirs Read Only Dirs No Read Dirs Rules 例如：
+# zhanglei36 Access Policy ## Identity - `user."></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&amp;style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2026</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Harness Engineering: 实现协作者安全隔离的一次探索</h3></div><p>这篇文章记录一次小范围实践：在 AI 开发时代，如何通过 <code>Harness Engineering</code> 给协作者加上清楚的边界。</p><p>问题并不抽象。代码库里已经出现了新的协作者。它可能是 Codex、Claude Code、Cursor。它能读代码、改文件、跑命令、提 PR。风险也随之变化了。关键不再只是“它会不会答错”，而是“它有没有权力改不该改的东西”。</p><p>只靠提示词约束不够。上下文会漂移，任务会扩张，模型会误判，人也会口头越权。更稳妥的做法，是把边界从提示层压到执行层。</p><h2 id=为什么-ai-协作者更需要隔离>为什么 AI 协作者更需要隔离</h2><p>传统团队协作里，权限问题很多时候由人来兜底。一个经验足够的工程师通常知道什么目录不能碰，什么配置不能改，什么操作需要再次确认。AI 协作者没有这种默认判断：</p><ul><li>它行动很快，但不天然理解组织边界。</li><li>它能执行很多事，但不天然知道哪些事情不该做。</li><li>它在单次任务里看起来“理解了约束”，不代表下一轮仍然稳定遵守。</li></ul><p>所以安全隔离的重点，不只是“让模型更听话”，而是<strong>让越界本身更难发生</strong>。这也是这里对 <code>Harness Engineering</code> 的理解：先把边界做成可读取、可检查、可执行的工程约束。</p><h2 id=这次实践把仓库变成一个带边界的执行-harness>这次实践：把仓库变成一个带边界的执行 Harness</h2><p>这套机制不复杂，重点是先把最小边界立起来。做法大体有四步：识别协作者身份、加载对应权限、按目录最小授权、把扩权能力留在人手里。</p><h3 id=1-用-git-身份识别当前协作者>1. 用 Git 身份识别当前协作者</h3><p>进入仓库后，先读取：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git config user.name
+</span></span></code></pre></div><p>这里把这个值当作协作者身份入口，而不只是提交记录上的一个名字。后续权限文件直接按这个名字映射，比如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>docs/access_policy/&lt;user.name&gt;.md
+</span></span></code></pre></div><p>这样做的好处很直接：<strong>人类和 AI 可以共用同一套身份入口。</strong></p><h3 id=2-默认只读而不是默认可写>2. 默认只读，而不是默认可写</h3><p>如果没有找到与 <code>user.name</code> 对应的权限文件，就回退到：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>docs/access_policy/default.md
+</span></span></code></pre></div><p>默认策略里没有任何 <code>Writable Dirs</code>，也就意味着整个仓库只读。</p><p>这样做把安全模型从“默认信任，出问题再收缩”改成了“默认拒绝，明确授权后再开放”。对 AI 协作者来说，这比单纯依赖提示词稳得多。</p><h3 id=3-权限按目录白名单定义>3. 权限按目录白名单定义</h3><p>每个协作者都有一个独立的权限文件，里面至少定义四部分：</p><ul><li><code>Identity</code></li><li><code>Writable Dirs</code></li><li><code>Read Only Dirs</code></li><li><code>No Read Dirs</code></li><li><code>Rules</code></li></ul><p>例如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-md data-lang=md><span style=display:flex><span># zhanglei36 Access Policy
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Identity
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`user.name == &#34;zhanglei36&#34;`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Writable Dirs
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/agents/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/api/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/common/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/domain/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`CONTRIBUTING.md`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`README.md`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Read Only Dirs
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`AGENTS.md`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`docs/`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## No Read Dirs
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`frontend/`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Rules
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 未明确列入 <span style=color:#e6db74>`Writable Dirs`</span> 的目录，默认不修改。
+</span></span></code></pre></div><p>这意味着协作者拿到的不是整个仓库的写权限，而是自己负责区域的写权限。这样至少能缩小误改和误操作的半径。</p><h3 id=4-策略文件只能由人维护ai-不能自行扩权>4. 策略文件只能由人维护，AI 不能自行扩权</h3><p>这套机制里最关键的一条，是“谁有资格改授权”。<code>docs/access_policy/</code> 被明确设为人类维护区，并在 <code>AGENTS.md</code> 中规定：</p><ul><li>AI 永远不得创建、修改或删除 <code>docs/access_policy/</code> 下的任何文件。</li><li>即使用户口头授权，也不能把这类一次性授权沉淀成长期权限。</li><li>一次性口头授权只对当前任务生效，且不适用于权限策略目录本身。</li></ul><p>这一步切断了一个高风险路径：<strong>AI 不能通过修改规则文件给自己扩权。</strong></p><h2 id=它更像一个协作安全的最小闭环>它更像一个协作安全的最小闭环</h2><p>这套做法不追求一开始就做复杂，也不试图立刻引入完整的审计、审批、角色模型。它更像是在回答一个现实问题：</p><p><strong>在一个人类与 AI 混合协作的代码库里，如何用最低成本建立可信边界。</strong></p><p>这个最小闭环是这样的：</p><ol><li>进入仓库，先读 <code>AGENTS.md</code>。</li><li>读取 <code>git config user.name</code>，识别当前协作者。</li><li>加载 <code>docs/access_policy/&lt;user.name>.md</code>，不存在则回退到 <code>default.md</code>。</li><li>只在 <code>Writable Dirs</code> 内执行修改，其余路径默认只读。</li><li>如果任务要求越界，先停止，由人决定是否做一次性授权。</li><li>无论任何情况，AI 都不能修改权限策略目录本身。</li></ol><p>这六步不复杂，但已经把“能不能改”从模型主观判断，推进成了仓库内显式存在的协作协议。</p><p>这套闭环通常还会再加一层运行时约束：<strong>涉及生产、设备控制、外部系统写入的动作，默认需要更高确认门槛。</strong> 目录权限解决的是“它能改哪里”，运行确认解决的是“它能不能把影响真正执行”。</p><h2 id=为什么这套机制适合-ai-时代>为什么这套机制适合 AI 时代</h2><p>从这次实践回看，AI 工程可以粗略拆成两部分：</p><ul><li>一部分是模型能力，解决“它能不能做”。</li><li>另一部分是 Harness 能力，解决“它被允许做什么”。</li></ul><p>很多团队会把精力优先放在前者，比如提示词、工具调用、工作流编排、记忆系统；但一旦进入真实开发，后者更影响系统是否可控。</p><p>协作者隔离防的，不只是恶意，更是误用：</p><ul><li>防止 agent 顺手修改无关目录。</li><li>防止它把只读文档改成“顺手修复”。</li><li>防止它在一次临时授权后把越权行为常态化。</li><li>防止多人协作时边界模糊，最后所有人都默认拥有全仓写权限。</li></ul><p>从这个意义上说，<code>Harness Engineering</code> 更像是在给协作系统补上刹车、护栏和分道线。</p><h2 id=如何落地>如何落地</h2><blockquote><p>这里直接给出提示词判断和样例规则，你可以直接拿去用，或者改成适合你团队的版本。</p></blockquote><p><strong>AGENTS.md</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-md data-lang=md><span style=display:flex><span># AGENTS.md
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Directory Access Policy
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span>身份识别与协作者项目目录权限：
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 协作者身份来自 <span style=color:#e6db74>`git config user.name`</span>。
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 如果无法识别身份，默认整个仓库只读，不进行修改。
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>协作者目录权限定义放在 <span style=color:#e6db74>`./docs/access_policy/`</span> 目录下。
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 文件名默认使用 <span style=color:#e6db74>`git config user.name`</span> 的值，例如 <span style=color:#e6db74>`zhanglei36.md`</span>。
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 进入仓库后，应优先读取与当前 <span style=color:#e6db74>`user.name`</span> 同名的权限文件。
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 如果对应文件不存在，默认读取 <span style=color:#e6db74>`./docs/access_policy/default.md`</span>。
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`docs/access_policy/`</span> 下的文件只允许人类协作者维护，AI 永远不得创建、修改或删除。
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 如果用户口头授权，AI 只可在当前一次任务中临时越过既有写入范围执行一次，不得据此扩展为长期权限。
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 上述一次性口头授权不适用于 <span style=color:#e6db74>`docs/access_policy/`</span>；AI 仍不得直接创建、修改或删除该目录下的任何文件。
+</span></span></code></pre></div><p><strong>docs/access_policy/zhanglei36.md</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-md data-lang=md><span style=display:flex><span># zhanglei36 Access Policy
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Identity
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`user.name == &#34;zhanglei36&#34;`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Writable Dirs
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/agents/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/api/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/common/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`backend/src/phys_os/domain/`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`CONTRIBUTING.md`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`README.md`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Read Only Dirs
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`AGENTS.md`</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`docs/`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## No Read Dirs
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`frontend/`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## Rules
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 未明确列入 <span style=color:#e6db74>`Writable Dirs`</span> 的目录，默认不修改。
+</span></span></code></pre></div></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/ai/>ai</a><a class=category href=/categories/harness-engineering/>harness-engineering</a></span>
+<span class=separator><a class=tag href=/tags/ai/>ai</a><a class=tag href=/tags/harness-engineering/>harness-engineering</a><a class=tag href=/tags/security/>security</a><a class=tag href=/tags/collaboration/>collaboration</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.e1c6918cbaa90022a5612f0bd71c7bf3be6d036614c5729cebfe14f7b91fa4bc.js integrity="sha256-4caRjLqpACKlYS8L1xx7875tA2YUxXKc6/4U97kfpLw=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
