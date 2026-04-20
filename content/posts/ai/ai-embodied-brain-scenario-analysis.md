@@ -6,10 +6,6 @@ categories: [ai]
 draft: false
 ---
 
-![动态非结构化实验室危险品二次分类场景示意图](/images/posts/ai/ai-embodied-brain-scenario-analysis/scenario.png)
-
-地图上 1.6 公里，理论上 19 分钟；放到重庆，可能要翻一座山，最后走 50 分钟。具身智能里也一样，概念上挨得很近的几层能力，一落地就必须把边界说清楚。
-
 ## 导读
 
 本文只讨论一个问题：把具身智能系统拆开以后，具身智能大脑到底负责哪一段。
@@ -31,6 +27,8 @@ draft: false
 | 具身智能大脑 | 重建执行计划并做治理性决策 |
 
 ## 场景设定：动态非结构化环境下的实验室危险品二次分类
+
+![动态非结构化实验室危险品二次分类场景示意图](/images/posts/ai/ai-embodied-brain-scenario-analysis/scenario.png)
 
 这里选一个适合 SO101 这类低成本机械臂平台的任务作为分析基准：
 
