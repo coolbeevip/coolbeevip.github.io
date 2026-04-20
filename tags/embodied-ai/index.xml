@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Embodied-Ai on</title><link>https://coolbeevip.github.io/tags/embodied-ai/</link><description>Recent content in Embodied-Ai on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 20 Apr 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/embodied-ai/index.xml" rel="self" type="application/rss+xml"/><item><title>具身智能大脑负责什么：一个场景化边界分析</title><link>https://coolbeevip.github.io/posts/ai/ai-embodied-brain-scenario-analysis/</link><pubDate>Mon, 20 Apr 2026 00:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/ai-embodied-brain-scenario-analysis/</guid><description>地图上 1.6 公里，理论上 19 分钟；放到重庆，可能要翻一座山，最后走 50 分钟。具身智能里也一样，概念上挨得很近的几层能力，一落地就必须把边界说清楚。
-导读 本文只讨论一个问题：把具身智能系统拆开以后，具身智能大脑到底负责哪一段。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Embodied-Ai on</title><link>https://coolbeevip.github.io/tags/embodied-ai/</link><description>Recent content in Embodied-Ai on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 20 Apr 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/embodied-ai/index.xml" rel="self" type="application/rss+xml"/><item><title>具身智能大脑负责什么：一个场景化边界分析</title><link>https://coolbeevip.github.io/posts/ai/ai-embodied-brain-scenario-analysis/</link><pubDate>Mon, 20 Apr 2026 00:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/ai/ai-embodied-brain-scenario-analysis/</guid><description>导读 本文只讨论一个问题：把具身智能系统拆开以后，具身智能大脑到底负责哪一段。
 这个问题不能靠抽象定义回答，只能放进具体场景里看。下面用一个动态非结构化实验室危险品二次分类场景，把执行层、空间智能、世界模型、具身智能大脑的边界拆开。
 先把几个词说清楚，后面会轻松很多：
 SO101：一种低成本桌面机械臂，这里把它当作具身平台的代表 空间智能：负责理解几何关系、障碍物和局部物理安全的层 世界模型：用于估计动作发生后环境可能如何演化的预测模型 具身智能大脑：负责处理意图、风险和重规划的治理层 层级 职责 执行层 把指令转成电机和关节级控制 空间智能 识别几何关系并维持即时安全 世界模型 预测接下来可能发生什么 具身智能大脑 重建执行计划并做治理性决策 场景设定：动态非结构化环境下的实验室危险品二次分类 这里选一个适合 SO101 这类低成本机械臂平台的任务作为分析基准：
@@ -21,4 +20,6 @@ SO101：一种低成本桌面机械臂，这里把它当作具身平台的代表
 识别用户到底想处理什么对象 明确哪些对象是可操作目标 明确哪些对象是绝对不能碰的约束物 把自然语言指令拆成可执行的子目标链 把模糊的人类目标，整理成带约束的执行计划。
 边界二：空间智能看几何变化，具身智能大脑重建执行计划 再看一个执行中断事件。
 SO101 正在抓取一盒带红色标签的试剂盒，实验室工作人员意外碰撞了桌面。结果有两个变化同时发生：
-药盒相对原位置偏移了大约 5 厘米 蓝色烧杯朝机械臂原有运动路径方向倾斜 空间智能负责什么 空间智能负责对几何变化做快速感知和即时响应。</description></item></channel></rss>
+药盒相对原位置偏移了大约 5 厘米 蓝色烧杯朝机械臂原有运动路径方向倾斜 空间智能负责什么 空间智能负责对几何变化做快速感知和即时响应。
+它看到的是：
+目标位置变了 障碍物姿态变了 原路径的碰撞风险变高了 它先保物理安全闭环。</description></item></channel></rss>
