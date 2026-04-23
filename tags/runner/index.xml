@@ -3,4 +3,5 @@
 宿主机已安装 Docker，且能正常执行 docker 命令 GitLab 服务地址可从 Runner 宿主机访问 预先准备 Runner 配置目录与 Maven 缓存目录 文中的 URL、Token、路径均为示例，请替换为自己的值 启动 Gitlab Runner
 docker run -d --name gitlab-runner-01 --restart always \ -v /data01/runner/git-runner-01/volumes/runner/config:/etc/gitlab-runner \ -v /var/run/docker.sock:/var/run/docker.sock \ -v /bin/docker:/bin/docker \ -v /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2 \ -v /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn \ gitlab/gitlab-runner:v13.6.0 如果宿主机无法解析内网域名，可按需追加 --add-host=gitlab.example.com:10.0.0.10 这类参数。
 注册 Gitlab Runner 到 Gitlab
-docker exec -it gitlab-runner-01 gitlab-runner register \ --non-interactive \ --url &amp;#34;http://gitlab.</description></item></channel></rss>
+RUNNER_REGISTRATION_TOKEN 可在 GitLab 的 Runner 管理页面获取：
+实例级 Runner：Admin &amp;gt; CI/CD &amp;gt; Runners 组级或项目级 Runner：进入对应 Group / Project 的 Settings &amp;gt; CI/CD &amp;gt; Runners docker exec -it gitlab-runner-01 gitlab-runner register \ --non-interactive \ --url &amp;#34;http://gitlab.</description></item></channel></rss>
