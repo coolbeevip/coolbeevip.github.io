@@ -79,10 +79,3 @@ log_level = "debug"
     volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3:/root/.m2", "/data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn", "/cache"]
     shm_size = 0
 ```
-
-## Q & A
-
-1. Initial heap size set to a larger value than the maximum heap size
-
-
-
