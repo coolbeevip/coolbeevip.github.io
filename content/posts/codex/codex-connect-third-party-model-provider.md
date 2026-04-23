@@ -63,7 +63,7 @@ export MY_API_KEY="你的平台密钥"
 
 ## 我踩过的坑
 
-### Q1: 为什么我会遇到这个报错？
+### Q1: litellm.BadRequestError
 
 ```text
 litellm.BadRequestError: DashscopeException - 'function' is a required property, expected an object -
@@ -96,3 +96,13 @@ multi_agent = false
 js_repl = false
 code_mode = false
 ```
+
+### Q2: Unexpected message role
+
+```text
+{"error":{"message":"Unexpected message role.","type":"BadRequestError","param":null,"code":400}}
+```
+
+### A2
+
+因为 Codex 内置发送系统消息角色不是 `system` 而是 `developer` ，有的第三方推理平台会对消息角色进行检查，目前没有太好的办法，一定要用可以修改 Codex 源代码。
