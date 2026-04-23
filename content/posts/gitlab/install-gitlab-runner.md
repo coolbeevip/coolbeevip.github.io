@@ -48,8 +48,8 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
   --registration-token "<RUNNER_REGISTRATION_TOKEN>" \
   --executor "docker" \
   --docker-image alpine:latest \
-  --description "runner-01" \
-  --tag-list "runner-01" \
+  --description "group-prod-runner-01" \
+  --tag-list "group,prod,runner-01,docker,maven" \
   --run-untagged="true" \
   --locked="false" \
   --access-level="not_protected" \
@@ -58,7 +58,7 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
   --docker-volumes /data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn
 ```
 
-如果使用旧版 Runner 镜像，也可以使用 `gitlab-ci-multi-runner register`。
+如果 Runner 用于某个 Group，建议在 `description` 和 `tag-list` 中带上组织、环境和节点信息，便于在 GitLab 页面识别和调度。
 
 注销 Gitlab Runner 到 Gitlab
 
