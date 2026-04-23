@@ -84,35 +84,9 @@ docker exec -it gitlab-runner-01 gitlab-runner list
 - 挂载 `/var/run/docker.sock` 后，CI Job 可直接控制宿主机 Docker，请仅在可信环境中使用
 - 不要在文档、仓库或截图中保存真实的 registration token 和 runner token
 
-启动后自动生成的 config.toml
+维护：
 
-```toml
-concurrent = 1
-check_interval = 0
-log_level = "debug"
-
-[session_server]
-  session_timeout = 1800
-
-[[runners]]
-  name = "10.19.32.51-runner-01"
-  url = "http://gitlab.example.com:8081/"
-  token = "<RUNNER_TOKEN>"
-  executor = "docker"
-  [runners.custom_build_dir]
-  [runners.cache]
-    [runners.cache.s3]
-    [runners.cache.gcs]
-    [runners.cache.azure]
-  [runners.docker]
-    tls_verify = false
-    image = "alpine:latest"
-    privileged = false
-    cpus = "2"
-    memory = "2g"
-    disable_entrypoint_overwrite = false
-    oom_kill_disable = false
-    disable_cache = false
-    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/data01/runner/git-runner-01/m2:/root/.m2", "/data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn", "/cache"]
-    shm_size = 0
-```
+- Runner 配置文件位于 `/data01/runner/git-runner-01/config/config.toml`
+- 修改配置后，可执行 `docker restart gitlab-runner-01` 使配置生效
+- 可通过 `docker exec -it gitlab-runner-01 gitlab-runner verify` 检查 Runner 状态
+- 如需删除 Runner，可先执行 `unregister`，再停止并删除容器
