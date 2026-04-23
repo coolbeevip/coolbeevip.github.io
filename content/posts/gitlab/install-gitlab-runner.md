@@ -8,6 +8,11 @@ draft: false
 
 本文记录使用 Docker 安装 `GitLab Runner` 并注册到 GitLab 的最小步骤，适用于 `docker executor` 场景。
 
+目录规划示例：
+
+- `/data01/runner/git-runner-01/config`：GitLab Runner 配置目录
+- `/data01/runner/git-runner-01/m2`：Maven 本地缓存目录
+
 前置条件：
 
 - 宿主机已安装 Docker，且能正常执行 `docker` 命令
@@ -19,11 +24,11 @@ draft: false
 
 ```shell
 docker run -d --name gitlab-runner-01 --restart always \
-  -v /data01/runner/git-runner-01/volumes/runner/config:/etc/gitlab-runner \
+  -v /data01/runner/git-runner-01/config:/etc/gitlab-runner \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /bin/docker:/bin/docker \
-  -v /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2 \
-  -v /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn \
+  -v /data01/runner/git-runner-01/m2:/root/.m2 \
+  -v /data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn \
   gitlab/gitlab-runner:v13.6.0
 ```
 
@@ -49,8 +54,8 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
   --locked="false" \
   --access-level="not_protected" \
   --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
-  --docker-volumes /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2 \
-  --docker-volumes /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn
+  --docker-volumes /data01/runner/git-runner-01/m2:/root/.m2 \
+  --docker-volumes /data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn
 ```
 
 如果使用旧版 Runner 镜像，也可以使用 `gitlab-ci-multi-runner register`。
@@ -108,6 +113,6 @@ log_level = "debug"
     disable_entrypoint_overwrite = false
     oom_kill_disable = false
     disable_cache = false
-    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2", "/data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn", "/cache"]
+    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/data01/runner/git-runner-01/m2:/root/.m2", "/data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn", "/cache"]
     shm_size = 0
 ```
