@@ -5,7 +5,7 @@
 <span aria-hidden=true></span>
 <span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a class=current href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."></div><div class="post ."><div class=post-title><h3><a href=/posts/codex/codex-connect-third-party-model-provider/>如何让 Codex 连接第三方模型平台</a></h3></div><div class=post-content><div class=p_part><p>Codex 接第三方平台，只改 config.toml 两段：
 model_providers：声明网关地址、协议和密钥变量 profiles：绑定 provider 和具体模型参数 如果你是第一次找这个文件，默认位置通常是 $CODEX_HOME/config.toml，很多机器上会落在 ~/.codex/config.toml。
-本文配置在 OpenAI Codex v0.123.0 下验证，验证日期为 2026-04-23。版本变化快，后续行为以官方文档和 release notes 为准。
+本文配置在 OpenAI Codex v0.123.0 下验证。版本变化快，后续行为以官方文档和 release notes 为准。
 配置完成后，通过 profile 切换模型。
 配置片段 # 模型平台 [model_providers.aliyuncs] name = "dashscope aliyuncs" base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1" supports_websockets = false env_key = "MY_API_KEY" # 模型配方 [profiles.minimax] model_provider = "aliyuncs" model = "MiniMax-M2.5" model_context_window = 131072 model_max_output_tokens = 8192 关键字段说明 base_url: 第三方网关根路径，示例为 https://dashscope.aliyuncs.com/compatible-mode/v1。 supports_websockets: 是否启用 WebSocket 通道。这个配置走 HTTP，请设为 false。 env_key: 读取 API Key 的环境变量名，示例为 MY_API_KEY。 model_provider: profile 绑定的 provider 名，必须与 [model_providers.</p><a href=/posts/codex/codex-connect-third-party-model-provider/ class=read_more>Read more</a></div></div><div class=post-footer><div class=meta><div class=info><em class="fas fa-calendar-day"></em>
 <span class=date>Thu, Apr 23, 2026
