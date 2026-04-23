@@ -6,25 +6,34 @@ categories: [gitlab]
 draft: false
 ---
 
+本文记录使用 Docker 安装 `GitLab Runner` 并注册到 GitLab 的最小步骤，适用于 `docker executor` 场景。
+
+前置条件：
+
+- 宿主机已安装 Docker，且能正常执行 `docker` 命令
+- GitLab 服务地址可从 Runner 宿主机访问
+- 预先准备 Runner 配置目录与 Maven 缓存目录
+- 文中的 URL、Token、路径均为示例，请替换为自己的值
+
 启动 Gitlab Runner
 
 ```shell
 docker run -d --name gitlab-runner-01 --restart always \
-  -v /data01/runner/git-runner-01/volumns/runner/config:/etc/gitlab-runner \
+  -v /data01/runner/git-runner-01/volumes/runner/config:/etc/gitlab-runner \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /bin/docker:/bin/docker \
-  -v /data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3:/root/.m2 \
-  -v /data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn \
-  gitlab/gitlab-runner:latest
+  -v /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2 \
+  -v /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn \
+  gitlab/gitlab-runner:alpine
 ```
 
 注册 Gitlab Runner 到 Gitlab
 
 ```shell
-docker exec -it gitlab-runner-01 gitlab-ci-multi-runner register \
+docker exec -it gitlab-runner-01 gitlab-runner register \
   --non-interactive \
-  --url "http://mygitlab:8081/" \
-  --registration-token "K6PPp2LWzdHpks5RKJWy" \
+  --url "http://gitlab.example.com:8081/" \
+  --registration-token "<RUNNER_REGISTRATION_TOKEN>" \
   --executor "docker" \
   --docker-image alpine:latest \
   --description "runner-01" \
@@ -33,19 +42,33 @@ docker exec -it gitlab-runner-01 gitlab-ci-multi-runner register \
   --locked="false" \
   --access-level="not_protected" \
   --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
-  --docker-volumes /data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3:/root/.m2 \
-  --docker-volumes /data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn
+  --docker-volumes /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2 \
+  --docker-volumes /data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn
 ```
-
 
 注销 Gitlab Runner 到 Gitlab
 
 ```shell
-docker exec -it gitlab-runner-01 gitlab-ci-multi-runner unregister \
+docker exec -it gitlab-runner-01 gitlab-runner unregister \
   --non-interactive \
-  --url "http://mygitlab:8081/" \
-  --token "K6PPp2LWzdHpks5RKJWy"
+  --url "http://gitlab.example.com:8081/" \
+  --token "<RUNNER_TOKEN>"
 ```
+
+验证：
+
+```shell
+docker ps | grep gitlab-runner-01
+docker exec -it gitlab-runner-01 gitlab-runner verify
+docker exec -it gitlab-runner-01 gitlab-runner list
+```
+
+如果 Runner 已在 GitLab 页面显示为在线，并且能成功执行一个最小 CI Job，则说明安装完成。
+
+注意：
+
+- 挂载 `/var/run/docker.sock` 后，CI Job 可直接控制宿主机 Docker，请仅在可信环境中使用
+- 不要在文档、仓库或截图中保存真实的 registration token 和 runner token
 
 启动后自动生成的 config.toml
 
@@ -59,8 +82,8 @@ log_level = "debug"
 
 [[runners]]
   name = "10.19.32.51-runner-01"
-  url = "http://git.server.com:8081/"
-  token = "LrVrtzxwNamXUCyHE2Nx"
+  url = "http://gitlab.example.com:8081/"
+  token = "<RUNNER_TOKEN>"
   executor = "docker"
   [runners.custom_build_dir]
   [runners.cache]
@@ -72,10 +95,10 @@ log_level = "debug"
     image = "alpine:latest"
     privileged = false
     cpus = "2"
-    memory = "2g"    
+    memory = "2g"
     disable_entrypoint_overwrite = false
     oom_kill_disable = false
     disable_cache = false
-    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3:/root/.m2", "/data01/runner/git-runner-01/volumns/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn", "/cache"]
+    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3:/root/.m2", "/data01/runner/git-runner-01/volumes/runner/apache-maven-3.6.3/bin/mvn:/bin/mvn", "/cache"]
     shm_size = 0
 ```
