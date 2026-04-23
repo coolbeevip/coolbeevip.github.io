@@ -3,7 +3,7 @@ title: "如何让 Codex 连接第三方模型平台"
 date: 2026-04-23T16:00:00+08:00
 tags: [codex, llm, model-provider, config]
 categories: [codex]
-draft: true
+draft: false
 ---
 
 Codex 接第三方平台，只改 `config.toml` 两段：
@@ -58,6 +58,8 @@ export MY_API_KEY="你的平台密钥"
 ## 使用路径
 
 启动 `codex -p minimax`，Codex 会自动加载 `minimax` profile。
+
+![](/images/posts/codex/codex-connect-third-party-model-provider/codex-minimax.png)
 
 ## 我踩过的坑
 
