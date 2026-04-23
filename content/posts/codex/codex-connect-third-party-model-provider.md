@@ -11,6 +11,8 @@ Codex 接第三方平台，只改 `config.toml` 两段：
 - `model_providers`：声明网关地址、协议和密钥变量
 - `profiles`：绑定 provider 和具体模型参数
 
+如果你是第一次找这个文件，默认位置通常是 `$CODEX_HOME/config.toml`，很多机器上会落在 `~/.codex/config.toml`。
+
 本文配置在 `OpenAI Codex v0.123.0` 下验证，验证日期为 `2026-04-23`。版本变化快，后续行为以官方文档和 release notes 为准。
 
 配置完成后，通过 profile 切换模型。
