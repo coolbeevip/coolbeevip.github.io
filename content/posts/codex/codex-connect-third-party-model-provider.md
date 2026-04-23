@@ -3,7 +3,7 @@ title: "如何让 Codex 连接第三方模型平台"
 date: 2026-04-23T16:00:00+08:00
 tags: [codex, llm, model-provider, config]
 categories: [codex]
-draft: false
+draft: true
 ---
 
 Codex 接第三方平台，只改 `config.toml` 两段：
