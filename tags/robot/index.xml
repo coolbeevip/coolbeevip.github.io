@@ -2,4 +2,11 @@
 1. 引言 如果从一般产品介绍的角度描述机械臂，常见写法通常会集中在负载、速度、臂展和应用行业上。但从软件工程师和系统集成工程师的视角来看，这样的介绍远远不够。因为在实际项目里，机械臂并不是一个孤立设备，而是一个需要接入控制系统、配置安全策略、定义工具模型、完成示教调试、接入上位系统并持续维护的工程对象。
 机械臂的价值，不只在于它是一台协作机器人，更在于它围绕“机器人如何真正进入生产系统”提供了一整套较完整的工程链路。官方教程材料已经覆盖了这一链路的关键环节：从开箱、接线、控制器接口，到安全配置、手动引导、可视化编程，再到虚拟仿真和后续支持。把这些材料重新组织后，可以更清楚地看出机械臂在工程实施中的真实定位。
 本文将不再沿用传统“产品亮点罗列”的方式，而是按照软件工程更熟悉的分析框架来介绍机械臂：先明确系统边界，再分析组成结构、接口与安全，再看开发方式、交互机制以及它在完整自动化系统中的职责分工。
-产品 GoFa SWIFTI YuMi（单臂） Dual-arm YuMi（双臂） 型号代表 ABB GoFa CRB 15000 ABB SWIFTI CRB 1300 ABB YuMi IRB 14050 ABB YuMi IRB 14000 定位 通用协作机器人 高速工业协作机器人 小型精密单臂协作机器人 双臂精密协作机器人 轴数 6 轴 6 轴 7 轴 14 轴（每臂 7 轴） 最大负载 5–12 kg 7–11 kg 0.5 kg 0.5 kg/臂 最大臂展 0.95–1.62 m 0.9–1.4 m 559 mm 559 mm/臂 重复定位精度 ±0.</description></item></channel></rss>
+产品 GoFa SWIFTI YuMi（单臂） Dual-arm YuMi（双臂） 型号代表 ABB GoFa CRB 15000 ABB SWIFTI CRB 1300 ABB YuMi IRB 14050 ABB YuMi IRB 14000 定位 通用协作机器人 高速工业协作机器人 小型精密单臂协作机器人 双臂精密协作机器人 轴数 6 轴 6 轴 7 轴 14 轴（每臂 7 轴） 最大负载 5–12 kg 7–11 kg 0.5 kg 0.5 kg/臂 最大臂展 0.95–1.62 m 0.9–1.4 m 559 mm 559 mm/臂 重复定位精度 ±0.</description></item><item><title>Codex + Spec-Kit 开发 LeRobot Agent 的实践与反思</title><link>https://coolbeevip.github.io/posts/lerobot/lerobot-codex-spec-kit/</link><pubDate>Wed, 04 Mar 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/lerobot/lerobot-codex-spec-kit/</guid><description>“现在问题解决了，但请你重新 Review 一下今天的几轮修改，看看是不是补丁叠补丁式的修改，如果是的话，重构成最优解”，这是我在这个项目里对 AI 说得最多的一句话。 你也可以说 “review the code, think from greenfield” 或者 “/samplify”，但不管怎么说，这句话的核心意思是：当 AI 在一个已经快速迭代过的代码库里继续修改时，它很容易陷入“补丁叠补丁”的陷阱，而不是停下来重新思考最优解。
+过去一周，我做了个基于 LeRobot 的 SO-101 机械臂 PoC。最初只是一个能跑起来的遥操作脚本，后来长成具备配置驱动、基础测试、服务接口和调试界面的 MVP。这个项目并不是我一个人独立完成的。我主要搭起了大约 60% 的骨架和核心功能，包括命令行入口、配置体系、API 分层、Web 服务、调试面板（dashboard），以及大部分基础测试。到了后期，团队里的同事也逐步参与进来，补上了模型推理、训练以及一些更贴近业务场景的能力。
+现在的结构：
+命令行入口：teleoperate、record、replay、serve Python API 分层：src/api FastAPI 服务：src/webapi React 调试面板：dashboard/ 单元测试：tests/unit 配置文件：config/agent.toml 一句话概括：用 Spec-Kit 管&amp;quot;要做什么&amp;quot;，用 Codex 管&amp;quot;怎么更快做出来&amp;quot;
+但这不是一个&amp;quot;AI 加 Spec-Kit 就一路顺风&amp;quot;的故事。中间有很多反复、修正和取舍。Spec-Kit 帮了我不少，也带来过混乱；Codex 让我省了很多重复劳动，也把我前端、协作和问题表达上的短板照得很清楚。
+这篇文章讲的就是这些真实经验。
+一、为什么一开始没有直接写代码 表面上看这是个&amp;quot;硬件 + Python&amp;quot;工具，但做起来才发现是一整条链路的问题：
+读取 SO-101 的 follower、leader、camera 配置 跑通 teleoperate（遥操作） 支持 record（数据采集）和 replay（回放） 把能力暴露成 HTTP / WebSocket 服务，方便外部调用 做调试面板，把串口、相机、控制状态、任务状态可视化 后续接入推理和 LLM，而不是推翻重来 直接写代码很容易在第 3 步以后失控。配置解析、硬件连接、任务生命周期、Web 接口、前端调试、测试替身——这些边界一旦不清，后面每加一个功能都牵一发而动全身。</description></item></channel></rss>
