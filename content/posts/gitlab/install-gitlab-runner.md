@@ -31,6 +31,11 @@ docker run -d --name gitlab-runner-01 --restart always \
 
 注册 Gitlab Runner 到 Gitlab
 
+`RUNNER_REGISTRATION_TOKEN` 可在 GitLab 的 Runner 管理页面获取：
+
+- 实例级 Runner：`Admin > CI/CD > Runners`
+- 组级或项目级 Runner：进入对应 Group / Project 的 `Settings > CI/CD > Runners`
+
 ```shell
 docker exec -it gitlab-runner-01 gitlab-runner register \
   --non-interactive \
