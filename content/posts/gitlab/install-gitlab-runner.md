@@ -34,6 +34,8 @@ draft: false
 
 ## docker executor + host docker (via docker.sock)
 
+> 挂载 `/var/run/docker.sock` 后，CI Job 可直接控制宿主机 Docker，请仅在可信环境中使用
+
 启动 GitLab Runner
 
 ```shell
@@ -89,6 +91,16 @@ docker exec -it gitlab-runner-01 gitlab-runner unregister \
 * `token` 参数使用的是注册完成后生成的 `RUNNER_TOKEN`，不是 `RUNNER_REGISTRATION_TOKEN`。
 * `RUNNER_TOKEN` 会在 Runner 注册成功后自动生成，可从 Runner 所在机器的 `config.toml` 中查看。
 * 注销完成后，如不再使用该 Runner，可继续停止并删除对应容器。
+
+验证 GitLab Runner
+
+```shell
+docker ps | grep gitlab-runner-01
+docker exec -it gitlab-runner-01 gitlab-runner verify
+docker exec -it gitlab-runner-01 gitlab-runner list
+```
+
+如果 Runner 已在 GitLab 页面显示为在线，并且能成功执行一个最小 CI Job，则说明安装完成。
 
 ## docker executor + docker-in-docker (dind)
 
@@ -146,6 +158,16 @@ docker exec -it gitlab-runner-01 gitlab-runner unregister \
 * `RUNNER_TOKEN` 会在 Runner 注册成功后自动生成，可从 Runner 所在机器的 `config.toml` 中查看。
 * 如果同时部署了独立的 DinD 服务容器，确认不再使用后也应一并停止和删除。
 
+验证 GitLab Runner
+
+```shell
+docker ps | grep gitlab-runner-01
+docker exec -it gitlab-runner-01 gitlab-runner verify
+docker exec -it gitlab-runner-01 gitlab-runner list
+```
+
+如果 Runner 已在 GitLab 页面显示为在线，并且能成功执行一个最小 CI Job，则说明安装完成。
+
 ## shell executor
 
 > 不建议在同一宿主机上启动多个 `shell executor`。这种模式下多个 Runner 共享同一套宿主机环境，容易发生工具链、缓存、临时文件和端口冲突，排查成本也更高。
@@ -196,22 +218,14 @@ gitlab-runner unregister \
 * `RUNNER_TOKEN` 会在 Runner 注册成功后自动生成，可从 Runner 所在机器的 `config.toml` 中查看。
 * 注销后，如不再使用该 Runner，可继续停止宿主机上的 Runner 服务。
 
-## 验证
+验证 GitLab Runner
 
 ```shell
-docker ps | grep gitlab-runner-01
-docker exec -it gitlab-runner-01 gitlab-runner verify
-docker exec -it gitlab-runner-01 gitlab-runner list
+gitlab-runner verify
+gitlab-runner list
 ```
 
-如果使用的是 `shell executor`，则改为在宿主机执行 `gitlab-runner verify` 和 `gitlab-runner list`。
-
 如果 Runner 已在 GitLab 页面显示为在线，并且能成功执行一个最小 CI Job，则说明安装完成。
-
-## 注意事项
-
-- 挂载 `/var/run/docker.sock` 后，CI Job 可直接控制宿主机 Docker，请仅在可信环境中使用
-- 不要在文档、仓库或截图中保存真实的 registration token 和 runner token
 
 ## 维护
 
