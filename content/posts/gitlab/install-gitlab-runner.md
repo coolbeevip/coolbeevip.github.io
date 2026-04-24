@@ -148,6 +148,8 @@ docker exec -it gitlab-runner-01 gitlab-runner unregister \
 
 ## shell executor
 
+> 不建议在同一宿主机上启动多个 `shell executor`。这种模式下多个 Runner 共享同一套宿主机环境，容易发生工具链、缓存、临时文件和端口冲突，排查成本也更高。
+
 启动 GitLab Runner
 
 这种模式下，`gitlab-runner` 直接安装在宿主机上，CI Job 也直接在宿主机 Shell 中执行，因此宿主机本身就是运行环境。
