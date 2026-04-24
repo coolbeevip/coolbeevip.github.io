@@ -77,6 +77,19 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
 * `description` 和 `tag-list` 参数用于标识 Runner，建议包含组织、环境和节点信息，便于在 GitLab 页面识别和调度。
 * `docker-volumes` 参数重复挂载了之前启动 Runner 时指定的卷，确保 Job 内部能访问 Docker 和 Maven 缓存。
 
+注销 GitLab Runner
+
+```shell
+docker exec -it gitlab-runner-01 gitlab-runner unregister \
+  --non-interactive \
+  --url "http://gitlab.example.com:8081/" \
+  --token "<RUNNER_TOKEN>"
+```
+
+* `token` 参数使用的是注册完成后生成的 `RUNNER_TOKEN`，不是 `RUNNER_REGISTRATION_TOKEN`。
+* `RUNNER_TOKEN` 会在 Runner 注册成功后自动生成，可从 Runner 所在机器的 `config.toml` 中查看。
+* 注销完成后，如不再使用该 Runner，可继续停止并删除对应容器。
+
 ## docker executor + docker-in-docker (dind)
 
 启动 GitLab Runner
@@ -120,6 +133,19 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
 
 如果 CI Job 直接连接外部 DinD 容器，通常还需要设置 `DOCKER_HOST=tcp://docker:2375`，让 Job 内部 Docker CLI 能正确连接到名为 `docker` 的服务。
 
+注销 GitLab Runner
+
+```shell
+docker exec -it gitlab-runner-01 gitlab-runner unregister \
+  --non-interactive \
+  --url "http://gitlab.example.com:8081/" \
+  --token "<RUNNER_TOKEN>"
+```
+
+* `token` 参数使用的是注册完成后生成的 `RUNNER_TOKEN`，不是 `RUNNER_REGISTRATION_TOKEN`。
+* `RUNNER_TOKEN` 会在 Runner 注册成功后自动生成，可从 Runner 所在机器的 `config.toml` 中查看。
+* 如果同时部署了独立的 DinD 服务容器，确认不再使用后也应一并停止和删除。
+
 ## shell executor
 
 启动 GitLab Runner
@@ -155,16 +181,7 @@ gitlab-runner register \
 * `description` 和 `tag-list` 参数用于标识 Runner，建议包含组织、环境和节点信息，便于在 GitLab 页面识别和调度。
 * 这种模式下，CI Job 会直接使用宿主机上的 Shell、Docker、Maven、Node.js 等工具链，因此需要自行保证宿主机环境一致性。
 
-## 注销 GitLab Runner
-
-```shell
-docker exec -it gitlab-runner-01 gitlab-runner unregister \
-  --non-interactive \
-  --url "http://gitlab.example.com:8081/" \
-  --token "<RUNNER_TOKEN>"
-```
-
-如果使用的是 `shell executor`，则直接在宿主机执行：
+注销 GitLab Runner
 
 ```shell
 gitlab-runner unregister \
@@ -172,6 +189,10 @@ gitlab-runner unregister \
   --url "http://gitlab.example.com:8081/" \
   --token "<RUNNER_TOKEN>"
 ```
+
+* `token` 参数使用的是注册完成后生成的 `RUNNER_TOKEN`，不是 `RUNNER_REGISTRATION_TOKEN`。
+* `RUNNER_TOKEN` 会在 Runner 注册成功后自动生成，可从 Runner 所在机器的 `config.toml` 中查看。
+* 注销后，如不再使用该 Runner，可继续停止宿主机上的 Runner 服务。
 
 ## 验证
 
