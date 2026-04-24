@@ -227,9 +227,37 @@ gitlab-runner list
 
 如果 Runner 已在 GitLab 页面显示为在线，并且能成功执行一个最小 CI Job，则说明安装完成。
 
-## 维护
+## 在项目中指定使用某个 GitLab Runner
 
-- Runner 配置文件位于 `/data01/runner/gitlab-runner-01/config/config.toml`
-- 修改配置后，可执行 `docker restart gitlab-runner-01` 使配置生效
-- 可通过 `docker exec -it gitlab-runner-01 gitlab-runner verify` 检查 Runner 状态
-- 如需删除 Runner，可先执行 `unregister`，再停止并删除容器
+如果希望项目中的 Job 只在指定的 GitLab Runner 上执行，最常见的做法是在 `.gitlab-ci.yml` 中添加与 Runner `tag-list` 对应的 `tags`。
+
+例如，上文注册 Runner 时使用了 `group,prod,runner-01,docker,maven` 这样的标签，那么项目中的 Job 可以这样写：
+
+```yaml
+build:
+  stage: build
+  tags:
+    - group
+    - prod
+    - docker
+    - maven
+  script:
+    - mvn clean package
+```
+
+如果希望整个项目默认都使用同一组 Runner，也可以在 `.gitlab-ci.yml` 顶层统一声明：
+
+```yaml
+default:
+  tags:
+    - group
+    - prod
+    - docker
+
+build:
+  stage: build
+  script:
+    - mvn clean package
+```
+
+只要 Job 中声明的 `tags` 能被某个 Runner 的 `tag-list` 覆盖，GitLab 就会优先把这个 Job 调度到对应的 Runner 上执行。
