@@ -1,7 +1,7 @@
 ---
 title: "Using gitlab-ci to cache python"
 date: 2023-07-18T13:24:14+08:00
-tags: [cache, python]
+tags: [cache, python, gitlab]
 categories: [gitlab]
 draft: false
 ---

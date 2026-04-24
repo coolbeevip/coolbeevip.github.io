@@ -1,7 +1,7 @@
 ---
 title: "Install Gitlab Runner"
 date: 2023-07-18T13:24:14+08:00
-tags: [runner]
+tags: [gitlab]
 categories: [gitlab]
 draft: false
 ---
