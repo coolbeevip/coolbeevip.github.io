@@ -38,18 +38,18 @@ draft: false
 
 ```shell
 docker run -d --name gitlab-runner-01 --restart always \
-  -v /data01/runner/git-runner-01/config:/etc/gitlab-runner \
+  -v /data01/runner/gitlab-runner-01/config:/etc/gitlab-runner \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /bin/docker:/bin/docker \
-  -v /data01/runner/git-runner-01/m2:/root/.m2 \
-  -v /data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn \
+  -v /data01/runner/gitlab-runner-01/m2:/root/.m2 \
+  -v /data01/runner/gitlab-runner-01/m2/bin/mvn:/bin/mvn \
   gitlab/gitlab-runner:v13.6.0
 ```
 
-* `/data01/runner/git-runner-01/config` ：GitLab Runner 配置目录，必须挂载到容器的 `/etc/gitlab-runner`，否则注册后 Runner 无法保存配置，重启后会丢失注册状态。
+* `/data01/runner/gitlab-runner-01/config` ：GitLab Runner 配置目录，必须挂载到容器的 `/etc/gitlab-runner`，否则注册后 Runner 无法保存配置，重启后会丢失注册状态。
 * `/var/run/docker.sock` 和 `/bin/docker`：让 Runner 容器内的 Job 能直接调用宿主机 Docker，执行构建、推送等操作。
-* `/data01/runner/git-runner-01/m2`：Maven 本地缓存目录，挂载到容器内的 `/root/.m2`，让 Job 内部执行 Maven 构建时能复用缓存，加速构建过程。
-* `/data01/runner/git-runner-01/m2/bin/mvn`：如果宿主机上的 Maven 可执行文件不在 PATH 中，或者需要特定版本，也可以直接挂载到容器内的 `/bin/mvn`，让 Job 内部直接调用。
+* `/data01/runner/gitlab-runner-01/m2`：Maven 本地缓存目录，挂载到容器内的 `/root/.m2`，让 Job 内部执行 Maven 构建时能复用缓存，加速构建过程。
+* `/data01/runner/gitlab-runner-01/m2/bin/mvn`：如果宿主机上的 Maven 可执行文件不在 PATH 中，或者需要特定版本，也可以直接挂载到容器内的 `/bin/mvn`，让 Job 内部直接调用。
 
 注册 GitLab Runner 到 GitLab 实例
 
@@ -66,8 +66,8 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
   --locked="false" \
   --access-level="not_protected" \
   --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
-  --docker-volumes /data01/runner/git-runner-01/m2:/root/.m2 \
-  --docker-volumes /data01/runner/git-runner-01/m2/bin/mvn:/bin/mvn
+  --docker-volumes /data01/runner/gitlab-runner-01/m2:/root/.m2 \
+  --docker-volumes /data01/runner/gitlab-runner-01/m2/bin/mvn:/bin/mvn
 ```
 
 * `url` 参数指定 GitLab 实例地址，确保 Runner 所在机器能访问该地址。
@@ -79,27 +79,20 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
 
 ## docker executor + docker-in-docker (dind)
 
-### 1. 启动 GitLab Runner
-
-这种模式通常需要同时启动一个 `docker:dind` 服务容器，供 Job 内部执行 Docker 命令。
-
-```shell
-docker run -d --name gitlab-dind-01 --restart always \
-  --privileged \
-  -e DOCKER_TLS_CERTDIR="" \
-  docker:20.10-dind
-```
+启动 GitLab Runner
 
 ```shell
 docker run -d --name gitlab-runner-01 --restart always \
-  --link gitlab-dind-01:docker \
-  -v /data01/runner/git-runner-01/config:/etc/gitlab-runner \
+  --link gitlab-runner-01:docker \
+  -v /data01/runner/gitlab-runner-01/config:/etc/gitlab-runner \
   gitlab/gitlab-runner:v13.6.0
 ```
 
-如果不希望使用 `--link`，也可以改为自定义 Docker Network，让 Runner 容器通过服务名访问 DinD 容器。
+* `/data01/runner/gitlab-runner-01/config`：GitLab Runner 配置目录，必须挂载到容器的 `/etc/gitlab-runner`，否则注册后 Runner 无法保存配置，重启后会丢失注册状态。
+* `--link gitlab-runner-01:docker`：让 Runner 容器内可以通过主机名 `docker` 访问 DinD 服务容器，后续 Job 中可直接使用 `tcp://docker:2375`。
+* 如果不希望使用 `--link`，也可以改为自定义 Docker Network，让 Runner 容器通过服务名访问 DinD 容器。
 
-### 2. 注册 GitLab Runner
+注册 GitLab Runner 到 GitLab 实例
 
 ```shell
 docker exec -it gitlab-runner-01 gitlab-runner register \
@@ -117,21 +110,31 @@ docker exec -it gitlab-runner-01 gitlab-runner register \
   --docker-volumes /cache
 ```
 
-对应的 CI Job 通常还需要声明 `services: ["docker:dind"]`，并设置 `DOCKER_HOST=tcp://docker:2375` 等变量。
+* `url` 参数指定 GitLab 实例地址，确保 Runner 所在机器能访问该地址。
+* `registration-token` 参数使用之前获取的注册 token。
+* `executor` 参数指定使用 `docker` executor。
+* `docker-image` 参数指定 Job 内部默认使用的基础镜像，这里使用 `docker:20.10`，让 Job 内部具备 Docker CLI。
+* `description` 和 `tag-list` 参数用于标识 Runner，建议包含组织、环境和节点信息，便于在 GitLab 页面识别和调度。
+* `docker-privileged="true"`：允许 Job 容器以特权模式运行，否则无法正常访问 DinD 服务。
+* `docker-volumes /cache`：给 Job 提供默认缓存目录，减少重复拉取和构建的开销。
+
+如果 CI Job 直接连接外部 DinD 容器，通常还需要设置 `DOCKER_HOST=tcp://docker:2375`，让 Job 内部 Docker CLI 能正确连接到名为 `docker` 的服务。
 
 ## shell executor
 
-### 1. 启动 GitLab Runner
+启动 GitLab Runner
 
-这种模式通常直接在宿主机安装 `gitlab-runner`，并以系统服务方式启动。安装方式可按宿主机发行版选择。
+这种模式下，`gitlab-runner` 直接安装在宿主机上，CI Job 也直接在宿主机 Shell 中执行，因此宿主机本身就是运行环境。
 
 ```shell
 gitlab-runner start
 ```
 
-如果宿主机使用 `systemd` 管理服务，也可以使用 `systemctl start gitlab-runner`。
+* `gitlab-runner start`：启动本机已经安装的 Runner 服务。
+* 如果宿主机使用 `systemd` 管理服务，也可以使用 `systemctl start gitlab-runner`。
+* 这种模式不需要额外挂载 Docker Socket、缓存目录或辅助服务容器，但要求宿主机已提前安装好 CI 所需工具链。
 
-### 2. 注册 GitLab Runner
+注册 GitLab Runner 到 GitLab 实例
 
 ```shell
 gitlab-runner register \
@@ -146,7 +149,11 @@ gitlab-runner register \
   --access-level="not_protected"
 ```
 
-这种模式下，CI Job 会直接使用宿主机上的 Shell、Docker、Maven、Node.js 等工具链，因此需要自行保证宿主机环境一致性。
+* `url` 参数指定 GitLab 实例地址，确保宿主机能访问该地址。
+* `registration-token` 参数使用之前获取的注册 token。
+* `executor` 参数指定使用 `shell` executor。
+* `description` 和 `tag-list` 参数用于标识 Runner，建议包含组织、环境和节点信息，便于在 GitLab 页面识别和调度。
+* 这种模式下，CI Job 会直接使用宿主机上的 Shell、Docker、Maven、Node.js 等工具链，因此需要自行保证宿主机环境一致性。
 
 ## 注销 GitLab Runner
 
@@ -185,7 +192,7 @@ docker exec -it gitlab-runner-01 gitlab-runner list
 
 ## 维护
 
-- Runner 配置文件位于 `/data01/runner/git-runner-01/config/config.toml`
+- Runner 配置文件位于 `/data01/runner/gitlab-runner-01/config/config.toml`
 - 修改配置后，可执行 `docker restart gitlab-runner-01` 使配置生效
 - 可通过 `docker exec -it gitlab-runner-01 gitlab-runner verify` 检查 Runner 状态
 - 如需删除 Runner，可先执行 `unregister`，再停止并删除容器
