@@ -6,8 +6,6 @@ categories: [gitlab]
 draft: false
 ---
 
-# Git 仓库主分支镜像同步（保留 Commit 历史）
-
 最近需要将一个 Git 仓库 A 的 `master` 分支定期同步到另一个 GitLab 仓库 B，并且要求：
 
 - 保留 A 的所有 commit 历史
