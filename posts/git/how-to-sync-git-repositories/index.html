@@ -1,0 +1,116 @@
+<!doctype html><html lang=en data-theme><head><title>Lei Zhang | Git 仓库主分支镜像同步（保留 Commit 历史） </title><meta charset=utf-8><meta name=generator content="Hugo 0.123.3"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="This is my knowledge base. I document things here"><link rel=stylesheet href=/css/style.min.7cf3c5090ac13256a5fa5531e5649cfe5a2ba7de88dca14ce0b6e253409a3511.css integrity="sha256-fPPFCQrBMlal+lUx5WSc/lorp96I3KFM4LbiU0CaNRE=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/custom.min.d03676fac5605f1e95639c8b2239ea77daf8804fe13da2208bb83b252959846c.css integrity="sha256-0DZ2+sVgXx6VY5yLIjnqd9r4gE/hPaIgi7g7JSlZhGw=" crossorigin=anonymous media=screen><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicons/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/favicons/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicons/favicon-16x16.png><link rel=canonical href=/posts/git/how-to-sync-git-repositories/><script type=text/javascript src=/js/anatole-header.min.df804b63b5bd8474ea0756ea874bc8f1e92552708cc6ea43aa0d76981dc419f9.js integrity="sha256-34BLY7W9hHTqB1bqh0vI8eklUnCMxupDqg12mB3EGfk=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="Git 仓库主分支镜像同步（保留 Commit 历史）"><meta name=twitter:description content="Git 仓库主分支镜像同步（保留 Commit 历史） 最近需要将一个 Git 仓库 A 的 master 分支定期同步到另一个 GitLab 仓库 B，并且要求：
+保留 A 的所有 commit 历史 B 最终以 A 为准 后续支持定期同步 最终整理了一套稳定可复用的方案。
+场景 源仓库 A：
+ssh://git@example.com:10022/group/source-repo.git 目标仓库 B：
+http://gitlab.example.com/group/target-repo.git 目标：
+A/master -> B/master 并且：
+保留所有 commit 后续支持自动同步 为什么不使用 git push &ndash;mirror 一开始尝试：
+git push --mirror target 会遇到：
+deny updating a hidden ref 因为 GitLab 内部存在：
+refs/merge-requests/* 这些隐藏 refs 不允许推送。
+另外：
+master -> master (forced update) 说明：
+A/master 与 B/master 历史不一致 因此："></head><body><div class="sidebar ."><div class=logo-title><div class=title><img src=/images/profile.jpg alt="profile picture"><h3 title><a href=/>I'm Lei Zhang</a></h3><div class=description><p>This is my knowledge base. I document things here</p></div></div><p><a href=https://github.com/coolbeevip><img src="https://img.shields.io/github/followers/coolbeevip?label=follow&amp;style=social" alt="GitHub coolbeevip"></a>
+<img src=https://badges.pufler.dev/commits/all/coolbeevip alt="Commits Badge">
+<img src=https://badges.pufler.dev/repos/coolbeevip alt="Repos Badge">
+<img src=https://badges.pufler.dev/years/coolbeevip alt="Years Badge"></p></div><ul class=social-links><li><a href=https://github.com/coolbeevip/ rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:zhanglei@apache.org rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; Lei Zhang 2026</div></div></div><div class=main><div class="page-top ."><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span>
+<span aria-hidden=true></span>
+<span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>Home</a></li><li><a href=/posts title>Blog</a></li><li><a href=/bookmarks title>Bookmarks</a></li><li><a href=/about/ title>About</a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post ."><div class=post-content><div class=post-title><h3>Git 仓库主分支镜像同步（保留 Commit 历史）</h3></div><h1 id=git-仓库主分支镜像同步保留-commit-历史>Git 仓库主分支镜像同步（保留 Commit 历史）</h1><p>最近需要将一个 Git 仓库 A 的 <code>master</code> 分支定期同步到另一个 GitLab 仓库 B，并且要求：</p><ul><li>保留 A 的所有 commit 历史</li><li>B 最终以 A 为准</li><li>后续支持定期同步</li></ul><p>最终整理了一套稳定可复用的方案。</p><hr><h1 id=场景>场景</h1><p>源仓库 A：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>ssh://git@example.com:10022/group/source-repo.git
+</span></span></code></pre></div><p>目标仓库 B：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>http://gitlab.example.com/group/target-repo.git
+</span></span></code></pre></div><p>目标：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>A/master  -&gt;  B/master
+</span></span></code></pre></div><p>并且：</p><ul><li>保留所有 commit</li><li>后续支持自动同步</li></ul><hr><h1 id=为什么不使用-git-push---mirror>为什么不使用 git push &ndash;mirror</h1><p>一开始尝试：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git push --mirror target
+</span></span></code></pre></div><p>会遇到：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>deny updating a hidden ref
+</span></span></code></pre></div><p>因为 GitLab 内部存在：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>refs/merge-requests/*
+</span></span></code></pre></div><p>这些隐藏 refs 不允许推送。</p><p>另外：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>master -&gt; master (forced update)
+</span></span></code></pre></div><p>说明：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>A/master 与 B/master 历史不一致
+</span></span></code></pre></div><p>因此：</p><ul><li>普通 push 会失败</li><li>需要 force push</li><li>但只应该同步 master</li><li>不应该 mirror 全部 refs</li></ul><hr><h1 id=推荐方案>推荐方案</h1><p>核心思路：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>使用 mirror clone 保存 A
+</span></span><span style=display:flex><span>仅 force push master 到 B
+</span></span></code></pre></div><hr><h1 id=第一次初始化>第一次初始化</h1><h2 id=1-创建同步目录>1. 创建同步目录</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>mkdir -p ~/git-sync-test
+</span></span><span style=display:flex><span>cd ~/git-sync-test
+</span></span></code></pre></div><hr><h2 id=2-mirror-clone-源仓库>2. mirror clone 源仓库</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git clone --mirror <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  ssh://git@example.com:10022/group/source-repo.git
+</span></span></code></pre></div><p>进入目录：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>cd source-repo.git
+</span></span></code></pre></div><hr><h2 id=3-添加目标仓库>3. 添加目标仓库</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git remote add target <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  http://gitlab.example.com/group/target-repo.git
+</span></span></code></pre></div><hr><h2 id=4-获取远端信息>4. 获取远端信息</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git fetch origin
+</span></span><span style=display:flex><span>git fetch target master
+</span></span></code></pre></div><hr><h2 id=5-dry-run-验证>5. Dry Run 验证</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git push <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --force-with-lease <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --dry-run <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  target <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  refs/heads/master:refs/heads/master
+</span></span></code></pre></div><p>如果看到：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>master -&gt; master (forced update)
+</span></span></code></pre></div><p>说明：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>B/master 将被 A/master 覆盖
+</span></span></code></pre></div><hr><h2 id=6-正式同步>6. 正式同步</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git push <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --force-with-lease <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  target <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  refs/heads/master:refs/heads/master
+</span></span></code></pre></div><hr><h1 id=注意事项>注意事项</h1><h2 id=1-b-的-master-可能需要允许-force-push>1. B 的 master 可能需要允许 force push</h2><p>如果出现：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>You are not allowed to force push code to a protected branch
+</span></span></code></pre></div><p>需要在 GitLab：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>Settings
+</span></span><span style=display:flex><span>  -&gt; Repository
+</span></span><span style=display:flex><span>    -&gt; Protected branches
+</span></span></code></pre></div><p>临时：</p><ul><li>Unprotect master</li><li>或允许 force push</li></ul><hr><h2 id=2-b-最好不要再直接开发>2. B 最好不要再直接开发</h2><p>因为：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>B 会被 A 周期性覆盖
+</span></span></code></pre></div><p>如果 B 上继续开发：</p><ul><li>会再次产生历史分叉</li><li>后续同步还会需要 force push</li></ul><p>因此：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>B 更适合作为镜像仓库
+</span></span></code></pre></div><hr><h1 id=后续定期同步>后续定期同步</h1><p>后续只需要：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>cd ~/git-sync-test/source-repo.git
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>git fetch origin
+</span></span><span style=display:flex><span>git fetch target master
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>git push <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  --force-with-lease <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  target <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  refs/heads/master:refs/heads/master
+</span></span></code></pre></div><hr><h1 id=自动同步脚本>自动同步脚本</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/usr/bin/env bash
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>set -euo pipefail
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>BASE_DIR<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/path/to/git-mirror&#34;</span>
+</span></span><span style=display:flex><span>REPO_DIR<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#e6db74>${</span>BASE_DIR<span style=color:#e6db74>}</span><span style=color:#e6db74>/source-repo.git&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>SOURCE_REMOTE<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;origin&#34;</span>
+</span></span><span style=display:flex><span>TARGET_REMOTE<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;target&#34;</span>
+</span></span><span style=display:flex><span>BRANCH<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;master&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>cd <span style=color:#e6db74>&#34;</span>$REPO_DIR<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Fetch latest from </span><span style=color:#e6db74>${</span>SOURCE_REMOTE<span style=color:#e6db74>}</span><span style=color:#e6db74>...&#34;</span>
+</span></span><span style=display:flex><span>git fetch <span style=color:#e6db74>&#34;</span>$SOURCE_REMOTE<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Fetch latest from </span><span style=color:#e6db74>${</span>TARGET_REMOTE<span style=color:#e6db74>}</span><span style=color:#e6db74>/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>...&#34;</span>
+</span></span><span style=display:flex><span>git fetch <span style=color:#e6db74>&#34;</span>$TARGET_REMOTE<span style=color:#e6db74>&#34;</span> <span style=color:#e6db74>&#34;</span>$BRANCH<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Push </span><span style=color:#e6db74>${</span>SOURCE_REMOTE<span style=color:#e6db74>}</span><span style=color:#e6db74>/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74> to </span><span style=color:#e6db74>${</span>TARGET_REMOTE<span style=color:#e6db74>}</span><span style=color:#e6db74>/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>...&#34;</span>
+</span></span><span style=display:flex><span>git push --force-with-lease <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  <span style=color:#e6db74>&#34;</span>$TARGET_REMOTE<span style=color:#e6db74>&#34;</span> <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span><span style=color:#ae81ff></span>  <span style=color:#e6db74>&#34;refs/heads/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>:refs/heads/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Verifying synchronization...&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>LOCAL_HASH<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>git rev-parse <span style=color:#e6db74>&#34;refs/heads/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>REMOTE_HASH<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>git ls-remote <span style=color:#e6db74>&#34;</span>$TARGET_REMOTE<span style=color:#e6db74>&#34;</span> <span style=color:#e6db74>&#34;refs/heads/</span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span> | awk <span style=color:#e6db74>&#39;{print $1}&#39;</span><span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Local  </span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>: </span><span style=color:#e6db74>${</span>LOCAL_HASH<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Remote </span><span style=color:#e6db74>${</span>BRANCH<span style=color:#e6db74>}</span><span style=color:#e6db74>: </span><span style=color:#e6db74>${</span>REMOTE_HASH<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> <span style=color:#f92672>[[</span> <span style=color:#e6db74>&#34;</span>$LOCAL_HASH<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;</span>$REMOTE_HASH<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>]]</span>; <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>  echo <span style=color:#e6db74>&#34;[INFO] Sync verification succeeded.&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>else</span>
+</span></span><span style=display:flex><span>  echo <span style=color:#e6db74>&#34;[ERROR] Sync verification failed!&#34;</span>
+</span></span><span style=display:flex><span>  exit <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>fi</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>cd <span style=color:#e6db74>&#34;</span>$BASE_DIR<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>echo <span style=color:#e6db74>&#34;[INFO] Done.&#34;</span>
+</span></span></code></pre></div><hr><h1 id=验证同步是否成功>验证同步是否成功</h1><p>本地：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git rev-parse refs/heads/master
+</span></span></code></pre></div><p>远端：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git ls-remote target refs/heads/master
+</span></span></code></pre></div><p>两个 commit hash 一致即可。</p><hr><h1 id=总结>总结</h1><p>最终方案：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text><span style=display:flex><span>mirror clone A
+</span></span><span style=display:flex><span>↓
+</span></span><span style=display:flex><span>fetch A
+</span></span><span style=display:flex><span>↓
+</span></span><span style=display:flex><span>fetch B/master
+</span></span><span style=display:flex><span>↓
+</span></span><span style=display:flex><span>force-with-lease push A/master -&gt; B/master
+</span></span><span style=display:flex><span>↓
+</span></span><span style=display:flex><span>compare commit hash
+</span></span></code></pre></div><p>这个方案适合：</p><ul><li>GitLab 仓库镜像</li><li>内网代码同步</li><li>多环境仓库同步</li><li>主仓库 -> 只读仓库</li></ul><p>同时：</p><ul><li>保留完整 commit 历史</li><li>避免 merge request refs 问题</li><li>支持自动化定期同步</li></ul></div><div class=post-footer><div class=info><span class=separator><a class=category href=/categories/gitlab/>gitlab</a></span>
+<span class=separator><a class=tag href=/tags/git/>git</a><a class=tag href=/tags/gitlab/>gitlab</a><a class=tag href=/tags/mirror/>mirror</a><a class=tag href=/tags/sync/>sync</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.e1c6918cbaa90022a5612f0bd71c7bf3be6d036614c5729cebfe14f7b91fa4bc.js integrity="sha256-4caRjLqpACKlYS8L1xx7875tA2YUxXKc6/4U97kfpLw=" crossorigin=anonymous></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css integrity=sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js integrity=sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js integrity=sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v crossorigin=anonymous onload=renderMathInElement(document.body)></script></body></html>
