@@ -1,5 +1,5 @@
 ---
-title: "从 ScienceWorld 看具身智能长程规划"
+title: "ScienceWorld 实验笔记：一个 melt water 任务暴露了 agent 的哪些短板"
 date: 2026-06-12T10:00:00+08:00
 summary: "介绍 ScienceWorld 基准测试框架，并用 melt water 任务说明具身智能评估如何围绕世界状态、动作模型、记忆、阶段控制、观察校验和恢复降级展开。"
 tags: [ai, agent, embodied-ai, planning, scienceworld]
@@ -7,7 +7,7 @@ categories: [embodied-ai]
 draft: true
 ---
 
-# 从 ScienceWorld 看具身智能长程规划
+# ScienceWorld 实验笔记：一个 melt water 任务暴露了 agent 的哪些短板
 
 ![scienceworld-long-horizon-planning](/images/posts/embodied-ai/scienceworld-long-horizon-planning/melt.png)
 
