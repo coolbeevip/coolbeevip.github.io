@@ -101,7 +101,46 @@ ros2 pkg list
 
 如果这一步失败，不要继续。先回到 Getting Started 文档修远程主机环境。
 
-### 2.4 创建最小 Python 节点验证开发链路
+### 2.4 可选：安装其他 ROS / Isaac ROS 库
+
+建议基于 Isaac ROS 官方镜像制作项目专用镜像，把项目需要的 ROS / Isaac ROS 库写进 Dockerfile。直接在 `isaac-ros activate` 进入的临时容器里执行 `apt install` 只适合快速验证；容器停止、重建或清理后，手动安装的包会丢失。
+
+按项目需要在 Isaac ROS 容器内安装额外库。机械臂规划常用 MoveIt 和 Isaac ROS cuMotion：
+
+```bash
+sudo -i
+apt clean
+rm -rf /var/lib/apt/lists/*
+apt update
+apt install -y ros-jazzy-moveit ros-jazzy-isaac-ros-cumotion
+exit
+```
+
+确认 package 可见：
+
+```bash
+ros2 pkg list | grep -E 'moveit|cumotion'
+```
+
+确认结果：能看到 `moveit`、`moveit_ros_planning_interface`、`isaac_ros_cumotion` 等 package 名称。
+
+常见可选库：
+
+| 方向 | 示例 Debian 包 | 用途 |
+|---|---|---|
+| 机械臂规划 | `ros-jazzy-moveit` | MoveGroup、Planning Scene、MoveIt Python/C++ 接口 |
+| GPU 运动规划 | `ros-jazzy-isaac-ros-cumotion` | cuMotion 机械臂运动生成 |
+| AprilTag | `ros-jazzy-isaac-ros-apriltag` | AprilTag 检测与位姿估计 |
+| 图像处理 | `ros-jazzy-isaac-ros-image-proc` | GPU 加速图像处理 |
+| 视觉 SLAM | `ros-jazzy-isaac-ros-visual-slam` | cuVSLAM 视觉里程计 / SLAM |
+| 3D 重建 | `ros-jazzy-isaac-ros-nvblox` | nvblox 3D scene reconstruction |
+| DNN 推理 | `ros-jazzy-isaac-ros-tensor-rt`、`ros-jazzy-isaac-ros-triton` | TensorRT / Triton 推理节点 |
+
+完整 Isaac ROS 包列表见官方索引：[Repositories and Packages](https://nvidia-isaac-ros.github.io/repositories_and_packages/index.html)。
+
+如果只做普通 ROS 2 Python 节点开发，可以跳过这一步。
+
+### 2.5 创建最小 Python 节点验证开发链路
 
 远程主机、Docker 容器和 ROS 2 都验证通过后，再创建一个最小 Python ROS 2 package，确认 workspace、`colcon` 构建、Python 节点注册和 `ros2 run` 都能正常工作。
 
