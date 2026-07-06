@@ -1,2 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ssh on</title><link>https://coolbeevip.github.io/tags/ssh/</link><description>Recent content in Ssh on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 17 May 2022 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/ssh/index.xml" rel="self" type="application/rss+xml"/><item><title>Backup SSH KEY</title><link>https://coolbeevip.github.io/posts/my/my-backup-ssh-key/</link><pubDate>Tue, 17 May 2022 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/my/my-backup-ssh-key/</guid><description>将 ~/.ssh/下的所有文件迁移到新的机器上，然后在新的机器上执行
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ssh on</title><link>https://coolbeevip.github.io/tags/ssh/</link><description>Recent content in Ssh on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 06 Jul 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/ssh/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH 反向隧道：让服务器通过客户端代理访问互联网</title><link>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</link><pubDate>Mon, 06 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</guid><description>很多服务器不能直接访问互联网。常见原因不是机器坏了，而是它处在内网、受出口策略限制，或者云上环境没有配置公网出口。
+这时很多人的第一反应是：给服务器装代理、改防火墙、开公网出口、加 NAT 网关。
+这些办法都可以，但它们改变的是服务器所在网络的出口结构。权限不够时，往往做不了；临时排障时，也太重。
+还有一种更轻的办法：如果你的客户端机器已经能访问互联网，并且本地已经有一个代理端口，比如 127.0.0.1:10808，就可以用 SSH 反向端口转发，把这个代理能力挂到服务器上。服务器访问自己的 127.0.0.1:18080，实际流量会穿过 SSH 隧道，转到客户端的 127.0.0.1:10808。
+先假设有这样一组配置：
+服务器地址：203.0.113.10 服务器 SSH 端口：2222 服务器 SSH 用户：ops 客户端本地代理地址：127.0.0.1 客户端本地代理端口：10808 服务器侧代理入口：127.0.0.1:18080 基于这组配置，核心命令如下：
+ssh -p 2222 \ -R 18080:127.0.0.1:10808 \ ops@203.0.113.10 这条命令的重点在 -R。
+这条命令真正做了什么 先看完整结构：
+ssh -p 2222 \ -R 18080:127.0.0.1:10808 \ ops@203.0.113.10 含义是：
+-p 2222：连接服务器 203.0.113.10 的 SSH 端口 2222 ops@203.0.113.10：以用户 ops 登录服务器 -R 18080:127.0.0.1:10808：在服务器侧监听 18080，并把连接转发到客户端侧的 127.0.0.1:10808 连接建立后，链路变成这样：
+服务器上的程序 -&amp;gt; 127.0.0.1:18080 -&amp;gt; SSH 反向隧道 -&amp;gt; 客户端 127.0.0.1:10808 -&amp;gt; 客户端本地代理 -&amp;gt; 互联网 注意，这不是让客户端访问服务器的端口，而是让服务器借用客户端的端口。</description></item><item><title>Backup SSH KEY</title><link>https://coolbeevip.github.io/posts/my/my-backup-ssh-key/</link><pubDate>Tue, 17 May 2022 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/my/my-backup-ssh-key/</guid><description>将 ~/.ssh/下的所有文件迁移到新的机器上，然后在新的机器上执行
 chmod 600 ~/.ssh/*</description></item></channel></rss>
