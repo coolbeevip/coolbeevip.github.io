@@ -15,11 +15,7 @@ Isaac ROS 不是一个适合直接装在 macOS 上开发和运行的栈。它依
 - Isaac ROS 工作区、Docker 容器、ROS 2 节点和 GPU 运行时都放在远程 Linux 或 Jetson 主机上。
 - PyCharm 通过 SSH 连接远程主机，做代码编辑、索引、运行和调试。
 
-本文不重复 Isaac ROS 官方安装细节，只记录 macOS + PyCharm 远程开发时需要额外处理的部分。Isaac ROS 本体安装以官方文档为准：
-
-- [NVIDIA Isaac ROS Getting Started](https://nvidia-isaac-ros.github.io/getting_started/index.html)
-- [Isaac ROS Development Environment](https://nvidia-isaac-ros.github.io/concepts/dev_env/index.html)
-- [Isaac ROS Common](https://nvidia-isaac-ros.github.io/repositories_and_packages/isaac_ros_common/index.html)
+本文不重复 Isaac ROS 官方安装细节，只记录 macOS + PyCharm 远程开发时需要额外处理的部分。Isaac ROS 本体安装以官方 Getting Started 文档为准，具体链接会在安装步骤中给出。
 
 PyCharm 相关能力以 JetBrains 官方文档为准：
 
@@ -29,6 +25,8 @@ PyCharm 相关能力以 JetBrains 官方文档为准：
 - [Remote Debugging with PyCharm](https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html)
 
 环境隔离模式推荐使用 Docker。Isaac ROS 依赖 CUDA、TensorRT、ROS 2、NITROS、OpenCV 和多个 NVIDIA 软件仓库，裸机安装容易和系统已有包发生冲突。除非你明确需要调试驱动、传感器权限或系统级依赖，否则日常开发应优先让 Isaac ROS 节点运行在官方 Docker 开发环境中。
+
+[Isaac ROS Development Environment](https://nvidia-isaac-ros.github.io/concepts/dev_env/index.html) 不是安装验证的必经入口，它的作用是解释官方开发环境的组织方式，例如 Docker 隔离、workspace 挂载、`isaac-ros activate` 进入容器后的开发工作流。读者可以在完成 Getting Started 之后，把它当作理解和调整开发环境的参考。
 
 ## 1. 推荐架构
 
@@ -45,28 +43,37 @@ PyCharm 相关能力以 JetBrains 官方文档为准：
 
 ## 2. 在远程主机安装 Isaac ROS
 
-先把远程 Linux 或 Jetson 主机准备好，再配置 macOS 和 PyCharm。这样排查路径更清楚：如果 Isaac ROS 在远程主机上不能独立跑通，就不要先处理 IDE。
+先让 Isaac ROS 在远程 Linux 或 Jetson 主机上独立跑通，再配置 macOS 和 PyCharm。这样问题边界清楚：远程主机验证失败，就先修 Isaac ROS、Docker 或 GPU runtime；远程主机验证通过，再处理 IDE。
 
-### 2.1 选择远程主机
+### 2.1 确认远程主机可用
 
-- x86_64 Ubuntu + NVIDIA GPU
-- Jetson Thor / Jetson Orin
-- 一台可以访问机器人硬件和传感器的边缘工控机
+远程主机可以是 x86_64 Ubuntu + NVIDIA GPU、Jetson Thor / Jetson Orin，或一台能访问机器人硬件和传感器的边缘工控机。先从 macOS 登录远程主机：
 
-远程主机至少需要满足三点：
+```bash
+ssh user@remote-host
+```
 
-1. NVIDIA 驱动、CUDA、JetPack 或 Jetson Linux 版本满足 Isaac ROS 官方要求。
-2. 能通过 SSH 从 macOS 登录。
-3. Isaac ROS workspace 放在稳定路径下，例如 `~/workspaces/isaac_ros-dev`。
+验证 SSH 成功后，再确认 NVIDIA 环境可见。x86 + NVIDIA GPU 使用：
 
-版本要求、APT 源、Docker、NVIDIA Container Toolkit、Isaac ROS CLI 的安装步骤以官方文档为准：
+```bash
+nvidia-smi
+```
 
-- [NVIDIA Isaac ROS Getting Started](https://nvidia-isaac-ros.github.io/getting_started/index.html)
-- [Isaac ROS Development Environment](https://nvidia-isaac-ros.github.io/concepts/dev_env/index.html)
+Jetson 使用：
+
+```bash
+cat /etc/nv_tegra_release
+```
+
+这一阶段的通过标准是：macOS 能稳定 SSH 登录远程主机，并且远程主机能看到 NVIDIA 驱动、JetPack 或 Jetson Linux 信息。
 
 ### 2.2 按官方文档安装 Isaac ROS
 
-在远程主机上按官方 Getting Started 文档完成这些动作：
+安装入口使用官方 Getting Started 文档：
+
+- [NVIDIA Isaac ROS Getting Started](https://nvidia-isaac-ros.github.io/getting_started/index.html)
+
+在远程主机上按官方文档完成：
 
 1. 安装或确认 NVIDIA 驱动 / JetPack。
 2. 安装 Docker 和 NVIDIA Container Toolkit。
@@ -75,34 +82,19 @@ PyCharm 相关能力以 JetBrains 官方文档为准：
 5. 创建 Isaac ROS workspace，例如 `~/workspaces/isaac_ros-dev`。
 6. 执行 `isaac-ros init docker` 初始化 Docker 开发环境。
 
-本文推荐 Docker 隔离模式，因此不要把 Isaac ROS 的 Python、TensorRT、OpenCV 等依赖直接铺到系统 Python 里。远程主机系统只承担 Docker、GPU runtime、workspace 存储和硬件访问职责。
+本文推荐 Docker 隔离模式。远程主机系统只承担 Docker、GPU runtime、workspace 存储和硬件访问职责，不把 Isaac ROS 的 Python、TensorRT、OpenCV 等依赖直接铺到系统 Python 里。
 
-### 2.3 最小验证
-
-安装完成后，先从 macOS 登录远程主机：
-
-```bash
-ssh user@remote-host
-```
-
-如果是 x86 + NVIDIA GPU，先确认驱动可见：
-
-```bash
-nvidia-smi
-```
-
-如果是 Jetson，先确认 JetPack / Jetson Linux 信息可见：
-
-```bash
-cat /etc/nv_tegra_release
-```
-
-确认 workspace 变量和 Isaac ROS CLI 可用：
+安装完成后，在远程主机上验证 CLI 和 workspace：
 
 ```bash
 echo $ISAAC_ROS_WS
 isaac-ros --help
+test -d "${ISAAC_ROS_WS}/src" && echo "workspace ok"
 ```
+
+看到 workspace 路径、`isaac-ros` 帮助信息和 `workspace ok` 后，再进入下一步。
+
+### 2.3 进入 Docker 开发环境并验证 ROS 2
 
 进入 Isaac ROS Docker 开发环境：
 
@@ -111,31 +103,40 @@ cd $ISAAC_ROS_WS
 isaac-ros activate
 ```
 
-进入容器后，确认 ROS 2 基础命令可用：
+进入容器后验证 ROS 2 基础命令：
 
 ```bash
 ros2 --help
+ros2 pkg list
 ```
 
-如果这里不能跑通，不要先配置 PyCharm。先回到 NVIDIA 官方 Getting Started 文档，把远程主机上的 Isaac ROS、Docker 或 GPU runtime 问题修好。
+`ros2 --help` 能输出帮助信息，说明 ROS 2 命令可用；`ros2 pkg list` 能列出当前环境可发现的 package，说明当前 shell 已经具备 ROS 2 package 发现能力。
+
+如果这一步失败，不要继续。先回到 Getting Started 文档修远程主机环境。
 
 ### 2.4 创建最小 Python 节点验证开发链路
 
-远程主机和 Isaac ROS 容器验证通过后，再创建一个最小 Python ROS 2 package，确认 workspace、`colcon` 构建、Python 节点注册和 `ros2 run` 都能正常工作。
+远程主机、Docker 容器和 ROS 2 都验证通过后，再创建一个最小 Python ROS 2 package，确认 workspace、`colcon` 构建、Python 节点注册和 `ros2 run` 都能正常工作。
 
-进入 Isaac ROS Docker 开发环境：
+如果还不在 Isaac ROS 容器中，先执行：
 
 ```bash
 cd $ISAAC_ROS_WS
 isaac-ros activate
 ```
 
-如果 `${ISAAC_ROS_WS}/src` 还是空目录，进入容器后创建一个最小 package：
+在容器中创建最小 package：
 
 ```bash
 cd ${ISAAC_ROS_WS}/src
 ros2 pkg create py_hello --build-type ament_python --dependencies rclpy
 ```
+
+这条命令会在 `src` 目录下创建一个名为 `py_hello` 的 ROS 2 package：
+
+- `py_hello`：package 名称，后续运行时会用到，例如 `ros2 run py_hello hello_node`。
+- `--build-type ament_python`：说明这是一个 Python package，使用 ROS 2 的 `ament_python` 构建方式。
+- `--dependencies rclpy`：声明这个 package 依赖 ROS 2 Python 客户端库，后面的节点会通过它创建 node、timer、logger 等对象。
 
 编辑 `${ISAAC_ROS_WS}/src/py_hello/py_hello/hello_node.py`：
 
@@ -167,7 +168,7 @@ if __name__ == "__main__":
     main()
 ```
 
-再编辑 `${ISAAC_ROS_WS}/src/py_hello/setup.py`，在 `entry_points` 里的 `console_scripts` 下加入节点入口：
+再编辑 `${ISAAC_ROS_WS}/src/py_hello/setup.py`，在 `entry_points` 的 `console_scripts` 下加入节点入口：
 
 ```python
 entry_points={
@@ -177,7 +178,7 @@ entry_points={
 },
 ```
 
-回到容器 Terminal 中构建并运行：
+构建并运行：
 
 ```bash
 cd ${ISAAC_ROS_WS}
@@ -192,29 +193,13 @@ ros2 run py_hello hello_node
 [INFO] [hello_node]: Hello from Isaac ROS remote dev
 ```
 
-这里用到的三条核心命令含义如下：
+这一步用到的三个命令分别负责：
 
-- `colcon build --symlink-install --packages-select py_hello`：只构建 `py_hello` 这个 ROS 2 package。`colcon` 是 ROS 2 常用构建工具，`--symlink-install` 会让 Python 脚本、launch 文件等以符号链接方式进入 `install/` 目录。这样修改 Python 代码后通常不用反复完整安装，开发体验更接近“改完直接跑”。
-- `source install/setup.bash`：把当前 workspace 的环境加载到这个 shell 里。执行后，ROS 2 才能找到刚构建出来的 package、可执行节点、消息类型和 launch 文件。每打开一个新终端，或者每次重新进入容器后，都需要重新 source。
-- `ros2 run py_hello hello_node`：运行 `py_hello` 包里注册的 `hello_node` 节点。真实项目中一般替换成 `ros2 run your_package your_node`。
+- `colcon build --symlink-install --packages-select py_hello`：只构建 `py_hello`。`--symlink-install` 让 Python 脚本和 launch 文件以符号链接进入 `install/`，便于开发时改完直接跑。
+- `source install/setup.bash`：把当前 workspace 加载到这个 shell，让 ROS 2 找到刚构建出来的 package 和节点。
+- `ros2 run py_hello hello_node`：运行 `py_hello` 包里注册的 `hello_node` 节点。
 
-如果 workspace 里已经有 Isaac ROS 包或自己的业务包，常用检查命令是：
-
-```bash
-ros2 pkg list | grep isaac
-```
-
-它会列出当前环境里 ROS 2 能识别到的 package，并筛出名字里包含 `isaac` 的包。这个命令可以快速确认 Isaac ROS 相关包是否已经出现在当前 ROS 2 环境中。
-
-运行 launch 文件时使用：
-
-```bash
-ros2 launch your_package your_launch.py
-```
-
-如果修改的是 Python 包，`--symlink-install` 可以减少重复构建成本。C++ 包仍需要重新 `colcon build`。
-
-## 3. 准备 macOS 端
+## 3. 准备 macOS 端开发环境
 
 macOS 端只需要安装：
 
