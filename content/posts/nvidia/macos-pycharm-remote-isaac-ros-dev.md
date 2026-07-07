@@ -11,6 +11,16 @@ draft: false
 
 目标：在 macOS 上使用 PyCharm 编写和调试代码，在远程 Ubuntu GPU 主机上运行 Isaac ROS、Docker、ROS 2、CUDA 和传感器驱动。
 
+先给结论：
+
+| 目标 | 本地无 GPU 是否可行 | 推荐方式 |
+|---|---|---|
+| 学习 ROS 2 | ✅ 完全可以 | macOS / Linux 本地即可 |
+| 开发 ROS 2 节点 | ✅ 完全可以 | macOS + Remote SSH 或本地 |
+| 开发 Isaac ROS package | ⚠️ 可以写代码，但无法真正验证 | 最终仍需要 NVIDIA GPU |
+| 开发 Isaac ROS GPU 算法 | ❌ 基本不行 | NVIDIA GPU |
+| 调试 TensorRT / CUDA / NITROS | ❌ 不行 | NVIDIA GPU |
+
 工作边界：
 
 - macOS：PyCharm UI、SSH、Git、调试入口。
@@ -438,107 +448,3 @@ ros2 topic echo /topic_name
 ros2 service list
 ros2 bag record /topic_name
 ```
-
-## 6. 常见问题
-
-### 6.1 PyCharm 能连远程主机，但运行节点失败
-
-先确认你是在 Isaac ROS 容器里运行：
-
-```bash
-isaac-ros activate
-```
-
-再确认 workspace 环境已经 source：
-
-```bash
-source ${ISAAC_ROS_WS}/install/setup.bash
-```
-
-### 6.2 `add-apt-repository universe` 触发 Docker 源握手失败
-
-安装 Isaac ROS 时，官方步骤里会执行：
-
-```bash
-sudo add-apt-repository universe
-```
-
-这个命令本身只是启用 Ubuntu 的 `universe` 仓库，但它通常会顺带触发一次 `apt update`。如果远程服务器在国内网络环境下访问 Docker 官方源受限，可能出现类似错误：
-
-```text
-Err:2 https://download.docker.com/linux/ubuntu noble InRelease
-  Could not handshake: Error in the pull function.
-W: Failed to fetch https://download.docker.com/linux/ubuntu/dists/noble/InRelease
-```
-
-这不是 Isaac ROS 或 Ubuntu `universe` 仓库本身的问题，而是远程服务器访问 `download.docker.com` 失败。可选处理方式有两种：
-
-1. 在远程服务器上直接使用可访问外网的 VPN 或代理。
-2. 通过 SSH 反向隧道，让远程服务器临时使用 macOS 客户端上的 VPN 代理。
-
-如果 macOS 本地有 HTTP 代理，例如 `127.0.0.1:7890`，可以从 macOS 发起反向隧道：
-
-```bash
-ssh -N -R 7890:127.0.0.1:7890 user@remote-host
-```
-
-然后在远程服务器上临时给 APT 配置代理：
-
-```bash
-sudo tee /etc/apt/apt.conf.d/99proxy >/dev/null <<'EOF'
-Acquire::http::Proxy "http://127.0.0.1:7890";
-Acquire::https::Proxy "http://127.0.0.1:7890";
-EOF
-
-sudo apt update
-```
-
-安装完成后可以删除临时代理配置：
-
-```bash
-sudo rm /etc/apt/apt.conf.d/99proxy
-```
-
-APT 需要 HTTP 代理地址。如果 macOS 客户端只有 SOCKS5 代理，先转换成 HTTP 代理，或直接使用服务器端 VPN。
-
-### 6.3 PyCharm 可以索引，但提示 import 不存在
-
-这通常是解释器与实际运行环境不一致。PyCharm 可能使用远程主机 Python，但节点实际运行在 Isaac ROS 容器内。先确认缺失依赖是否只存在于容器里，再决定是否需要调整解释器或运行方式。
-
-### 6.4 文件同步后容器里看不到
-
-Isaac ROS Docker 模式会把 `${ISAAC_ROS_WS}` 挂载到容器中的 `/workspaces/isaac_ros-dev`。PyCharm 打开的远程目录必须是宿主机上的 `${ISAAC_ROS_WS}`。
-
-### 6.5 `colcon build` 很慢
-
-优先排除 PyCharm 索引目录，并使用：
-
-```bash
-colcon build --symlink-install --packages-select your_package
-```
-
-大型 Isaac ROS 包不建议每次全量构建。
-
-### 6.6 ROS 2 多机通信不通
-
-先检查三件事：
-
-```bash
-echo $ROS_DOMAIN_ID
-hostname -I
-ros2 topic list
-```
-
-多机通信时，macOS、远程主机、机器人控制器和容器网络可能不在同一个广播域。调试阶段先让 ROS 2 节点都在远程主机或同一个容器网络内运行，减少变量。
-
-## 7. 最小可用清单
-
-搭建完成后，至少应满足：
-
-- macOS 可以 SSH 免密登录远程主机。
-- PyCharm Remote Development 能打开 `${ISAAC_ROS_WS}`。
-- PyCharm Terminal 中可以执行 `isaac-ros activate`。
-- 容器中可以执行 `colcon build --symlink-install`。
-- 容器中可以执行 `ros2 run` 或 `ros2 launch`。
-- PyCharm 排除了 `build/`、`install/`、`log/` 和大数据目录。
-- Python 节点需要断点时，可以通过 Debug Server 或 SSH 端口转发接回 PyCharm。
