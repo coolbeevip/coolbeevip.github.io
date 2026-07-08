@@ -243,6 +243,22 @@ ros2 run orbbec_camera list_devices_node
 ros2 run orbbec_camera list_devices_node -- --enabled_sdk_log --sdk_log_level debug
 ```
 
+如果提示 `usbEnumerator createUsbDevice failed` 错误 ，尝试执行 `sudo chmod -R a+rw /dev/bus/usb`。这是一个临时办法，容器重启或者重新插拔镜头后都会失效
+
+最佳方式方法是 
+
+1. 先看看仓库里有没有规则文件 `find ${ISAAC_ROS_WS}/src/third_party/OrbbecSDK_ROS2 -name "*.rules"`
+2. 找到类似 `99-sensor-libusb.rules` 文件
+3. 复制到容器外的宿主机 `sudo cp src/third_party/OrbbecSDK_ROS2/orbbec_camera/scripts/99-obsensor-libusb.rules /etc/udev/rules.d/` 目录下
+4. 执行以下命令重新加载并应用 udev 规则
+
+```bash
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+再重新插拔摄像头就不会再出现因为权限问题导致的 `usbEnumerator createUsbDevice failed` 错误了
+
 ### 3.5 Step 5：启动 Orbbec DaBai ROS 2 驱动
 
 先查看当前 `orbbec_camera` 包实际提供了哪些 launch 文件：
@@ -256,6 +272,105 @@ ls $(ros2 pkg prefix orbbec_camera)/share/orbbec_camera/launch
 ```bash
 ros2 launch orbbec_camera dabai.launch.py
 ```
+
+如果连接两个 Orbbec DaBai，不要依赖 `/dev/video0`、`/dev/video1` 的顺序。正确做法是：
+
+1. 先查两个相机的序列号。
+2. 每个相机指定不同的 `camera_name`。
+3. 在一个 launch 文件里启动两个 driver。
+
+先列出设备，记录两个相机的 serial number：
+
+```bash
+ros2 run orbbec_camera list_devices_node
+```
+
+比如：
+
+```bash
+Found 2 devices:
+  Serial: CC1WC5201FV
+  usb port: 3-3.4
+  Serial: CC1N16200F0
+  usb port: 3-1.2.4
+```
+
+再查看你当前版本的 `dabai.launch.py` 支持哪些参数：
+
+```bash
+ros2 launch orbbec_camera dabai.launch.py --show-args
+```
+
+如果输出中包含 `camera_name` 和 `serial_number`，可以新建一个项目 launch 文件，例如：
+
+```text
+${ISAAC_ROS_WS}/src/your_robot_bringup/launch/two_dabai.launch.py
+```
+
+内容如下，把 `SERIAL_FRONT` 和 `SERIAL_WRIST` 换成实际序列号：
+
+```python
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
+
+
+def dabai_launch(camera_name, serial_number):
+    return IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("orbbec_camera"),
+                "launch",
+                "dabai.launch.py",
+            ])
+        ),
+        launch_arguments={
+            "camera_name": camera_name,
+            "serial_number": serial_number,
+        }.items(),
+    )
+
+
+def generate_launch_description():
+    return LaunchDescription([
+        dabai_launch("camera_front", "SERIAL_FRONT"),
+        dabai_launch("camera_wrist", "SERIAL_WRIST"),
+    ])
+```
+
+启动两个相机：
+
+```bash
+ros2 launch your_robot_bringup two_dabai.launch.py
+```
+
+这样两个相机会发布到不同 topic 前缀下：
+
+```text
+/camera_front/color/image_raw
+/camera_front/color/camera_info
+/camera_front/depth/image_raw
+/camera_front/depth/camera_info
+/camera_front/depth/points
+
+/camera_wrist/color/image_raw
+/camera_wrist/color/camera_info
+/camera_wrist/depth/image_raw
+/camera_wrist/depth/camera_info
+/camera_wrist/depth/points
+```
+
+验证两个相机的 topic：
+
+```bash
+ros2 topic list | grep -E 'camera_front|camera_wrist'
+ros2 topic hz /camera_front/color/image_raw
+ros2 topic hz /camera_wrist/color/image_raw
+```
+
+如果你的 `dabai.launch.py --show-args` 里序列号参数不叫 `serial_number`，以实际输出为准替换 launch 文件里的参数名。原则不变：**用序列号绑定物理相机，用 `camera_name` 区分 ROS topic**。
 
 这个终端保持运行，用来承载摄像头 driver。不要在同一个摄像头上同时启动多个 driver，否则可能出现 `device busy` 或 topic 间歇掉帧。
 
@@ -329,17 +444,104 @@ ros2 topic hz /camera/depth/image_raw
 
 ### 3.7 Step 7：可视化确认图像
 
-如果容器内有 `rqt_image_view`：
+ROS 2 里常用的可视化工具叫 **RViz2**，命令是 `rviz2`。它不只可以看图像，还可以看点云、TF、机器人模型、Marker 等。Isaac ROS 示例和机器人感知链路里通常也会用 RViz2 做结果确认。
+
+这里采用一种方式：**直接在 Isaac ROS 容器内运行 RViz2**。
+
+进入容器前，先在 Ubuntu 主机允许本地容器访问 X11 显示：
 
 ```bash
-ros2 run rqt_image_view rqt_image_view
+echo $DISPLAY
+xhost +local:root
 ```
 
-选择 color 或 depth 图像 topic 查看画面。也可以使用 Foxglove Bridge：
+然后进入 Isaac ROS 容器：
 
 ```bash
-ros2 run foxglove_bridge foxglove_bridge
+isaac-ros activate
 ```
+
+进入容器后，先确认显示环境被带进来了：
+
+```bash
+echo $DISPLAY
+ls -l /tmp/.X11-unix
+```
+
+如果 `DISPLAY` 为空，或 `/tmp/.X11-unix` 不存在，容器通常无法打开 RViz2 窗口。这是容器 GUI 透传问题，不是摄像头 topic 问题。
+
+设置 `XDG_RUNTIME_DIR`，避免部分 Qt/SDL 程序报 runtime dir 错误：
+
+```bash
+export XDG_RUNTIME_DIR=/tmp/runtime-root
+mkdir -p ${XDG_RUNTIME_DIR}
+chmod 700 ${XDG_RUNTIME_DIR}
+```
+
+先确认容器里已经能看到图像 topic：
+
+```bash
+ros2 topic list | grep -Ei 'camera|color|depth|image|points|info'
+ros2 topic hz /camera/color/image_raw
+```
+
+检查容器里是否有 RViz2：
+
+```bash
+which rviz2
+ros2 pkg list | grep -E '^rviz2$'
+```
+
+如果没有，可以在容器内安装：
+
+```bash
+sudo apt update
+sudo apt install -y ros-jazzy-rviz2
+```
+
+启动 RViz2：
+
+```bash
+QT_X11_NO_MITSHM=1 rviz2
+```
+
+如果 RViz2 打不开窗口，先不要改摄像头配置，先检查：
+
+```bash
+echo $DISPLAY
+ls -l /tmp/.X11-unix
+echo $XDG_RUNTIME_DIR
+```
+
+在 RViz2 里查看 DaBai 图像：
+
+1. 点击左下角 `Add`。
+2. 选择 `By topic`。
+3. 选择 `/camera/color/image_raw` 对应的 `Image`。
+4. 如果要看深度图，选择 `/camera/depth/image_raw` 或 `/camera/depth/image_rect_raw` 对应的 `Image`。
+5. 如果驱动发布了点云，选择 `/camera/depth/points` 对应的 `PointCloud2`。
+
+如果 `PointCloud2` 显示报 TF 或 Fixed Frame 错误，先查点云 topic 的 `frame_id`：
+
+```bash
+ros2 topic echo /camera/depth/points --once --field header.frame_id
+```
+
+然后在 RViz2 左侧 `Global Options` 里把 `Fixed Frame` 设置成这个 frame id。常见值可能类似：
+
+```text
+camera_link
+camera_depth_optical_frame
+camera_color_optical_frame
+```
+
+如果只是看 2D 图像，RViz2 的 `Image` display 通常不依赖完整 TF tree；如果看点云、机器人模型或多传感器融合结果，就需要正确的 TF。
+
+总结判断：
+
+- 容器里 `ros2 topic hz` 正常：摄像头 driver 正在发布图像。
+- `rviz2` 打不开窗口：优先判断为容器 GUI 透传问题。
+- `$ROS_DOMAIN_ID` 为空是正常情况，表示使用 ROS 2 默认 domain，不需要额外设置。
 
 可视化只作为最后确认。是否真正稳定，优先看：
 
