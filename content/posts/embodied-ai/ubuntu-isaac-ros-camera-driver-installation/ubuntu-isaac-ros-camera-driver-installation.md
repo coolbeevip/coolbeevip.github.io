@@ -277,7 +277,7 @@ ros2 launch orbbec_camera dabai.launch.py
 
 1. 先查两个相机的序列号。
 2. 每个相机指定不同的 `camera_name`。
-3. 在一个 launch 文件里启动两个 driver。
+3. 调试时可以用两个终端分别启动；工程化时再写一个总 launch 文件。
 
 先列出设备，记录两个相机的 serial number：
 
@@ -301,7 +301,31 @@ Found 2 devices:
 ros2 launch orbbec_camera dabai.launch.py --show-args
 ```
 
-如果输出中包含 `camera_name` 和 `serial_number`，可以新建一个项目 launch 文件，例如：
+如果输出中包含 `camera_name` 和 `serial_number`，可以先用命令行方式调试。
+
+方式 A：两个终端分别启动。
+
+终端 1 启动前置相机：
+
+```bash
+ros2 launch orbbec_camera dabai.launch.py \
+  camera_name:=camera_front \
+  serial_number:=CC1WC5201FV
+```
+
+终端 2 启动腕部相机：
+
+```bash
+ros2 launch orbbec_camera dabai.launch.py \
+  camera_name:=camera_wrist \
+  serial_number:=CC1N16200F0
+```
+
+这种方式适合第一次调试，因为每个终端只看一个相机的日志，出错时更容易判断是哪台相机的问题。确认两个相机都稳定后，再改成一个总 launch 文件。
+
+方式 B：写一个项目 launch 文件统一启动。
+
+可以新建一个项目 launch 文件，例如：
 
 ```text
 ${ISAAC_ROS_WS}/src/your_robot_bringup/launch/two_dabai.launch.py
