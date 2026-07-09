@@ -603,3 +603,107 @@ ros2 topic hz /camera/depth/image_raw
 | 分辨率 | image 和 camera_info 的 width/height 一致 |
 
 如果这张表没有通过，不要先调 Isaac ROS 算法参数。先把摄像头输入链路修到稳定。
+
+## 5. 实际项目里的最佳实践
+
+调试时把 `OrbbecSDK_ROS2` 放到 `${ISAAC_ROS_WS}/src/third_party/` 没问题。这样改起来快，也方便确认驱动能不能跑。
+
+正式项目里不要每次部署时再编译摄像头驱动。更好的做法是把驱动编译进基础镜像或硬件适配镜像：
+
+如果你的项目当前使用的 Isaac ROS 基础镜像是：
+
+```text
+nvcr.io/nvidia/isaac/ros:isaac_ros_28556f8bc78a98822bd08b2d7c6fcf9b-amd64
+```
+
+最小 Dockerfile 可以这样写：
+
+```dockerfile
+FROM nvcr.io/nvidia/isaac/ros:isaac_ros_28556f8bc78a98822bd08b2d7c6fcf9b-amd64
+
+SHELL ["/bin/bash", "-c"]
+
+ENV ORBBEC_WS=/opt/orbbec_ws
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    usbutils \
+    v4l-utils \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p ${ORBBEC_WS}/src
+
+WORKDIR ${ORBBEC_WS}/src
+
+RUN git clone -b main https://github.com/orbbec/OrbbecSDK_ROS2.git
+
+WORKDIR ${ORBBEC_WS}
+
+RUN source /opt/ros/jazzy/setup.bash && \
+    rosdep update && \
+    rosdep install --from-paths src/OrbbecSDK_ROS2 --ignore-src -r -y && \
+    colcon build \
+      --packages-up-to orbbec_camera \
+      --event-handlers console_direct+ && \
+    rm -rf src build log
+
+RUN echo "source ${ORBBEC_WS}/install/setup.bash" >> /etc/bash.bashrc
+```
+
+这里不要用 `${ISAAC_ROS_WS}` 存驱动。Isaac ROS 运行时常把 `${ISAAC_ROS_WS}` 映射成宿主机工程目录，放在那里容易和项目代码混在一起，甚至被挂载覆盖。驱动这种预装内容放到 `/opt/orbbec_ws` 更合适。
+
+上面的 Dockerfile 编译完成后会删除源码、`build/` 和 `log/`，镜像里只保留：
+
+```text
+/opt/orbbec_ws/install/
+```
+
+构建镜像：
+
+```bash
+docker build -t isaac-ros-orbbec-dabai:latest .
+```
+
+构建结果不是一个 workspace 目录，而是 Docker 本地镜像。可以这样确认：
+
+```bash
+docker images | grep isaac-ros-orbbec-dabai
+```
+
+以后进入这个镜像，`/etc/bash.bashrc` 会自动执行：
+
+```bash
+source /opt/orbbec_ws/install/setup.bash
+```
+
+进入容器后检查驱动是否已经在环境里：
+
+```bash
+ros2 pkg list | grep -E '^orbbec_camera$'
+ros2 pkg prefix orbbec_camera
+```
+
+正常情况下，`ros2 pkg prefix orbbec_camera` 会指向：
+
+```text
+/opt/orbbec_ws/install/orbbec_camera
+```
+
+类似 Orbbec 这种需要预装的驱动，都可以放到独立 workspace：
+
+```text
+/opt/orbbec_ws/install/setup.bash
+/opt/lidar_ws/install/setup.bash
+/opt/gripper_ws/install/setup.bash
+```
+
+然后统一写入 `/etc/bash.bashrc`：
+
+```bash
+source /opt/orbbec_ws/install/setup.bash
+source /opt/lidar_ws/install/setup.bash
+source /opt/gripper_ws/install/setup.bash
+```
+
+项目自己的 workspace 仍然放在 `${ISAAC_ROS_WS}`。这样驱动层和业务项目分开：镜像负责提供硬件驱动，项目仓库负责 launch、config 和感知逻辑。
