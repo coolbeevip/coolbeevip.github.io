@@ -9,9 +9,9 @@ draft: false
 
 # macOS 上使用 PyCharm 远程开发 Isaac ROS
 
-目标：在 macOS 上使用 PyCharm 编写和调试代码，在远程 Ubuntu GPU 主机上运行 Isaac ROS、Docker、ROS 2、CUDA 和传感器驱动。
+本文档的目标是在 macOS 上使用 PyCharm 编写和调试 Isaac ROS 代码，在远程 Ubuntu GPU 主机上运行 Isaac ROS、Docker、ROS 2、CUDA 和传感器驱动
 
-结论：
+为什么这么做：
 
 | 目标                          | 本地无 GPU 是否可行     | 推荐方式                   |
 |-----------------------------|------------------|------------------------|
@@ -27,11 +27,7 @@ draft: false
 - 远程主机：Isaac ROS workspace、Docker、ROS 2、CUDA、TensorRT、传感器和机器人硬件接口。
 - Isaac ROS 容器：`ros2`、`colcon`、Python 节点、launch 文件的实际运行环境。
 
-本文不复制 Isaac ROS 官方安装细节。Isaac ROS 本体安装以官方 Getting Started 文档为准；本文补齐 macOS + PyCharm 远程开发链路。
-
-环境隔离使用 Docker。除非需要调试驱动、设备权限或系统依赖，否则不要把 Isaac ROS 的 Python、TensorRT、OpenCV 等依赖铺到远程宿主机系统环境里。
-
-参考：[Isaac ROS Development Environment](https://nvidia-isaac-ros.github.io/concepts/dev_env/index.html) 说明官方 Docker 开发环境、workspace 挂载和 `isaac-ros activate` 工作流。
+本文不讲解 Isaac ROS 官方安装细节。Isaac ROS 安装以官方文档为准；本文补齐 macOS + PyCharm 远程开发链路。环境隔离使用 Docker。除非需要调试驱动、设备权限或系统依赖，否则不要把 Isaac ROS 的 Python、TensorRT、OpenCV 等依赖铺到远程宿主机系统环境里
 
 ## 1. 推荐架构
 
@@ -69,9 +65,10 @@ lsb_release -a
 
 ### 2.2 按官方文档安装 Isaac ROS
 
-安装入口使用官方 Getting Started 文档：
+参考一下两个官方文档安装环境，了解 workspace 挂载和 `isaac-ros activate` 工作流
 
 - [NVIDIA Isaac ROS Getting Started](https://nvidia-isaac-ros.github.io/getting_started/index.html)
+- [Isaac ROS Development Environment](https://nvidia-isaac-ros.github.io/concepts/dev_env/index.html)
 
 在远程主机上按官方文档完成：
 

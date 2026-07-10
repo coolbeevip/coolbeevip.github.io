@@ -2,7 +2,7 @@
 title: "在 Isaac ROS 容器环境中安装 Orbbec DaBai 摄像头驱动"
 date: 2026-07-08T10:00:00+08:00
 summary: "在已有 Isaac ROS 环境中接入 Orbbec DaBai：先在 Ubuntu 主机确认设备，再到容器内安装 Orbbec ROS 2 驱动、启动节点并检查图像 topic。"
-tags: [isaac-ros, ros2, ubuntu, camera, embodied-ai]
+tags: [isaac-ros, ros2, ubuntu, camera, embodied-ai, nvidia]
 categories: [embodied-ai]
 draft: false
 ---
@@ -153,13 +153,49 @@ ffmpeg -i /dev/video0 -frames:v 1 /tmp/orbbec-dabai-frame.jpg
 
 > 项目里最好把 Orbbec ROS 2 wrapper 预装到镜像里，避免每次启动容器后手动安装。
 
+先确认容器里的 ROS 2 发行版：
+
+```bash
+echo ${ROS_DISTRO}
+```
+
+本文实测环境是 ROS 2 Jazzy。2026-07-09 在 Ubuntu 24.04 Noble / ROS 2 Jazzy 环境中，ROS 官方 apt 仓库已经提供 Orbbec 二进制包：
+
+```bash
+apt-cache policy ros-${ROS_DISTRO}-orbbec-camera ros-${ROS_DISTRO}-orbbec-description
+```
+
+实测输出里可以看到：
+
+```text
+ros-jazzy-orbbec-camera:
+  Candidate: 2.7.6-1noble.20260615.151450
+ros-jazzy-orbbec-description:
+  Candidate: 2.7.6-1noble.20260303.233722
+```
+
+如果你的环境也能查到候选版本，优先用 apt 安装：
+
+```bash
+sudo apt update
+sudo apt install -y \
+  ros-${ROS_DISTRO}-orbbec-camera \
+  ros-${ROS_DISTRO}-orbbec-description
+```
+
 先使用以下命令检测是否已经安装过 `orbbec_camera` 包：
 
 ```bash
 ros2 pkg list | grep -E '^orbbec_camera$'
 ```
 
-如果容器内没有 `orbbec_camera`，从源码编译安装。
+正常情况下会看到 `orbbec_camera` 和 `orbbec_camera_msgs`。再确认 launch 文件存在：
+
+```bash
+ls $(ros2 pkg prefix orbbec_camera)/share/orbbec_camera/launch
+```
+
+如果 apt 仓库里没有对应包，或者你需要修改驱动源码，再从源码编译安装。
 
 - 驱动源码不要直接放在 `${ISAAC_ROS_WS}` 根目录。
 - 如果 `${ISAAC_ROS_WS}` 里已经有项目，把第三方驱动放到 `src/third_party/`。`git clone` 只会新增 `OrbbecSDK_ROS2` 目录；除非已有同名目录，否则不会覆盖项目包。
@@ -228,12 +264,19 @@ source ~/.bashrc
 ros2 pkg list | grep -E '^orbbec_camera$'
 ```
 
-正常情况下会看到 `orbbec_camera` 和 `orbbec_camera_msgs`。
-
 执行以下命令列出 Orbbec 相机设备：
 
 ```bash
 ros2 run orbbec_camera list_devices_node
+```
+
+实测双 DaBai DC1 会返回两个序列号：
+
+```text
+[list_device_node]: serial: CC1N16200F0
+[list_device_node]: usb port: 3-3.4
+[list_device_node]: serial: CC1WC5201FV
+[list_device_node]: usb port: 3-1.2.4
 ```
 
 如果命令没有返回设备，打开 debug 日志再执行一次：
@@ -252,12 +295,26 @@ sudo chmod -R a+rw /dev/bus/usb
 
 更稳妥的做法是配置 udev 规则：
 
-1. 查找规则文件：`find ${ISAAC_ROS_WS}/src/third_party/OrbbecSDK_ROS2 -name "*.rules"`
+1. 查找规则文件。
 2. 找到类似 `99-sensor-libusb.rules` 或 `99-obsensor-libusb.rules` 的文件。
-3. 在宿主机上复制到 `/etc/udev/rules.d/` 目录，例如：
+3. 在宿主机上复制到 `/etc/udev/rules.d/` 目录。
+
+apt 安装时可以这样找：
 
 ```bash
-sudo cp ${ISAAC_ROS_WS}/src/third_party/OrbbecSDK_ROS2/orbbec_camera/scripts/99-obsensor-libusb.rules /etc/udev/rules.d/
+find /opt/ros/${ROS_DISTRO}/share -path "*orbbec*" -name "*.rules" -print
+```
+
+源码安装时可以这样找：
+
+```bash
+find ${ISAAC_ROS_WS}/src/third_party/OrbbecSDK_ROS2 -name "*.rules" -print
+```
+
+找到实际规则文件后复制，例如：
+
+```bash
+sudo cp /path/to/99-obsensor-libusb.rules /etc/udev/rules.d/
 ```
 
 4. 重新加载并应用 udev 规则：
@@ -295,14 +352,13 @@ ros2 launch orbbec_camera dabai.launch.py
 ros2 run orbbec_camera list_devices_node
 ```
 
-比如：
+实测输出中，两个 DaBai DC1 的序列号如下：
 
-```bash
-Found 2 devices:
-  Serial: CC1WC5201FV
-  usb port: 3-3.4
-  Serial: CC1N16200F0
-  usb port: 3-1.2.4
+```text
+[list_device_node]: serial: CC1N16200F0
+[list_device_node]: usb port: 3-3.4
+[list_device_node]: serial: CC1WC5201FV
+[list_device_node]: usb port: 3-1.2.4
 ```
 
 再查看你当前版本的 `dabai.launch.py` 支持哪些参数：
@@ -315,11 +371,11 @@ ros2 launch orbbec_camera dabai.launch.py --show-args
 
 方式 A：两个终端分别启动。
 
-终端 1 启动前置相机：
+终端 1 启动顶部相机：
 
 ```bash
 ros2 launch orbbec_camera dabai.launch.py \
-  camera_name:=camera_front \
+  camera_name:=camera_top \
   serial_number:=CC1WC5201FV
 ```
 
@@ -341,7 +397,7 @@ ros2 launch orbbec_camera dabai.launch.py \
 ${ISAAC_ROS_WS}/src/your_robot_bringup/launch/two_dabai.launch.py
 ```
 
-内容如下，把 `SERIAL_FRONT` 和 `SERIAL_WRIST` 换成实际序列号：
+内容如下，把 `SERIAL_TOP` 和 `SERIAL_WRIST` 换成实际序列号：
 
 ```python
 from launch import LaunchDescription
@@ -369,7 +425,7 @@ def dabai_launch(camera_name, serial_number):
 
 def generate_launch_description():
     return LaunchDescription([
-        dabai_launch("camera_front", "CC1WC5201FV"),
+        dabai_launch("camera_top", "CC1WC5201FV"),
         dabai_launch("camera_wrist", "CC1N16200F0"),
     ])
 ```
@@ -383,11 +439,11 @@ ros2 launch your_robot_bringup two_dabai.launch.py
 两个相机会发布到不同 topic 前缀下：
 
 ```text
-/camera_front/color/image_raw
-/camera_front/color/camera_info
-/camera_front/depth/image_raw
-/camera_front/depth/camera_info
-/camera_front/depth/points
+/camera_top/color/image_raw
+/camera_top/color/camera_info
+/camera_top/depth/image_raw
+/camera_top/depth/camera_info
+/camera_top/depth/points
 
 /camera_wrist/color/image_raw
 /camera_wrist/color/camera_info
@@ -399,8 +455,8 @@ ros2 launch your_robot_bringup two_dabai.launch.py
 验证两个相机的 topic：
 
 ```bash
-ros2 topic list | grep -E 'camera_front|camera_wrist'
-ros2 topic hz /camera_front/color/image_raw
+ros2 topic list | grep -E 'camera_top|camera_wrist'
+ros2 topic hz /camera_top/color/image_raw
 ros2 topic hz /camera_wrist/color/image_raw
 ```
 
@@ -433,19 +489,26 @@ ros2 topic list | grep -Ei 'camera|color|depth|image|points|info'
 Orbbec driver 的 topic 名称会随 launch 文件和参数变化，常见形式如下：
 
 ```text
-/camera/color/image_raw
-/camera/color/camera_info
-/camera/depth/image_raw
-/camera/depth/image_rect_raw
-/camera/depth/camera_info
-/camera/depth/points
+/camera_top/color/image_raw
+/camera_top/color/camera_info
+/camera_top/depth/image_raw
+/camera_top/depth/camera_info
+/camera_top/depth/points
+
+/camera_wrist/color/image_raw
+/camera_wrist/color/camera_info
+/camera_wrist/depth/image_raw
+/camera_wrist/depth/camera_info
+/camera_wrist/depth/points
 ```
 
 确认图像 topic 的消息类型：
 
 ```bash
-ros2 topic info /camera/color/image_raw
-ros2 topic info /camera/depth/image_raw
+ros2 topic info /camera_top/color/image_raw
+ros2 topic info /camera_top/depth/image_raw
+ros2 topic info /camera_wrist/color/image_raw
+ros2 topic info /camera_wrist/depth/image_raw
 ```
 
 图像 topic 类型应为：
@@ -457,8 +520,11 @@ sensor_msgs/msg/Image
 确认相机内参 topic：
 
 ```bash
-ros2 topic info /camera/color/camera_info
-ros2 topic echo /camera/color/camera_info --once
+ros2 topic info /camera_top/color/camera_info
+ros2 topic info /camera_top/depth/camera_info
+ros2 topic info /camera_wrist/color/camera_info
+ros2 topic info /camera_wrist/depth/camera_info
+ros2 topic echo /camera_top/color/camera_info --once
 ```
 
 内参 topic 类型应为：
@@ -470,11 +536,37 @@ sensor_msgs/msg/CameraInfo
 检查图像是否持续写入 topic：
 
 ```bash
-ros2 topic hz /camera/color/image_raw
-ros2 topic hz /camera/depth/image_raw
+ros2 topic hz /camera_top/color/image_raw
+ros2 topic hz /camera_top/depth/image_raw
+ros2 topic hz /camera_wrist/color/image_raw
+ros2 topic hz /camera_wrist/depth/image_raw
 ```
 
 如果实际 topic 名称不同，以 `ros2 topic list` 输出为准替换上面的路径。
+
+这次实测的最低结果可以作为验收参考：
+
+| Topic | Type | 实测图像格式 | 实测频率 |
+|---|---|---|---|
+| `/camera_top/color/image_raw` | `sensor_msgs/msg/Image` | `640x480`, `rgb8` | 约 3.7-6.7 Hz |
+| `/camera_top/depth/image_raw` | `sensor_msgs/msg/Image` | `640x400`, `16UC1` | 约 30 Hz |
+| `/camera_wrist/color/image_raw` | `sensor_msgs/msg/Image` | `640x480`, `rgb8` | 约 2-3 Hz |
+| `/camera_wrist/depth/image_raw` | `sensor_msgs/msg/Image` | `640x400`, `16UC1` | 约 30 Hz |
+| `/camera_top/color/camera_info` | `sensor_msgs/msg/CameraInfo` | `640x480` | 有 publisher |
+| `/camera_top/depth/camera_info` | `sensor_msgs/msg/CameraInfo` | `640x400` | 有 publisher |
+| `/camera_wrist/color/camera_info` | `sensor_msgs/msg/CameraInfo` | `640x480` | 有 publisher |
+| `/camera_wrist/depth/camera_info` | `sensor_msgs/msg/CameraInfo` | `640x400` | 有 publisher |
+
+实测 frame id 分别是：
+
+```text
+camera_top_color_optical_frame
+camera_top_depth_optical_frame
+camera_wrist_color_optical_frame
+camera_wrist_depth_optical_frame
+```
+
+注意这次 `list_devices_node` 日志里两个设备都显示 `Connection: USB2.0`，`lsusb` 也能看到每个 DaBai 同时枚举出 `2bc5:0557 Dabai DC1` 和 `2bc5:0657 ORBBEC Depth Sensor`。在这个连接状态下，深度图稳定在约 30 Hz，但 RGB topic 明显低于 30 Hz。后续如果算法依赖高帧率 RGB，应先检查 USB 拓扑、Hub、线材、相机输出配置和是否被其他节点占用。
 
 ### 3.6 可视化确认图像
 
@@ -516,7 +608,7 @@ chmod 700 ${XDG_RUNTIME_DIR}
 
 ```bash
 ros2 topic list | grep -Ei 'camera|color|depth|image|points|info'
-ros2 topic hz /camera/color/image_raw
+ros2 topic hz /camera_top/color/image_raw
 ```
 
 检查容器里是否有 RViz2：
@@ -530,7 +622,7 @@ ros2 pkg list | grep -E '^rviz2$'
 
 ```bash
 sudo apt update
-sudo apt install -y ros-jazzy-rviz2
+sudo apt install -y ros-${ROS_DISTRO}-rviz2
 ```
 
 启动 RViz2：
@@ -551,22 +643,23 @@ echo $XDG_RUNTIME_DIR
 
 1. 点击左下角 `Add`。
 2. 选择 `By topic`。
-3. 选择 `/camera/color/image_raw` 对应的 `Image`。
-4. 如果要看深度图，选择 `/camera/depth/image_raw` 或 `/camera/depth/image_rect_raw` 对应的 `Image`。
-5. 如果驱动发布了点云，选择 `/camera/depth/points` 对应的 `PointCloud2`。
+3. 选择 `/camera_top/color/image_raw` 或 `/camera_wrist/color/image_raw` 对应的 `Image`。
+4. 如果要看深度图，选择 `/camera_top/depth/image_raw` 或 `/camera_wrist/depth/image_raw` 对应的 `Image`。
+5. 如果驱动发布了点云，选择 `/camera_top/depth/points` 或 `/camera_wrist/depth/points` 对应的 `PointCloud2`。
 
 如果 `PointCloud2` 显示报 TF 或 Fixed Frame 错误，先查点云 topic 的 `frame_id`：
 
 ```bash
-ros2 topic echo /camera/depth/points --once --field header.frame_id
+ros2 topic echo /camera_top/depth/points --once --field header.frame_id
 ```
 
 然后在 RViz2 左侧 `Global Options` 里把 `Fixed Frame` 设置成这个 frame id。常见值可能类似：
 
 ```text
-camera_link
-camera_depth_optical_frame
-camera_color_optical_frame
+camera_top_depth_optical_frame
+camera_top_color_optical_frame
+camera_wrist_depth_optical_frame
+camera_wrist_color_optical_frame
 ```
 
 只看 2D 图像时，RViz2 的 `Image` display 通常不依赖完整 TF tree；看点云、机器人模型或多传感器融合结果时，需要正确的 TF。
@@ -580,8 +673,10 @@ camera_color_optical_frame
 可视化只用来确认画面。稳定性看 `ros2 topic hz`：
 
 ```bash
-ros2 topic hz /camera/color/image_raw
-ros2 topic hz /camera/depth/image_raw
+ros2 topic hz /camera_top/color/image_raw
+ros2 topic hz /camera_top/depth/image_raw
+ros2 topic hz /camera_wrist/color/image_raw
+ros2 topic hz /camera_wrist/depth/image_raw
 ```
 
 确认 `Image`、`CameraInfo`、帧率和时间戳都正常后，再把 DaBai 接入 AprilTag、深度融合、nvblox、DNN 推理或机械臂感知链路。
@@ -606,9 +701,9 @@ ros2 topic hz /camera/depth/image_raw
 
 ## 5. 实际项目里的最佳实践
 
-调试时把 `OrbbecSDK_ROS2` 放到 `${ISAAC_ROS_WS}/src/third_party/` 没问题。这样改起来快，也方便确认驱动能不能跑。
+如果 apt 仓库已经提供 `ros-${ROS_DISTRO}-orbbec-camera`，正式项目优先把二进制包预装进基础镜像或硬件适配镜像。这样镜像构建更快，也避免把第三方驱动源码混进业务 workspace。
 
-正式项目里不要每次部署时再编译摄像头驱动。更好的做法是把驱动编译进基础镜像或硬件适配镜像：
+调试驱动源码、修 bug 或 apt 仓库缺包时，再把 `OrbbecSDK_ROS2` 放到 `${ISAAC_ROS_WS}/src/third_party/` 编译。
 
 如果你的项目当前使用的 Isaac ROS 基础镜像是：
 
@@ -621,42 +716,15 @@ nvcr.io/nvidia/isaac/ros:isaac_ros_28556f8bc78a98822bd08b2d7c6fcf9b-amd64
 ```dockerfile
 FROM nvcr.io/nvidia/isaac/ros:isaac_ros_28556f8bc78a98822bd08b2d7c6fcf9b-amd64
 
-SHELL ["/bin/bash", "-c"]
-
-ENV ORBBEC_WS=/opt/orbbec_ws
+ARG ROS_DISTRO=jazzy
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
     usbutils \
     v4l-utils \
     ffmpeg \
+    ros-${ROS_DISTRO}-orbbec-camera \
+    ros-${ROS_DISTRO}-orbbec-description \
     && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p ${ORBBEC_WS}/src
-
-WORKDIR ${ORBBEC_WS}/src
-
-RUN git clone -b main https://github.com/orbbec/OrbbecSDK_ROS2.git
-
-WORKDIR ${ORBBEC_WS}
-
-RUN source /opt/ros/jazzy/setup.bash && \
-    rosdep update && \
-    rosdep install --from-paths src/OrbbecSDK_ROS2 --ignore-src -r -y && \
-    colcon build \
-      --packages-up-to orbbec_camera \
-      --event-handlers console_direct+ && \
-    rm -rf src build log
-
-RUN echo "source ${ORBBEC_WS}/install/setup.bash" >> /etc/bash.bashrc
-```
-
-这里不要用 `${ISAAC_ROS_WS}` 存驱动。Isaac ROS 运行时常把 `${ISAAC_ROS_WS}` 映射成宿主机工程目录，放在那里容易和项目代码混在一起，甚至被挂载覆盖。驱动这种预装内容放到 `/opt/orbbec_ws` 更合适。
-
-上面的 Dockerfile 编译完成后会删除源码、`build/` 和 `log/`，镜像里只保留：
-
-```text
-/opt/orbbec_ws/install/
 ```
 
 构建镜像：
@@ -671,12 +739,6 @@ docker build -t isaac-ros-orbbec-dabai:latest .
 docker images | grep isaac-ros-orbbec-dabai
 ```
 
-以后进入这个镜像，`/etc/bash.bashrc` 会自动执行：
-
-```bash
-source /opt/orbbec_ws/install/setup.bash
-```
-
 进入容器后检查驱动是否已经在环境里：
 
 ```bash
@@ -684,13 +746,13 @@ ros2 pkg list | grep -E '^orbbec_camera$'
 ros2 pkg prefix orbbec_camera
 ```
 
-正常情况下，`ros2 pkg prefix orbbec_camera` 会指向：
+apt 安装时，`ros2 pkg prefix orbbec_camera` 通常会指向：
 
 ```text
-/opt/orbbec_ws/install/orbbec_camera
+/opt/ros/jazzy
 ```
 
-类似 Orbbec 这种需要预装的驱动，都可以放到独立 workspace：
+如果必须从源码编译驱动，不要把预装驱动放在 `${ISAAC_ROS_WS}`。Isaac ROS 运行时常把 `${ISAAC_ROS_WS}` 映射成宿主机工程目录，放在那里容易和项目代码混在一起，甚至被挂载覆盖。源码编译的硬件驱动可以放到独立 workspace：
 
 ```text
 /opt/orbbec_ws/install/setup.bash
