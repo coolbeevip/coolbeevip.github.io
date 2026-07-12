@@ -1,4 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on</title><link>https://coolbeevip.github.io/categories/linux/</link><description>Recent content in Linux on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 06 Jul 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH 反向隧道：让服务器通过客户端代理访问互联网</title><link>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</link><pubDate>Mon, 06 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</guid><description>很多服务器不能直接访问互联网。常见原因不是机器坏了，而是它处在内网、受出口策略限制，或者云上环境没有配置公网出口。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on</title><link>https://coolbeevip.github.io/categories/linux/</link><description>Recent content in Linux on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 12 Jul 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Zsh 我的配置</title><link>https://coolbeevip.github.io/posts/linux/zsh-config/</link><pubDate>Sun, 12 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/zsh-config/</guid><description>这篇只解决两个问题：
+输入命令时，根据历史记录给出自动补全提示 输入命令时，实时显示语法高亮 用到两个插件：
+zsh-autosuggestions zsh-syntax-highlighting 下面每个插件单独安装、单独配置。只需要哪个，就看哪个章节。
+准备 zsh 插件目录 先创建一个统一的插件目录：
+mkdir -p ~/.zsh/plugins 后面的插件都会安装到这个目录下。
+安装 zsh-autosuggestions zsh-autosuggestions 用来根据历史命令给出输入提示。
+比如你以前执行过：
+ssh -p 2222 ops@203.0.113.10 下次输入 ssh 时，终端可能会用灰色文字提示后半段命令。按右方向键可以接受提示。
+安装插件：
+git clone https://github.com/zsh-users/zsh-autosuggestions.git \ ~/.zsh/plugins/zsh-autosuggestions 然后在 ~/.zshrc 中加入：
+source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 如果想让提示颜色更淡一点，可以继续加入：
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=&amp;#39;fg=8&amp;#39; 重新加载配置：
+source ~/.zshrc 验证方式：
+history | tail 找一条历史命令，输入它的前几个字符。如果后面出现灰色提示，说明插件已经生效。
+安装 zsh-syntax-highlighting zsh-syntax-highlighting 用来给正在输入的命令做语法高亮。
+常见效果：
+可执行命令显示为正常颜色 不存在的命令显示为红色 字符串、路径、参数会显示不同颜色 安装插件：
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \ ~/.zsh/plugins/zsh-syntax-highlighting 然后在 ~/.zshrc 中加入：
+source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 注意：zsh-syntax-highlighting 建议放在 ~/.zshrc 的最后加载。</description></item><item><title>SSH 反向隧道：让服务器通过客户端代理访问互联网</title><link>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</link><pubDate>Mon, 06 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</guid><description>很多服务器不能直接访问互联网。常见原因不是机器坏了，而是它处在内网、受出口策略限制，或者云上环境没有配置公网出口。
 这时很多人的第一反应是：给服务器装代理、改防火墙、开公网出口、加 NAT 网关。
 这些办法都可以，但它们改变的是服务器所在网络的出口结构。权限不够时，往往做不了；临时排障时，也太重。
 还有一种更轻的办法：如果你的客户端机器已经能访问互联网，并且本地已经有一个代理端口，比如 127.0.0.1:10808，就可以用 SSH 反向端口转发，把这个代理能力挂到服务器上。服务器访问自己的 127.0.0.1:18080，实际流量会穿过 SSH 隧道，转到客户端的 127.0.0.1:10808。
