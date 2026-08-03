@@ -1,4 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on</title><link>https://coolbeevip.github.io/tags/linux/</link><description>Recent content in Linux on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 25 Jul 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>macOS 远程连接 Ubuntu 桌面：NoMachine 安装指南</title><link>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</link><pubDate>Sat, 25 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</guid><description>这篇文章介绍如何从 macOS 连接 Ubuntu 远程桌面，尤其适合没有物理显示器、默认只有命令行环境的 Ubuntu 服务器。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on</title><link>https://coolbeevip.github.io/tags/linux/</link><description>Recent content in Linux on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Aug 2026 13:25:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH 本地端口转发：通过跳板机访问内网服务</title><link>https://coolbeevip.github.io/posts/linux/ssh-local-port-forwarding/</link><pubDate>Mon, 03 Aug 2026 13:25:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-local-port-forwarding/</guid><description>内网中的 Web 服务可能监听在服务器的 127.0.0.1:50052，当前电脑既不能直接访问这台服务器，也不应该把这个服务暴露到公网。
+如果当前电脑可以登录跳板机 192.0.2.10:22022，跳板机又可以访问目标服务器 198.51.100.20，就可以用 SSH 本地端口转发，把目标服务器上的服务临时映射到当前电脑。
+本文中的账号和地址都是脱敏示例：跳板机使用 jump-user@192.0.2.10:22022，目标服务器使用 target-user@198.51.100.20。请替换为实际环境的值。
+建立隧道：
+ssh -fN \ -J jump-user@192.0.2.10:22022 \ -L 50052:127.0.0.1:50052 \ -o ExitOnForwardFailure=yes \ target-user@198.51.100.20 然后在浏览器中打开这个内网页面：
+http://127.0.0.1:50052/ 对浏览器来说，内网 Web 服务就在本机；对内网 Web 服务来说，请求来自目标服务器上的 SSH 连接。
+完整链路 这条命令建立的是下面这条 TCP 链路：
+本地 浏览器 -&amp;gt; 本地 127.0.0.1:50052 -&amp;gt; SSH 本地端口转发 -&amp;gt; 跳板机 192.0.2.10:22022 -&amp;gt; 目标服务器 198.51.100.20 -&amp;gt; 目标服务器 127.0.0.1:50052 -&amp;gt; 内网 HTTP 服务 这里有两个 127.0.0.1:50052，但它们不是同一个地址：
+-L 左侧的 50052 是当前电脑上的监听端口 -L 右侧的 127.0.0.1:50052 是目标服务器视角下的地址 127.</description></item><item><title>SSH ProxyJump：通过跳板机访问内网服务器</title><link>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</link><pubDate>Mon, 03 Aug 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</guid><description>有些服务器不能从办公电脑直接访问，但可以先登录一台跳板机，再由跳板机访问内网目标服务器。
+最直接的做法是先登录跳板机，再在跳板机上执行第二次 ssh。不过 SSH 自己就支持这条链路，使用 -J（ProxyJump）可以把两次连接写成一条命令。
+假设网络关系如下：
+当前电脑 └── SSH ──&amp;gt; 跳板机 192.0.2.10:22022 └── SSH ──&amp;gt; 目标服务器 198.51.100.20:22 本文中的账号和地址都是脱敏示例：跳板机使用 jump-user@192.0.2.10:22022，目标服务器使用 target-user@198.51.100.20。请替换为实际环境的值。
+当前电脑不能直接访问 198.51.100.20，但跳板机可以访问它。连接目标服务器只需要：
+ssh -J jump-user@192.0.2.10:22022 target-user@198.51.100.20 -J 到底做了什么 这条命令中有两个 SSH 地址：
+ssh -J jump-user@192.0.2.10:22022 \ target-user@198.51.100.20 它们的角色不同：
+-J jump-user@192.0.2.10:22022：先连接跳板机，用户名是 jump-user，SSH 端口是 22022 target-user@198.51.100.20：最终要登录的目标服务器，未指定端口时使用默认的 22 -J 的格式是：
+-J [跳板机用户@]跳板机地址[:跳板机端口] 如果目标服务器的 SSH 端口不是 22，使用 -p 指定目标端口：
+ssh -J jump-user@192.0.2.10:22022 \ -p 2222 \ target-user@198.51.100.20 这里的 -p 2222 属于目标服务器；跳板机的端口仍然写在 -J 后面。
+连接过程 执行命令后，本地 SSH 客户端会做两件事：</description></item><item><title>macOS 远程连接 Ubuntu 桌面：NoMachine 安装指南</title><link>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</link><pubDate>Sat, 25 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</guid><description>这篇文章介绍如何从 macOS 连接 Ubuntu 远程桌面，尤其适合没有物理显示器、默认只有命令行环境的 Ubuntu 服务器。
 本文使用的方案是：
 客户端：macOS 服务端：Ubuntu 24.04 桌面环境：XFCE 远程桌面：NoMachine SSH 用来完成服务端安装和故障排查，真正承载远程桌面会话的是 NoMachine 的 NX 协议。
 准备 Ubuntu 账号 先通过 SSH 登录 Ubuntu，并确认系统版本、处理器架构和当前用户：
