@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on</title><link>https://coolbeevip.github.io/categories/linux/</link><description>Recent content in Linux on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 12 Jul 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Zsh 我的配置</title><link>https://coolbeevip.github.io/posts/linux/zsh-config/</link><pubDate>Sun, 12 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/zsh-config/</guid><description>这篇只解决三个问题：
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on</title><link>https://coolbeevip.github.io/categories/linux/</link><description>Recent content in Linux on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 25 Jul 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>macOS 远程连接 Ubuntu 桌面：NoMachine 安装指南</title><link>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</link><pubDate>Sat, 25 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</guid><description>这篇文章介绍如何从 macOS 连接 Ubuntu 远程桌面，尤其适合没有物理显示器、默认只有命令行环境的 Ubuntu 服务器。
+本文使用的方案是：
+客户端：macOS 服务端：Ubuntu 24.04 桌面环境：XFCE 远程桌面：NoMachine SSH 用来完成服务端安装和故障排查，真正承载远程桌面会话的是 NoMachine 的 NX 协议。
+准备 Ubuntu 账号 先通过 SSH 登录 Ubuntu，并确认系统版本、处理器架构和当前用户：
+lsb_release -a dpkg --print-architecture whoami 常见的 x86 服务器架构为：
+amd64 下载 NoMachine 时，需要选择与服务器架构匹配的 DEB 安装包。
+后文用 ubuntu-user 表示登录 Ubuntu 桌面的用户。执行命令时，将它替换成真实用户名。
+安装 XFCE 桌面 如果 Ubuntu 只有命令行环境，先安装相对轻量的 XFCE：
+sudo apt update sudo apt install -y xfce4 xfce4-goodies dbus-x11 安装过程中如果出现显示管理器选择界面，保持默认选项即可。NoMachine 创建虚拟桌面不依赖物理显示器。
+确认 XFCE 已经安装：
+command -v startxfce4 ls /usr/share/xsessions/ 正常情况下，可以看到类似结果：</description></item><item><title>Zsh 我的配置</title><link>https://coolbeevip.github.io/posts/linux/zsh-config/</link><pubDate>Sun, 12 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/zsh-config/</guid><description>这篇只解决三个问题：
 输入命令时，根据历史记录给出自动补全提示 按 Tab 时，补全更多命令、参数和子命令 输入命令时，实时显示语法高亮 用到三个插件：
 zsh-autosuggestions zsh-completions zsh-syntax-highlighting 下面每个插件单独安装、单独配置。只需要哪个，就看哪个章节。
 准备 zsh 插件目录 先创建一个统一的插件目录：
