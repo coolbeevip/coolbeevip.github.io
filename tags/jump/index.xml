@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jump on</title><link>https://coolbeevip.github.io/tags/jump/</link><description>Recent content in Jump on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Aug 2026 13:24:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/tags/jump/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH ProxyJump：通过跳板机访问内网服务器</title><link>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</link><pubDate>Mon, 03 Aug 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</guid><description>有些服务器不能从办公电脑直接访问，但可以先登录一台跳板机，再由跳板机访问内网目标服务器。
-最直接的做法是先登录跳板机，再在跳板机上执行第二次 ssh。不过 SSH 自己就支持这条链路，使用 -J（ProxyJump）可以把两次连接写成一条命令。
+一种做法是先登录跳板机，再在跳板机上执行第二次 ssh。SSH 本身支持这种连接路径，使用 -J（ProxyJump）就能把两次连接写成一条命令。
 假设网络关系如下：
 当前电脑 └── SSH ──&amp;gt; 跳板机 192.0.2.10:22022 └── SSH ──&amp;gt; 目标服务器 198.51.100.20:22 本文中的账号和地址都是脱敏示例：跳板机使用 jump-user@192.0.2.10:22022，目标服务器使用 target-user@198.51.100.20。请替换为实际环境的值。
-当前电脑不能直接访问 198.51.100.20，但跳板机可以访问它。连接目标服务器只需要：
-ssh -J jump-user@192.0.2.10:22022 target-user@198.51.100.20 -J 到底做了什么 这条命令中有两个 SSH 地址：
+假设当前电脑不能直接访问 198.51.100.20，但跳板机可以访问它。连接目标服务器只需要：
+ssh -J jump-user@192.0.2.10:22022 target-user@198.51.100.20 -J 到底做了什么 命令里出现两个 SSH 地址：
 ssh -J jump-user@192.0.2.10:22022 \ target-user@198.51.100.20 它们的角色不同：
 -J jump-user@192.0.2.10:22022：先连接跳板机，用户名是 jump-user，SSH 端口是 22022 target-user@198.51.100.20：最终要登录的目标服务器，未指定端口时使用默认的 22 -J 的格式是：
 -J [跳板机用户@]跳板机地址[:跳板机端口] 如果目标服务器的 SSH 端口不是 22，使用 -p 指定目标端口：
 ssh -J jump-user@192.0.2.10:22022 \ -p 2222 \ target-user@198.51.100.20 这里的 -p 2222 属于目标服务器；跳板机的端口仍然写在 -J 后面。
-连接过程 执行命令后，本地 SSH 客户端会做两件事：</description></item></channel></rss>
+连接过程 执行命令时，本地 SSH 客户端会先处理跳板机连接：</description></item></channel></rss>

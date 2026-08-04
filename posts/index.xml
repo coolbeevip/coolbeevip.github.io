@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on</title><link>https://coolbeevip.github.io/posts/</link><description>Recent content in Posts on</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Aug 2026 13:25:14 +0800</lastBuildDate><atom:link href="https://coolbeevip.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH 本地端口转发：通过跳板机访问内网服务</title><link>https://coolbeevip.github.io/posts/linux/ssh-local-port-forwarding/</link><pubDate>Mon, 03 Aug 2026 13:25:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-local-port-forwarding/</guid><description>内网中的 Web 服务可能监听在服务器的 127.0.0.1:50052，当前电脑既不能直接访问这台服务器，也不应该把这个服务暴露到公网。
-如果当前电脑可以登录跳板机 192.0.2.10:22022，跳板机又可以访问目标服务器 198.51.100.20，就可以用 SSH 本地端口转发，把目标服务器上的服务临时映射到当前电脑。
+当前电脑能登录跳板机 192.0.2.10:22022，而跳板机能访问目标服务器 198.51.100.20。这时可以用 SSH 本地端口转发，把目标服务器上的服务临时映射到当前电脑。
 本文中的账号和地址都是脱敏示例：跳板机使用 jump-user@192.0.2.10:22022，目标服务器使用 target-user@198.51.100.20。请替换为实际环境的值。
 建立隧道：
-ssh -fN \ -J jump-user@192.0.2.10:22022 \ -L 50052:127.0.0.1:50052 \ -o ExitOnForwardFailure=yes \ target-user@198.51.100.20 然后在浏览器中打开这个内网页面：
-http://127.0.0.1:50052/ 对浏览器来说，内网 Web 服务就在本机；对内网 Web 服务来说，请求来自目标服务器上的 SSH 连接。
-完整链路 这条命令建立的是下面这条 TCP 链路：
+ssh -fN \ -J jump-user@192.0.2.10:22022 \ -L 50052:127.0.0.1:50052 \ -o ExitOnForwardFailure=yes \ target-user@198.51.100.20 隧道建立后，在浏览器中打开这个内网页面：
+http://127.0.0.1:50052/ 浏览器会把它当作本机服务，目标 Web 服务看到的则是目标服务器本机发起的连接。
+完整链路 实际的 TCP 链路如下：
 本地 浏览器 -&amp;gt; 本地 127.0.0.1:50052 -&amp;gt; SSH 本地端口转发 -&amp;gt; 跳板机 192.0.2.10:22022 -&amp;gt; 目标服务器 198.51.100.20 -&amp;gt; 目标服务器 127.0.0.1:50052 -&amp;gt; 内网 HTTP 服务 这里有两个 127.0.0.1:50052，但它们不是同一个地址：
--L 左侧的 50052 是当前电脑上的监听端口 -L 右侧的 127.0.0.1:50052 是目标服务器视角下的地址 127.</description></item><item><title>SSH ProxyJump：通过跳板机访问内网服务器</title><link>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</link><pubDate>Mon, 03 Aug 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</guid><description>有些服务器不能从办公电脑直接访问，但可以先登录一台跳板机，再由跳板机访问内网目标服务器。
-最直接的做法是先登录跳板机，再在跳板机上执行第二次 ssh。不过 SSH 自己就支持这条链路，使用 -J（ProxyJump）可以把两次连接写成一条命令。
+-L 左侧的 50052 是当前电脑上的监听端口 -L 右侧的 127.0.0.1:50052 是目标服务器视角下的地址 127.0.0.1 表示建立连接的那台机器本身。SSH 收到本地连接后，会让目标服务器上的 SSH 服务连接它自己的 127.</description></item><item><title>SSH ProxyJump：通过跳板机访问内网服务器</title><link>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</link><pubDate>Mon, 03 Aug 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-proxy-jump/</guid><description>有些服务器不能从办公电脑直接访问，但可以先登录一台跳板机，再由跳板机访问内网目标服务器。
+一种做法是先登录跳板机，再在跳板机上执行第二次 ssh。SSH 本身支持这种连接路径，使用 -J（ProxyJump）就能把两次连接写成一条命令。
 假设网络关系如下：
 当前电脑 └── SSH ──&amp;gt; 跳板机 192.0.2.10:22022 └── SSH ──&amp;gt; 目标服务器 198.51.100.20:22 本文中的账号和地址都是脱敏示例：跳板机使用 jump-user@192.0.2.10:22022，目标服务器使用 target-user@198.51.100.20。请替换为实际环境的值。
-当前电脑不能直接访问 198.51.100.20，但跳板机可以访问它。连接目标服务器只需要：
-ssh -J jump-user@192.0.2.10:22022 target-user@198.51.100.20 -J 到底做了什么 这条命令中有两个 SSH 地址：
+假设当前电脑不能直接访问 198.51.100.20，但跳板机可以访问它。连接目标服务器只需要：
+ssh -J jump-user@192.0.2.10:22022 target-user@198.51.100.20 -J 到底做了什么 命令里出现两个 SSH 地址：
 ssh -J jump-user@192.0.2.10:22022 \ target-user@198.51.100.20 它们的角色不同：
 -J jump-user@192.0.2.10:22022：先连接跳板机，用户名是 jump-user，SSH 端口是 22022 target-user@198.51.100.20：最终要登录的目标服务器，未指定端口时使用默认的 22 -J 的格式是：
 -J [跳板机用户@]跳板机地址[:跳板机端口] 如果目标服务器的 SSH 端口不是 22，使用 -p 指定目标端口：
 ssh -J jump-user@192.0.2.10:22022 \ -p 2222 \ target-user@198.51.100.20 这里的 -p 2222 属于目标服务器；跳板机的端口仍然写在 -J 后面。
-连接过程 执行命令后，本地 SSH 客户端会做两件事：</description></item><item><title>ROS 2 Docker 双宿主机通信指南：网络检查与 Topic 双向验证</title><link>https://coolbeevip.github.io/posts/embodied-ai/ros2-docker-two-server-communication/ros2-docker-two-server-communication/</link><pubDate>Mon, 03 Aug 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/embodied-ai/ros2-docker-two-server-communication/ros2-docker-two-server-communication/</guid><description>用三个步骤完成两台宿主机上的 ROS 2 Docker 容器通信：检查网络、启动容器，并验证 /cross_server_test 的双向收发。</description></item><item><title>macOS 远程连接 Ubuntu 桌面：NoMachine 安装指南</title><link>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</link><pubDate>Sat, 25 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</guid><description>这篇文章介绍如何从 macOS 连接 Ubuntu 远程桌面，尤其适合没有物理显示器、默认只有命令行环境的 Ubuntu 服务器。
+连接过程 执行命令时，本地 SSH 客户端会先处理跳板机连接：</description></item><item><title>ROS 2 Docker 双宿主机通信指南：网络检查与 Topic 双向验证</title><link>https://coolbeevip.github.io/posts/embodied-ai/ros2-docker-two-server-communication/ros2-docker-two-server-communication/</link><pubDate>Mon, 03 Aug 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/embodied-ai/ros2-docker-two-server-communication/ros2-docker-two-server-communication/</guid><description>用三个步骤完成两台宿主机上的 ROS 2 Docker 容器通信：检查网络、启动容器，并验证 /cross_server_test 的双向收发。</description></item><item><title>macOS 远程连接 Ubuntu 桌面：NoMachine 安装指南</title><link>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</link><pubDate>Sat, 25 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/macos-nomachine-ubuntu-remote-desktop/</guid><description>这篇文章介绍如何从 macOS 连接 Ubuntu 远程桌面，尤其适合没有物理显示器、默认只有命令行环境的 Ubuntu 服务器。
 本文使用的方案是：
 客户端：macOS 服务端：Ubuntu 24.04 桌面环境：XFCE 远程桌面：NoMachine SSH 用来完成服务端安装和故障排查，真正承载远程桌面会话的是 NoMachine 的 NX 协议。
 准备 Ubuntu 账号 先通过 SSH 登录 Ubuntu，并确认系统版本、处理器架构和当前用户：
@@ -42,17 +42,17 @@ source ~/.zshrc 验证方式：
 history | tail 找一条历史命令，输入它的前几个字符。如果后面出现灰色提示，说明插件已经生效。
 安装 zsh-completions zsh-completions 用来增强 zsh 的 Tab 补全规则。
 它和 zsh-autosuggestions 不一样：
-zsh-autosuggestions 是根据历史命令给输入提示 zsh-completions 是让 Tab 补全认识更多命令、参数和子命令 安装插件：</description></item><item><title>在 Isaac ROS 容器环境中安装 Orbbec DaBai 摄像头驱动</title><link>https://coolbeevip.github.io/posts/nvidia/ubuntu-isaac-ros-camera-driver-installation/</link><pubDate>Wed, 08 Jul 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/nvidia/ubuntu-isaac-ros-camera-driver-installation/</guid><description>在已有 Isaac ROS 环境中接入 Orbbec DaBai：先在 Ubuntu 主机确认设备，再到容器内安装 Orbbec ROS 2 驱动、启动节点并检查图像 topic。</description></item><item><title>SSH 反向隧道：让服务器通过客户端代理访问互联网</title><link>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</link><pubDate>Mon, 06 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</guid><description>很多服务器不能直接访问互联网。常见原因不是机器坏了，而是它处在内网、受出口策略限制，或者云上环境没有配置公网出口。
-这时很多人的第一反应是：给服务器装代理、改防火墙、开公网出口、加 NAT 网关。
-这些办法都可以，但它们改变的是服务器所在网络的出口结构。权限不够时，往往做不了；临时排障时，也太重。
-还有一种更轻的办法：如果你的客户端机器已经能访问互联网，并且本地已经有一个代理端口，比如 127.0.0.1:10808，就可以用 SSH 反向端口转发，把这个代理能力挂到服务器上。服务器访问自己的 127.0.0.1:18080，实际流量会穿过 SSH 隧道，转到客户端的 127.0.0.1:10808。
-先假设有这样一组配置：
-服务器地址：203.0.113.10 服务器 SSH 端口：2222 服务器 SSH 用户：ops 客户端本地代理地址：127.0.0.1 客户端本地代理端口：10808 服务器侧代理入口：127.0.0.1:18080 基于这组配置，核心命令如下：
-ssh -p 2222 \ -R 18080:127.0.0.1:10808 \ ops@203.0.113.10 这条命令的重点在 -R。
+zsh-autosuggestions 是根据历史命令给输入提示 zsh-completions 是让 Tab 补全认识更多命令、参数和子命令 安装插件：</description></item><item><title>在 Isaac ROS 容器环境中安装 Orbbec DaBai 摄像头驱动</title><link>https://coolbeevip.github.io/posts/nvidia/ubuntu-isaac-ros-camera-driver-installation/</link><pubDate>Wed, 08 Jul 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/nvidia/ubuntu-isaac-ros-camera-driver-installation/</guid><description>在已有 Isaac ROS 环境中接入 Orbbec DaBai：先在 Ubuntu 主机确认设备，再到容器内安装 Orbbec ROS 2 驱动、启动节点并检查图像 topic。</description></item><item><title>SSH 反向隧道：让服务器通过客户端代理访问互联网</title><link>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</link><pubDate>Mon, 06 Jul 2026 13:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/linux/ssh-reverse-tunnel-proxy/</guid><description>很多服务器不能直接访问互联网。常见原因是服务器处在内网、受到出口策略限制，或者云上环境没有配置公网出口。
+常见处理方式包括给服务器装代理、修改防火墙、开公网出口或增加 NAT 网关。
+这些办法都会改变服务器所在网络的出口结构。权限不够时往往无法操作，临时排障也显得过重。
+如果客户端已经能访问互联网，而且本地有一个代理端口，例如 127.0.0.1:10808，还可以用 SSH 反向端口转发，把这个代理端口提供给服务器。服务器访问自己的 127.0.0.1:18080 时，流量会穿过 SSH 隧道，转到客户端的 127.0.0.1:10808。
+下面用这组示例配置说明：
+服务器地址：203.0.113.10 服务器 SSH 端口：2222 服务器 SSH 用户：ops 客户端本地代理地址：127.0.0.1 客户端本地代理端口：10808 服务器侧代理入口：127.0.0.1:18080 先从客户端运行：
+ssh -p 2222 \ -R 18080:127.0.0.1:10808 \ ops@203.0.113.10 其中 -R 决定反向转发规则。
 这条命令真正做了什么 先看完整结构：
 ssh -p 2222 \ -R 18080:127.0.0.1:10808 \ ops@203.0.113.10 含义是：
 -p 2222：连接服务器 203.0.113.10 的 SSH 端口 2222 ops@203.0.113.10：以用户 ops 登录服务器 -R 18080:127.0.0.1:10808：在服务器侧监听 18080，并把连接转发到客户端侧的 127.0.0.1:10808 连接建立后，链路变成这样：
-服务器上的程序 -&amp;gt; 127.0.0.1:18080 -&amp;gt; SSH 反向隧道 -&amp;gt; 客户端 127.0.0.1:10808 -&amp;gt; 客户端本地代理 -&amp;gt; 互联网 注意，这不是让客户端访问服务器的端口，而是让服务器借用客户端的端口。</description></item><item><title>macOS 上使用 PyCharm 远程开发 Isaac ROS</title><link>https://coolbeevip.github.io/posts/nvidia/macos-pycharm-remote-isaac-ros-dev/</link><pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/nvidia/macos-pycharm-remote-isaac-ros-dev/</guid><description>记录在 macOS 上通过 PyCharm 连接远程 Ubuntu GPU 主机开发 Isaac ROS 的推荐环境结构、配置步骤、调试方式与常见坑。</description></item><item><title>在 AWS 上搭建 WireGuard 并在 macOS 上连接</title><link>https://coolbeevip.github.io/posts/vpn/aws-wireguard-macos/</link><pubDate>Fri, 26 Jun 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/vpn/aws-wireguard-macos/</guid><description>本文记录如何在 Amazon Lightsail 上搭建 WireGuard VPN，并使用 macOS 客户端连接。示例使用 Debian 13 (Trixie)，VPN 网段使用 10.66.66.0/24，WireGuard 监听 UDP 58222。
+服务器上的程序 -&amp;gt; 127.0.0.1:18080 -&amp;gt; SSH 反向隧道 -&amp;gt; 客户端 127.</description></item><item><title>macOS 上使用 PyCharm 远程开发 Isaac ROS</title><link>https://coolbeevip.github.io/posts/nvidia/macos-pycharm-remote-isaac-ros-dev/</link><pubDate>Mon, 06 Jul 2026 00:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/nvidia/macos-pycharm-remote-isaac-ros-dev/</guid><description>记录在 macOS 上通过 PyCharm 连接远程 Ubuntu GPU 主机开发 Isaac ROS 的推荐环境结构、配置步骤、调试方式与常见坑。</description></item><item><title>在 AWS 上搭建 WireGuard 并在 macOS 上连接</title><link>https://coolbeevip.github.io/posts/vpn/aws-wireguard-macos/</link><pubDate>Fri, 26 Jun 2026 00:24:14 +0800</pubDate><guid>https://coolbeevip.github.io/posts/vpn/aws-wireguard-macos/</guid><description>本文记录如何在 Amazon Lightsail 上搭建 WireGuard VPN，并使用 macOS 客户端连接。示例使用 Debian 13 (Trixie)，VPN 网段使用 10.66.66.0/24，WireGuard 监听 UDP 58222。
 适用场景 需要一个轻量、配置简单的个人 VPN 使用 Amazon Lightsail VPS 作为公网入口 macOS 通过 WireGuard 官方客户端连接 希望所有流量都走 VPN，或者只让指定网段走 VPN 一、Lightsail 准备 1. 创建 Lightsail 实例 建议配置：
 项目 建议值 Platform Linux/Unix Blueprint Debian 13 (Trixie) Plan 1 GB 内存以上 Storage 8 GB 以上 Public IP 建议绑定 Lightsail Static IP 如果只是个人使用，最低配通常已经足够。建议创建后立即绑定 Static IP，避免实例 stop/start 后公网 IP 变化。
 2. 配置 Lightsail 防火墙 在 Lightsail 实例页面进入：</description></item><item><title>NVIDIA 与具身智能领域的产品版图</title><link>https://coolbeevip.github.io/posts/nvidia/nvidia-embodied-ai-product-landscape/</link><pubDate>Thu, 04 Jun 2026 00:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/nvidia/nvidia-embodied-ai-product-landscape/</guid><description>梳理 NVIDIA 在 AI Agent、Physical AI、机器人仿真、世界模型、边缘部署与治理平台上的产品布局，并分析其与具身智能大脑的协作边界。</description></item><item><title>Git 仓库主分支镜像同步（保留 Commit 历史）</title><link>https://coolbeevip.github.io/posts/git/how-to-sync-git-repositories/</link><pubDate>Mon, 04 May 2026 10:00:00 +0800</pubDate><guid>https://coolbeevip.github.io/posts/git/how-to-sync-git-repositories/</guid><description>最近需要将一个 Git 仓库 A 的 master 分支定期同步到另一个 GitLab 仓库 B，并且要求：
