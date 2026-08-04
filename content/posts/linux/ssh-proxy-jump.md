@@ -1,5 +1,5 @@
 ---
-title: "SSH ProxyJump：通过跳板机访问内网服务器"
+title: "SSH ProxyJump：经由跳板机登录内网服务器"
 date: 2026-08-03T13:24:14+08:00
 tags: [linux,ssh,proxy,jump]
 categories: [linux]

@@ -1,5 +1,5 @@
 ---
-title: "SSH 本地端口转发：通过跳板机访问内网服务"
+title: "SSH 本地端口转发：把内网服务映射到本机"
 date: 2026-08-03T13:25:14+08:00
 tags: [linux,ssh,proxy,tunnel]
 categories: [linux]
