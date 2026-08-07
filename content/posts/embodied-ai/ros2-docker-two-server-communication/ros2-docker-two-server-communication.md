@@ -120,7 +120,7 @@ kill "$(cat /tmp/fastdds-discovery.pid)"
 ```bash
 source /opt/ros/jazzy/setup.bash
 export ROS_DOMAIN_ID=0
-export ROS_LOCALHOST_ONLY=0
+export ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
 export ROS_DISCOVERY_SERVER=10.1.252.121:11811
 ```
 
@@ -146,7 +146,7 @@ docker run -d \
   --restart unless-stopped \
   --network host \
   -e ROS_DOMAIN_ID=0 \
-  -e ROS_LOCALHOST_ONLY=0 \
+  -e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
   --entrypoint bash \
   phys-ros:ros-base \
   -lc 'source /opt/ros/jazzy/setup.bash; exec sleep infinity'
@@ -160,7 +160,7 @@ docker run -d \
   --restart unless-stopped \
   --network host \
   -e ROS_DOMAIN_ID=0 \
-  -e ROS_LOCALHOST_ONLY=0 \
+  -e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
   --entrypoint bash \
   phys-ros:ros-base \
   -lc 'source /opt/ros/jazzy/setup.bash; exec sleep infinity'
