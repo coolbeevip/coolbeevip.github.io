@@ -60,6 +60,82 @@ ip route get 10.1.252.121
 ip route get 10.1.252.118
 ```
 
+### 1.1 验证两台宿主机的 ROS 2 组播
+
+ROS 2 使用的 DDS 发现机制主要依赖 UDP 组播。`ping` 成功只能说明单播网络可达，不能证明 DDS 组播能够正常通过。使用 ROS 2 自带的组播工具做一次端到端验证，这是继续后续步骤前的必要检查。
+
+在宿主机 1（`10.1.252.118`）执行接收：
+
+```bash
+ros2 multicast receive
+```
+
+保持该终端等待，然后在宿主机 2（`10.1.252.121`）执行发送：
+
+```bash
+ros2 multicast send
+```
+
+成功条件：宿主机 1 立即输出类似下面的信息：
+
+```text
+Received from 10.1.252.121:43751: 'Hello World!'
+```
+
+然后交换两台宿主机的角色，再执行一次，确认两个方向都能收到组播消息。
+
+如果 ROS 2 只安装在 `phys-ros:ros-base` 镜像中，请先按第 2 节启动容器，再分别进入两个容器执行上述命令；容器必须使用本指南中的 `--network host` 配置。
+
+任一方向未收到消息时，不要继续。此时再检查路由、宿主机防火墙，以及交换机或云网络安全策略是否阻隔了 UDP 组播流量。
+
+### 1.2 组播不可用时使用 Fast DDS Discovery Server
+
+如果网络设备或防火墙不支持 UDP 组播，可以使用 Fast DDS Discovery Server 提供单播发现。下面以宿主机 2（`10.1.252.121`）作为 Discovery Server，端口使用 `11811`。
+
+先按第 2 节启动两个容器，并分别进入容器。然后在宿主机 2 的容器内启动 Discovery Server：
+
+```bash
+source /opt/ros/jazzy/setup.bash
+nohup fastdds discovery -i 0 -l 0.0.0.0 -p 11811 \
+  > /tmp/fastdds-discovery.log 2>&1 &
+echo $! > /tmp/fastdds-discovery.pid
+```
+
+检查服务是否仍在运行：
+
+```bash
+cat /tmp/fastdds-discovery.pid
+ps -p "$(cat /tmp/fastdds-discovery.pid)"
+tail -f /tmp/fastdds-discovery.log
+```
+
+关闭 Discovery Server：
+
+```bash
+kill "$(cat /tmp/fastdds-discovery.pid)"
+```
+
+在两个容器中分别打开新的终端，并设置相同的 Discovery Server 地址：
+
+```bash
+source /opt/ros/jazzy/setup.bash
+export ROS_DOMAIN_ID=0
+export ROS_LOCALHOST_ONLY=0
+export ROS_DISCOVERY_SERVER=10.1.252.121:11811
+```
+
+如果环境没有明确使用 Fast DDS，再额外设置：
+
+```bash
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+```
+
+之后继续执行第 3 节的 Topic 双向验证。此时两个 ROS 2 节点通过宿主机 2 的 `11811` 端口完成发现，不再依赖两台宿主机之间的 DDS 组播发现。
+
+成功条件：在设置上述环境变量后，宿主机 1 和宿主机 2 仍能分别收到对方发布的 `/cross_server_test` 消息。
+
+注意：`ROS_DISCOVERY_SERVER` 只对 Fast DDS 生效，因此必须确认当前 RMW 实现是 `rmw_fastrtps_cpp`；如果已经通过环境或系统默认配置使用 Fast DDS，就不需要重复设置 `RMW_IMPLEMENTATION`。Discovery Server 所在宿主机的 `11811/UDP` 端口必须允许宿主机 1 访问；该单个 Server 发生故障时，客户端之间将无法继续完成新的发现。
+
 ## 2. 在两个宿主机上启动 ROS 2 镜像
 
 在宿主机 1 执行：
