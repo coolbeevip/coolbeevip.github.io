@@ -109,11 +109,29 @@ ps -p "$(cat /tmp/fastdds-discovery.pid)"
 tail -f /tmp/fastdds-discovery.log
 ```
 
-关闭 Discovery Server：
+保持 Discovery Server 运行，在宿主机 1 和宿主机 2 的容器内分别检查到发现服务 UDP 端口的连通性：
 
 ```bash
-kill "$(cat /tmp/fastdds-discovery.pid)"
+nc -uvz -w 3 10.1.252.121 11811
 ```
+
+如果环境中没有安装 `nc`，可以使用 Python 3 检查：
+
+```bash
+python3 -c "import socket; s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.settimeout(2); s.sendto(b'', ('10.1.252.121', 11811)); exec('try:\n s.recvfrom(1024); print(\"open (received response)\")\nexcept socket.timeout:\n print(\"open (no response, but no ICMP error)\")\nexcept:\n print(\"closed/filtered\")')"
+```
+
+输出 `open (received response)` 或 `open (no response, but no ICMP error)` 表示没有检测到端口不可达；输出 `closed/filtered` 时，应先排查网络和防火墙配置。
+
+使用 `nc` 检查成功时，通常会输出类似信息：
+
+```text
+Connection to 10.1.252.121 11811 port [udp/*] succeeded!
+```
+
+如果任一容器报告 `timed out`、`No route to host` 或 `Connection refused`，先检查容器是否使用 `--network host`、到 `10.1.252.121` 的路由，以及宿主机 2 是否已放行 `11811/UDP`，不要继续 Topic 验证。
+
+注意：UDP 没有连接握手，不同版本的 `nc` 和不同操作系统的 Python Socket 对 UDP 探测结果的判断也可能不同。上述检查成功表示没有检测到不可达错误，不能单独证明 Discovery Server 已正确处理请求；还需要结合 Discovery Server 进程和日志，以及后续的 Topic 双向验证确认。
 
 在两个容器中分别打开新的终端，并设置相同的 Discovery Server 地址：
 
@@ -135,6 +153,12 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 成功条件：在设置上述环境变量后，宿主机 1 和宿主机 2 仍能分别收到对方发布的 `/cross_server_test` 消息。
 
 注意：`ROS_DISCOVERY_SERVER` 只对 Fast DDS 生效，因此必须确认当前 RMW 实现是 `rmw_fastrtps_cpp`；如果已经通过环境或系统默认配置使用 Fast DDS，就不需要重复设置 `RMW_IMPLEMENTATION`。Discovery Server 所在宿主机的 `11811/UDP` 端口必须允许宿主机 1 访问；该单个 Server 发生故障时，客户端之间将无法继续完成新的发现。
+
+完成所有验证后，关闭 Discovery Server：
+
+```bash
+kill "$(cat /tmp/fastdds-discovery.pid)"
+```
 
 ## 2. 在两个宿主机上启动 ROS 2 镜像
 
